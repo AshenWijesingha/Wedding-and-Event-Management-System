@@ -27,7 +27,7 @@
         "@fullcalendar/daygrid": "^6.1",
         "@fullcalendar/interaction": "^6.1",
         "@fullcalendar/timegrid": "^6.1",
-        "apexcharts": "^3.45",
+        "apexcharts": "^4.0",
         "vue3-apexcharts": "^1.5",
         "alpinejs": "^3.13"
     }
