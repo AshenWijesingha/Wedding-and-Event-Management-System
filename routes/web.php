@@ -22,7 +22,7 @@ Route::get('/venues', function () {
     return view('venues.index');
 })->name('venues.index');
 
-Route::get('/venues/{venue:slug}', function ($venue) {
+Route::get('/venues/{venue:slug}', function (\App\Models\Venue $venue) {
     return view('venues.show', compact('venue'));
 })->name('venues.show');
 
