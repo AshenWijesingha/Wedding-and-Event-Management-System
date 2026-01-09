@@ -1,0 +1,52 @@
+{
+    "name": "Payment Gateway",
+    "slug": "payment-gateway",
+    "version": "1.0.0",
+    "description": "Accept online payments through various payment gateways",
+    "author": "EventPro Team",
+    "providers": [
+        "Plugins\\PaymentGateway\\PaymentGatewayServiceProvider"
+    ],
+    "hooks": {
+        "payment.process": "processPayment",
+        "payment.refund": "processRefund",
+        "invoice.paid": "handleInvoicePaid"
+    },
+    "settings": {
+        "active_gateway": {
+            "type": "select",
+            "label": "Payment Gateway",
+            "options": ["stripe", "paypal", "razorpay", "square"],
+            "default": "stripe"
+        },
+        "stripe_publishable_key": {
+            "type": "text",
+            "label": "Stripe Publishable Key",
+            "condition": {"active_gateway": "stripe"}
+        },
+        "stripe_secret_key": {
+            "type": "password",
+            "label": "Stripe Secret Key",
+            "condition": {"active_gateway": "stripe"}
+        },
+        "paypal_client_id": {
+            "type": "text",
+            "label": "PayPal Client ID",
+            "condition": {"active_gateway": "paypal"}
+        },
+        "paypal_secret": {
+            "type": "password",
+            "label": "PayPal Secret",
+            "condition": {"active_gateway": "paypal"}
+        },
+        "test_mode": {
+            "type": "boolean",
+            "label": "Test Mode",
+            "default": true
+        }
+    },
+    "requirements": {
+        "php": "^8.2",
+        "plan_features": ["online_payments"]
+    }
+}
