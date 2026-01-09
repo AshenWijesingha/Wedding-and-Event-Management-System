@@ -1,0 +1,31 @@
+{
+    "name": "Elegant",
+    "version": "1.0.0",
+    "description": "A sophisticated theme for luxury venues with elegant typography",
+    "author": "EventPro Team",
+    "colors": {
+        "primary": "#8B4513",
+        "secondary": "#D4AF37",
+        "accent": "#2F4F4F",
+        "background": "#FFFEF7",
+        "surface": "#FFFFFF",
+        "text": "#2C2C2C",
+        "text-muted": "#666666"
+    },
+    "fonts": {
+        "heading": "Playfair Display",
+        "body": "Lato"
+    },
+    "features": {
+        "hero_slider": true,
+        "parallax_sections": true,
+        "animated_counters": true,
+        "testimonials": true,
+        "gallery_masonry": true
+    },
+    "layouts": {
+        "header": "elegant",
+        "footer": "elegant",
+        "sidebar": "right"
+    }
+}

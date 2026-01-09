@@ -1,0 +1,46 @@
+{
+    "name": "SMS Gateway",
+    "slug": "sms-gateway",
+    "version": "1.0.0",
+    "description": "Send SMS notifications for bookings, payments, and reminders",
+    "author": "EventPro Team",
+    "providers": [
+        "Plugins\\SmsGateway\\SmsGatewayServiceProvider"
+    ],
+    "hooks": {
+        "booking.created": "sendBookingConfirmationSms",
+        "booking.confirmed": "sendBookingConfirmedSms",
+        "payment.received": "sendPaymentConfirmationSms",
+        "reminder.due": "sendReminderSms"
+    },
+    "settings": {
+        "gateway_provider": {
+            "type": "select",
+            "label": "SMS Provider",
+            "options": ["twilio", "nexmo", "messagebird"],
+            "default": "twilio"
+        },
+        "api_key": {
+            "type": "password",
+            "label": "API Key"
+        },
+        "api_secret": {
+            "type": "password",
+            "label": "API Secret"
+        },
+        "sender_id": {
+            "type": "text",
+            "label": "Sender ID / Phone Number"
+        },
+        "enabled_notifications": {
+            "type": "multiselect",
+            "label": "Enabled Notifications",
+            "options": ["booking_confirmation", "payment_received", "event_reminder"],
+            "default": ["booking_confirmation", "payment_received"]
+        }
+    },
+    "requirements": {
+        "php": "^8.2",
+        "plan_features": ["sms_notifications"]
+    }
+}
