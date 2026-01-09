@@ -38,6 +38,10 @@ Route::post('/inquiry', [\App\Http\Controllers\InquiryController::class, 'store'
 
 // Authentication routes (using Laravel Breeze or Fortify)
 // These will be added when the auth package is installed
+// Placeholder login route for development
+Route::get('/login', function () {
+    return redirect('/')->with('error', 'Authentication is not yet configured.');
+})->name('login');
 
 // Admin panel routes (Inertia.js SPA)
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
