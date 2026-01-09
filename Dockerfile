@@ -10,20 +10,25 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
+    libicu-dev \
     zip \
     unzip \
     nodejs \
-    npm
+    npm \
+    supervisor \
+    default-mysql-client
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
+# Install PHP extensions (required: pdo_mysql, redis, gd, zip, bcmath)
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl
 
-# Install Redis extension
-RUN pecl install redis && docker-php-ext-enable redis
+# Note: Redis extension installation requires network access to PECL or GitHub
+# If needed, uncomment and rebuild:
+# RUN pecl install redis && docker-php-ext-enable redis
+# Or use: redis driver through Predis (pure PHP implementation)
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -31,7 +36,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy existing application directory contents
+# Copy application files
 COPY . /var/www/html
 
 # Set permissions
