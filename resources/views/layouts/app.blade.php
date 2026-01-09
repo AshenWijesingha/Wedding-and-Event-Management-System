@@ -89,13 +89,13 @@
                 <div>
                     <h4 class="text-sm font-semibold uppercase tracking-wider mb-4">Contact</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
-                        @if($branding['contact']['email'])
+                        @if(($branding['contact']['email'] ?? null))
                             <li>{{ $branding['contact']['email'] }}</li>
                         @endif
-                        @if($branding['contact']['phone'])
+                        @if(($branding['contact']['phone'] ?? null))
                             <li>{{ $branding['contact']['phone'] }}</li>
                         @endif
-                        @if($branding['contact']['address'])
+                        @if(($branding['contact']['address'] ?? null))
                             <li>{{ $branding['contact']['address'] }}</li>
                         @endif
                     </ul>
