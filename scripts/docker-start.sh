@@ -6,7 +6,7 @@
 echo "🚀 Starting EventPro Docker containers..."
 
 # Build and start containers
-docker-compose up -d --build
+docker compose up -d --build
 
 # Wait for services to be ready
 echo "⏳ Waiting for services to be ready..."
@@ -14,7 +14,7 @@ sleep 10
 
 # Check if containers are running
 echo "📊 Container Status:"
-docker-compose ps
+docker compose ps
 
 echo ""
 echo "✅ Docker containers started successfully!"

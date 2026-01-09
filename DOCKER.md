@@ -186,7 +186,7 @@ MEILISEARCH_HOST=http://meilisearch:7700
 
 To change database credentials, update both:
 1. `.env` file
-2. `docker-compose.yml` (MySQL environment variables)
+2. `docker compose.yml` (MySQL environment variables)
 
 ---
 
@@ -218,7 +218,7 @@ Stops all Docker containers.
 **Options:**
 ```bash
 # Stop and remove volumes (WARNING: Deletes all data)
-docker-compose down -v
+docker compose down -v
 ```
 
 ### docker-setup.sh
@@ -283,88 +283,88 @@ Opens a shell in a container.
 ### Running Artisan Commands
 
 ```bash
-docker-compose exec app php artisan [command]
+docker compose exec app php artisan [command]
 ```
 
 **Examples:**
 ```bash
 # Run migrations
-docker-compose exec app php artisan migrate
+docker compose exec app php artisan migrate
 
 # Create a new controller
-docker-compose exec app php artisan make:controller VenueController
+docker compose exec app php artisan make:controller VenueController
 
 # Clear cache
-docker-compose exec app php artisan cache:clear
+docker compose exec app php artisan cache:clear
 
 # Run queue worker
-docker-compose exec app php artisan queue:work
+docker compose exec app php artisan queue:work
 ```
 
 ### Running Composer Commands
 
 ```bash
-docker-compose exec app composer [command]
+docker compose exec app composer [command]
 ```
 
 **Examples:**
 ```bash
 # Install a package
-docker-compose exec app composer require spatie/laravel-backup
+docker compose exec app composer require spatie/laravel-backup
 
 # Update dependencies
-docker-compose exec app composer update
+docker compose exec app composer update
 
 # Dump autoload
-docker-compose exec app composer dump-autoload
+docker compose exec app composer dump-autoload
 ```
 
 ### Running NPM Commands
 
 ```bash
-docker-compose exec app npm [command]
+docker compose exec app npm [command]
 ```
 
 **Examples:**
 ```bash
 # Install a package
-docker-compose exec app npm install -D tailwindcss
+docker compose exec app npm install -D tailwindcss
 
 # Run development build
-docker-compose exec app npm run dev
+docker compose exec app npm run dev
 
 # Run production build
-docker-compose exec app npm run build
+docker compose exec app npm run build
 
 # Watch for changes
-docker-compose exec app npm run watch
+docker compose exec app npm run watch
 ```
 
 ### Database Management
 
 **Accessing MySQL:**
 ```bash
-docker-compose exec mysql mysql -u root -psecret eventpro
+docker compose exec mysql mysql -u root -psecret eventpro
 ```
 
 **Running Migrations:**
 ```bash
-docker-compose exec app php artisan migrate
+docker compose exec app php artisan migrate
 ```
 
 **Rolling Back Migrations:**
 ```bash
-docker-compose exec app php artisan migrate:rollback
+docker compose exec app php artisan migrate:rollback
 ```
 
 **Seeding Database:**
 ```bash
-docker-compose exec app php artisan db:seed
+docker compose exec app php artisan db:seed
 ```
 
 **Resetting Database:**
 ```bash
-docker-compose exec app php artisan migrate:fresh --seed
+docker compose exec app php artisan migrate:fresh --seed
 ```
 
 ### Testing Email with Mailhog
@@ -375,7 +375,7 @@ docker-compose exec app php artisan migrate:fresh --seed
 
 **Testing Example:**
 ```bash
-docker-compose exec app php artisan tinker
+docker compose exec app php artisan tinker
 >>> Mail::raw('Test email', function($msg) { $msg->to('test@example.com')->subject('Test'); });
 ```
 
@@ -383,12 +383,12 @@ docker-compose exec app php artisan tinker
 
 **Clear Redis Cache:**
 ```bash
-docker-compose exec app php artisan cache:clear
+docker compose exec app php artisan cache:clear
 ```
 
 **Access Redis CLI:**
 ```bash
-docker-compose exec redis redis-cli
+docker compose exec redis redis-cli
 ```
 
 **Redis Commands:**
@@ -407,12 +407,12 @@ FLUSHALL
 
 **Import data to Meilisearch:**
 ```bash
-docker-compose exec app php artisan scout:import "App\Models\Venue"
+docker compose exec app php artisan scout:import "App\Models\Venue"
 ```
 
 **Flush Meilisearch index:**
 ```bash
-docker-compose exec app php artisan scout:flush "App\Models\Venue"
+docker compose exec app php artisan scout:flush "App\Models\Venue"
 ```
 
 ---
@@ -424,7 +424,7 @@ docker-compose exec app php artisan scout:flush "App\Models\Venue"
 **Check Docker is running:**
 ```bash
 docker --version
-docker-compose --version
+docker compose --version
 ```
 
 **View container logs:**
@@ -434,8 +434,8 @@ docker-compose --version
 
 **Rebuild containers:**
 ```bash
-docker-compose down
-docker-compose build --no-cache
+docker compose down
+docker compose build --no-cache
 ./scripts/docker-start.sh
 ```
 
@@ -443,7 +443,7 @@ docker-compose build --no-cache
 
 **Verify MySQL is healthy:**
 ```bash
-docker-compose ps mysql
+docker compose ps mysql
 ```
 
 **Check MySQL logs:**
@@ -453,19 +453,19 @@ docker-compose ps mysql
 
 **Test connection:**
 ```bash
-docker-compose exec mysql mysql -u root -psecret -e "SHOW DATABASES;"
+docker compose exec mysql mysql -u root -psecret -e "SHOW DATABASES;"
 ```
 
 **Restart MySQL:**
 ```bash
-docker-compose restart mysql
+docker compose restart mysql
 ```
 
 ### Redis Connection Issues
 
 **Verify Redis is running:**
 ```bash
-docker-compose exec redis redis-cli ping
+docker compose exec redis redis-cli ping
 ```
 
 **Check Redis logs:**
@@ -477,8 +477,8 @@ docker-compose exec redis redis-cli ping
 
 **Fix storage permissions:**
 ```bash
-docker-compose exec app chown -R www-data:www-data /var/www/html/storage
-docker-compose exec app chown -R www-data:www-data /var/www/html/bootstrap/cache
+docker compose exec app chown -R www-data:www-data /var/www/html/storage
+docker compose exec app chown -R www-data:www-data /var/www/html/bootstrap/cache
 ```
 
 ### Port Already in Use
@@ -495,7 +495,7 @@ lsof -i :3306
 netstat -ano | findstr :8000
 ```
 
-**Change ports in docker-compose.yml:**
+**Change ports in docker compose.yml:**
 ```yaml
 services:
   app:
@@ -507,7 +507,7 @@ services:
 
 **Remove all containers, volumes, and images:**
 ```bash
-docker-compose down -v
+docker compose down -v
 docker system prune -a
 ./scripts/docker-start.sh
 ./scripts/docker-setup.sh
@@ -559,9 +559,9 @@ All containers are connected via a custom bridge network (`eventpro-network`), a
 
 **From app container:**
 ```bash
-docker-compose exec app ping mysql
-docker-compose exec app ping redis
-docker-compose exec app curl http://meilisearch:7700
+docker compose exec app ping mysql
+docker compose exec app ping redis
+docker compose exec app curl http://meilisearch:7700
 ```
 
 ### Health Checks
@@ -573,7 +573,7 @@ Services include health checks to ensure they're ready before dependent services
 
 **View health status:**
 ```bash
-docker-compose ps
+docker compose ps
 ```
 
 ---
@@ -584,7 +584,7 @@ docker-compose ps
 
 1. Start containers: `./scripts/docker-start.sh`
 2. Make code changes (auto-synced via volumes)
-3. Run tests: `docker-compose exec app php artisan test`
+3. Run tests: `docker compose exec app php artisan test`
 4. View logs: `./scripts/docker-logs.sh`
 5. Stop containers: `./scripts/docker-stop.sh`
 
@@ -592,14 +592,14 @@ docker-compose ps
 
 - Use Docker volume caching for vendor and node_modules
 - Keep containers running between sessions
-- Use `docker-compose restart` instead of down/up
+- Use `docker compose restart` instead of down/up
 - Regularly prune unused images: `docker system prune`
 
 ### Security Notes
 
 - Never commit `.env` file
 - Change default passwords in production
-- Use environment-specific docker-compose files
+- Use environment-specific docker compose files
 - Keep Docker and images updated
 
 ---
@@ -618,11 +618,11 @@ docker-compose ps
 If you encounter issues not covered in this guide:
 
 1. Check container logs: `./scripts/docker-logs.sh all`
-2. Verify all services are healthy: `docker-compose ps`
-3. Try rebuilding: `docker-compose build --no-cache`
+2. Verify all services are healthy: `docker compose ps`
+3. Try rebuilding: `docker compose build --no-cache`
 4. Review [Troubleshooting](#troubleshooting) section
 
 For persistent issues, please create an issue on GitHub with:
-- Output of `docker-compose ps`
-- Relevant logs from `docker-compose logs`
+- Output of `docker compose ps`
+- Relevant logs from `docker compose logs`
 - Steps to reproduce the issue

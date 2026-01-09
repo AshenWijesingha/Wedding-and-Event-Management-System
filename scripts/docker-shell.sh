@@ -10,7 +10,7 @@ echo "💡 Available services: app, mysql, redis, mailhog, meilisearch"
 echo ""
 
 if [ "$SERVICE" = "mysql" ]; then
-    docker-compose exec mysql mysql -u root -psecret eventpro
+    docker compose exec mysql mysql -u root -psecret eventpro
 else
-    docker-compose exec $SERVICE /bin/sh -c "[ -e /bin/bash ] && /bin/bash || /bin/sh"
+    docker compose exec $SERVICE /bin/sh -c "[ -e /bin/bash ] && /bin/bash || /bin/sh"
 fi

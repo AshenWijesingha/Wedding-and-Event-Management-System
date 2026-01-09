@@ -5,9 +5,9 @@
 
 echo "🛑 Stopping EventPro Docker containers..."
 
-docker-compose down
+docker compose down
 
 echo "✅ Docker containers stopped successfully!"
 echo ""
 echo "💡 To start again, run: ./scripts/docker-start.sh"
-echo "💡 To remove volumes, run: docker-compose down -v"
+echo "💡 To remove volumes, run: docker compose down -v"
