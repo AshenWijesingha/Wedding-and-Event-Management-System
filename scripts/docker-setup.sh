@@ -15,41 +15,41 @@ fi
 
 # Install composer dependencies
 echo "📦 Installing PHP dependencies..."
-docker-compose exec -T app composer install --no-interaction
+docker compose exec -T app composer install --no-interaction
 
 # Generate application key
 echo "🔑 Generating application key..."
-docker-compose exec -T app php artisan key:generate
+docker compose exec -T app php artisan key:generate
 
 # Run migrations
 echo "🗄️  Running database migrations..."
-docker-compose exec -T app php artisan migrate --force
+docker compose exec -T app php artisan migrate --force
 
 # Seed database (optional)
 read -p "Do you want to seed the database? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "🌱 Seeding database..."
-    docker-compose exec -T app php artisan db:seed
+    docker compose exec -T app php artisan db:seed
 fi
 
 # Install npm dependencies
 echo "📦 Installing Node.js dependencies..."
-docker-compose exec -T app npm install
+docker compose exec -T app npm install
 
 # Build assets
 echo "🏗️  Building frontend assets..."
-docker-compose exec -T app npm run build
+docker compose exec -T app npm run build
 
 # Clear and cache config
 echo "🧹 Clearing and caching configuration..."
-docker-compose exec -T app php artisan config:clear
-docker-compose exec -T app php artisan cache:clear
-docker-compose exec -T app php artisan view:clear
+docker compose exec -T app php artisan config:clear
+docker compose exec -T app php artisan cache:clear
+docker compose exec -T app php artisan view:clear
 
 # Set permissions
 echo "🔒 Setting permissions..."
-docker-compose exec -T app chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+docker compose exec -T app chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 echo ""
 echo "✅ Setup completed successfully!"

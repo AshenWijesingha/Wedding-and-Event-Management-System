@@ -5,7 +5,7 @@
 
 echo "🔄 Restarting EventPro Docker containers..."
 
-docker-compose restart
+docker compose restart
 
 echo "✅ Docker containers restarted successfully!"
 echo ""
