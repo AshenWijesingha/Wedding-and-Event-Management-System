@@ -473,54 +473,9 @@ class CustomFieldService
 
 ### Docker Setup (Recommended)
 
-```yaml
-# docker-compose.yml
-version: '3.8'
+**For complete Docker documentation, see [DOCKER.md](DOCKER.md)**
 
-services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
-    volumes:
-      - .:/var/www/html
-    depends_on:
-      - mysql
-      - redis
-
-  mysql:
-    image: mysql:8.0
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: eventpro
-    volumes:
-      - mysql_data:/var/lib/mysql
-
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-
-  mailhog:
-    image: mailhog/mailhog
-    ports:
-      - "1025:1025"
-      - "8025:8025"
-
-  meilisearch:
-    image: getmeili/meilisearch:latest
-    ports:
-      - "7700:7700"
-
-volumes:
-  mysql_data:
-```
-
-### Installation Steps
+Quick start with Docker:
 
 ```bash
 # 1. Clone repository
@@ -528,26 +483,32 @@ git clone https://github.com/[username]/eventpro.git
 cd eventpro
 
 # 2. Start Docker containers
-docker-compose up -d
+./scripts/docker-start.sh
 
-# 3. Install dependencies
-docker-compose exec app composer install
-docker-compose exec app npm install
+# 3. Initial setup
+./scripts/docker-setup.sh
 
-# 4. Environment setup
-cp .env.example .env
-docker-compose exec app php artisan key:generate
-
-# 5. Database setup
-docker-compose exec app php artisan migrate
-docker-compose exec app php artisan db:seed
-
-# 6. Build assets
-docker-compose exec app npm run dev
-
-# 7. Access application
+# 4. Access application
 # App: http://localhost:8000
-# Mail: http://localhost:8025
+# Mailhog: http://localhost:8025
+# Meilisearch: http://localhost:7700
+```
+
+**Available Services:**
+- PHP 8.2 with extensions (pdo_mysql, redis, gd, zip, bcmath)
+- MySQL 8.0
+- Redis 7 (caching and queues)
+- Mailhog (email testing)
+- Meilisearch (full-text search)
+
+**Development Scripts:**
+```bash
+./scripts/docker-start.sh    # Start containers
+./scripts/docker-stop.sh     # Stop containers
+./scripts/docker-setup.sh    # Initial setup
+./scripts/docker-restart.sh  # Restart containers
+./scripts/docker-logs.sh     # View logs
+./scripts/docker-shell.sh    # Container shell access
 ```
 
 ### Manual Installation

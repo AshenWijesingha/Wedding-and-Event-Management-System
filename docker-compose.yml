@@ -5,13 +5,22 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: eventpro-app
     ports:
       - "8000:8000"
     volumes:
       - .:/var/www/html
+      - /var/www/html/vendor
+      - /var/www/html/node_modules
     depends_on:
-      - mysql
-      - redis
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      mailhog:
+        condition: service_started
+      meilisearch:
+        condition: service_started
     environment:
       - DB_CONNECTION=mysql
       - DB_HOST=mysql
@@ -20,38 +29,83 @@ services:
       - DB_USERNAME=root
       - DB_PASSWORD=secret
       - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CACHE_DRIVER=redis
+      - SESSION_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+      - MAIL_MAILER=smtp
+      - MAIL_HOST=mailhog
+      - MAIL_PORT=1025
+      - MAIL_USERNAME=null
+      - MAIL_PASSWORD=null
+      - MAIL_ENCRYPTION=null
       - MEILISEARCH_HOST=http://meilisearch:7700
+      - MEILISEARCH_KEY=
+    networks:
+      - eventpro-network
 
   mysql:
     image: mysql:8.0
+    container_name: eventpro-mysql
     ports:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: eventpro
+      MYSQL_USER: eventpro
+      MYSQL_PASSWORD: secret
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-psecret"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - eventpro-network
 
   redis:
     image: redis:7-alpine
+    container_name: eventpro-redis
     ports:
       - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - eventpro-network
 
   mailhog:
     image: mailhog/mailhog
+    container_name: eventpro-mailhog
     ports:
-      - "1025:1025"
-      - "8025:8025"
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - eventpro-network
 
   meilisearch:
     image: getmeili/meilisearch:latest
+    container_name: eventpro-meilisearch
     ports:
       - "7700:7700"
     environment:
       - MEILI_NO_ANALYTICS=true
+      - MEILI_ENV=development
     volumes:
       - meilisearch_data:/meili_data
+    networks:
+      - eventpro-network
+
+networks:
+  eventpro-network:
+    driver: bridge
 
 volumes:
   mysql_data:
+  redis_data:
   meilisearch_data:
