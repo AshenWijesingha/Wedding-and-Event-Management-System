@@ -1,0 +1,1398 @@
+{
+  "metadata": {
+    "project": "EventPro Universal Event Management System",
+    "total_issues": 83,
+    "phases": 5,
+    "duration_weeks": 36,
+    "generated_from": "ISSUES.md"
+  },
+  "labels": [
+    {"name": "priority:critical", "color": "d73a4a", "description": "Must be completed, blocks other work"},
+    {"name": "priority:high", "color": "f9c513", "description": "Important feature, should be completed"},
+    {"name": "priority:medium", "color": "0e8a16", "description": "Nice to have, can be deferred if needed"},
+    {"name": "priority:low", "color": "c5def5", "description": "Optional enhancement"},
+    {"name": "type:feature", "color": "a2eeef", "description": "New functionality"},
+    {"name": "type:enhancement", "color": "84b6eb", "description": "Improvement to existing feature"},
+    {"name": "type:bug", "color": "d73a4a", "description": "Bug fix"},
+    {"name": "type:docs", "color": "0075ca", "description": "Documentation"},
+    {"name": "type:test", "color": "5319e7", "description": "Testing"},
+    {"name": "type:devops", "color": "fbca04", "description": "Infrastructure/deployment"},
+    {"name": "module:core", "color": "bfd4f2", "description": "Core architecture"},
+    {"name": "module:venue", "color": "b4a7d6", "description": "Venue management"},
+    {"name": "module:booking", "color": "d5a6bd", "description": "Booking system"},
+    {"name": "module:payment", "color": "ffe599", "description": "Payment tracking"},
+    {"name": "module:client-portal", "color": "9fc5e8", "description": "Client portal"},
+    {"name": "module:admin", "color": "f4cccc", "description": "Admin interface"},
+    {"name": "module:api", "color": "b6d7a8", "description": "API endpoints"},
+    {"name": "module:vendor", "color": "c9daf8", "description": "Vendor management"},
+    {"name": "module:staff", "color": "d9ead3", "description": "Staff scheduling"},
+    {"name": "module:reports", "color": "fff2cc", "description": "Reporting and analytics"},
+    {"name": "module:settings", "color": "e6b8af", "description": "Settings and customization"},
+    {"name": "module:theme", "color": "d0e0e3", "description": "Theme and plugin system"},
+    {"name": "phase:1-foundation", "color": "e99695", "description": "Phase 1: Foundation (Weeks 1-6)"},
+    {"name": "phase:2-core-modules", "color": "f9cb9c", "description": "Phase 2: Core Modules (Weeks 7-16)"},
+    {"name": "phase:3-extended", "color": "ffe599", "description": "Phase 3: Extended Modules (Weeks 17-24)"},
+    {"name": "phase:4-customization", "color": "b6d7a8", "description": "Phase 4: Customization (Weeks 25-30)"},
+    {"name": "phase:5-launch", "color": "a2c4c9", "description": "Phase 5: Launch (Weeks 31-36)"}
+  ],
+  "milestones": [
+    {"title": "M1: Foundation Complete", "description": "Phase 1 complete - Core infrastructure and architecture (EP-001 to EP-017)", "week": 6},
+    {"title": "M2: Core Booking Flow", "description": "Phase 2 complete - Core booking and payment modules (EP-018 to EP-039)", "week": 16},
+    {"title": "M3: Extended Features", "description": "Phase 3 complete - Vendor, staff, reporting, and client portal (EP-040 to EP-056)", "week": 24},
+    {"title": "M4: Customization Ready", "description": "Phase 4 complete - Settings, custom fields, themes, and plugins (EP-057 to EP-069)", "week": 30},
+    {"title": "M5: Production Launch", "description": "Phase 5 complete - Testing, documentation, and deployment (EP-070 to EP-083)", "week": 36}
+  ],
+  "issues": [
+    {
+      "id": "EP-001",
+      "title": "Initialize Laravel 11 project with required dependencies",
+      "phase": 1,
+      "week": "1-2",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["core"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "2 days",
+      "tasks": [
+        "Set up Laravel 11 with PHP 8.2+",
+        "Configure composer.json with all required packages (Spatie packages, DomPDF, etc.)",
+        "Set up package.json with Vue 3, Inertia.js, and Tailwind CSS"
+      ]
+    },
+    {
+      "id": "EP-002",
+      "title": "Configure Docker development environment",
+      "phase": 1,
+      "week": "1-2",
+      "priority": "high",
+      "type": "devops",
+      "modules": ["core"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "1 day",
+      "tasks": [
+        "Create Dockerfile for PHP 8.2 with required extensions",
+        "Set up docker-compose.yml with MySQL, Redis, Meilisearch, and Mailhog",
+        "Document Docker setup instructions"
+      ]
+    },
+    {
+      "id": "EP-003",
+      "title": "Set up CI/CD pipeline",
+      "phase": 1,
+      "week": "1-2",
+      "priority": "high",
+      "type": "devops",
+      "modules": ["core"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "2 days",
+      "tasks": [
+        "Configure GitHub Actions for automated testing",
+        "Set up code quality checks (PHPStan, Laravel Pint)",
+        "Configure deployment workflows"
+      ]
+    },
+    {
+      "id": "EP-004",
+      "title": "Configure multi-tenancy foundation",
+      "phase": 1,
+      "week": "1-2",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["core"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "3 days",
+      "tasks": [
+        "Install and configure spatie/laravel-multitenancy",
+        "Implement tenant identification (domain/subdomain)",
+        "Create BelongsToTenant trait with automatic scoping"
+      ]
+    },
+    {
+      "id": "EP-005",
+      "title": "Set up authentication system",
+      "phase": 1,
+      "week": "1-2",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["core"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "2 days",
+      "tasks": [
+        "Configure Laravel Sanctum for API authentication",
+        "Implement session-based auth for web",
+        "Set up password reset and email verification"
+      ]
+    },
+    {
+      "id": "EP-006",
+      "title": "Create core database migrations",
+      "phase": 1,
+      "week": "3-4",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["core"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "1 day",
+      "tasks": [
+        "Plans table for subscription tiers",
+        "Tenants table with settings JSON",
+        "Users table with tenant relationship"
+      ]
+    },
+    {
+      "id": "EP-007",
+      "title": "Create venue and package migrations",
+      "phase": 1,
+      "week": "3-4",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["venue"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "1 day",
+      "tasks": [
+        "Venues table with capacity, pricing, amenities",
+        "Packages table with guest pricing tiers",
+        "Venue-Package pivot table"
+      ]
+    },
+    {
+      "id": "EP-008",
+      "title": "Create booking workflow migrations",
+      "phase": 1,
+      "week": "3-4",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["booking"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "2 days",
+      "tasks": [
+        "Clients table",
+        "Inquiries table with status workflow",
+        "Bookings table with comprehensive fields",
+        "Quotations table with versioning support",
+        "Payments table for installment tracking"
+      ]
+    },
+    {
+      "id": "EP-009",
+      "title": "Create custom fields system migrations",
+      "phase": 1,
+      "week": "3-4",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["core"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "1 day",
+      "tasks": [
+        "Custom fields definition table",
+        "Custom field values table with polymorphic relationships"
+      ]
+    },
+    {
+      "id": "EP-010",
+      "title": "Implement core Eloquent models",
+      "phase": 1,
+      "week": "3-4",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["core"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "3 days",
+      "tasks": [
+        "Tenant model with settings methods",
+        "Venue, Package, Client models",
+        "Booking, Inquiry, Quotation, Payment models",
+        "Configure relationships and accessors"
+      ]
+    },
+    {
+      "id": "EP-011",
+      "title": "Create model factories and seeders",
+      "phase": 1,
+      "week": "3-4",
+      "priority": "medium",
+      "type": "feature",
+      "modules": ["core"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "2 days",
+      "tasks": [
+        "Factory classes for all models",
+        "DatabaseSeeder with sample data",
+        "TenantSeeder for demo tenant"
+      ]
+    },
+    {
+      "id": "EP-012",
+      "title": "Implement SettingsService",
+      "phase": 1,
+      "week": "5-6",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["core"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "2 days",
+      "tasks": [
+        "Hierarchical settings resolution (tenant > env > defaults)",
+        "Settings schema validation",
+        "Currency, date, and time formatting helpers"
+      ]
+    },
+    {
+      "id": "EP-013",
+      "title": "Implement AvailabilityService",
+      "phase": 1,
+      "week": "5-6",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["venue"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "2 days",
+      "tasks": [
+        "Venue availability checking with date locking",
+        "Calendar availability generation",
+        "Multi-venue availability matrix"
+      ]
+    },
+    {
+      "id": "EP-014",
+      "title": "Implement PricingService",
+      "phase": 1,
+      "week": "5-6",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["booking"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "3 days",
+      "tasks": [
+        "Event pricing calculation engine",
+        "Venue and package pricing",
+        "Surcharges (weekend, peak season)",
+        "Discount application",
+        "Tax calculation"
+      ]
+    },
+    {
+      "id": "EP-015",
+      "title": "Implement BrandingService",
+      "phase": 1,
+      "week": "5-6",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["core"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "1 day",
+      "tasks": [
+        "Logo and favicon URL resolution",
+        "Dynamic CSS variables generation",
+        "Contact and social media configuration"
+      ]
+    },
+    {
+      "id": "EP-016",
+      "title": "Create API response formatting",
+      "phase": 1,
+      "week": "5-6",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["api"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "2 days",
+      "tasks": [
+        "Standardized JSON response structure",
+        "API resources for all models",
+        "Error handling and validation responses"
+      ]
+    },
+    {
+      "id": "EP-017",
+      "title": "Set up authorization with Spatie Permissions",
+      "phase": 1,
+      "week": "5-6",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["core"],
+      "milestone": "M1: Foundation Complete",
+      "estimate": "2 days",
+      "tasks": [
+        "Define roles (super_admin, admin, manager, staff, client)",
+        "Create permission sets for each role",
+        "Implement role-based middleware"
+      ]
+    },
+    {
+      "id": "EP-018",
+      "title": "Create Venue CRUD API endpoints",
+      "phase": 2,
+      "week": "7-8",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["venue", "api"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "3 days",
+      "tasks": [
+        "List venues with filtering and pagination",
+        "Create, update, delete venue operations",
+        "Image upload and management"
+      ]
+    },
+    {
+      "id": "EP-019",
+      "title": "Build Venue admin interface (Vue/Inertia)",
+      "phase": 2,
+      "week": "7-8",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["venue", "admin"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "4 days",
+      "tasks": [
+        "Venues list page with search and filters",
+        "Create/Edit venue form with image gallery",
+        "Amenities and pricing configuration"
+      ]
+    },
+    {
+      "id": "EP-020",
+      "title": "Implement availability calendar",
+      "phase": 2,
+      "week": "7-8",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["venue", "admin"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "3 days",
+      "tasks": [
+        "FullCalendar integration",
+        "Color-coded booking status display",
+        "Date selection for availability check"
+      ]
+    },
+    {
+      "id": "EP-021",
+      "title": "Create public venue pages",
+      "phase": 2,
+      "week": "7-8",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["venue"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "2 days",
+      "tasks": [
+        "Venue listing with filters (capacity, price)",
+        "Individual venue detail pages",
+        "Availability calendar widget"
+      ]
+    },
+    {
+      "id": "EP-022",
+      "title": "Create Package CRUD API endpoints",
+      "phase": 2,
+      "week": "9-10",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["booking", "api"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "2 days",
+      "tasks": [
+        "Package listing with venue associations",
+        "Create, update, delete operations",
+        "Tiered guest pricing management"
+      ]
+    },
+    {
+      "id": "EP-023",
+      "title": "Build Package admin interface",
+      "phase": 2,
+      "week": "9-10",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["booking", "admin"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "3 days",
+      "tasks": [
+        "Packages list page",
+        "Create/Edit package form",
+        "Guest pricing tier builder",
+        "Included services configuration"
+      ]
+    },
+    {
+      "id": "EP-024",
+      "title": "Implement dynamic pricing calculator",
+      "phase": 2,
+      "week": "9-10",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["booking"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "3 days",
+      "tasks": [
+        "Real-time price calculation API",
+        "Frontend pricing widget",
+        "Service add-on selection"
+      ]
+    },
+    {
+      "id": "EP-025",
+      "title": "Create public packages page",
+      "phase": 2,
+      "week": "9-10",
+      "priority": "medium",
+      "type": "feature",
+      "modules": ["booking"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "2 days",
+      "tasks": [
+        "Package cards with key features",
+        "Comparison view",
+        "Direct inquiry from package"
+      ]
+    },
+    {
+      "id": "EP-026",
+      "title": "Create Inquiry management API",
+      "phase": 2,
+      "week": "11-12",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["booking", "api"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "3 days",
+      "tasks": [
+        "Public inquiry submission endpoint",
+        "Admin inquiry CRUD operations",
+        "Status workflow management",
+        "Assignment to staff"
+      ]
+    },
+    {
+      "id": "EP-027",
+      "title": "Build Inquiry admin interface",
+      "phase": 2,
+      "week": "11-12",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["booking", "admin"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "4 days",
+      "tasks": [
+        "Inquiry kanban board by status",
+        "Inquiry detail view",
+        "Communication log",
+        "Convert to quotation action"
+      ]
+    },
+    {
+      "id": "EP-028",
+      "title": "Implement QuotationService",
+      "phase": 2,
+      "week": "11-12",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["booking"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "3 days",
+      "tasks": [
+        "Generate quotation from inquiry",
+        "Line item management",
+        "Terms and conditions",
+        "Version tracking"
+      ]
+    },
+    {
+      "id": "EP-029",
+      "title": "Create Quotation admin interface",
+      "phase": 2,
+      "week": "11-12",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["booking", "admin"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "4 days",
+      "tasks": [
+        "Quotation builder with drag-drop items",
+        "Preview mode",
+        "Send via email functionality",
+        "Track views and responses"
+      ]
+    },
+    {
+      "id": "EP-030",
+      "title": "Implement PDF generation for quotations",
+      "phase": 2,
+      "week": "11-12",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["booking"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "2 days",
+      "tasks": [
+        "Branded PDF template using DomPDF",
+        "Dynamic content rendering",
+        "Download and email attachment"
+      ]
+    },
+    {
+      "id": "EP-031",
+      "title": "Create Booking CRUD API",
+      "phase": 2,
+      "week": "13-14",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["booking", "api"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "3 days",
+      "tasks": [
+        "Create booking from accepted quotation",
+        "Manual booking creation",
+        "Status workflow (pending → confirmed → completed)"
+      ]
+    },
+    {
+      "id": "EP-032",
+      "title": "Implement booking validation rules",
+      "phase": 2,
+      "week": "13-14",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["booking"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "2 days",
+      "tasks": [
+        "Venue availability check with locking",
+        "Advance booking limits",
+        "Guest count validation"
+      ]
+    },
+    {
+      "id": "EP-033",
+      "title": "Build Booking admin interface",
+      "phase": 2,
+      "week": "13-14",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["booking", "admin"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "4 days",
+      "tasks": [
+        "Bookings calendar view",
+        "Bookings list with filters",
+        "Booking detail page",
+        "Quick actions (confirm, cancel)"
+      ]
+    },
+    {
+      "id": "EP-034",
+      "title": "Create booking confirmation workflow",
+      "phase": 2,
+      "week": "13-14",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["booking"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "2 days",
+      "tasks": [
+        "Confirmation email templates",
+        "Contract generation",
+        "Deposit requirements"
+      ]
+    },
+    {
+      "id": "EP-035",
+      "title": "Implement booking cancellation",
+      "phase": 2,
+      "week": "13-14",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["booking"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "2 days",
+      "tasks": [
+        "Cancellation policy enforcement",
+        "Refund calculation",
+        "Cancellation notifications"
+      ]
+    },
+    {
+      "id": "EP-036",
+      "title": "Create Payment management API",
+      "phase": 2,
+      "week": "15-16",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["payment", "api"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "2 days",
+      "tasks": [
+        "Record payment entries",
+        "Installment schedule generation",
+        "Balance calculation"
+      ]
+    },
+    {
+      "id": "EP-037",
+      "title": "Build Payment admin interface",
+      "phase": 2,
+      "week": "15-16",
+      "priority": "critical",
+      "type": "feature",
+      "modules": ["payment", "admin"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "3 days",
+      "tasks": [
+        "Payment recording form",
+        "Payment history per booking",
+        "Payment schedule display",
+        "Receipt generation"
+      ]
+    },
+    {
+      "id": "EP-038",
+      "title": "Implement payment reminders",
+      "phase": 2,
+      "week": "15-16",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["payment"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "2 days",
+      "tasks": [
+        "Automated reminder scheduling",
+        "Email notification for due payments",
+        "Overdue payment alerts"
+      ]
+    },
+    {
+      "id": "EP-039",
+      "title": "Create financial dashboard",
+      "phase": 2,
+      "week": "15-16",
+      "priority": "medium",
+      "type": "feature",
+      "modules": ["payment", "admin"],
+      "milestone": "M2: Core Booking Flow",
+      "estimate": "3 days",
+      "tasks": [
+        "Revenue overview charts",
+        "Outstanding payments",
+        "Payment method breakdown"
+      ]
+    },
+    {
+      "id": "EP-040",
+      "title": "Create Vendor model and migrations",
+      "phase": 3,
+      "week": "17-18",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["vendor"],
+      "milestone": "M3: Extended Features",
+      "estimate": "2 days",
+      "tasks": [
+        "Vendor categories (caterer, florist, photographer, etc.)",
+        "Contact information and services",
+        "Pricing and availability"
+      ]
+    },
+    {
+      "id": "EP-041",
+      "title": "Implement Vendor CRUD API",
+      "phase": 3,
+      "week": "17-18",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["vendor", "api"],
+      "milestone": "M3: Extended Features",
+      "estimate": "2 days",
+      "tasks": [
+        "Vendor listing and filtering",
+        "Create, update, delete operations",
+        "Service assignment to bookings"
+      ]
+    },
+    {
+      "id": "EP-042",
+      "title": "Build Vendor admin interface",
+      "phase": 3,
+      "week": "17-18",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["vendor", "admin"],
+      "milestone": "M3: Extended Features",
+      "estimate": "3 days",
+      "tasks": [
+        "Vendor directory",
+        "Vendor profile pages",
+        "Assignment workflow for bookings"
+      ]
+    },
+    {
+      "id": "EP-043",
+      "title": "Create vendor booking integration",
+      "phase": 3,
+      "week": "17-18",
+      "priority": "medium",
+      "type": "feature",
+      "modules": ["vendor", "booking"],
+      "milestone": "M3: Extended Features",
+      "estimate": "3 days",
+      "tasks": [
+        "Assign vendors to events",
+        "Track vendor confirmations",
+        "Vendor payment tracking"
+      ]
+    },
+    {
+      "id": "EP-044",
+      "title": "Create Staff and Task models",
+      "phase": 3,
+      "week": "19-20",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["staff"],
+      "milestone": "M3: Extended Features",
+      "estimate": "2 days",
+      "tasks": [
+        "Staff profiles with roles and skills",
+        "Task templates",
+        "Shift management"
+      ]
+    },
+    {
+      "id": "EP-045",
+      "title": "Implement staff scheduling API",
+      "phase": 3,
+      "week": "19-20",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["staff", "api"],
+      "milestone": "M3: Extended Features",
+      "estimate": "3 days",
+      "tasks": [
+        "Staff availability management",
+        "Task assignment to events",
+        "Shift scheduling"
+      ]
+    },
+    {
+      "id": "EP-046",
+      "title": "Build Staff scheduling interface",
+      "phase": 3,
+      "week": "19-20",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["staff", "admin"],
+      "milestone": "M3: Extended Features",
+      "estimate": "4 days",
+      "tasks": [
+        "Staff calendar view",
+        "Event staffing requirements",
+        "Task checklist per event"
+      ]
+    },
+    {
+      "id": "EP-047",
+      "title": "Create mobile-friendly task view",
+      "phase": 3,
+      "week": "19-20",
+      "priority": "medium",
+      "type": "feature",
+      "modules": ["staff"],
+      "milestone": "M3: Extended Features",
+      "estimate": "2 days",
+      "tasks": [
+        "Staff mobile task list",
+        "Task completion tracking",
+        "Time logging"
+      ]
+    },
+    {
+      "id": "EP-048",
+      "title": "Implement revenue reports",
+      "phase": 3,
+      "week": "21-22",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["reports"],
+      "milestone": "M3: Extended Features",
+      "estimate": "3 days",
+      "tasks": [
+        "Daily/weekly/monthly revenue",
+        "Revenue by venue",
+        "Revenue by event type",
+        "Export to Excel"
+      ]
+    },
+    {
+      "id": "EP-049",
+      "title": "Create booking reports",
+      "phase": 3,
+      "week": "21-22",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["reports"],
+      "milestone": "M3: Extended Features",
+      "estimate": "2 days",
+      "tasks": [
+        "Booking volume trends",
+        "Conversion rates (inquiry → booking)",
+        "Cancellation analysis"
+      ]
+    },
+    {
+      "id": "EP-050",
+      "title": "Build analytics dashboard",
+      "phase": 3,
+      "week": "21-22",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["reports", "admin"],
+      "milestone": "M3: Extended Features",
+      "estimate": "3 days",
+      "tasks": [
+        "Key metrics overview",
+        "ApexCharts visualizations",
+        "Date range selection"
+      ]
+    },
+    {
+      "id": "EP-051",
+      "title": "Implement occupancy reports",
+      "phase": 3,
+      "week": "21-22",
+      "priority": "medium",
+      "type": "feature",
+      "modules": ["reports"],
+      "milestone": "M3: Extended Features",
+      "estimate": "2 days",
+      "tasks": [
+        "Venue utilization rates",
+        "Peak booking times",
+        "Seasonal trends"
+      ]
+    },
+    {
+      "id": "EP-052",
+      "title": "Create Client Portal authentication",
+      "phase": 3,
+      "week": "23-24",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["client-portal"],
+      "milestone": "M3: Extended Features",
+      "estimate": "2 days",
+      "tasks": [
+        "Client registration and login",
+        "Profile management",
+        "Password reset"
+      ]
+    },
+    {
+      "id": "EP-053",
+      "title": "Build Client Portal dashboard",
+      "phase": 3,
+      "week": "23-24",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["client-portal"],
+      "milestone": "M3: Extended Features",
+      "estimate": "2 days",
+      "tasks": [
+        "Upcoming events display",
+        "Recent activity feed",
+        "Quick actions"
+      ]
+    },
+    {
+      "id": "EP-054",
+      "title": "Implement Client booking view",
+      "phase": 3,
+      "week": "23-24",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["client-portal"],
+      "milestone": "M3: Extended Features",
+      "estimate": "2 days",
+      "tasks": [
+        "View booking details",
+        "Download documents",
+        "Event countdown"
+      ]
+    },
+    {
+      "id": "EP-055",
+      "title": "Create Client payment features",
+      "phase": 3,
+      "week": "23-24",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["client-portal", "payment"],
+      "milestone": "M3: Extended Features",
+      "estimate": "2 days",
+      "tasks": [
+        "View payment schedule",
+        "Payment history",
+        "Make online payments (preparation for plugin)"
+      ]
+    },
+    {
+      "id": "EP-056",
+      "title": "Add Client communication features",
+      "phase": 3,
+      "week": "23-24",
+      "priority": "medium",
+      "type": "feature",
+      "modules": ["client-portal"],
+      "milestone": "M3: Extended Features",
+      "estimate": "2 days",
+      "tasks": [
+        "Message thread with venue",
+        "Document sharing",
+        "Notification preferences"
+      ]
+    },
+    {
+      "id": "EP-057",
+      "title": "Build Settings admin interface",
+      "phase": 4,
+      "week": "25-26",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["settings", "admin"],
+      "milestone": "M4: Customization Ready",
+      "estimate": "3 days",
+      "tasks": [
+        "General settings page",
+        "Currency and localization",
+        "Booking rules configuration"
+      ]
+    },
+    {
+      "id": "EP-058",
+      "title": "Implement branding settings",
+      "phase": 4,
+      "week": "25-26",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["settings"],
+      "milestone": "M4: Customization Ready",
+      "estimate": "2 days",
+      "tasks": [
+        "Logo and favicon upload",
+        "Color scheme customization",
+        "Business information"
+      ]
+    },
+    {
+      "id": "EP-059",
+      "title": "Create email template settings",
+      "phase": 4,
+      "week": "25-26",
+      "priority": "medium",
+      "type": "feature",
+      "modules": ["settings"],
+      "milestone": "M4: Customization Ready",
+      "estimate": "3 days",
+      "tasks": [
+        "Editable email templates",
+        "Template variables documentation",
+        "Preview functionality"
+      ]
+    },
+    {
+      "id": "EP-060",
+      "title": "Implement document template settings",
+      "phase": 4,
+      "week": "25-26",
+      "priority": "medium",
+      "type": "feature",
+      "modules": ["settings"],
+      "milestone": "M4: Customization Ready",
+      "estimate": "2 days",
+      "tasks": [
+        "Contract template customization",
+        "Terms and conditions editor",
+        "PDF header/footer configuration"
+      ]
+    },
+    {
+      "id": "EP-061",
+      "title": "Build Custom Fields admin interface",
+      "phase": 4,
+      "week": "27-28",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["settings", "admin"],
+      "milestone": "M4: Customization Ready",
+      "estimate": "3 days",
+      "tasks": [
+        "Field type selection (text, number, select, etc.)",
+        "Validation rules configuration",
+        "Field ordering"
+      ]
+    },
+    {
+      "id": "EP-062",
+      "title": "Implement CustomFieldService",
+      "phase": 4,
+      "week": "27-28",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["core"],
+      "milestone": "M4: Customization Ready",
+      "estimate": "2 days",
+      "tasks": [
+        "Field retrieval by entity type",
+        "Value storage and retrieval",
+        "Validation integration"
+      ]
+    },
+    {
+      "id": "EP-063",
+      "title": "Integrate custom fields with forms",
+      "phase": 4,
+      "week": "27-28",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["core"],
+      "milestone": "M4: Customization Ready",
+      "estimate": "3 days",
+      "tasks": [
+        "Dynamic form field rendering",
+        "Custom field display in views",
+        "Search integration"
+      ]
+    },
+    {
+      "id": "EP-064",
+      "title": "Implement ThemeService",
+      "phase": 4,
+      "week": "29-30",
+      "priority": "medium",
+      "type": "feature",
+      "modules": ["theme"],
+      "milestone": "M4: Customization Ready",
+      "estimate": "2 days",
+      "tasks": [
+        "Theme discovery and loading",
+        "Active theme switching",
+        "Theme asset management"
+      ]
+    },
+    {
+      "id": "EP-065",
+      "title": "Create default and elegant themes",
+      "phase": 4,
+      "week": "29-30",
+      "priority": "medium",
+      "type": "feature",
+      "modules": ["theme"],
+      "milestone": "M4: Customization Ready",
+      "estimate": "3 days",
+      "tasks": [
+        "Default theme with Tailwind styles",
+        "Elegant theme for luxury venues",
+        "Theme configuration files"
+      ]
+    },
+    {
+      "id": "EP-066",
+      "title": "Build theme management interface",
+      "phase": 4,
+      "week": "29-30",
+      "priority": "low",
+      "type": "feature",
+      "modules": ["theme", "admin"],
+      "milestone": "M4: Customization Ready",
+      "estimate": "2 days",
+      "tasks": [
+        "Theme selection",
+        "Theme preview",
+        "Color customization override"
+      ]
+    },
+    {
+      "id": "EP-067",
+      "title": "Implement PluginService",
+      "phase": 4,
+      "week": "29-30",
+      "priority": "medium",
+      "type": "feature",
+      "modules": ["core"],
+      "milestone": "M4: Customization Ready",
+      "estimate": "3 days",
+      "tasks": [
+        "Plugin discovery and loading",
+        "Hook system for extensibility",
+        "Plugin settings storage"
+      ]
+    },
+    {
+      "id": "EP-068",
+      "title": "Create SMS Gateway plugin",
+      "phase": 4,
+      "week": "29-30",
+      "priority": "medium",
+      "type": "feature",
+      "modules": ["core"],
+      "milestone": "M4: Customization Ready",
+      "estimate": "3 days",
+      "tasks": [
+        "Twilio/Nexmo integration",
+        "Booking notification SMS",
+        "Payment reminder SMS"
+      ]
+    },
+    {
+      "id": "EP-069",
+      "title": "Create Payment Gateway plugin",
+      "phase": 4,
+      "week": "29-30",
+      "priority": "high",
+      "type": "feature",
+      "modules": ["payment"],
+      "milestone": "M4: Customization Ready",
+      "estimate": "4 days",
+      "tasks": [
+        "Stripe integration",
+        "PayPal integration",
+        "Online payment processing"
+      ]
+    },
+    {
+      "id": "EP-070",
+      "title": "Write unit tests for services",
+      "phase": 5,
+      "week": "31-32",
+      "priority": "critical",
+      "type": "test",
+      "modules": ["core"],
+      "milestone": "M5: Production Launch",
+      "estimate": "4 days",
+      "tasks": [
+        "SettingsService tests",
+        "PricingService tests",
+        "AvailabilityService tests",
+        "QuotationService tests"
+      ]
+    },
+    {
+      "id": "EP-071",
+      "title": "Write feature tests for API",
+      "phase": 5,
+      "week": "31-32",
+      "priority": "critical",
+      "type": "test",
+      "modules": ["api"],
+      "milestone": "M5: Production Launch",
+      "estimate": "4 days",
+      "tasks": [
+        "Authentication tests",
+        "Venue API tests",
+        "Booking workflow tests",
+        "Payment tests"
+      ]
+    },
+    {
+      "id": "EP-072",
+      "title": "Write feature tests for admin interface",
+      "phase": 5,
+      "week": "31-32",
+      "priority": "high",
+      "type": "test",
+      "modules": ["admin"],
+      "milestone": "M5: Production Launch",
+      "estimate": "3 days",
+      "tasks": [
+        "Browser tests with Laravel Dusk",
+        "Form submission tests",
+        "Workflow tests"
+      ]
+    },
+    {
+      "id": "EP-073",
+      "title": "Perform security audit",
+      "phase": 5,
+      "week": "31-32",
+      "priority": "critical",
+      "type": "test",
+      "modules": ["core"],
+      "milestone": "M5: Production Launch",
+      "estimate": "2 days",
+      "tasks": [
+        "OWASP vulnerability check",
+        "SQL injection prevention",
+        "XSS prevention",
+        "CSRF protection verification"
+      ]
+    },
+    {
+      "id": "EP-074",
+      "title": "Create API documentation",
+      "phase": 5,
+      "week": "33-34",
+      "priority": "high",
+      "type": "docs",
+      "modules": ["api"],
+      "milestone": "M5: Production Launch",
+      "estimate": "3 days",
+      "tasks": [
+        "OpenAPI/Swagger specification",
+        "Endpoint descriptions",
+        "Request/response examples",
+        "Authentication guide"
+      ]
+    },
+    {
+      "id": "EP-075",
+      "title": "Write admin user guide",
+      "phase": 5,
+      "week": "33-34",
+      "priority": "high",
+      "type": "docs",
+      "modules": ["admin"],
+      "milestone": "M5: Production Launch",
+      "estimate": "3 days",
+      "tasks": [
+        "Feature documentation",
+        "Step-by-step tutorials",
+        "FAQ section"
+      ]
+    },
+    {
+      "id": "EP-076",
+      "title": "Create developer documentation",
+      "phase": 5,
+      "week": "33-34",
+      "priority": "medium",
+      "type": "docs",
+      "modules": ["core"],
+      "milestone": "M5: Production Launch",
+      "estimate": "3 days",
+      "tasks": [
+        "Architecture overview",
+        "Custom field development",
+        "Plugin development guide",
+        "Theme development guide"
+      ]
+    },
+    {
+      "id": "EP-077",
+      "title": "Prepare installation guide",
+      "phase": 5,
+      "week": "33-34",
+      "priority": "high",
+      "type": "docs",
+      "modules": ["core"],
+      "milestone": "M5: Production Launch",
+      "estimate": "1 day",
+      "tasks": [
+        "Requirements documentation",
+        "Step-by-step installation",
+        "Environment configuration",
+        "Troubleshooting guide"
+      ]
+    },
+    {
+      "id": "EP-078",
+      "title": "Set up production infrastructure",
+      "phase": 5,
+      "week": "35-36",
+      "priority": "critical",
+      "type": "devops",
+      "modules": ["core"],
+      "milestone": "M5: Production Launch",
+      "estimate": "2 days",
+      "tasks": [
+        "Server provisioning",
+        "Database setup",
+        "Redis configuration",
+        "SSL certificates"
+      ]
+    },
+    {
+      "id": "EP-079",
+      "title": "Configure production deployment",
+      "phase": 5,
+      "week": "35-36",
+      "priority": "critical",
+      "type": "devops",
+      "modules": ["core"],
+      "milestone": "M5: Production Launch",
+      "estimate": "2 days",
+      "tasks": [
+        "Environment variables",
+        "Queue workers (Supervisor)",
+        "Scheduled tasks (Cron)",
+        "Backup configuration"
+      ]
+    },
+    {
+      "id": "EP-080",
+      "title": "Perform performance optimization",
+      "phase": 5,
+      "week": "35-36",
+      "priority": "high",
+      "type": "enhancement",
+      "modules": ["core"],
+      "milestone": "M5: Production Launch",
+      "estimate": "2 days",
+      "tasks": [
+        "Query optimization",
+        "Cache configuration",
+        "Asset optimization",
+        "CDN setup"
+      ]
+    },
+    {
+      "id": "EP-081",
+      "title": "Create demo tenant",
+      "phase": 5,
+      "week": "35-36",
+      "priority": "medium",
+      "type": "feature",
+      "modules": ["core"],
+      "milestone": "M5: Production Launch",
+      "estimate": "1 day",
+      "tasks": [
+        "Sample data population",
+        "Demo credentials",
+        "Reset mechanism"
+      ]
+    },
+    {
+      "id": "EP-082",
+      "title": "Conduct UAT",
+      "phase": 5,
+      "week": "35-36",
+      "priority": "critical",
+      "type": "test",
+      "modules": ["core"],
+      "milestone": "M5: Production Launch",
+      "estimate": "3 days",
+      "tasks": [
+        "End-to-end workflow testing",
+        "Multi-tenant testing",
+        "Mobile responsiveness",
+        "Cross-browser testing"
+      ]
+    },
+    {
+      "id": "EP-083",
+      "title": "Launch preparation",
+      "phase": 5,
+      "week": "35-36",
+      "priority": "critical",
+      "type": "devops",
+      "modules": ["core"],
+      "milestone": "M5: Production Launch",
+      "estimate": "2 days",
+      "tasks": [
+        "Final security review",
+        "Monitoring setup (logs, alerts)",
+        "Support procedures",
+        "Go-live checklist"
+      ]
+    }
+  ]
+}
