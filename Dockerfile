@@ -39,9 +39,6 @@ WORKDIR /var/www/html
 # Copy application files
 COPY . /var/www/html
 
-# Install PHP dependencies
-RUN composer install --no-interaction --no-dev --optimize-autoloader || true
-
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 

@@ -26,11 +26,11 @@ echo "🗄️  Running database migrations..."
 docker compose exec -T app php artisan migrate --force
 
 # Seed database (optional)
-read -p "Do you want to seed the database? (y/n) " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
+if [ "${SEED_DATABASE:-false}" = "true" ] || [ "$1" = "--seed" ]; then
     echo "🌱 Seeding database..."
     docker compose exec -T app php artisan db:seed
+else
+    echo "ℹ️  Skipping database seeding. Use '--seed' flag or set SEED_DATABASE=true to seed."
 fi
 
 # Install npm dependencies

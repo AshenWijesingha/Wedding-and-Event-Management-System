@@ -65,7 +65,14 @@ This will:
 ### 3. Initial Setup
 
 ```bash
+# Basic setup without seeding
 ./scripts/docker-setup.sh
+
+# Or with database seeding
+./scripts/docker-setup.sh --seed
+
+# Or using environment variable
+SEED_DATABASE=true ./scripts/docker-setup.sh
 ```
 
 This will:
@@ -73,6 +80,7 @@ This will:
 - Install PHP dependencies (Composer)
 - Generate application key
 - Run database migrations
+- Optionally seed the database (with --seed flag or SEED_DATABASE=true)
 - Install Node.js dependencies
 - Build frontend assets
 - Clear and cache configuration

@@ -10,7 +10,9 @@ echo "💡 Available services: app, mysql, redis, mailhog, meilisearch"
 echo ""
 
 if [ "$SERVICE" = "mysql" ]; then
-    docker compose exec mysql mysql -u root -psecret eventpro
+    # Read MySQL password from environment or use default
+    MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD:-secret}
+    docker compose exec mysql mysql -u root -p"$MYSQL_PASSWORD" eventpro
 else
     docker compose exec $SERVICE /bin/sh -c "[ -e /bin/bash ] && /bin/bash || /bin/sh"
 fi
