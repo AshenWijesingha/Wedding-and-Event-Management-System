@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToTenant;
+
+class Payment extends Model
+{
+    use HasFactory, BelongsToTenant;
+
+    protected $fillable = [
+        'tenant_id',
+        'payment_number',
+        'booking_id',
+        'client_id',
+        'installment_name',
+        'amount',
+        'payment_method',
+        'payment_date',
+        'reference_number',
+        'status',
+        'notes',
+        'received_by',
+    ];
+
+    protected $casts = [
+        'amount' => 'decimal:2',
+        'payment_date' => 'date',
+    ];
+
+    /**
+     * Get the booking for this payment.
+     */
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class);
+    }
+
+    /**
+     * Get the client for this payment.
+     */
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    /**
+     * Get the user who received the payment.
+     */
+    public function receivedBy()
+    {
+        return $this->belongsTo(User::class, 'received_by');
+    }
+
+    /**
+     * Generate unique payment number.
+     */
+    public static function generatePaymentNumber(): string
+    {
+        $year = date('Y');
+        $count = static::whereYear('created_at', $year)->count() + 1;
+        return sprintf('PAY%s%04d', $year, $count);
+    }
+
+    /**
+     * Scope query to completed payments.
+     */
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', 'completed');
+    }
+
+    /**
+     * Scope query by payment method.
+     */
+    public function scopeByMethod($query, string $method)
+    {
+        return $query->where('payment_method', $method);
+    }
+}
