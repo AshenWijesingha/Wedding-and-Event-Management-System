@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # EventPro Issue Creation Script
-# This script creates all GitHub issues from the ISSUES.md roadmap using GitHub CLI
+# This script creates all GitHub issues based on the development roadmap using GitHub CLI
+# Issue data is defined in this script and mirrors the ISSUES.md roadmap document
 #
 # Prerequisites:
 #   - GitHub CLI (gh) must be installed and authenticated
@@ -140,8 +141,8 @@ create_milestones() {
             # GNU date
             due_date=$(date -d "$START_DATE + $weeks weeks" +%Y-%m-%dT23:59:59Z)
         else
-            # BSD date (macOS)
-            due_date=$(date -v+${weeks}w +%Y-%m-%dT23:59:59Z)
+            # BSD date (macOS) - use -j -f to parse START_DATE
+            due_date=$(date -j -f '%Y-%m-%d' "$START_DATE" -v+${weeks}w +%Y-%m-%dT23:59:59Z)
         fi
         
         echo "Creating milestone: $title (due: $due_date)"
@@ -165,20 +166,21 @@ create_issue() {
     echo "Creating: [$id] $title"
     
     if [ "$DRY_RUN" = false ]; then
-        local cmd="gh issue create --title \"[$id] $title\" --body \"$body\""
+        # Build command arguments as an array to avoid eval
+        local args=("issue" "create" "--title" "[$id] $title" "--body" "$body")
         
         # Add labels
         IFS=',' read -ra LABEL_ARRAY <<< "$labels"
         for label in "${LABEL_ARRAY[@]}"; do
-            cmd="$cmd --label \"$label\""
+            args+=("--label" "$label")
         done
         
         # Add milestone
         if [ -n "$milestone" ]; then
-            cmd="$cmd --milestone \"$milestone\""
+            args+=("--milestone" "$milestone")
         fi
         
-        eval $cmd
+        gh "${args[@]}"
         sleep 1  # Rate limiting
     fi
 }
