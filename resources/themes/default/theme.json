@@ -1,0 +1,31 @@
+{
+    "name": "Default",
+    "version": "1.0.0",
+    "description": "The default EventPro theme with a clean, modern design",
+    "author": "EventPro Team",
+    "colors": {
+        "primary": "#3B82F6",
+        "secondary": "#1E40AF",
+        "accent": "#10B981",
+        "background": "#F9FAFB",
+        "surface": "#FFFFFF",
+        "text": "#1F2937",
+        "text-muted": "#6B7280"
+    },
+    "fonts": {
+        "heading": "Inter",
+        "body": "Inter"
+    },
+    "features": {
+        "hero_slider": true,
+        "parallax_sections": false,
+        "animated_counters": true,
+        "testimonials": true,
+        "gallery_grid": true
+    },
+    "layouts": {
+        "header": "default",
+        "footer": "default",
+        "sidebar": "left"
+    }
+}
