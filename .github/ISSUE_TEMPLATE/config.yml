@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: EventPro Documentation
+    url: https://github.com/AshenWijesingha/Wedding-and-Event-Management-System#readme
+    about: Check the documentation before creating an issue
+  - name: Development Roadmap
+    url: https://github.com/AshenWijesingha/Wedding-and-Event-Management-System/blob/main/ISSUES.md
+    about: View the complete development roadmap (EP-001 to EP-083)
