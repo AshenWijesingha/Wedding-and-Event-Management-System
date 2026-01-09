@@ -1,0 +1,140 @@
+name: Development Task
+description: Create a development task for EventPro roadmap
+title: "[EP-XXX]: "
+labels: ["type:feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for creating roadmap issues (EP-001 through EP-083).
+
+  - type: input
+    id: issue-id
+    attributes:
+      label: Issue ID
+      description: The roadmap issue ID
+      placeholder: EP-001
+    validations:
+      required: true
+
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Development Phase
+      description: Which phase does this task belong to?
+      options:
+        - Phase 1: Foundation (Weeks 1-6)
+        - Phase 2: Core Modules (Weeks 7-16)
+        - Phase 3: Extended Modules (Weeks 17-24)
+        - Phase 4: Customization (Weeks 25-30)
+        - Phase 5: Launch (Weeks 31-36)
+    validations:
+      required: true
+
+  - type: input
+    id: week
+    attributes:
+      label: Target Week
+      description: Which week(s) is this scheduled for?
+      placeholder: Week 1-2
+    validations:
+      required: true
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: Module
+      description: Which module does this task relate to?
+      options:
+        - Core Architecture
+        - Venue Management
+        - Booking System
+        - Payment Tracking
+        - Client Portal
+        - Admin Interface
+        - API
+        - Vendor Management
+        - Staff Scheduling
+        - Reporting & Analytics
+        - Settings & Customization
+        - Theme & Plugin System
+        - Testing
+        - Documentation
+        - DevOps & Deployment
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: What is the priority level?
+      options:
+        - Critical - Must be completed, blocks other work
+        - High - Important feature, should be completed
+        - Medium - Nice to have, can be deferred if needed
+        - Low - Optional enhancement
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Task Description
+      description: Provide a clear description of what needs to be done
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Sub-tasks
+      description: Break down the task into smaller pieces
+      placeholder: |
+        - [ ] Sub-task 1
+        - [ ] Sub-task 2
+        - [ ] Sub-task 3
+    validations:
+      required: true
+
+  - type: input
+    id: estimate
+    attributes:
+      label: Time Estimate
+      description: Estimated time to complete this task
+      placeholder: e.g., 2 days
+    validations:
+      required: true
+
+  - type: dropdown
+    id: milestone
+    attributes:
+      label: Milestone
+      description: Which milestone does this belong to?
+      options:
+        - M1: Foundation Complete (Week 6)
+        - M2: Core Booking Flow (Week 16)
+        - M3: Extended Features (Week 24)
+        - M4: Customization Ready (Week 30)
+        - M5: Production Launch (Week 36)
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: List any issues that must be completed before this one
+      placeholder: |
+        - EP-001
+        - EP-002
+    validations:
+      required: false
+
+  - type: textarea
+    id: technical-notes
+    attributes:
+      label: Technical Notes
+      description: Any technical implementation details or notes
+    validations:
+      required: false
