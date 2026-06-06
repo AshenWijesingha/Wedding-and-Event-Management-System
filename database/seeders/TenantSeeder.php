@@ -16,38 +16,27 @@ class TenantSeeder extends Seeder
     {
         $plan = Plan::where('slug', 'professional')->first();
 
-        Tenant::create([
-            'uuid' => Str::uuid(),
-            'name' => 'Grand Vista Events',
-            'slug' => 'grand-vista',
-            'domain' => 'grandvista.localhost',
-            'plan_id' => $plan?->id,
-            'email' => 'info@grandvista.example.com',
-            'phone' => '+1 555-0123',
-            'primary_color' => '#3B82F6',
-            'status' => 'active',
-            'settings' => [
-                'general' => [
-                    'business_name' => 'Grand Vista Events',
-                    'tagline' => 'Creating Unforgettable Moments',
-                    'timezone' => 'America/New_York',
+        Tenant::updateOrCreate(
+            ['slug' => 'grand-vista'],
+            [
+                'name' => 'Grand Vista Events',
+                'domain' => 'grandvista.localhost',
+                'plan_id' => $plan?->id,
+                'email' => 'info@grandvista.example.com',
+                'phone' => '+1 555-0123',
+                'primary_color' => '#3B82F6',
+                'status' => 'active',
+                'settings' => [
+                    'general' => [
+                        'business_name' => 'Grand Vista Events',
+                        'tagline' => 'Creating Unforgettable Moments',
+                        'timezone' => 'America/New_York',
+                    ],
+                    'currency' => ['code' => 'USD', 'symbol' => '$', 'position' => 'before'],
+                    'booking' => ['min_advance_days' => 14, 'max_advance_days' => 365, 'deposit_percentage' => 25],
+                    'contact' => ['address' => '123 Event Boulevard', 'city' => 'New York', 'country' => 'United States'],
                 ],
-                'currency' => [
-                    'code' => 'USD',
-                    'symbol' => '$',
-                    'position' => 'before',
-                ],
-                'booking' => [
-                    'min_advance_days' => 14,
-                    'max_advance_days' => 365,
-                    'deposit_percentage' => 25,
-                ],
-                'contact' => [
-                    'address' => '123 Event Boulevard',
-                    'city' => 'New York',
-                    'country' => 'United States',
-                ],
-            ],
-        ]);
+            ]
+        );
     }
 }

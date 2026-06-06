@@ -15,39 +15,45 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Create super admin (no tenant)
-        User::create([
-            'tenant_id' => null,
-            'name' => 'Super Admin',
-            'email' => 'admin@eventpro.io',
-            'password' => Hash::make('password'),
-            'role' => 'super_admin',
-            'is_active' => true,
-            'email_verified_at' => now(),
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@eventpro.io'],
+            [
+                'tenant_id' => null,
+                'name' => 'Super Admin',
+                'password' => Hash::make('password'),
+                'role' => 'super_admin',
+                'is_active' => true,
+                'email_verified_at' => now(),
+            ]
+        );
 
-        // Create tenant admin
+        // Create tenant users
         $tenant = Tenant::where('slug', 'grand-vista')->first();
-        
-        if ($tenant) {
-            User::create([
-                'tenant_id' => $tenant->id,
-                'name' => 'John Manager',
-                'email' => 'john@grandvista.example.com',
-                'password' => Hash::make('password'),
-                'role' => 'admin',
-                'is_active' => true,
-                'email_verified_at' => now(),
-            ]);
 
-            User::create([
-                'tenant_id' => $tenant->id,
-                'name' => 'Sarah Staff',
-                'email' => 'sarah@grandvista.example.com',
-                'password' => Hash::make('password'),
-                'role' => 'staff',
-                'is_active' => true,
-                'email_verified_at' => now(),
-            ]);
+        if ($tenant) {
+            User::updateOrCreate(
+                ['email' => 'john@grandvista.example.com'],
+                [
+                    'tenant_id' => $tenant->id,
+                    'name' => 'John Manager',
+                    'password' => Hash::make('password'),
+                    'role' => 'admin',
+                    'is_active' => true,
+                    'email_verified_at' => now(),
+                ]
+            );
+
+            User::updateOrCreate(
+                ['email' => 'sarah@grandvista.example.com'],
+                [
+                    'tenant_id' => $tenant->id,
+                    'name' => 'Sarah Staff',
+                    'password' => Hash::make('password'),
+                    'role' => 'staff',
+                    'is_active' => true,
+                    'email_verified_at' => now(),
+                ]
+            );
         }
     }
 }
