@@ -50,11 +50,21 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Packages
     Route::resource('packages', \App\Http\Controllers\Admin\PackageController::class)
         ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
-    Route::get('/bookings', fn () => inertia('Bookings/Index'))->name('bookings.index');
+    // Bookings
+    Route::get('/bookings', [\App\Http\Controllers\Admin\BookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/create', fn () => inertia('Bookings/Create'))->name('bookings.create');
-    Route::get('/bookings/{id}', fn ($id) => inertia('Bookings/Show', ['bookingId' => $id]))->name('bookings.show');
-    Route::get('/inquiries', fn () => inertia('Inquiries/Index'))->name('inquiries.index');
-    Route::get('/quotations', fn () => inertia('Quotations/Index'))->name('quotations.index');
+    Route::get('/bookings/{booking}', [\App\Http\Controllers\Admin\BookingController::class, 'show'])->name('bookings.show');
+
+    // Inquiries
+    Route::get('/inquiries', [\App\Http\Controllers\Admin\InquiryController::class, 'index'])->name('inquiries.index');
+    Route::get('/inquiries/{inquiry}', [\App\Http\Controllers\Admin\InquiryController::class, 'show'])->name('inquiries.show');
+    Route::patch('/inquiries/{inquiry}', [\App\Http\Controllers\Admin\InquiryController::class, 'update'])->name('inquiries.update');
+
+    // Quotations
+    Route::get('/quotations', [\App\Http\Controllers\Admin\QuotationController::class, 'index'])->name('quotations.index');
+    Route::get('/quotations/create', fn () => inertia('Quotations/Create'))->name('quotations.create');
+    Route::get('/quotations/{quotation}', [\App\Http\Controllers\Admin\QuotationController::class, 'show'])->name('quotations.show');
+
     Route::get('/clients', fn () => inertia('Clients/Index'))->name('clients.index');
     Route::get('/payments', fn () => inertia('Payments/Index'))->name('payments.index');
     Route::get('/reports', fn () => inertia('Reports/Index'))->name('reports.index');
