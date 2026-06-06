@@ -3,47 +3,55 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\VenueResource;
+use App\Http\Traits\ApiResponse;
 use App\Models\Venue;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class VenueController extends Controller
 {
-    /**
-     * Display a listing of venues.
-     */
+    use ApiResponse;
+
     public function index(Request $request): JsonResponse
     {
-        $venues = Venue::query()
-            ->when($request->search, fn ($query, $search) => 
-                $query->where('name', 'like', "%{$search}%")
+        $venues = Venue::active()
+            ->when($request->search, fn ($q, $search) =>
+                $q->where('name', 'like', "%{$search}%")
             )
-            ->when($request->type, fn ($query, $type) => 
-                $query->where('type', $type)
+            ->when($request->capacity_min, fn ($q, $min) =>
+                $q->where('capacity_max', '>=', $min)
             )
-            ->paginate($request->per_page ?? 15);
+            ->when($request->capacity_max, fn ($q, $max) =>
+                $q->where('capacity_min', '<=', $max)
+            )
+            ->orderBy('name')
+            ->paginate($request->per_page ?? 12);
 
-        return response()->json($venues);
+        return $this->success(VenueResource::collection($venues));
     }
 
-    /**
-     * Display the specified venue.
-     */
     public function show(Venue $venue): JsonResponse
     {
-        return response()->json($venue);
+        if ($venue->status !== 'active') {
+            return $this->notFound('Venue not found.');
+        }
+
+        return $this->success(new VenueResource($venue));
     }
 
-    /**
-     * Get availability for a venue.
-     */
     public function availability(Venue $venue, Request $request): JsonResponse
     {
-        // TODO: Implement availability check
-        return response()->json([
+        $request->validate([
+            'date' => 'required|date|after_or_equal:today',
+        ]);
+
+        $available = $venue->isAvailableOn($request->date);
+
+        return $this->success([
             'venue_id' => $venue->id,
-            'available' => true,
-            'dates' => [],
+            'date' => $request->date,
+            'available' => $available,
         ]);
     }
 }

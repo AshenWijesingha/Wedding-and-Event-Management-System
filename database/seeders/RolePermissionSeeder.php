@@ -1,0 +1,79 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+
+class RolePermissionSeeder extends Seeder
+{
+    public function run(): void
+    {
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
+        $permissions = [
+            // Venues
+            'venues.view', 'venues.create', 'venues.edit', 'venues.delete',
+            // Packages
+            'packages.view', 'packages.create', 'packages.edit', 'packages.delete',
+            // Clients
+            'clients.view', 'clients.create', 'clients.edit', 'clients.delete',
+            // Inquiries
+            'inquiries.view', 'inquiries.create', 'inquiries.edit', 'inquiries.delete', 'inquiries.assign',
+            // Quotations
+            'quotations.view', 'quotations.create', 'quotations.edit', 'quotations.delete', 'quotations.send',
+            // Bookings
+            'bookings.view', 'bookings.create', 'bookings.edit', 'bookings.delete', 'bookings.confirm', 'bookings.cancel',
+            // Payments
+            'payments.view', 'payments.create', 'payments.edit', 'payments.delete', 'payments.refund',
+            // Reports
+            'reports.view', 'reports.export',
+            // Settings
+            'settings.view', 'settings.edit',
+            // Users
+            'users.view', 'users.create', 'users.edit', 'users.delete',
+        ];
+
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
+        }
+
+        $superAdmin = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+        $superAdmin->syncPermissions(Permission::all());
+
+        $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        $admin->syncPermissions(Permission::whereNotIn('name', [
+            'settings.edit',
+            'users.delete',
+        ])->get());
+
+        $manager = Role::firstOrCreate(['name' => 'manager', 'guard_name' => 'web']);
+        $manager->syncPermissions([
+            'venues.view', 'packages.view',
+            'clients.view', 'clients.create', 'clients.edit',
+            'inquiries.view', 'inquiries.create', 'inquiries.edit', 'inquiries.assign',
+            'quotations.view', 'quotations.create', 'quotations.edit', 'quotations.send',
+            'bookings.view', 'bookings.create', 'bookings.edit', 'bookings.confirm', 'bookings.cancel',
+            'payments.view', 'payments.create',
+            'reports.view',
+        ]);
+
+        $staff = Role::firstOrCreate(['name' => 'staff', 'guard_name' => 'web']);
+        $staff->syncPermissions([
+            'venues.view', 'packages.view',
+            'clients.view',
+            'inquiries.view', 'inquiries.create',
+            'quotations.view',
+            'bookings.view',
+            'payments.view',
+        ]);
+
+        $client = Role::firstOrCreate(['name' => 'client', 'guard_name' => 'web']);
+        $client->syncPermissions([
+            'bookings.view',
+            'payments.view',
+            'quotations.view',
+        ]);
+    }
+}
