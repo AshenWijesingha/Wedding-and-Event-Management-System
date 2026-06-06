@@ -69,7 +69,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     Route::get('/clients', fn () => inertia('Clients/Index'))->name('clients.index');
     Route::get('/payments', [\App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('payments.index');
-    Route::get('/reports', fn () => inertia('Reports/Index'))->name('reports.index');
+    Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
     Route::get('/settings', fn () => inertia('Settings/Index'))->name('settings.index');
 });
 
