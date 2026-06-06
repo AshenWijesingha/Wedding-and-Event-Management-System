@@ -84,6 +84,23 @@ class SettingsController extends Controller
         return back()->with('success', 'Branding settings saved.');
     }
 
+    public function updateDocumentTemplates(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'quotation_footer' => 'nullable|string',
+            'quotation_terms'  => 'nullable|string',
+            'invoice_footer'   => 'nullable|string',
+            'contract_header'  => 'nullable|string',
+        ]);
+
+        $tenant = $this->getTenant();
+        if ($tenant) {
+            $tenant->setSetting('document_templates', $request->only(['quotation_footer', 'quotation_terms', 'invoice_footer', 'contract_header']));
+        }
+
+        return back()->with('success', 'Document templates saved.');
+    }
+
     public function updateEmailTemplates(Request $request): RedirectResponse
     {
         $request->validate([

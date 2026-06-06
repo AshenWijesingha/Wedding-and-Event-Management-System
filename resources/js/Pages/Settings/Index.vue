@@ -45,10 +45,20 @@ function saveEmailTemplates() {
     });
 }
 
+// Document templates form
+const docTemplates = props.settings?.document_templates ?? {};
+const docForm = useForm({
+    quotation_footer: docTemplates.quotation_footer ?? '',
+    quotation_terms:  docTemplates.quotation_terms ?? '',
+    invoice_footer:   docTemplates.invoice_footer ?? '',
+    contract_header:  docTemplates.contract_header ?? '',
+});
+
 const tabs = [
     { id: 'general', label: 'General' },
     { id: 'branding', label: 'Branding' },
     { id: 'email', label: 'Email Templates' },
+    { id: 'documents', label: 'Documents' },
 ];
 </script>
 
@@ -168,6 +178,43 @@ const tabs = [
                     Save Email Templates
                 </button>
             </div>
+
+            <!-- Document Templates -->
+            <form v-if="activeTab === 'documents'" @submit.prevent="docForm.post('/admin/settings/document-templates', { preserveScroll: true })"
+                class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                <h3 class="text-sm font-semibold text-gray-900">Document Template Settings</h3>
+                <p class="text-xs text-gray-500">Customise footers, terms, and headers for generated PDF documents.</p>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Quotation Footer</label>
+                        <textarea v-model="docForm.quotation_footer" rows="3"
+                            class="w-full border-gray-300 rounded-md text-sm resize-none focus:border-indigo-500 focus:ring-indigo-500"
+                            placeholder="Footer text printed on all quotations..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Quotation Terms & Conditions</label>
+                        <textarea v-model="docForm.quotation_terms" rows="5"
+                            class="w-full border-gray-300 rounded-md text-sm resize-none focus:border-indigo-500 focus:ring-indigo-500"
+                            placeholder="Standard terms included in quotations..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Invoice Footer</label>
+                        <textarea v-model="docForm.invoice_footer" rows="3"
+                            class="w-full border-gray-300 rounded-md text-sm resize-none focus:border-indigo-500 focus:ring-indigo-500"
+                            placeholder="Footer text printed on all invoices..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Contract Header</label>
+                        <textarea v-model="docForm.contract_header" rows="3"
+                            class="w-full border-gray-300 rounded-md text-sm resize-none focus:border-indigo-500 focus:ring-indigo-500"
+                            placeholder="Header text for contract documents..."></textarea>
+                    </div>
+                </div>
+                <button type="submit" :disabled="docForm.processing"
+                    class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg disabled:opacity-50">
+                    Save Document Templates
+                </button>
+            </form>
         </div>
     </AppLayout>
 </template>
