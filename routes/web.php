@@ -85,6 +85,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     Route::get('/clients', fn () => inertia('Clients/Index'))->name('clients.index');
     Route::get('/payments', [\App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('payments.index');
+    // Custom Fields
+    Route::get('/custom-fields', [\App\Http\Controllers\Admin\CustomFieldController::class, 'index'])->name('custom-fields.index');
+    Route::post('/custom-fields', [\App\Http\Controllers\Admin\CustomFieldController::class, 'store'])->name('custom-fields.store');
+    Route::patch('/custom-fields/{customField}', [\App\Http\Controllers\Admin\CustomFieldController::class, 'update'])->name('custom-fields.update');
+    Route::delete('/custom-fields/{customField}', [\App\Http\Controllers\Admin\CustomFieldController::class, 'destroy'])->name('custom-fields.destroy');
+
     Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/revenue', [\App\Http\Controllers\Admin\ReportController::class, 'revenue'])->name('reports.revenue');
     Route::get('/reports/bookings', [\App\Http\Controllers\Admin\ReportController::class, 'bookings'])->name('reports.bookings');
@@ -93,6 +99,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/settings/general', [\App\Http\Controllers\Admin\SettingsController::class, 'updateGeneral'])->name('settings.general');
     Route::post('/settings/branding', [\App\Http\Controllers\Admin\SettingsController::class, 'updateBranding'])->name('settings.branding');
     Route::post('/settings/email-templates', [\App\Http\Controllers\Admin\SettingsController::class, 'updateEmailTemplates'])->name('settings.email-templates');
+    Route::post('/settings/document-templates', [\App\Http\Controllers\Admin\SettingsController::class, 'updateDocumentTemplates'])->name('settings.document-templates');
     Route::post('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'updateSettings'])->name('settings.update');
 });
 
