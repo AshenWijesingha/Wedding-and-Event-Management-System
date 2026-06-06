@@ -23,11 +23,15 @@ class Payment extends Model
         'status',
         'notes',
         'received_by',
+        'due_date',
+        'reminder_sent_at',
     ];
 
     protected $casts = [
-        'amount' => 'decimal:2',
-        'payment_date' => 'date',
+        'amount'           => 'decimal:2',
+        'payment_date'     => 'date',
+        'due_date'         => 'date',
+        'reminder_sent_at' => 'datetime',
     ];
 
     /**
