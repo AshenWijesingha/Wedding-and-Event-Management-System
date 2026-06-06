@@ -3,10 +3,23 @@ import { ref } from 'vue';
 import { useForm, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
-const props = defineProps({ booking: Object });
+const props = defineProps({ booking: Object, availableVendors: Array });
 
 const cancelForm = useForm({ cancellation_reason: '' });
 const showCancelModal = ref(false);
+const showVendorForm = ref(false);
+const vendorForm = useForm({ vendor_id: '', service_description: '', agreed_amount: '', notes: '' });
+
+function attachVendor() {
+    vendorForm.post(`/admin/bookings/${props.booking.id}/vendors`, {
+        onSuccess: () => { showVendorForm.value = false; vendorForm.reset(); },
+    });
+}
+
+function detachVendor(vendorId) {
+    if (!window.confirm('Remove this vendor from the booking?')) return;
+    router.delete(`/admin/bookings/${props.booking.id}/vendors/${vendorId}`, { preserveScroll: true });
+}
 
 function confirm() {
     if (!window.confirm('Confirm this booking?')) return;
@@ -138,6 +151,47 @@ const statusColors = {
                             </tbody>
                         </table>
                         <p v-else class="text-sm text-gray-400">No payments recorded yet.</p>
+                    </div>
+
+                    <!-- Vendors -->
+                    <div class="bg-white rounded-lg shadow-sm p-5">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-sm font-semibold text-gray-900">Vendors</h3>
+                            <button @click="showVendorForm = !showVendorForm" class="text-xs text-indigo-600 hover:underline">
+                                {{ showVendorForm ? 'Cancel' : '+ Assign Vendor' }}
+                            </button>
+                        </div>
+
+                        <!-- Attach form -->
+                        <div v-if="showVendorForm" class="mb-4 p-3 bg-gray-50 rounded-lg space-y-2">
+                            <select v-model="vendorForm.vendor_id" class="w-full border-gray-300 rounded-md text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <option value="">Select vendor</option>
+                                <option v-for="v in availableVendors" :key="v.id" :value="v.id">{{ v.name }} ({{ v.category }})</option>
+                            </select>
+                            <input v-model="vendorForm.service_description" type="text" placeholder="Service description"
+                                class="w-full border-gray-300 rounded-md text-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                            <input v-model="vendorForm.agreed_amount" type="number" min="0" step="0.01" placeholder="Agreed amount ($)"
+                                class="w-full border-gray-300 rounded-md text-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                            <button @click="attachVendor" :disabled="vendorForm.processing || !vendorForm.vendor_id"
+                                class="w-full py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm rounded-md disabled:opacity-50">
+                                Assign
+                            </button>
+                        </div>
+
+                        <div v-if="booking.vendors?.length" class="space-y-2">
+                            <div v-for="vendor in booking.vendors" :key="vendor.id" class="flex items-start justify-between text-sm py-2 border-t border-gray-100">
+                                <div>
+                                    <p class="font-medium text-gray-900">{{ vendor.name }}</p>
+                                    <p class="text-xs text-gray-500 capitalize">{{ vendor.category }}</p>
+                                    <p v-if="vendor.pivot?.service_description" class="text-xs text-gray-500 mt-0.5">{{ vendor.pivot.service_description }}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p v-if="vendor.pivot?.agreed_amount" class="font-semibold text-gray-900">${{ parseFloat(vendor.pivot.agreed_amount).toLocaleString() }}</p>
+                                    <button @click="detachVendor(vendor.id)" class="text-xs text-red-500 hover:text-red-700 mt-1">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                        <p v-else-if="!showVendorForm" class="text-sm text-gray-400">No vendors assigned yet.</p>
                     </div>
                 </div>
 

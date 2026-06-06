@@ -30,6 +30,7 @@ class BookingResource extends JsonResource
             'venue' => new VenueResource($this->whenLoaded('venue')),
             'package' => new PackageResource($this->whenLoaded('package')),
             'payments' => PaymentResource::collection($this->whenLoaded('payments')),
+            'vendors' => VendorResource::collection($this->whenLoaded('vendors')),
             'notes' => $this->notes,
             'created_at' => $this->created_at?->toDateTimeString(),
             'updated_at' => $this->updated_at?->toDateTimeString(),

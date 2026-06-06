@@ -72,6 +72,16 @@ class Booking extends Model
     }
 
     /**
+     * Get the vendors for this booking.
+     */
+    public function vendors()
+    {
+        return $this->belongsToMany(Vendor::class, 'booking_vendor')
+            ->withPivot(['service_description', 'agreed_amount', 'status', 'notes'])
+            ->withTimestamps();
+    }
+
+    /**
      * Get the quotation for this booking.
      */
     public function quotation()

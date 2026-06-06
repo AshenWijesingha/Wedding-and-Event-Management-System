@@ -70,6 +70,9 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             
             // Payments management
             Route::apiResource('payments', \App\Http\Controllers\Api\V1\Admin\PaymentController::class);
+
+            // Vendors management
+            Route::apiResource('vendors', \App\Http\Controllers\Api\V1\Admin\VendorController::class);
             
             // Reports
             Route::prefix('reports')->name('reports.')->group(function () {
