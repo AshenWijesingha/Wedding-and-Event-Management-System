@@ -5,12 +5,17 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\QuotationResource;
 use App\Models\Quotation;
+use App\Services\BrandingService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class QuotationController extends Controller
 {
+    public function __construct(private BrandingService $brandingService) {}
+
     public function index(Request $request): Response
     {
         $quotations = Quotation::with(['client', 'venue'])
@@ -37,7 +42,19 @@ class QuotationController extends Controller
     public function show(Quotation $quotation): Response
     {
         return Inertia::render('Quotations/Show', [
-            'quotation' => new QuotationResource($quotation->load(['client', 'venue'])),
+            'quotation' => new QuotationResource($quotation->load(['client', 'venue', 'package'])),
         ]);
+    }
+
+    public function downloadPdf(Quotation $quotation): SymfonyResponse
+    {
+        $quotation->load(['client', 'venue', 'package']);
+
+        $pdf = Pdf::loadView('pdf.quotation', [
+            'quotation' => $quotation,
+            'branding'  => $this->brandingService->getBranding(),
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->download("quotation_{$quotation->quotation_number}.pdf");
     }
 }
