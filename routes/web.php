@@ -52,6 +52,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Venues — full resource with web controller
     Route::resource('venues', \App\Http\Controllers\Admin\VenueController::class)
         ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+    Route::get('venues/{venue}/availability', [\App\Http\Controllers\Admin\VenueController::class, 'availability'])->name('admin.venues.availability');
 
     // Placeholder routes for pages not yet built
     Route::get('/packages', fn () => inertia('Packages/Index'))->name('packages.index');
