@@ -101,6 +101,9 @@ const logout = () => router.post('/logout');
                 <div v-if="$page.props.flash?.success" class="mr-4 px-3 py-1 bg-green-100 text-green-700 rounded text-sm">
                     {{ $page.props.flash.success }}
                 </div>
+                <div v-if="$page.props.flash?.error" class="mr-4 px-3 py-1 bg-red-100 text-red-700 rounded text-sm">
+                    {{ $page.props.flash.error }}
+                </div>
             </header>
 
             <!-- Page content -->
