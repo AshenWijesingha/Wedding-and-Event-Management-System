@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -39,5 +40,36 @@ class BookingController extends Controller
         return Inertia::render('Bookings/Show', [
             'booking' => new BookingResource($booking->load(['client', 'venue', 'package', 'payments'])),
         ]);
+    }
+
+    public function confirm(Booking $booking): RedirectResponse
+    {
+        if (!in_array($booking->status, ['tentative'])) {
+            return back()->with('error', 'Only tentative bookings can be confirmed.');
+        }
+
+        $booking->update(['status' => 'confirmed']);
+
+        return back()->with('success', 'Booking confirmed successfully.');
+    }
+
+    public function cancel(Request $request, Booking $booking): RedirectResponse
+    {
+        if (!$booking->canBeCancelled()) {
+            return back()->with('error', 'This booking cannot be cancelled.');
+        }
+
+        $request->validate([
+            'cancellation_reason' => 'nullable|string|max:500',
+        ]);
+
+        $booking->update([
+            'status' => 'cancelled',
+            'notes' => $booking->notes
+                ? $booking->notes . "\n\nCancellation reason: " . ($request->cancellation_reason ?? 'Not specified')
+                : "Cancellation reason: " . ($request->cancellation_reason ?? 'Not specified'),
+        ]);
+
+        return back()->with('success', 'Booking cancelled.');
     }
 }
