@@ -13,7 +13,7 @@ return new class extends Migration
             $table->index(['tenant_id', 'status'], 'bookings_tenant_status');
             $table->index(['tenant_id', 'event_date'], 'bookings_tenant_date');
             $table->index(['venue_id', 'event_date', 'status'], 'bookings_venue_date_status');
-            $table->index('client_id', 'bookings_client');
+            $table->index(['client_id'], 'bookings_client');
         });
 
         // Payments: tenant + status queries for financial summaries
@@ -35,9 +35,9 @@ return new class extends Migration
             $table->index('client_id', 'quotations_client');
         });
 
-        // Tasks: staff + status + due date
+        // Tasks: assigned_to + status + due date
         Schema::table('tasks', function (Blueprint $table) {
-            $table->index(['staff_id', 'status'], 'tasks_staff_status');
+            $table->index(['assigned_to', 'status'], 'tasks_staff_status');
             $table->index('due_date', 'tasks_due_date');
         });
 

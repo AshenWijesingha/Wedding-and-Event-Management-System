@@ -9,6 +9,7 @@ use App\Models\Booking;
 use App\Models\Payment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
@@ -90,7 +91,14 @@ class PaymentController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        $payment->update($validated);
+        DB::transaction(function () use ($payment, $validated) {
+            $payment->update($validated);
+
+            $booking = $payment->booking;
+            $booking->paid_amount = $booking->payments()->where('status', 'completed')->sum('amount');
+            $booking->balance_amount = $booking->total_amount - $booking->paid_amount;
+            $booking->save();
+        });
 
         return $this->success(new PaymentResource($payment->fresh()));
     }

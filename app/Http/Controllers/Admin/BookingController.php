@@ -8,6 +8,7 @@ use App\Models\Booking;
 use App\Models\Vendor;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -50,7 +51,9 @@ class BookingController extends Controller
             return back()->with('error', 'Only pending or tentative bookings can be confirmed.');
         }
 
-        $booking->update(['status' => 'confirmed']);
+        DB::transaction(function () use ($booking) {
+            $booking->update(['status' => 'confirmed']);
+        });
 
         return back()->with('success', 'Booking confirmed successfully.');
     }

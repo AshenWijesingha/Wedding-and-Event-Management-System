@@ -6,12 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\QuotationResource;
 use App\Http\Traits\ApiResponse;
 use App\Models\Quotation;
+use App\Services\QuotationService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class QuotationController extends Controller
 {
     use ApiResponse;
+
+    public function __construct(private QuotationService $quotationService) {}
 
     public function index(Request $request): JsonResponse
     {
@@ -122,8 +126,18 @@ class QuotationController extends Controller
         return $this->success(new QuotationResource($quotation->fresh()));
     }
 
-    public function pdf(Quotation $quotation): JsonResponse
+    public function pdf(Quotation $quotation): \Illuminate\Http\Response
     {
-        return $this->error('PDF generation not yet implemented.', 501);
+        $quotation->load(['client', 'venue', 'preparedBy']);
+
+        $pdf = Pdf::loadView('pdf.quotation', [
+            'quotation' => $quotation,
+        ]);
+
+        $filename = 'quotation-' . $quotation->quotation_number . '.pdf';
+
+        return response($pdf->output(), 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Traits\ApiResponse;
 use App\Models\Client;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ClientController extends Controller
 {
@@ -32,7 +33,12 @@ class ClientController extends Controller
         $validated = $request->validate([
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
-            'email' => 'required|email|max:255|unique:clients',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('clients')->where('tenant_id', $request->user()->tenant_id),
+            ],
             'phone' => 'required|string|max:50',
             'secondary_phone' => 'nullable|string|max:50',
             'address' => 'nullable|string|max:500',

@@ -5,8 +5,9 @@
 - PHP 8.2+
 - Composer 2.x
 - Node.js 18+ and npm
-- MySQL 8.0+ or PostgreSQL 14+ (or SQLite for local dev)
+- MySQL 8.0+ or MariaDB 10.6+ (or SQLite for local dev)
 - Redis (optional, recommended for caching/queues)
+- Meilisearch 1.x (**required for full-text search in production**; local dev uses `SCOUT_DRIVER=database` by default — see note below)
 
 ---
 
@@ -74,6 +75,28 @@ The seeder creates:
 - Demo tenant: **Grand Vista Events**
 - Demo admin user: `admin@demo.eventpro.test` / `password`
 - Demo venues, packages, clients, bookings, staff
+
+### 5b. Full-text search (optional for local dev)
+
+By default `.env.example` sets `SCOUT_DRIVER=database`, which uses MySQL/SQLite for search — adequate for development and small deployments.
+
+For production with large datasets, switch to Meilisearch:
+
+```env
+SCOUT_DRIVER=meilisearch
+MEILISEARCH_HOST=http://127.0.0.1:7700
+MEILISEARCH_KEY=your-meilisearch-master-key
+```
+
+Then index all searchable models:
+
+```bash
+php artisan scout:import "App\Models\Venue"
+php artisan scout:import "App\Models\Client"
+php artisan scout:import "App\Models\Booking"
+```
+
+> **Note:** If `SCOUT_DRIVER=meilisearch` and Meilisearch is not running, all search-powered pages will throw a connection error. Always confirm the service is up before switching drivers.
 
 ### 6. Build frontend assets
 

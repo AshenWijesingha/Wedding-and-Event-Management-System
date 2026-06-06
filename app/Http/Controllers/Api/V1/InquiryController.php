@@ -24,12 +24,11 @@ class InquiryController extends Controller
             'venue_id' => 'nullable|exists:venues,id',
         ]);
 
-        // TODO: Create inquiry
-        // $inquiry = Inquiry::create($validated);
+        $inquiry = Inquiry::create($validated);
 
         return response()->json([
             'message' => 'Inquiry submitted successfully',
-            'inquiry' => $validated,
+            'inquiry' => $inquiry,
         ], 201);
     }
 }
