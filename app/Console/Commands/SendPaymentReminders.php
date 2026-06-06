@@ -29,6 +29,8 @@ class SendPaymentReminders extends Command
         foreach ($payments as $payment) {
             $client = $payment->client;
             if (!$client) {
+                $this->warn("Payment #{$payment->id} has no associated client — skipping. Data integrity issue.");
+                logger()->warning('SendPaymentReminders: payment has no client', ['payment_id' => $payment->id, 'booking_id' => $payment->booking_id]);
                 continue;
             }
 

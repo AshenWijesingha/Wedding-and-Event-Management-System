@@ -28,9 +28,15 @@ class DomainTenantFinder extends TenantFinder
             return Tenant::where('slug', $slug)->where('status', '!=', 'suspended')->first();
         }
 
-        // 3. Single-tenant mode: return first active tenant (no subdomain needed)
+        // 3. Single-tenant mode: return the single active tenant (no subdomain needed)
         if (config('eventpro.tenancy_mode') === 'single') {
-            return Tenant::where('status', '!=', 'suspended')->first();
+            $activeTenants = Tenant::where('status', '!=', 'suspended')->get();
+            if ($activeTenants->count() > 1) {
+                logger()->error('Single-tenant mode active but multiple tenants exist. Using first. Check TENANCY_MODE config.', [
+                    'count' => $activeTenants->count(),
+                ]);
+            }
+            return $activeTenants->first();
         }
 
         return null;

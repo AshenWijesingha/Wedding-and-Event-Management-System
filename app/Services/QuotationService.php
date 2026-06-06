@@ -160,7 +160,7 @@ class QuotationService
     public function accept(Quotation $quotation): Quotation
     {
         if (!$quotation->canBeAccepted()) {
-            throw new \Exception('Quotation cannot be accepted.');
+            throw new \InvalidArgumentException('Quotation cannot be accepted: status is ' . $quotation->status . ' or it has expired.');
         }
 
         $quotation->update([

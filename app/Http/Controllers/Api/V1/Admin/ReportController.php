@@ -14,8 +14,9 @@ class ReportController extends Controller
 {
     public function revenue(Request $request): JsonResponse
     {
-        $from = $request->from ?? now()->startOfMonth();
-        $to = $request->to ?? now()->endOfMonth();
+        $request->validate(['from' => 'nullable|date', 'to' => 'nullable|date|after_or_equal:from']);
+        $from = $request->from ? \Carbon\Carbon::parse($request->from)->startOfDay() : now()->startOfMonth();
+        $to = $request->to ? \Carbon\Carbon::parse($request->to)->endOfDay() : now()->endOfMonth();
 
         $revenue = Payment::query()
             ->where('status', 'completed')
@@ -30,8 +31,9 @@ class ReportController extends Controller
 
     public function bookings(Request $request): JsonResponse
     {
-        $from = $request->from ?? now()->startOfMonth();
-        $to = $request->to ?? now()->endOfMonth();
+        $request->validate(['from' => 'nullable|date', 'to' => 'nullable|date|after_or_equal:from']);
+        $from = $request->from ? \Carbon\Carbon::parse($request->from)->startOfDay() : now()->startOfMonth();
+        $to = $request->to ? \Carbon\Carbon::parse($request->to)->endOfDay() : now()->endOfMonth();
 
         $bookings = Booking::query()
             ->whereBetween('created_at', [$from, $to])
@@ -47,8 +49,9 @@ class ReportController extends Controller
 
     public function inquiries(Request $request): JsonResponse
     {
-        $from = $request->from ?? now()->startOfMonth();
-        $to = $request->to ?? now()->endOfMonth();
+        $request->validate(['from' => 'nullable|date', 'to' => 'nullable|date|after_or_equal:from']);
+        $from = $request->from ? \Carbon\Carbon::parse($request->from)->startOfDay() : now()->startOfMonth();
+        $to = $request->to ? \Carbon\Carbon::parse($request->to)->endOfDay() : now()->endOfMonth();
 
         $inquiries = Inquiry::query()
             ->whereBetween('created_at', [$from, $to])

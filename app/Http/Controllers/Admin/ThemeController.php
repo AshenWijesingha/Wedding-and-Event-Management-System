@@ -23,6 +23,7 @@ class ThemeController extends Controller
 
     public function activate(Request $request): RedirectResponse
     {
+        abort_unless($request->user()->hasRole('admin'), 403);
         $request->validate(['theme' => 'required|string|max:100']);
 
         $success = $this->themeService->setActiveTheme($request->theme);

@@ -48,13 +48,19 @@ class QuotationController extends Controller
 
     public function downloadPdf(Quotation $quotation): SymfonyResponse
     {
-        $quotation->load(['client', 'venue', 'package']);
+        try {
+            $quotation->load(['client', 'venue', 'package']);
 
-        $pdf = Pdf::loadView('pdf.quotation', [
-            'quotation' => $quotation,
-            'branding'  => $this->brandingService->getBranding(),
-        ])->setPaper('a4', 'portrait');
+            $pdf = Pdf::loadView('pdf.quotation', [
+                'quotation' => $quotation,
+                'branding'  => $this->brandingService->getBranding(),
+            ])->setPaper('a4', 'portrait');
 
-        return $pdf->download("quotation_{$quotation->quotation_number}.pdf");
+            $safeNumber = preg_replace('/[^a-zA-Z0-9_\-]/', '', $quotation->quotation_number);
+            return $pdf->download("quotation_{$safeNumber}.pdf");
+        } catch (\Throwable $e) {
+            logger()->error('Quotation PDF generation failed', ['quotation_id' => $quotation->id, 'error' => $e->getMessage()]);
+            return back()->with('error', 'PDF generation failed. Please try again.');
+        }
     }
 }
