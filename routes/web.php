@@ -11,13 +11,8 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('/venues', function () {
-    return view('venues.index');
-})->name('venues.index');
-
-Route::get('/venues/{venue:slug}', function (\App\Models\Venue $venue) {
-    return view('venues.show', compact('venue'));
-})->name('venues.show');
+Route::get('/venues', [\App\Http\Controllers\VenueController::class, 'index'])->name('venues.index');
+Route::get('/venues/{venue:slug}', [\App\Http\Controllers\VenueController::class, 'show'])->name('venues.show');
 
 Route::get('/packages', function () {
     return view('packages.index');
