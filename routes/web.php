@@ -56,6 +56,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/bookings/{booking}', [\App\Http\Controllers\Admin\BookingController::class, 'show'])->name('bookings.show');
     Route::post('/bookings/{booking}/confirm', [\App\Http\Controllers\Admin\BookingController::class, 'confirm'])->name('bookings.confirm');
     Route::post('/bookings/{booking}/cancel', [\App\Http\Controllers\Admin\BookingController::class, 'cancel'])->name('bookings.cancel');
+    Route::post('/bookings/{booking}/vendors', [\App\Http\Controllers\Admin\BookingController::class, 'attachVendor'])->name('bookings.vendors.attach');
+    Route::delete('/bookings/{booking}/vendors/{vendor}', [\App\Http\Controllers\Admin\BookingController::class, 'detachVendor'])->name('bookings.vendors.detach');
+
+    // Vendors
+    Route::resource('vendors', \App\Http\Controllers\Admin\VendorController::class)
+        ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
 
     // Inquiries
     Route::get('/inquiries', [\App\Http\Controllers\Admin\InquiryController::class, 'index'])->name('inquiries.index');

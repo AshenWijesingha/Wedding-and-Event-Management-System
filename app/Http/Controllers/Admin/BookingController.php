@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
+use App\Models\Vendor;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -38,7 +39,8 @@ class BookingController extends Controller
     public function show(Booking $booking): Response
     {
         return Inertia::render('Bookings/Show', [
-            'booking' => new BookingResource($booking->load(['client', 'venue', 'package', 'payments'])),
+            'booking' => new BookingResource($booking->load(['client', 'venue', 'package', 'payments', 'vendors'])),
+            'availableVendors' => Vendor::active()->orderBy('name')->get(['id', 'name', 'category']),
         ]);
     }
 
@@ -71,5 +73,33 @@ class BookingController extends Controller
         ]);
 
         return back()->with('success', 'Booking cancelled.');
+    }
+
+    public function attachVendor(Request $request, Booking $booking): RedirectResponse
+    {
+        $data = $request->validate([
+            'vendor_id'           => 'required|exists:vendors,id',
+            'service_description' => 'nullable|string|max:500',
+            'agreed_amount'       => 'nullable|numeric|min:0',
+            'notes'               => 'nullable|string|max:500',
+        ]);
+
+        $booking->vendors()->syncWithoutDetaching([
+            $data['vendor_id'] => [
+                'service_description' => $data['service_description'] ?? null,
+                'agreed_amount'       => $data['agreed_amount'] ?? null,
+                'notes'               => $data['notes'] ?? null,
+                'status'              => 'confirmed',
+            ],
+        ]);
+
+        return back()->with('success', 'Vendor assigned to booking.');
+    }
+
+    public function detachVendor(Booking $booking, Vendor $vendor): RedirectResponse
+    {
+        $booking->vendors()->detach($vendor->id);
+
+        return back()->with('success', 'Vendor removed from booking.');
     }
 }
