@@ -73,6 +73,13 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
             // Vendors management
             Route::apiResource('vendors', \App\Http\Controllers\Api\V1\Admin\VendorController::class);
+
+            // Staff management
+            Route::apiResource('staff', \App\Http\Controllers\Api\V1\Admin\StaffController::class);
+            Route::get('staff/{staff}/schedule', [\App\Http\Controllers\Api\V1\Admin\StaffController::class, 'schedule'])->name('staff.schedule');
+
+            // Task management
+            Route::apiResource('tasks', \App\Http\Controllers\Api\V1\Admin\TaskController::class);
             
             // Reports
             Route::prefix('reports')->name('reports.')->group(function () {
