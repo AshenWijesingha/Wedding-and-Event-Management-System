@@ -59,13 +59,80 @@ class ReportController extends Controller
 
         $years = range(now()->year - 3, now()->year + 1);
 
+        $recentBookings = Booking::with(['client', 'venue'])
+            ->orderByDesc('created_at')
+            ->limit(5)
+            ->get()
+            ->map(fn ($b) => [
+                'booking_number' => $b->booking_number,
+                'client'         => $b->client?->full_name,
+                'venue'          => $b->venue?->name,
+                'event_date'     => $b->event_date?->toDateString(),
+                'total_amount'   => (float) $b->total_amount,
+                'status'         => $b->status,
+            ]);
+
+        $upcomingBookings = Booking::with(['client', 'venue'])
+            ->upcoming()
+            ->whereIn('status', ['confirmed', 'tentative'])
+            ->limit(5)
+            ->get()
+            ->map(fn ($b) => [
+                'booking_number' => $b->booking_number,
+                'client'         => $b->client?->full_name,
+                'venue'          => $b->venue?->name,
+                'event_date'     => $b->event_date?->toDateString(),
+                'status'         => $b->status,
+            ]);
+
         return Inertia::render('Reports/Index', [
             'months'           => $months,
             'bookingsByStatus' => $bookingsByStatus,
             'topVenues'        => $topVenues,
             'totals'           => $totals,
+            'recentBookings'   => $recentBookings,
+            'upcomingBookings' => $upcomingBookings,
             'filters'          => compact('year'),
             'years'            => $years,
+        ]);
+    }
+
+    public function occupancy(Request $request): Response
+    {
+        $year = $request->integer('year', now()->year);
+
+        $venues = \App\Models\Venue::withCount([
+            'bookings as booked_days' => fn ($q) =>
+                $q->whereYear('event_date', $year)->whereNotIn('status', ['cancelled']),
+        ])->orderByDesc('booked_days')->get(['id', 'name']);
+
+        $daysInYear = date('L', mktime(0, 0, 0, 1, 1, $year)) ? 366 : 365;
+
+        $venueOccupancy = $venues->map(fn ($v) => [
+            'venue'        => $v->name,
+            'booked_days'  => $v->booked_days,
+            'occupancy_pct' => $daysInYear > 0 ? round(($v->booked_days / $daysInYear) * 100, 1) : 0,
+        ]);
+
+        $monthlyOccupancy = collect(range(1, 12))->map(function ($m) use ($year) {
+            $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $m, $year);
+            $bookings    = \App\Models\Booking::whereYear('event_date', $year)
+                ->whereMonth('event_date', $m)
+                ->whereNotIn('status', ['cancelled'])
+                ->count();
+            return [
+                'month'         => $m,
+                'label'         => date('M', mktime(0, 0, 0, $m, 1)),
+                'bookings'      => $bookings,
+                'occupancy_pct' => $daysInMonth > 0 ? round(($bookings / $daysInMonth) * 100, 1) : 0,
+            ];
+        });
+
+        return Inertia::render('Reports/Occupancy', [
+            'venueOccupancy'   => $venueOccupancy,
+            'monthlyOccupancy' => $monthlyOccupancy,
+            'filters'          => compact('year'),
+            'years'            => range(now()->year - 3, now()->year + 1),
         ]);
     }
 
