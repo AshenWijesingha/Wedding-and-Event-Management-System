@@ -96,6 +96,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/reports/bookings', [\App\Http\Controllers\Admin\ReportController::class, 'bookings'])->name('reports.bookings');
     Route::get('/reports/occupancy', [\App\Http\Controllers\Admin\ReportController::class, 'occupancy'])->name('reports.occupancy');
     Route::get('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings.index');
+    Route::get('/themes', [\App\Http\Controllers\Admin\ThemeController::class, 'index'])->name('themes.index');
+    Route::post('/themes/activate', [\App\Http\Controllers\Admin\ThemeController::class, 'activate'])->name('themes.activate');
+    Route::get('/plugins', [\App\Http\Controllers\Admin\PluginController::class, 'index'])->name('plugins.index');
+    Route::post('/plugins/enable', [\App\Http\Controllers\Admin\PluginController::class, 'enable'])->name('plugins.enable');
+    Route::post('/plugins/disable', [\App\Http\Controllers\Admin\PluginController::class, 'disable'])->name('plugins.disable');
     Route::post('/settings/general', [\App\Http\Controllers\Admin\SettingsController::class, 'updateGeneral'])->name('settings.general');
     Route::post('/settings/branding', [\App\Http\Controllers\Admin\SettingsController::class, 'updateBranding'])->name('settings.branding');
     Route::post('/settings/email-templates', [\App\Http\Controllers\Admin\SettingsController::class, 'updateEmailTemplates'])->name('settings.email-templates');
