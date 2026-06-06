@@ -2,7 +2,123 @@
 
 Base URL: `https://your-domain.com/api/v1`
 
-Authentication: Bearer token via Laravel Sanctum (`Authorization: Bearer {token}`)
+---
+
+## Authentication
+
+EventPro uses **Laravel Sanctum** token authentication for all non-public endpoints.
+
+### Obtain a token
+
+```bash
+curl -X POST https://your-domain.com/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "admin@example.com", "password": "secret"}'
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "token": "1|AbCdEfGhIjKlMnOpQrStUvWxYz",
+    "user": { "id": 1, "name": "Admin", "email": "admin@example.com" }
+  }
+}
+```
+
+### Use the token
+
+Include the token in the `Authorization` header for every authenticated request:
+
+```bash
+curl https://your-domain.com/api/v1/admin/bookings \
+  -H "Authorization: Bearer 1|AbCdEfGhIjKlMnOpQrStUvWxYz" \
+  -H "Accept: application/json"
+```
+
+---
+
+## Standard Response Envelope
+
+All API responses share a consistent JSON envelope:
+
+```json
+{
+  "success": true,
+  "message": "Optional human-readable message.",
+  "data": { ... }
+}
+```
+
+For paginated collections, `data` contains the items array and `meta` contains pagination:
+
+```json
+{
+  "success": true,
+  "data": [ { ... }, { ... } ],
+  "meta": {
+    "current_page": 1,
+    "last_page": 4,
+    "per_page": 15,
+    "total": 57
+  }
+}
+```
+
+Query param `per_page` controls page size (default 15, max 100).
+
+---
+
+## Standard Error Responses
+
+### Validation error — HTTP 422
+
+```json
+{
+  "success": false,
+  "message": "The given data was invalid.",
+  "errors": {
+    "email": ["The email field is required."],
+    "event_date": ["The event date must be a future date."]
+  }
+}
+```
+
+### Unauthorised — HTTP 401
+
+```json
+{ "message": "Unauthenticated." }
+```
+
+### Forbidden — HTTP 403
+
+```json
+{ "message": "This action is unauthorized." }
+```
+
+### Not found — HTTP 404
+
+```json
+{ "message": "No query results for model [App\\Models\\Booking] 99" }
+```
+
+### Server error — HTTP 500
+
+```json
+{ "success": false, "message": "Server Error" }
+```
+
+---
+
+## Rate Limiting
+
+| Endpoint group | Limit |
+|----------------|-------|
+| All API routes | 60 requests / minute (per IP) |
+| `POST /inquiries` | 5 requests / minute (per IP) |
+
+When the limit is exceeded the API returns HTTP **429 Too Many Requests** with a `Retry-After` header indicating seconds until the limit resets.
 
 ---
 

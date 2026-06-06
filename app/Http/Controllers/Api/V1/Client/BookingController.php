@@ -24,9 +24,14 @@ class BookingController extends Controller
     /**
      * Display the specified booking.
      */
-    public function show(Booking $booking): JsonResponse
+    public function show(Request $request, Booking $booking): JsonResponse
     {
-        // TODO: Add authorization check
+        $clientId = $request->user()->client?->id ?? $request->user()->id;
+
+        if ($booking->client_id !== $clientId) {
+            abort(403, 'You are not authorized to view this booking.');
+        }
+
         return response()->json($booking);
     }
 }

@@ -36,17 +36,17 @@ class ReportController extends Controller
             ->groupBy('status')
             ->pluck('count', 'status');
 
-        $topVenues = Booking::with('venue')
-            ->whereYear('event_date', $year)
-            ->whereNotIn('status', ['cancelled'])
-            ->selectRaw('venue_id, COUNT(*) as bookings, SUM(total_amount) as revenue')
-            ->groupBy('venue_id')
+        $topVenues = Booking::selectRaw('bookings.venue_id, venues.name as venue_name, COUNT(*) as bookings, SUM(bookings.total_amount) as revenue')
+            ->join('venues', 'bookings.venue_id', '=', 'venues.id')
+            ->whereYear('bookings.event_date', $year)
+            ->whereNotIn('bookings.status', ['cancelled'])
+            ->groupBy('bookings.venue_id', 'venues.name')
             ->orderByDesc('bookings')
             ->limit(5)
             ->get()
             ->map(fn ($row) => [
-                'venue'    => $row->venue?->name,
-                'bookings' => $row->bookings,
+                'venue'    => $row->venue_name,
+                'bookings' => (int) $row->bookings,
                 'revenue'  => (float) $row->revenue,
             ]);
 

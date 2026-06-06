@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Payment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Concerns\BelongsToTenant;
 
@@ -55,6 +57,14 @@ class Client extends Model
     public function inquiries()
     {
         return $this->hasMany(Inquiry::class);
+    }
+
+    /**
+     * Get all payments for this client.
+     */
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
     }
 
     /**

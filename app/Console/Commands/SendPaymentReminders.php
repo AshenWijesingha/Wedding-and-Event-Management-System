@@ -19,12 +19,9 @@ class SendPaymentReminders extends Command
             ->where('status', 'pending')
             ->whereNotNull('due_date')
             ->where('due_date', '<=', now()->addDays($days)->toDateString())
-            ->whereNull('reminder_sent_at')
-            ->orWhere(function ($q) {
-                $q->where('status', 'pending')
-                  ->whereNotNull('due_date')
-                  ->where('due_date', '<', now()->toDateString())
-                  ->where('reminder_sent_at', '<', now()->subDays(3));
+            ->where(function ($q) {
+                $q->whereNull('reminder_sent_at')
+                  ->orWhere('reminder_sent_at', '<=', now()->subDays(3));
             })
             ->get();
 

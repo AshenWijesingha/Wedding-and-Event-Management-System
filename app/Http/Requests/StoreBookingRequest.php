@@ -11,7 +11,7 @@ class StoreBookingRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->hasAnyRole(['super_admin', 'admin', 'manager', 'staff']) ?? false;
     }
 
     public function rules(): array

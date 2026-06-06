@@ -25,7 +25,7 @@ Route::prefix('v1')->name('api.v1.')->middleware('throttle:api')->group(function
     Route::get('packages', [\App\Http\Controllers\Api\V1\PackageController::class, 'index'])->name('packages.index');
     Route::get('packages/{package}', [\App\Http\Controllers\Api\V1\PackageController::class, 'show'])->name('packages.show');
     
-    Route::post('inquiries', [\App\Http\Controllers\Api\V1\InquiryController::class, 'store'])->name('inquiries.store');
+    Route::middleware('throttle:5,1')->post('inquiries', [\App\Http\Controllers\Api\V1\InquiryController::class, 'store'])->name('inquiries.store');
     Route::post('calculate-price', [\App\Http\Controllers\Api\V1\PricingController::class, 'calculate'])->name('pricing.calculate');
     
     // Authenticated routes

@@ -28,6 +28,7 @@ class Booking extends Model
         'status',
         'notes',
         'custom_data',
+        'created_by',
     ];
 
     protected $casts = [
