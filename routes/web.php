@@ -1,17 +1,10 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 // Public website routes
 Route::get('/', function () {
@@ -36,58 +29,39 @@ Route::get('/contact', function () {
 
 Route::post('/inquiry', [\App\Http\Controllers\InquiryController::class, 'store'])->name('inquiry.store');
 
-// Authentication routes (using Laravel Breeze or Fortify)
-// These will be added when the auth package is installed
-// Placeholder login route for development
-Route::get('/login', function () {
-    return redirect('/')->with('error', 'Authentication is not yet configured.');
-})->name('login');
+// Authentication routes
+Route::middleware('guest')->group(function () {
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
+    Route::post('register', [RegisteredUserController::class, 'store']);
+    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
+    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+    Route::post('reset-password', [NewPasswordController::class, 'store'])->name('password.store');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+});
 
 // Admin panel routes (Inertia.js SPA)
-Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', function () {
-        return inertia('Dashboard');
-    })->name('dashboard');
-    
-    Route::get('/venues', function () {
-        return inertia('Venues/Index');
-    })->name('venues.index');
-    
-    Route::get('/packages', function () {
-        return inertia('Packages/Index');
-    })->name('packages.index');
-    
-    Route::get('/bookings', function () {
-        return inertia('Bookings/Index');
-    })->name('bookings.index');
-    
-    Route::get('/bookings/{booking}', function ($booking) {
-        return inertia('Bookings/Show', ['booking' => $booking]);
-    })->name('bookings.show');
-    
-    Route::get('/inquiries', function () {
-        return inertia('Inquiries/Index');
-    })->name('inquiries.index');
-    
-    Route::get('/quotations', function () {
-        return inertia('Quotations/Index');
-    })->name('quotations.index');
-    
-    Route::get('/clients', function () {
-        return inertia('Clients/Index');
-    })->name('clients.index');
-    
-    Route::get('/payments', function () {
-        return inertia('Payments/Index');
-    })->name('payments.index');
-    
-    Route::get('/reports', function () {
-        return inertia('Reports/Index');
-    })->name('reports.index');
-    
-    Route::get('/settings', function () {
-        return inertia('Settings/Index');
-    })->name('settings.index');
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', fn () => inertia('Dashboard'))->name('dashboard');
+    Route::get('/venues', fn () => inertia('Venues/Index'))->name('venues.index');
+    Route::get('/venues/create', fn () => inertia('Venues/Create'))->name('venues.create');
+    Route::get('/venues/{id}/edit', fn ($id) => inertia('Venues/Edit', ['venueId' => $id]))->name('venues.edit');
+    Route::get('/packages', fn () => inertia('Packages/Index'))->name('packages.index');
+    Route::get('/packages/create', fn () => inertia('Packages/Create'))->name('packages.create');
+    Route::get('/bookings', fn () => inertia('Bookings/Index'))->name('bookings.index');
+    Route::get('/bookings/create', fn () => inertia('Bookings/Create'))->name('bookings.create');
+    Route::get('/bookings/{id}', fn ($id) => inertia('Bookings/Show', ['bookingId' => $id]))->name('bookings.show');
+    Route::get('/inquiries', fn () => inertia('Inquiries/Index'))->name('inquiries.index');
+    Route::get('/quotations', fn () => inertia('Quotations/Index'))->name('quotations.index');
+    Route::get('/clients', fn () => inertia('Clients/Index'))->name('clients.index');
+    Route::get('/payments', fn () => inertia('Payments/Index'))->name('payments.index');
+    Route::get('/reports', fn () => inertia('Reports/Index'))->name('reports.index');
+    Route::get('/settings', fn () => inertia('Settings/Index'))->name('settings.index');
 });
 
 // Client portal routes
