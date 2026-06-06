@@ -94,19 +94,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
 // Client portal routes
 Route::middleware(['auth'])->prefix('portal')->name('portal.')->group(function () {
-    Route::get('/', function () {
-        return inertia('Portal/Dashboard');
-    })->name('dashboard');
-    
-    Route::get('/bookings', function () {
-        return inertia('Portal/Bookings');
-    })->name('bookings');
-    
-    Route::get('/quotations', function () {
-        return inertia('Portal/Quotations');
-    })->name('quotations');
-    
-    Route::get('/payments', function () {
-        return inertia('Portal/Payments');
-    })->name('payments');
+    Route::get('/', [\App\Http\Controllers\Portal\PortalController::class, 'dashboard'])->name('dashboard');
+    Route::get('/bookings', [\App\Http\Controllers\Portal\PortalController::class, 'bookings'])->name('bookings');
+    Route::get('/bookings/{booking}', [\App\Http\Controllers\Portal\PortalController::class, 'bookingShow'])->name('bookings.show');
+    Route::get('/quotations', [\App\Http\Controllers\Portal\PortalController::class, 'quotations'])->name('quotations');
+    Route::get('/payments', [\App\Http\Controllers\Portal\PortalController::class, 'payments'])->name('payments');
+    Route::post('/notifications/read', [\App\Http\Controllers\Portal\PortalController::class, 'markNotificationRead'])->name('notifications.read');
 });
