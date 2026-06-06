@@ -46,8 +46,8 @@ class BookingController extends Controller
 
     public function confirm(Booking $booking): RedirectResponse
     {
-        if (!in_array($booking->status, ['tentative'])) {
-            return back()->with('error', 'Only tentative bookings can be confirmed.');
+        if (!in_array($booking->status, ['pending', 'tentative'])) {
+            return back()->with('error', 'Only pending or tentative bookings can be confirmed.');
         }
 
         $booking->update(['status' => 'confirmed']);
