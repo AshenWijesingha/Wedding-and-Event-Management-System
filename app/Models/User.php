@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 use App\Models\Concerns\BelongsToTenant;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, BelongsToTenant;
+    use HasApiTokens, HasFactory, Notifiable, BelongsToTenant, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -76,22 +77,6 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user has a specific role.
-     */
-    public function hasRole(string $role): bool
-    {
-        return $this->role === $role;
-    }
-
-    /**
-     * Check if user has any of the given roles.
-     */
-    public function hasAnyRole(array $roles): bool
-    {
-        return in_array($this->role, $roles);
-    }
-
-    /**
      * Check if user is an admin.
      */
     public function isAdmin(): bool
@@ -99,35 +84,18 @@ class User extends Authenticatable
         return $this->hasAnyRole(['super_admin', 'admin']);
     }
 
-    /**
-     * Check if user is a manager or higher.
-     */
     public function isManager(): bool
     {
         return $this->hasAnyRole(['super_admin', 'admin', 'manager']);
     }
 
-    /**
-     * Check if user is a super admin.
-     */
     public function isSuperAdmin(): bool
     {
-        return $this->role === 'super_admin';
+        return $this->hasRole('super_admin');
     }
 
-    /**
-     * Scope query to active users.
-     */
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
-    }
-
-    /**
-     * Scope query by role.
-     */
-    public function scopeRole($query, string $role)
-    {
-        return $query->where('role', $role);
     }
 }

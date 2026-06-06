@@ -9,13 +9,9 @@ use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Create super admin (no tenant)
-        User::updateOrCreate(
+        $superAdmin = User::updateOrCreate(
             ['email' => 'admin@eventpro.io'],
             [
                 'tenant_id' => null,
@@ -26,12 +22,12 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
+        $superAdmin->syncRoles(['super_admin']);
 
-        // Create tenant users
         $tenant = Tenant::where('slug', 'grand-vista')->first();
 
         if ($tenant) {
-            User::updateOrCreate(
+            $admin = User::updateOrCreate(
                 ['email' => 'john@grandvista.example.com'],
                 [
                     'tenant_id' => $tenant->id,
@@ -42,8 +38,9 @@ class UserSeeder extends Seeder
                     'email_verified_at' => now(),
                 ]
             );
+            $admin->syncRoles(['admin']);
 
-            User::updateOrCreate(
+            $staff = User::updateOrCreate(
                 ['email' => 'sarah@grandvista.example.com'],
                 [
                     'tenant_id' => $tenant->id,
@@ -54,6 +51,7 @@ class UserSeeder extends Seeder
                     'email_verified_at' => now(),
                 ]
             );
+            $staff->syncRoles(['staff']);
         }
     }
 }
