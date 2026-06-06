@@ -2,12 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Spatie\Multitenancy\Models\Tenant as BaseTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Tenant extends BaseTenant
 {
     use HasFactory;
+
+    protected static function booted(): void
+    {
+        static::creating(function (Tenant $tenant) {
+            if (empty($tenant->uuid)) {
+                $tenant->uuid = (string) Str::uuid();
+            }
+        });
+    }
 
     protected $fillable = [
         'name',

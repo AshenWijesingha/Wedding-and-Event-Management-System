@@ -20,9 +20,9 @@ return new class extends Migration
             $table->foreignId('package_id')->nullable()->constrained('packages')->nullOnDelete();
             $table->string('event_type', 50);
             $table->date('event_date');
-            $table->time('setup_time');
-            $table->time('event_start_time');
-            $table->time('event_end_time');
+            $table->time('setup_time')->nullable();
+            $table->time('event_start_time')->nullable();
+            $table->time('event_end_time')->nullable();
             $table->unsignedInteger('guest_count');
             $table->decimal('total_amount', 14, 2);
             $table->decimal('paid_amount', 14, 2)->default(0);

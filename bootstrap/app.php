@@ -20,6 +20,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+            'tenant' => \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
+            'valid.tenant' => \App\Http\Middleware\EnsureValidTenant::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
