@@ -95,8 +95,11 @@ class Booking extends Model
      */
     public function updateBalance(): void
     {
-        $this->balance_amount = $this->total_amount - $this->paid_amount;
-        $this->save();
+        $calculated = (float) $this->total_amount - (float) $this->paid_amount;
+        if ((float) $this->balance_amount !== $calculated) {
+            $this->balance_amount = $calculated;
+            $this->save();
+        }
     }
 
     /**

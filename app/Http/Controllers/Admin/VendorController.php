@@ -39,6 +39,7 @@ class VendorController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
         $data = $request->validate([
             'name'         => 'required|string|max:255',
             'category'     => 'required|string|max:50',
@@ -76,6 +77,7 @@ class VendorController extends Controller
 
     public function update(Request $request, Vendor $vendor): RedirectResponse
     {
+        abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
         $data = $request->validate([
             'name'         => 'required|string|max:255',
             'category'     => 'required|string|max:50',
@@ -99,6 +101,7 @@ class VendorController extends Controller
 
     public function destroy(Vendor $vendor): RedirectResponse
     {
+        abort_unless(request()->user()->hasAnyRole(['admin', 'manager']), 403);
         if ($vendor->bookings()->whereNotIn('booking_vendor.status', ['cancelled'])->exists()) {
             return back()->with('error', 'Cannot delete vendor with active booking assignments.');
         }

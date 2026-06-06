@@ -27,6 +27,11 @@ class PluginService
      */
     public function loadPlugin(string $slug): bool
     {
+        if (!preg_match('/^[a-z0-9\-_]+$/', $slug)) {
+            logger()->warning("PluginService: rejected invalid plugin slug '{$slug}'.");
+            return false;
+        }
+
         $configPath = base_path("plugins/{$slug}/plugin.json");
         if (!File::exists($configPath)) {
             return false;

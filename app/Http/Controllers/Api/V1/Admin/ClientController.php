@@ -67,7 +67,7 @@ class ClientController extends Controller
         $validated = $request->validate([
             'first_name' => 'sometimes|string|max:100',
             'last_name' => 'sometimes|string|max:100',
-            'email' => 'sometimes|email|max:255|unique:clients,email,' . $client->id,
+            'email' => ['sometimes', 'email', 'max:255', Rule::unique('clients')->where('tenant_id', $request->user()->tenant_id)->ignore($client->id)],
             'phone' => 'sometimes|string|max:50',
             'secondary_phone' => 'nullable|string|max:50',
             'address' => 'nullable|string|max:500',

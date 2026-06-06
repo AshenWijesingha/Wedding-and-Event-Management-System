@@ -28,7 +28,7 @@ class BookingController extends Controller
                 $q->where('status', $status)
             )
             ->orderBy('event_date', 'desc')
-            ->paginate(15)
+            ->paginate(min((int) ($request->per_page ?? 15), 100))
             ->withQueryString();
 
         return Inertia::render('Bookings/Index', [
@@ -47,6 +47,7 @@ class BookingController extends Controller
 
     public function confirm(Booking $booking): RedirectResponse
     {
+        abort_unless(request()->user()->hasAnyRole(['admin', 'manager']), 403);
         if (!in_array($booking->status, ['pending', 'tentative'])) {
             return back()->with('error', 'Only pending or tentative bookings can be confirmed.');
         }
@@ -60,6 +61,7 @@ class BookingController extends Controller
 
     public function cancel(Request $request, Booking $booking): RedirectResponse
     {
+        abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
         if (!$booking->canBeCancelled()) {
             return back()->with('error', 'This booking cannot be cancelled.');
         }
@@ -80,6 +82,7 @@ class BookingController extends Controller
 
     public function attachVendor(Request $request, Booking $booking): RedirectResponse
     {
+        abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
         $data = $request->validate([
             'vendor_id'           => 'required|exists:vendors,id',
             'service_description' => 'nullable|string|max:500',
@@ -101,6 +104,7 @@ class BookingController extends Controller
 
     public function detachVendor(Booking $booking, Vendor $vendor): RedirectResponse
     {
+        abort_unless(request()->user()->hasAnyRole(['admin', 'manager']), 403);
         $booking->vendors()->detach($vendor->id);
 
         return back()->with('success', 'Vendor removed from booking.');

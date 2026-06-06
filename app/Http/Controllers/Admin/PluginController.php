@@ -23,6 +23,7 @@ class PluginController extends Controller
 
     public function enable(Request $request): RedirectResponse
     {
+        abort_unless($request->user()->hasRole('admin'), 403);
         $request->validate(['plugin' => 'required|string|max:100']);
         $success = $this->pluginService->enablePlugin($request->plugin);
         return back()->with($success ? 'success' : 'error', $success ? "Plugin enabled." : "Plugin not found.");
@@ -30,6 +31,7 @@ class PluginController extends Controller
 
     public function disable(Request $request): RedirectResponse
     {
+        abort_unless($request->user()->hasRole('admin'), 403);
         $request->validate(['plugin' => 'required|string|max:100']);
         $this->pluginService->disablePlugin($request->plugin);
         return back()->with('success', 'Plugin disabled.');

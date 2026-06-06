@@ -103,7 +103,7 @@ class QuotationController extends Controller
 
     public function destroy(Quotation $quotation): JsonResponse
     {
-        if (in_array($quotation->status, ['accepted'])) {
+        if ($quotation->status === 'accepted') {
             return $this->error('Cannot delete an accepted quotation.', 422);
         }
 
@@ -134,7 +134,8 @@ class QuotationController extends Controller
             'quotation' => $quotation,
         ]);
 
-        $filename = 'quotation-' . $quotation->quotation_number . '.pdf';
+        $safeNumber = preg_replace('/[^a-zA-Z0-9_\-]/', '', $quotation->quotation_number);
+        $filename = 'quotation-' . $safeNumber . '.pdf';
 
         return response($pdf->output(), 200)
             ->header('Content-Type', 'application/pdf')

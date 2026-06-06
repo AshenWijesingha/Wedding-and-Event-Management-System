@@ -14,19 +14,15 @@ trait BelongsToTenant
      */
     protected static function bootBelongsToTenant(): void
     {
-        // Only apply tenant scoping if multi-tenancy is enabled
-        if (config('eventpro.tenancy_mode') === 'single') {
-            return;
-        }
-
-        // Auto-scope queries to current tenant
+        // Always scope to current tenant regardless of tenancy_mode.
+        // In single-tenant mode the finder still resolves a tenant, so scoping
+        // is safe and prevents data leaks if the mode is ever changed.
         static::addGlobalScope('tenant', function (Builder $builder) {
             if ($tenant = app('currentTenant')) {
                 $builder->where($builder->getModel()->getTable() . '.tenant_id', $tenant->id);
             }
         });
 
-        // Auto-assign tenant on create
         static::creating(function (Model $model) {
             if ($tenant = app('currentTenant')) {
                 if (!$model->tenant_id) {

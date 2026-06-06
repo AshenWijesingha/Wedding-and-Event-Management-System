@@ -16,10 +16,12 @@ use Inertia\Response;
 
 class PortalController extends Controller
 {
-    private function getClientId(): ?int
+    private function getClientId(): int
     {
         $user = Auth::user();
-        return $user->client?->id;
+        $clientId = $user->client?->id;
+        abort_if($clientId === null, 403, 'No client profile associated with this account.');
+        return $clientId;
     }
 
     public function dashboard(): Response

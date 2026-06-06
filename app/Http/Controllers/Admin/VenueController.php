@@ -64,7 +64,11 @@ class VenueController extends Controller
             $i++;
         }
 
-        Venue::create($validated);
+        try {
+            Venue::create($validated);
+        } catch (\Illuminate\Database\UniqueConstraintViolationException $e) {
+            return back()->withErrors(['slug' => 'A venue with this slug already exists.'])->withInput();
+        }
 
         return redirect()->route('admin.venues.index')->with('success', 'Venue created successfully.');
     }

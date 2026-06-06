@@ -57,15 +57,16 @@ class PaymentController extends Controller
         $validated['payment_number'] = Payment::generatePaymentNumber();
         $validated['status'] = 'completed';
         $validated['client_id'] = Booking::findOrFail($validated['booking_id'])->client_id;
-        $validated['received_by'] = $request->user()?->id;
+        $validated['received_by'] = $request->user()->id;
 
-        $payment = Payment::create($validated);
-
-        // Update booking paid/balance amounts
-        $booking = $payment->booking;
-        $booking->paid_amount = $booking->payments()->where('status', 'completed')->sum('amount');
-        $booking->balance_amount = $booking->total_amount - $booking->paid_amount;
-        $booking->save();
+        $payment = DB::transaction(function () use ($validated) {
+            $payment = Payment::create($validated);
+            $booking = $payment->booking;
+            $booking->paid_amount = $booking->payments()->where('status', 'completed')->sum('amount');
+            $booking->balance_amount = $booking->total_amount - $booking->paid_amount;
+            $booking->save();
+            return $payment;
+        });
 
         return $this->created(new PaymentResource($payment));
     }

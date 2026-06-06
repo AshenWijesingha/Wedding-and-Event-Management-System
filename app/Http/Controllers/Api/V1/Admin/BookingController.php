@@ -41,8 +41,8 @@ class BookingController extends Controller
                          ->orWhere('last_name', 'like', "%{$search}%")
                   )
             )
-            ->orderBy($request->sort_by ?? 'event_date', $request->sort_dir ?? 'desc')
-            ->paginate($request->per_page ?? 15);
+            ->orderBy(in_array($request->sort_by, ['event_date', 'created_at', 'total_amount', 'status', 'guest_count']) ? $request->sort_by : 'event_date', $request->sort_dir === 'asc' ? 'asc' : 'desc')
+            ->paginate(min((int) ($request->per_page ?? 15), 100));
 
         return $this->success(BookingResource::collection($bookings));
     }

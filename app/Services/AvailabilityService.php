@@ -70,7 +70,7 @@ class AvailabilityService
             while ($current <= $end) {
                 $dateStr = $current->format('Y-m-d');
                 $booking = $bookings->first(function ($b) use ($venueId, $dateStr) {
-                    return $b->venue_id == $venueId && $b->event_date->format('Y-m-d') === $dateStr;
+                    return $b->venue_id == $venueId && $b->event_date?->format('Y-m-d') === $dateStr;
                 });
                 
                 $availability[$venueId][$dateStr] = $booking ? $this->mapStatus($booking->status) : 'available';

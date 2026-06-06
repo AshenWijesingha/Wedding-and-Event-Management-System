@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use App\Models\Concerns\BelongsToTenant;
 
 class Quotation extends Model
@@ -94,9 +95,9 @@ class Quotation extends Model
      */
     public function isValid(): bool
     {
-        return $this->status !== 'expired' && 
-               $this->valid_until && 
-               $this->valid_until->isFuture();
+        return $this->status !== 'expired' &&
+               $this->valid_until &&
+               $this->valid_until->gte(now()->startOfDay());
     }
 
     /**
@@ -112,9 +113,11 @@ class Quotation extends Model
      */
     public static function generateQuotationNumber(string $prefix = 'QT'): string
     {
-        $year = date('Y');
-        $count = static::whereYear('created_at', $year)->count() + 1;
-        return sprintf('%s%s%04d', $prefix, $year, $count);
+        return DB::transaction(function () use ($prefix) {
+            $year = date('Y');
+            $count = static::withoutGlobalScopes()->whereYear('created_at', $year)->lockForUpdate()->count() + 1;
+            return sprintf('%s%s%04d', $prefix, $year, $count);
+        });
     }
 
     /**

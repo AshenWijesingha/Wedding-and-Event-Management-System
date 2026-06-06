@@ -23,9 +23,9 @@ services:
       - DB_CONNECTION=mysql
       - DB_HOST=mysql
       - DB_PORT=3306
-      - DB_DATABASE=eventpro
-      - DB_USERNAME=root
-      - DB_PASSWORD=secret
+      - DB_DATABASE=${DB_DATABASE:-eventpro}
+      - DB_USERNAME=${DB_USERNAME:-root}
+      - DB_PASSWORD=${DB_PASSWORD}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - CACHE_DRIVER=redis
@@ -48,10 +48,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: eventpro
-      MYSQL_USER: eventpro
-      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE:-eventpro}
+      MYSQL_USER: ${DB_USERNAME:-eventpro}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
