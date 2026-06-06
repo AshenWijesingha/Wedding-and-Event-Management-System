@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Public API Routes (v1)
-Route::prefix('v1')->name('api.v1.')->group(function () {
+Route::prefix('v1')->name('api.v1.')->middleware('throttle:api')->group(function () {
     
     // Public endpoints - No authentication required
     Route::get('venues', [\App\Http\Controllers\Api\V1\VenueController::class, 'index'])->name('venues.index');
