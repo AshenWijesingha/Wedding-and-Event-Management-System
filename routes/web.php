@@ -48,9 +48,12 @@ Route::middleware('auth')->group(function () {
 // Admin panel routes (Inertia.js SPA)
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', fn () => inertia('Dashboard'))->name('dashboard');
-    Route::get('/venues', fn () => inertia('Venues/Index'))->name('venues.index');
-    Route::get('/venues/create', fn () => inertia('Venues/Create'))->name('venues.create');
-    Route::get('/venues/{id}/edit', fn ($id) => inertia('Venues/Edit', ['venueId' => $id]))->name('venues.edit');
+
+    // Venues — full resource with web controller
+    Route::resource('venues', \App\Http\Controllers\Admin\VenueController::class)
+        ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+
+    // Placeholder routes for pages not yet built
     Route::get('/packages', fn () => inertia('Packages/Index'))->name('packages.index');
     Route::get('/packages/create', fn () => inertia('Packages/Create'))->name('packages.create');
     Route::get('/bookings', fn () => inertia('Bookings/Index'))->name('bookings.index');

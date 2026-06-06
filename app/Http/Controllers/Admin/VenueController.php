@@ -1,0 +1,108 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\VenueResource;
+use App\Models\Venue;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Inertia\Inertia;
+use Inertia\Response;
+
+class VenueController extends Controller
+{
+    public function index(Request $request): Response
+    {
+        $venues = Venue::query()
+            ->when($request->search, fn ($q, $search) =>
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+            )
+            ->when($request->status, fn ($q, $status) =>
+                $q->where('status', $status)
+            )
+            ->orderBy('name')
+            ->paginate(15)
+            ->withQueryString();
+
+        return Inertia::render('Venues/Index', [
+            'venues' => VenueResource::collection($venues),
+            'filters' => $request->only(['search', 'status']),
+        ]);
+    }
+
+    public function create(): Response
+    {
+        return Inertia::render('Venues/Create');
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:venues',
+            'description' => 'nullable|string',
+            'capacity_min' => 'nullable|integer|min:1',
+            'capacity_max' => 'nullable|integer|min:1',
+            'base_price' => 'nullable|numeric|min:0',
+            'weekend_surcharge' => 'nullable|numeric|min:0',
+            'amenities' => 'nullable|array',
+            'amenities.*' => 'string',
+            'status' => 'nullable|in:active,inactive,maintenance',
+        ]);
+
+        $validated['slug'] = $validated['slug'] ?? Str::slug($validated['name']);
+        $validated['status'] = $validated['status'] ?? 'active';
+
+        $baseSlug = $validated['slug'];
+        $i = 1;
+        while (Venue::where('slug', $validated['slug'])->exists()) {
+            $validated['slug'] = "{$baseSlug}-{$i}";
+            $i++;
+        }
+
+        Venue::create($validated);
+
+        return redirect()->route('admin.venues.index')->with('success', 'Venue created successfully.');
+    }
+
+    public function edit(Venue $venue): Response
+    {
+        return Inertia::render('Venues/Edit', [
+            'venue' => new VenueResource($venue),
+        ]);
+    }
+
+    public function update(Request $request, Venue $venue): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:venues,slug,' . $venue->id,
+            'description' => 'nullable|string',
+            'capacity_min' => 'nullable|integer|min:1',
+            'capacity_max' => 'nullable|integer|min:1',
+            'base_price' => 'nullable|numeric|min:0',
+            'weekend_surcharge' => 'nullable|numeric|min:0',
+            'amenities' => 'nullable|array',
+            'amenities.*' => 'string',
+            'status' => 'nullable|in:active,inactive,maintenance',
+        ]);
+
+        $venue->update($validated);
+
+        return redirect()->route('admin.venues.index')->with('success', 'Venue updated successfully.');
+    }
+
+    public function destroy(Venue $venue): RedirectResponse
+    {
+        if ($venue->bookings()->whereNotIn('status', ['cancelled'])->exists()) {
+            return back()->with('error', 'Cannot delete venue with active bookings.');
+        }
+
+        $venue->delete();
+
+        return redirect()->route('admin.venues.index')->with('success', 'Venue deleted.');
+    }
+}
