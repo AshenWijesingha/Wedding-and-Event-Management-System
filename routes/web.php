@@ -14,9 +14,7 @@ Route::get('/', function () {
 Route::get('/venues', [\App\Http\Controllers\VenueController::class, 'index'])->name('venues.index');
 Route::get('/venues/{venue:slug}', [\App\Http\Controllers\VenueController::class, 'show'])->name('venues.show');
 
-Route::get('/packages', function () {
-    return view('packages.index');
-})->name('packages.index');
+Route::get('/packages', [\App\Http\Controllers\PackageController::class, 'index'])->name('packages.index');
 
 Route::get('/contact', function () {
     return view('contact');
@@ -49,9 +47,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
     Route::get('venues/{venue}/availability', [\App\Http\Controllers\Admin\VenueController::class, 'availability'])->name('admin.venues.availability');
 
-    // Placeholder routes for pages not yet built
-    Route::get('/packages', fn () => inertia('Packages/Index'))->name('packages.index');
-    Route::get('/packages/create', fn () => inertia('Packages/Create'))->name('packages.create');
+    // Packages
+    Route::resource('packages', \App\Http\Controllers\Admin\PackageController::class)
+        ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
     Route::get('/bookings', fn () => inertia('Bookings/Index'))->name('bookings.index');
     Route::get('/bookings/create', fn () => inertia('Bookings/Create'))->name('bookings.create');
     Route::get('/bookings/{id}', fn ($id) => inertia('Bookings/Show', ['bookingId' => $id]))->name('bookings.show');
