@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\VenueResource;
+use App\Models\Booking;
 use App\Models\Venue;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -93,6 +94,28 @@ class VenueController extends Controller
         $venue->update($validated);
 
         return redirect()->route('admin.venues.index')->with('success', 'Venue updated successfully.');
+    }
+
+    public function availability(Venue $venue): Response
+    {
+        $bookings = Booking::where('venue_id', $venue->id)
+            ->whereNotIn('status', ['cancelled'])
+            ->with('client')
+            ->get()
+            ->map(fn ($b) => [
+                'id' => $b->id,
+                'booking_number' => $b->booking_number,
+                'client_name' => $b->client?->first_name . ' ' . $b->client?->last_name,
+                'event_date' => $b->event_date?->toDateString(),
+                'event_type' => $b->event_type,
+                'guest_count' => $b->guest_count,
+                'status' => $b->status,
+            ]);
+
+        return Inertia::render('Venues/Availability', [
+            'venue' => new VenueResource($venue),
+            'events' => $bookings,
+        ]);
     }
 
     public function destroy(Venue $venue): RedirectResponse
