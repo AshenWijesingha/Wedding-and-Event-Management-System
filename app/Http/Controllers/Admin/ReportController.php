@@ -4,25 +4,25 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
-use App\Models\Client;
 use App\Models\Payment;
+use App\Models\Venue;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ReportController extends Controller
 {
     public function index(Request $request): Response
     {
-        $year  = $request->integer('year', now()->year);
-        $month = $request->integer('month', 0);
+        $year = $request->integer('year', now()->year);
 
+        // Portable monthly revenue (SQLite has no MONTH()): group Carbon dates in PHP.
         $revenueByMonth = Payment::completed()
             ->whereYear('payment_date', $year)
-            ->selectRaw('MONTH(payment_date) as month, SUM(amount) as total')
-            ->groupBy('month')
-            ->orderBy('month')
-            ->pluck('total', 'month');
+            ->get(['amount', 'payment_date'])
+            ->groupBy(fn ($p) => (int) $p->payment_date->format('n'))
+            ->map(fn ($group) => (float) $group->sum('amount'));
 
         $months = collect(range(1, 12))->mapWithKeys(fn ($m) => [
             $m => [
@@ -56,8 +56,6 @@ class ReportController extends Controller
             'confirmed_bookings' => Booking::whereYear('event_date', $year)->whereIn('status', ['confirmed', 'completed'])->count(),
             'outstanding'        => (float) Booking::whereNotIn('status', ['cancelled', 'completed'])->sum('balance_amount'),
         ];
-
-        $years = range(now()->year - 3, now()->year + 1);
 
         $recentBookings = Booking::with(['client', 'venue'])
             ->orderByDesc('created_at')
@@ -93,45 +91,6 @@ class ReportController extends Controller
             'recentBookings'   => $recentBookings,
             'upcomingBookings' => $upcomingBookings,
             'filters'          => compact('year'),
-            'years'            => $years,
-        ]);
-    }
-
-    public function occupancy(Request $request): Response
-    {
-        $year = $request->integer('year', now()->year);
-
-        $venues = \App\Models\Venue::withCount([
-            'bookings as booked_days' => fn ($q) =>
-                $q->whereYear('event_date', $year)->whereNotIn('status', ['cancelled']),
-        ])->orderByDesc('booked_days')->get(['id', 'name']);
-
-        $daysInYear = date('L', mktime(0, 0, 0, 1, 1, $year)) ? 366 : 365;
-
-        $venueOccupancy = $venues->map(fn ($v) => [
-            'venue'        => $v->name,
-            'booked_days'  => $v->booked_days,
-            'occupancy_pct' => $daysInYear > 0 ? round(($v->booked_days / $daysInYear) * 100, 1) : 0,
-        ]);
-
-        $monthlyOccupancy = collect(range(1, 12))->map(function ($m) use ($year) {
-            $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $m, $year);
-            $bookings    = \App\Models\Booking::whereYear('event_date', $year)
-                ->whereMonth('event_date', $m)
-                ->whereNotIn('status', ['cancelled'])
-                ->count();
-            return [
-                'month'         => $m,
-                'label'         => date('M', mktime(0, 0, 0, $m, 1)),
-                'bookings'      => $bookings,
-                'occupancy_pct' => $daysInMonth > 0 ? round(($bookings / $daysInMonth) * 100, 1) : 0,
-            ];
-        });
-
-        return Inertia::render('Reports/Occupancy', [
-            'venueOccupancy'   => $venueOccupancy,
-            'monthlyOccupancy' => $monthlyOccupancy,
-            'filters'          => compact('year'),
             'years'            => range(now()->year - 3, now()->year + 1),
         ]);
     }
@@ -139,20 +98,93 @@ class ReportController extends Controller
     public function revenue(Request $request): Response
     {
         $year = $request->integer('year', now()->year);
+        $data = $this->revenueData($year);
 
+        return Inertia::render('Reports/Revenue', [
+            'months'  => $data['months'],
+            'byMethod' => $data['byMethod'],
+            'totals'  => $data['totals'],
+            'filters' => compact('year'),
+            'years'   => range(now()->year - 3, now()->year + 1),
+        ]);
+    }
+
+    public function bookings(Request $request): Response
+    {
+        $year = $request->integer('year', now()->year);
+        $data = $this->bookingsData($year);
+
+        return Inertia::render('Reports/Bookings', [
+            'months'      => $data['months'],
+            'byEventType' => $data['byEventType'],
+            'totals'      => $data['totals'],
+            'filters'     => compact('year'),
+            'years'       => range(now()->year - 3, now()->year + 1),
+        ]);
+    }
+
+    public function occupancy(Request $request): Response
+    {
+        $year = $request->integer('year', now()->year);
+        $data = $this->occupancyData($year);
+
+        return Inertia::render('Reports/Occupancy', [
+            'venueOccupancy'   => $data['venueOccupancy'],
+            'monthlyOccupancy' => $data['monthlyOccupancy'],
+            'filters'          => compact('year'),
+            'years'            => range(now()->year - 3, now()->year + 1),
+        ]);
+    }
+
+    // ---- CSV exports ----------------------------------------------------
+
+    public function exportRevenue(Request $request): StreamedResponse
+    {
+        $year = $request->integer('year', now()->year);
+        $rows = $this->revenueData($year)['months'];
+
+        return $this->streamCsv("revenue-{$year}.csv",
+            ['Month', 'Revenue', 'Payments'],
+            $rows->map(fn ($m) => [$m['label'], $m['revenue'], $m['count']])->all()
+        );
+    }
+
+    public function exportBookings(Request $request): StreamedResponse
+    {
+        $year = $request->integer('year', now()->year);
+        $rows = $this->bookingsData($year)['months'];
+
+        return $this->streamCsv("bookings-{$year}.csv",
+            ['Month', 'Total', 'Confirmed', 'Completed', 'Cancelled'],
+            $rows->map(fn ($m) => [$m['label'], $m['total'], $m['confirmed'], $m['completed'], $m['cancelled']])->all()
+        );
+    }
+
+    public function exportOccupancy(Request $request): StreamedResponse
+    {
+        $year = $request->integer('year', now()->year);
+        $rows = $this->occupancyData($year)['venueOccupancy'];
+
+        return $this->streamCsv("occupancy-{$year}.csv",
+            ['Venue', 'Booked Days', 'Occupancy %'],
+            $rows->map(fn ($v) => [$v['venue'], $v['booked_days'], $v['occupancy_pct']])->all()
+        );
+    }
+
+    // ---- Shared data builders ------------------------------------------
+
+    private function revenueData(int $year): array
+    {
         $byMonth = Payment::completed()
             ->whereYear('payment_date', $year)
-            ->selectRaw('MONTH(payment_date) as month, SUM(amount) as total, COUNT(*) as count')
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get()
-            ->keyBy('month');
+            ->get(['amount', 'payment_date'])
+            ->groupBy(fn ($p) => (int) $p->payment_date->format('n'));
 
         $months = collect(range(1, 12))->map(fn ($m) => [
             'month'   => $m,
             'label'   => date('F', mktime(0, 0, 0, $m, 1)),
-            'revenue' => (float) ($byMonth[$m]?->total ?? 0),
-            'count'   => (int) ($byMonth[$m]?->count ?? 0),
+            'revenue' => (float) ($byMonth->get($m)?->sum('amount') ?? 0),
+            'count'   => (int) ($byMonth->get($m)?->count() ?? 0),
         ]);
 
         $byMethod = Payment::completed()
@@ -168,34 +200,24 @@ class ReportController extends Controller
             'refunded'    => (float) Payment::where('status', 'refunded')->whereYear('payment_date', $year)->sum('amount'),
         ];
 
-        return Inertia::render('Reports/Revenue', [
-            'months'  => $months,
-            'byMethod' => $byMethod,
-            'totals'  => $totals,
-            'filters' => compact('year'),
-            'years'   => range(now()->year - 3, now()->year + 1),
-        ]);
+        return compact('months', 'byMethod', 'totals');
     }
 
-    public function bookings(Request $request): Response
+    private function bookingsData(int $year): array
     {
-        $year = $request->integer('year', now()->year);
-
         $byMonth = Booking::whereYear('event_date', $year)
-            ->selectRaw('MONTH(event_date) as month, status, COUNT(*) as count')
-            ->groupBy('month', 'status')
-            ->get()
-            ->groupBy('month');
+            ->get(['status', 'event_date'])
+            ->groupBy(fn ($b) => (int) $b->event_date->format('n'));
 
         $months = collect(range(1, 12))->map(function ($m) use ($byMonth) {
             $rows = $byMonth[$m] ?? collect();
             return [
                 'month'     => $m,
                 'label'     => date('F', mktime(0, 0, 0, $m, 1)),
-                'total'     => $rows->sum('count'),
-                'confirmed' => $rows->where('status', 'confirmed')->sum('count'),
-                'completed' => $rows->where('status', 'completed')->sum('count'),
-                'cancelled' => $rows->where('status', 'cancelled')->sum('count'),
+                'total'     => $rows->count(),
+                'confirmed' => $rows->where('status', 'confirmed')->count(),
+                'completed' => $rows->where('status', 'completed')->count(),
+                'cancelled' => $rows->where('status', 'cancelled')->count(),
             ];
         });
 
@@ -214,12 +236,50 @@ class ReportController extends Controller
             'revenue'   => (float) Booking::whereYear('event_date', $year)->whereNotIn('status', ['cancelled'])->sum('total_amount'),
         ];
 
-        return Inertia::render('Reports/Bookings', [
-            'months'      => $months,
-            'byEventType' => $byEventType,
-            'totals'      => $totals,
-            'filters'     => compact('year'),
-            'years'       => range(now()->year - 3, now()->year + 1),
+        return compact('months', 'byEventType', 'totals');
+    }
+
+    private function occupancyData(int $year): array
+    {
+        $venues = Venue::withCount([
+            'bookings as booked_days' => fn ($q) =>
+                $q->whereYear('event_date', $year)->whereNotIn('status', ['cancelled']),
+        ])->orderByDesc('booked_days')->get(['id', 'name']);
+
+        $daysInYear = date('L', mktime(0, 0, 0, 1, 1, $year)) ? 366 : 365;
+
+        $venueOccupancy = $venues->map(fn ($v) => [
+            'venue'         => $v->name,
+            'booked_days'   => $v->booked_days,
+            'occupancy_pct' => $daysInYear > 0 ? round(($v->booked_days / $daysInYear) * 100, 1) : 0,
         ]);
+
+        $monthlyOccupancy = collect(range(1, 12))->map(function ($m) use ($year) {
+            $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $m, $year);
+            $bookings    = Booking::whereYear('event_date', $year)
+                ->whereMonth('event_date', $m)
+                ->whereNotIn('status', ['cancelled'])
+                ->count();
+            return [
+                'month'         => $m,
+                'label'         => date('M', mktime(0, 0, 0, $m, 1)),
+                'bookings'      => $bookings,
+                'occupancy_pct' => $daysInMonth > 0 ? round(($bookings / $daysInMonth) * 100, 1) : 0,
+            ];
+        });
+
+        return compact('venueOccupancy', 'monthlyOccupancy');
+    }
+
+    private function streamCsv(string $filename, array $header, array $rows): StreamedResponse
+    {
+        return response()->streamDownload(function () use ($header, $rows) {
+            $out = fopen('php://output', 'w');
+            fputcsv($out, $header);
+            foreach ($rows as $row) {
+                fputcsv($out, $row);
+            }
+            fclose($out);
+        }, $filename, ['Content-Type' => 'text/csv']);
     }
 }

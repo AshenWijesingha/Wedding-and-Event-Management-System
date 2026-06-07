@@ -70,13 +70,16 @@ const logout = () => router.post('/logout');
             <!-- User profile -->
             <div class="absolute bottom-0 w-full p-4 bg-gray-800">
                 <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white text-sm font-medium">
-                        {{ user?.name?.charAt(0)?.toUpperCase() }}
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-white truncate">{{ user?.name }}</p>
-                        <p class="text-xs text-gray-400 truncate">{{ user?.role }}</p>
-                    </div>
+                    <Link href="/admin/profile" class="flex items-center space-x-3 flex-1 min-w-0 group" title="My Profile">
+                        <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white text-sm font-medium overflow-hidden">
+                            <img v-if="user?.avatar" :src="user.avatar" alt="" class="w-full h-full object-cover" />
+                            <span v-else>{{ user?.name?.charAt(0)?.toUpperCase() }}</span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-white truncate group-hover:underline">{{ user?.name }}</p>
+                            <p class="text-xs text-gray-400 truncate capitalize">{{ user?.role }}</p>
+                        </div>
+                    </Link>
                     <button @click="logout" class="text-gray-400 hover:text-white transition-colors" title="Logout">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                     </button>
