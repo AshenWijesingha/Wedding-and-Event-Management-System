@@ -1,12 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="bg-white">
-    <div class="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
+<div class="relative isolate overflow-hidden bg-[#f7f3ec] text-[#2b211b]">
+    <div aria-hidden="true" class="au-noise pointer-events-none absolute inset-0 opacity-[0.04]"></div>
+    <div aria-hidden="true" class="pointer-events-none absolute -top-24 right-0 h-72 w-[34rem] rounded-full blur-3xl" style="background: radial-gradient(closest-side, rgba(200,169,106,0.18), transparent);"></div>
+
+    <div class="relative mx-auto max-w-7xl px-6 py-24 sm:py-28 lg:px-8">
         <div class="mx-auto max-w-2xl">
-            <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Contact Us</h2>
-            <p class="mt-4 text-lg leading-8 text-gray-600">
-                Ready to plan your event? Get in touch with our team.
+            <p class="text-[0.72rem] font-medium uppercase tracking-[0.3em] text-[#c8a96a]">Get in touch</p>
+            <h2 class="font-display mt-4 text-4xl font-light leading-tight text-[#1a1512] sm:text-5xl">
+                Let&rsquo;s plan something <span class="italic">unforgettable</span>
+            </h2>
+            <p class="mt-5 text-lg leading-relaxed text-[#5c5246]">
+                Tell us about your event &mdash; our team will be in touch within one business day.
             </p>
 
             <form
