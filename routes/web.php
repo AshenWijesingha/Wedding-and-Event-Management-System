@@ -118,8 +118,8 @@ Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefi
     Route::post('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [\App\Http\Controllers\Admin\ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::post('/profile/verification-notification', [\App\Http\Controllers\Admin\ProfileController::class, 'sendVerification'])->name('profile.verification');
-    // User management (admins manage their own tenant; super admins manage system-wide)
-    Route::middleware('role:super_admin|admin')->group(function () {
+    // User management (admins/owners manage their own tenant; super admins manage system-wide)
+    Route::middleware('role:super_admin|tenant_owner|admin')->group(function () {
         Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
         Route::get('/users/create', [\App\Http\Controllers\Admin\UserController::class, 'create'])->name('users.create');
         Route::post('/users', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('users.store');
@@ -127,6 +127,16 @@ Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefi
         Route::put('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
         Route::put('/users/{id}/reset-password', [\App\Http\Controllers\Admin\UserController::class, 'resetPassword'])->name('users.reset-password');
         Route::delete('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
+    });
+
+    // Platform administration (super admin only): tenants and plans.
+    Route::middleware('role:super_admin')->group(function () {
+        Route::get('/tenants', [\App\Http\Controllers\Admin\TenantController::class, 'index'])->name('tenants.index');
+        Route::get('/tenants/create', [\App\Http\Controllers\Admin\TenantController::class, 'create'])->name('tenants.create');
+        Route::post('/tenants', [\App\Http\Controllers\Admin\TenantController::class, 'store'])->name('tenants.store');
+        Route::get('/tenants/{tenant}/edit', [\App\Http\Controllers\Admin\TenantController::class, 'edit'])->name('tenants.edit');
+        Route::put('/tenants/{tenant}', [\App\Http\Controllers\Admin\TenantController::class, 'update'])->name('tenants.update');
+        Route::delete('/tenants/{tenant}', [\App\Http\Controllers\Admin\TenantController::class, 'destroy'])->name('tenants.destroy');
     });
 
     Route::get('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings.index');

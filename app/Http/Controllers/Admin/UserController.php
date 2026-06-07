@@ -16,7 +16,7 @@ use Inertia\Response;
 class UserController extends Controller
 {
     /** All roles in the system, ordered most to least privileged. */
-    private const ROLES = ['super_admin', 'admin', 'manager', 'staff', 'client'];
+    private const ROLES = ['super_admin', 'tenant_owner', 'admin', 'manager', 'staff', 'client'];
 
     public function index(Request $request): Response
     {
@@ -215,19 +215,31 @@ class UserController extends Controller
     {
         $user = $this->userQuery($actor)->findOrFail($id);
 
-        if (! $actor->isSuperAdmin() && $user->hasRole('super_admin')) {
+        // An actor may never manage a user that holds a role they cannot assign
+        // (prevents an admin touching a tenant_owner, or anyone touching a super_admin).
+        if (! in_array($user->role, $this->assignableRoles($actor), true)) {
             abort(403);
         }
 
         return $user;
     }
 
-    /** Roles the actor may assign. Non-super admins cannot create or grant super_admin. */
+    /**
+     * Roles the actor may assign, capped at their own level to prevent escalation:
+     * super_admin -> all; tenant_owner -> everything below super_admin;
+     * admin/below -> everything below tenant_owner.
+     */
     private function assignableRoles(User $actor): array
     {
-        return $actor->isSuperAdmin()
-            ? self::ROLES
-            : array_values(array_diff(self::ROLES, ['super_admin']));
+        if ($actor->isSuperAdmin()) {
+            return self::ROLES;
+        }
+
+        $excluded = $actor->isTenantOwner()
+            ? ['super_admin']
+            : ['super_admin', 'tenant_owner'];
+
+        return array_values(array_diff(self::ROLES, $excluded));
     }
 
     /** Tenants the actor may assign a user to. Admins are limited to their own. */
