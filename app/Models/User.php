@@ -91,17 +91,26 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isAdmin(): bool
     {
-        return $this->hasAnyRole(['super_admin', 'admin']);
+        return $this->hasAnyRole(['super_admin', 'tenant_owner', 'admin']);
     }
 
     public function isManager(): bool
     {
-        return $this->hasAnyRole(['super_admin', 'admin', 'manager']);
+        return $this->hasAnyRole(['super_admin', 'tenant_owner', 'admin', 'manager']);
     }
 
     public function isSuperAdmin(): bool
     {
         return $this->hasRole('super_admin');
+    }
+
+    /**
+     * The tenant's own super admin: full control of one tenant, but not the
+     * platform. Super admins are treated as tenant owners for tenant-scoped checks.
+     */
+    public function isTenantOwner(): bool
+    {
+        return $this->hasAnyRole(['super_admin', 'tenant_owner']);
     }
 
     public function scopeActive($query)

@@ -35,15 +35,27 @@ class RolePermissionSeeder extends Seeder
             'users.view', 'users.create', 'users.edit', 'users.delete',
         ];
 
-        foreach ($permissions as $permission) {
+        // Platform-level permissions, reserved for the super admin only. These
+        // govern the cross-tenant platform area (tenant + plan management).
+        $platformPermissions = [
+            'tenants.view', 'tenants.create', 'tenants.edit', 'tenants.delete', 'tenants.impersonate',
+            'plans.view', 'plans.create', 'plans.edit', 'plans.delete',
+        ];
+
+        foreach (array_merge($permissions, $platformPermissions) as $permission) {
             Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
         }
 
         $superAdmin = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
         $superAdmin->syncPermissions(Permission::all());
 
+        // Tenant owner: full authority over a single tenant (every tenant-scoped
+        // permission) but none of the platform-level permissions.
+        $tenantOwner = Role::firstOrCreate(['name' => 'tenant_owner', 'guard_name' => 'web']);
+        $tenantOwner->syncPermissions(Permission::whereIn('name', $permissions)->get());
+
         $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
-        $admin->syncPermissions(Permission::whereNotIn('name', [
+        $admin->syncPermissions(Permission::whereIn('name', $permissions)->whereNotIn('name', [
             'settings.edit',
             'users.delete',
         ])->get());
