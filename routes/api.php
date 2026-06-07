@@ -29,7 +29,7 @@ Route::prefix('v1')->name('api.v1.')->middleware('throttle:api')->group(function
     Route::post('calculate-price', [\App\Http\Controllers\Api\V1\PricingController::class, 'calculate'])->name('pricing.calculate');
     
     // Authenticated routes
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware(['auth:sanctum', \App\Http\Middleware\SetCurrentTenant::class])->group(function () {
         
         // User routes
         Route::get('user', function (Request $request) {
@@ -46,7 +46,7 @@ Route::prefix('v1')->name('api.v1.')->middleware('throttle:api')->group(function
         });
         
         // Admin routes
-        Route::prefix('admin')->name('admin.')->middleware('role:admin,manager')->group(function () {
+        Route::prefix('admin')->name('admin.')->middleware('role:admin|manager')->group(function () {
             
             // Venues management
             Route::apiResource('venues', \App\Http\Controllers\Api\V1\Admin\VenueController::class);

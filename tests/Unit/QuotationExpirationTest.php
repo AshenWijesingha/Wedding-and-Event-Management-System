@@ -47,7 +47,10 @@ class QuotationExpirationTest extends TestCase
         $quotation = new Quotation([
             'status' => 'expired',
         ]);
-        $quotation->setRawAttributes(['valid_until' => Carbon::tomorrow()->toDateString()]);
+        $quotation->setRawAttributes([
+            'status' => 'expired',
+            'valid_until' => Carbon::tomorrow()->toDateString(),
+        ]);
 
         $this->assertFalse($quotation->isValid());
     }

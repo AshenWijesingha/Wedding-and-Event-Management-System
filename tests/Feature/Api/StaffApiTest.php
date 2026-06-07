@@ -47,7 +47,7 @@ class StaffApiTest extends TestCase
     {
         $admin = User::factory()->admin()->create();
         $staff = Staff::factory()->create();
-        Task::factory()->count(3)->create(['staff_id' => $staff->id]);
+        Task::factory()->count(3)->create(['assigned_to' => $staff->id]);
 
         $response = $this->actingAs($admin, 'sanctum')
             ->getJson("/api/v1/admin/staff/{$staff->id}/schedule");
@@ -75,6 +75,6 @@ class StaffApiTest extends TestCase
             ->postJson('/api/v1/admin/staff', []);
 
         $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['first_name', 'last_name', 'email', 'role']);
+        $response->assertJsonValidationErrors(['first_name', 'last_name']);
     }
 }

@@ -12,6 +12,7 @@ class TaskFactory extends Factory
     {
         return [
             'tenant_id'   => Tenant::factory(),
+            'assigned_to' => Staff::factory(),
             'title'       => $this->faker->sentence(5),
             'description' => $this->faker->paragraph(),
             'priority'    => $this->faker->randomElement(['low', 'medium', 'high', 'urgent']),

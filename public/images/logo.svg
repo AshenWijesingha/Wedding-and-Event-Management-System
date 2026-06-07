@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 40" width="180" height="40" role="img" aria-label="EventPro">
+  <rect x="2" y="6" width="28" height="28" rx="6" fill="#6366f1"/>
+  <rect x="8" y="3" width="3" height="7" rx="1.5" fill="#4f46e5"/>
+  <rect x="21" y="3" width="3" height="7" rx="1.5" fill="#4f46e5"/>
+  <rect x="7" y="16" width="18" height="3" rx="1.5" fill="#ffffff"/>
+  <circle cx="11" cy="24" r="2" fill="#ffffff"/>
+  <circle cx="16" cy="24" r="2" fill="#ffffff"/>
+  <circle cx="21" cy="24" r="2" fill="#ffffff"/>
+  <text x="40" y="27" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700" fill="#111827">Event<tspan fill="#6366f1">Pro</tspan></text>
+</svg>

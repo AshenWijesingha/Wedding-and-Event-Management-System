@@ -14,7 +14,7 @@ class PluginService
      */
     public function loadPlugins(): void
     {
-        $tenant = app('currentTenant');
+        $tenant = \App\Models\Tenant::current();
         $enabledPlugins = $tenant?->getSetting('plugins.enabled', []) ?? [];
 
         foreach ($enabledPlugins as $pluginSlug) {
@@ -128,7 +128,7 @@ class PluginService
      */
     public function enablePlugin(string $slug): bool
     {
-        $tenant = app('currentTenant');
+        $tenant = \App\Models\Tenant::current();
         if (!$tenant) {
             return false;
         }
@@ -147,7 +147,7 @@ class PluginService
      */
     public function disablePlugin(string $slug): bool
     {
-        $tenant = app('currentTenant');
+        $tenant = \App\Models\Tenant::current();
         if (!$tenant) {
             return false;
         }

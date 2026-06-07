@@ -13,6 +13,7 @@ const props = defineProps({
 });
 
 const statusColors = {
+    pending: { bg: '#F3F4F6', text: '#4B5563', border: '#6B7280' },
     tentative: { bg: '#FEF3C7', text: '#92400E', border: '#F59E0B' },
     confirmed: { bg: '#D1FAE5', text: '#065F46', border: '#10B981' },
     in_progress: { bg: '#DBEAFE', text: '#1E40AF', border: '#3B82F6' },
@@ -64,6 +65,7 @@ function handleDateClick({ dateStr }) {
 }
 
 const statusLabels = {
+    pending: 'Pending',
     tentative: 'Tentative',
     confirmed: 'Confirmed',
     in_progress: 'In Progress',
@@ -86,7 +88,7 @@ const statusLabels = {
                         <p class="text-sm text-gray-500">Availability Calendar</p>
                     </div>
                 </div>
-                <Link :href="`/admin/venues/${venue.id}/edit`" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
+                <Link :href="`/admin/venues/${venue.slug}/edit`" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
                     Edit Venue
                 </Link>
             </div>

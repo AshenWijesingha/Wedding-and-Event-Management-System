@@ -4,9 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\Booking;
 use App\Models\Client;
+use App\Models\CustomField;
 use App\Models\Inquiry;
 use App\Models\Package;
 use App\Models\Payment;
+use App\Models\Quotation;
 use App\Models\Staff;
 use App\Models\Task;
 use App\Models\Tenant;
@@ -35,6 +37,7 @@ class DemoDataSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
+        $admin->assignRole('admin');
 
         // Venues
         $venues = [
@@ -47,6 +50,11 @@ class DemoDataSeeder extends Seeder
                 'base_price' => 8000,
                 'weekend_surcharge' => 1500,
                 'amenities' => ['parking', 'valet', 'catering', 'av_equipment', 'dance_floor', 'stage'],
+                'images' => [
+                    'https://picsum.photos/seed/grand-ballroom-1/1200/800',
+                    'https://picsum.photos/seed/grand-ballroom-2/1200/800',
+                    'https://picsum.photos/seed/grand-ballroom-3/1200/800',
+                ],
                 'status' => 'active',
             ],
             [
@@ -58,6 +66,11 @@ class DemoDataSeeder extends Seeder
                 'base_price' => 3500,
                 'weekend_surcharge' => 800,
                 'amenities' => ['parking', 'wifi', 'catering'],
+                'images' => [
+                    'https://picsum.photos/seed/garden-terrace-1/1200/800',
+                    'https://picsum.photos/seed/garden-terrace-2/1200/800',
+                    'https://picsum.photos/seed/garden-terrace-3/1200/800',
+                ],
                 'status' => 'active',
             ],
             [
@@ -69,6 +82,11 @@ class DemoDataSeeder extends Seeder
                 'base_price' => 5500,
                 'weekend_surcharge' => 1000,
                 'amenities' => ['parking', 'bar', 'av_equipment'],
+                'images' => [
+                    'https://picsum.photos/seed/rooftop-pavilion-1/1200/800',
+                    'https://picsum.photos/seed/rooftop-pavilion-2/1200/800',
+                    'https://picsum.photos/seed/rooftop-pavilion-3/1200/800',
+                ],
                 'status' => 'active',
             ],
         ];
@@ -85,10 +103,10 @@ class DemoDataSeeder extends Seeder
                 'slug' => 'classic-wedding',
                 'description' => 'Our most popular wedding package with everything you need for a perfect day.',
                 'base_price' => 5000,
-                'price_per_guest' => 85,
                 'min_guests' => 50,
                 'max_guests' => 300,
-                'includes' => ['Floral arrangements', 'DJ & sound system', 'Wedding coordinator', 'Catering setup'],
+                'guest_pricing' => [['from' => 50, 'to' => 300, 'price_per_guest' => 85]],
+                'included_services' => ['Floral arrangements', 'DJ & sound system', 'Wedding coordinator', 'Catering setup'],
                 'status' => 'active',
             ],
             [
@@ -96,10 +114,10 @@ class DemoDataSeeder extends Seeder
                 'slug' => 'corporate-gala',
                 'description' => 'Elevate your corporate events with our premium gala package.',
                 'base_price' => 3000,
-                'price_per_guest' => 60,
                 'min_guests' => 30,
                 'max_guests' => 500,
-                'includes' => ['AV equipment', 'Stage setup', 'Catering', 'Registration desk'],
+                'guest_pricing' => [['from' => 30, 'to' => 500, 'price_per_guest' => 60]],
+                'included_services' => ['AV equipment', 'Stage setup', 'Catering', 'Registration desk'],
                 'status' => 'active',
             ],
             [
@@ -107,10 +125,10 @@ class DemoDataSeeder extends Seeder
                 'slug' => 'intimate-celebration',
                 'description' => 'Perfect for milestone birthdays, anniversaries, and small gatherings.',
                 'base_price' => 1500,
-                'price_per_guest' => 45,
                 'min_guests' => 10,
                 'max_guests' => 80,
-                'includes' => ['Basic decor', 'Sound system', 'Event coordinator'],
+                'guest_pricing' => [['from' => 10, 'to' => 80, 'price_per_guest' => 45]],
+                'included_services' => ['Basic decor', 'Sound system', 'Event coordinator'],
                 'status' => 'active',
             ],
         ];
@@ -132,15 +150,19 @@ class DemoDataSeeder extends Seeder
         foreach ($clientsData as $clientData) {
             $createdClients[] = Client::updateOrCreate(
                 ['email' => $clientData['email']],
-                array_merge($clientData, ['status' => 'active'])
+                $clientData
             );
         }
 
         // Bookings
         $bookingStatuses = ['confirmed', 'confirmed', 'tentative', 'completed'];
+        $createdBookings = [];
         for ($i = 0; $i < 4; $i++) {
             $eventDate = now()->addDays(rand(30, 365));
-            Booking::updateOrCreate(
+            $total = rand(8000, 30000);
+            $paid  = $bookingStatuses[$i] === 'completed' ? $total : rand(2000, (int) ($total * 0.5));
+
+            $createdBookings[] = Booking::updateOrCreate(
                 ['booking_number' => sprintf('BK%s%04d', date('Y'), $i + 1)],
                 [
                     'client_id'      => $createdClients[$i]->id,
@@ -150,10 +172,13 @@ class DemoDataSeeder extends Seeder
                     'event_date'     => $bookingStatuses[$i] === 'completed'
                         ? now()->subDays(rand(10, 60))->toDateString()
                         : $eventDate->toDateString(),
+                    'setup_time'       => '08:00',
+                    'event_start_time' => '10:00',
+                    'event_end_time'   => '22:00',
                     'guest_count'    => rand(80, 250),
-                    'total_amount'   => rand(8000, 30000),
-                    'paid_amount'    => $bookingStatuses[$i] === 'completed' ? rand(8000, 30000) : rand(2000, 8000),
-                    'balance_amount' => 0,
+                    'total_amount'   => $total,
+                    'paid_amount'    => $paid,
+                    'balance_amount' => $total - $paid,
                     'status'         => $bookingStatuses[$i],
                 ]
             );
@@ -167,11 +192,29 @@ class DemoDataSeeder extends Seeder
             ['name' => 'Gourmet Catering Co', 'category' => 'catering', 'contact_name' => 'Chef Marie', 'email' => 'chef@gourmetcc.demo', 'status' => 'active'],
         ];
 
+        $createdVendors = [];
         foreach ($vendorsData as $vendorData) {
-            Vendor::updateOrCreate(
+            $createdVendors[] = Vendor::updateOrCreate(
                 ['email' => $vendorData['email']],
                 array_merge($vendorData, ['slug' => Str::slug($vendorData['name'])])
             );
+        }
+
+        // Attach vendors to bookings (booking_vendor pivot)
+        foreach ($createdBookings as $bIdx => $booking) {
+            $vendorSet = [
+                $createdVendors[$bIdx % count($createdVendors)]->id,
+                $createdVendors[($bIdx + 1) % count($createdVendors)]->id,
+            ];
+            foreach ($vendorSet as $vendorId) {
+                $booking->vendors()->syncWithoutDetaching([
+                    $vendorId => [
+                        'service_description' => 'Demo service for ' . $booking->booking_number,
+                        'agreed_amount'       => rand(800, 4000),
+                        'status'              => 'confirmed',
+                    ],
+                ]);
+            }
         }
 
         // Staff
@@ -199,13 +242,146 @@ class DemoDataSeeder extends Seeder
             Task::updateOrCreate(
                 ['title' => $taskName],
                 [
-                    'staff_id'    => $createdStaff[$idx % count($createdStaff)]->id,
+                    'assigned_to' => $createdStaff[$idx % count($createdStaff)]->id,
                     'title'       => $taskName,
                     'priority'    => ['low', 'medium', 'high'][$idx % 3],
                     'status'      => $idx < 2 ? 'completed' : 'pending',
                     'due_date'    => now()->addDays($idx * 5 + 3)->toDateString(),
                     'description' => "Demo task: {$taskName}",
                 ]
+            );
+        }
+
+        // Inquiries
+        $inquiriesData = [
+            ['client' => 0, 'venue' => 0, 'package' => 0, 'event_type' => 'wedding',   'status' => 'pending',       'guests' => 180, 'message' => 'Looking for a grand wedding venue for next spring.'],
+            ['client' => 1, 'venue' => 2, 'package' => 1, 'event_type' => 'corporate', 'status' => 'contacted',     'guests' => 120, 'message' => 'Annual company gala — need AV and stage.'],
+            ['client' => 2, 'venue' => 1, 'package' => 2, 'event_type' => 'birthday',  'status' => 'qualified',     'guests' => 60,  'message' => 'Milestone 50th birthday celebration in the garden.'],
+            ['client' => 3, 'venue' => 0, 'package' => 0, 'event_type' => 'wedding',   'status' => 'proposal_sent', 'guests' => 250, 'message' => 'Large traditional wedding, full package required.'],
+            ['client' => 1, 'venue' => 2, 'package' => 2, 'event_type' => 'anniversary','status' => 'converted',    'guests' => 40,  'message' => 'Intimate 25th anniversary dinner with rooftop views.'],
+        ];
+
+        foreach ($inquiriesData as $idx => $inq) {
+            Inquiry::updateOrCreate(
+                ['inquiry_number' => sprintf('INQ%s%04d', date('Y'), $idx + 1)],
+                [
+                    'client_id'        => $createdClients[$inq['client']]->id,
+                    'venue_id'         => $createdVenues[$inq['venue']]->id,
+                    'package_id'       => $createdPackages[$inq['package']]->id,
+                    'event_type'       => $inq['event_type'],
+                    'preferred_date'   => now()->addDays(rand(45, 300))->toDateString(),
+                    'guest_count'      => $inq['guests'],
+                    'budget_range_min' => 5000,
+                    'budget_range_max' => 25000,
+                    'message'          => $inq['message'],
+                    'source'           => ['website', 'referral', 'social_media', 'phone'][$idx % 4],
+                    'status'           => $inq['status'],
+                ]
+            );
+        }
+
+        // Quotations
+        $quotationStates = [
+            ['status' => 'draft',    'booking' => null],
+            ['status' => 'sent',     'booking' => null],
+            ['status' => 'accepted', 'booking' => 0],
+            ['status' => 'expired',  'booking' => null],
+        ];
+
+        foreach ($quotationStates as $idx => $qs) {
+            $items = [
+                ['name' => 'Venue Hire',  'description' => 'Full-day exclusive venue access', 'quantity' => 1,   'unit_price' => 6000, 'total' => 6000],
+                ['name' => 'Catering',    'description' => 'Three-course plated dinner',      'quantity' => 150, 'unit_price' => 75,   'total' => 11250],
+                ['name' => 'Decoration',  'description' => 'Floral and table styling',        'quantity' => 1,   'unit_price' => 2500, 'total' => 2500],
+                ['name' => 'Photography', 'description' => 'Full event coverage',             'quantity' => 1,   'unit_price' => 1800, 'total' => 1800],
+            ];
+            $subtotal = array_sum(array_column($items, 'total'));
+            $discount = (int) ($subtotal * 0.05);
+            $tax      = (int) (($subtotal - $discount) * 0.1);
+            $total    = $subtotal - $discount + $tax;
+
+            Quotation::updateOrCreate(
+                ['quotation_number' => sprintf('QT%s%04d', date('Y'), $idx + 1)],
+                [
+                    'client_id'            => $createdClients[$idx % count($createdClients)]->id,
+                    'venue_id'             => $createdVenues[$idx % count($createdVenues)]->id,
+                    'package_id'           => $createdPackages[$idx % count($createdPackages)]->id,
+                    'booking_id'           => $qs['booking'] !== null ? $createdBookings[$qs['booking']]->id : null,
+                    'event_date'           => now()->addDays(rand(60, 300))->toDateString(),
+                    'guest_count'          => rand(80, 220),
+                    'items'                => $items,
+                    'subtotal'             => $subtotal,
+                    'discount_amount'      => $discount,
+                    'tax_amount'           => $tax,
+                    'total_amount'         => $total,
+                    'valid_until'          => $qs['status'] === 'expired'
+                        ? now()->subDays(5)->toDateString()
+                        : now()->addDays(21)->toDateString(),
+                    'status'               => $qs['status'],
+                    'terms_and_conditions' => '50% deposit required to confirm the booking. Balance due 14 days before the event.',
+                    'sent_at'              => in_array($qs['status'], ['sent', 'accepted', 'expired'], true) ? now()->subDays(7) : null,
+                    'accepted_at'          => $qs['status'] === 'accepted' ? now()->subDays(2) : null,
+                ]
+            );
+        }
+
+        // Payments (deposit + balance per booking; some overdue for reminder demo)
+        $paySeq = 1;
+        foreach ($createdBookings as $bIdx => $booking) {
+            $deposit = (int) ($booking->total_amount * 0.5);
+
+            Payment::updateOrCreate(
+                ['payment_number' => sprintf('PAY%s%04d', date('Y'), $paySeq++)],
+                [
+                    'booking_id'       => $booking->id,
+                    'client_id'        => $booking->client_id,
+                    'installment_name' => 'Deposit',
+                    'amount'           => $deposit,
+                    'payment_method'   => 'bank_transfer',
+                    'payment_date'     => now()->subDays(rand(20, 60))->toDateString(),
+                    'reference_number' => 'REF' . strtoupper(Str::random(8)),
+                    'status'           => 'completed',
+                    'received_by'      => $admin->id,
+                ]
+            );
+
+            $balanceStatus = $booking->status === 'completed' ? 'completed' : 'pending';
+            Payment::updateOrCreate(
+                ['payment_number' => sprintf('PAY%s%04d', date('Y'), $paySeq++)],
+                [
+                    'booking_id'       => $booking->id,
+                    'client_id'        => $booking->client_id,
+                    'installment_name' => 'Balance',
+                    'amount'           => $booking->total_amount - $deposit,
+                    'payment_method'   => 'credit_card',
+                    'payment_date'     => $balanceStatus === 'completed' ? now()->subDays(rand(1, 15))->toDateString() : now()->toDateString(),
+                    'reference_number' => $balanceStatus === 'completed' ? 'REF' . strtoupper(Str::random(8)) : null,
+                    'status'           => $balanceStatus,
+                    // Make one outstanding balance overdue to demo payment reminders
+                    'due_date'         => $balanceStatus === 'pending'
+                        ? now()->addDays($bIdx === 0 ? -3 : 14)->toDateString()
+                        : null,
+                ]
+            );
+        }
+
+        // Custom Fields (demo of the extensible custom-field system)
+        $customFields = [
+            ['entity_type' => 'booking', 'name' => 'Dietary Requirements', 'slug' => 'dietary-requirements', 'type' => 'textarea', 'help_text' => 'Any allergies or dietary needs for catering.'],
+            ['entity_type' => 'booking', 'name' => 'Theme Color',          'slug' => 'theme-color',          'type' => 'text',     'placeholder' => 'e.g. Burgundy & Gold'],
+            ['entity_type' => 'client',  'name' => 'Preferred Contact',    'slug' => 'preferred-contact',    'type' => 'select',   'options' => ['Email', 'Phone', 'WhatsApp']],
+        ];
+
+        foreach ($customFields as $sort => $cf) {
+            CustomField::updateOrCreate(
+                ['entity_type' => $cf['entity_type'], 'slug' => $cf['slug']],
+                array_merge($cf, [
+                    'is_required'   => false,
+                    'is_active'     => true,
+                    'is_searchable' => false,
+                    'show_on_list'  => false,
+                    'sort_order'    => $sort,
+                ])
             );
         }
 

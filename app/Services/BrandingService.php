@@ -11,7 +11,7 @@ class BrandingService
 
     public function __construct(?Tenant $tenant = null)
     {
-        $this->tenant = $tenant ?? app('currentTenant');
+        $this->tenant = $tenant ?? Tenant::current();
     }
 
     /**
@@ -86,8 +86,8 @@ CSS;
         if ($logo && Storage::disk('public')->exists($logo)) {
             return Storage::disk('public')->url($logo);
         }
-        
-        return asset('images/logo.png');
+
+        return asset('images/logo.svg');
     }
 
     /**
@@ -100,8 +100,8 @@ CSS;
         if ($favicon && Storage::disk('public')->exists($favicon)) {
             return Storage::disk('public')->url($favicon);
         }
-        
-        return asset('favicon.ico');
+
+        return asset('images/favicon.svg');
     }
 
     /**
@@ -112,9 +112,9 @@ CSS;
         return [
             'business_name' => config('app.name', 'EventPro'),
             'tagline' => 'Professional Event Management',
-            'logo' => asset('images/logo.png'),
-            'logo_dark' => asset('images/logo-dark.png'),
-            'favicon' => asset('favicon.ico'),
+            'logo' => asset('images/logo.svg'),
+            'logo_dark' => asset('images/logo.svg'),
+            'favicon' => asset('images/favicon.svg'),
             'colors' => [
                 'primary' => '#3B82F6',
                 'secondary' => '#1E40AF',

@@ -64,8 +64,8 @@ const statusColors = {
                     <h3 class="text-sm font-semibold text-gray-900">Assigned Tasks</h3>
                     <Link href="/admin/tasks" class="text-xs text-indigo-600 hover:underline">View all tasks</Link>
                 </div>
-                <div v-if="tasks?.data?.length" class="space-y-2">
-                    <div v-for="task in tasks.data" :key="task.id" class="flex items-start justify-between py-2 border-t border-gray-100 text-sm">
+                <div v-if="tasks?.length" class="space-y-2">
+                    <div v-for="task in tasks" :key="task.id" class="flex items-start justify-between py-2 border-t border-gray-100 text-sm">
                         <div>
                             <p class="font-medium text-gray-900">{{ task.title }}</p>
                             <p v-if="task.booking" class="text-xs text-gray-500">Booking: {{ task.booking.booking_number }}</p>

@@ -30,7 +30,7 @@ function addService() {
 
 function removeService(i) { form.included_services.splice(i, 1); }
 
-function submit() { form.put(`/admin/packages/${props.package.id}`); }
+function submit() { form.put(`/admin/packages/${props.package.slug}`); }
 </script>
 
 <template>

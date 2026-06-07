@@ -24,7 +24,7 @@ const statusColors = {
     sent: 'bg-blue-100 text-blue-700',
     viewed: 'bg-indigo-100 text-indigo-700',
     accepted: 'bg-green-100 text-green-700',
-    declined: 'bg-red-100 text-red-600',
+    rejected: 'bg-red-100 text-red-600',
     expired: 'bg-orange-100 text-orange-700',
     cancelled: 'bg-gray-100 text-gray-500',
 };
@@ -52,7 +52,7 @@ const statusColors = {
                     <option value="sent">Sent</option>
                     <option value="viewed">Viewed</option>
                     <option value="accepted">Accepted</option>
-                    <option value="declined">Declined</option>
+                    <option value="rejected">Rejected</option>
                     <option value="expired">Expired</option>
                 </select>
             </div>

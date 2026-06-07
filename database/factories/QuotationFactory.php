@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Client;
 use App\Models\Inquiry;
+use App\Models\Tenant;
 use App\Models\Venue;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -11,7 +12,7 @@ class QuotationFactory extends Factory
 {
     public function definition(): array
     {
-        $statuses = ['draft', 'sent', 'viewed', 'accepted', 'declined', 'expired', 'cancelled'];
+        $statuses = ['draft', 'sent', 'viewed', 'accepted', 'rejected', 'expired', 'cancelled'];
 
         $subtotal = $this->faker->numberBetween(10000, 80000);
         $discount = $this->faker->numberBetween(0, (int) ($subtotal * 0.15));
@@ -34,6 +35,7 @@ class QuotationFactory extends Factory
         }
 
         return [
+            'tenant_id' => Tenant::factory(),
             'quotation_number' => 'QT' . date('Y') . $this->faker->unique()->numerify('####'),
             'client_id' => Client::factory(),
             'venue_id' => Venue::factory(),

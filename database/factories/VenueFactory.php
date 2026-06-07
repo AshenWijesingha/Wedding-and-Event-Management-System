@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -12,6 +13,7 @@ class VenueFactory extends Factory
         $name = $this->faker->words(3, true) . ' Hall';
 
         return [
+            'tenant_id' => Tenant::factory(),
             'name' => ucwords($name),
             'slug' => Str::slug($name) . '-' . $this->faker->unique()->numberBetween(1, 9999),
             'description' => $this->faker->paragraph(),
