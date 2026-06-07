@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { useForm, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
@@ -9,10 +9,12 @@ import InputError from '@/Components/InputError.vue';
 const props = defineProps({ profile: Object });
 
 const profileForm = useForm({
+    _method: 'post',
     name: props.profile.name ?? '',
     email: props.profile.email ?? '',
     phone: props.profile.phone ?? '',
-    avatar: props.profile.avatar ?? '',
+    avatar: null,
+    remove_avatar: false,
 });
 
 const passwordForm = useForm({
@@ -24,8 +26,34 @@ const passwordForm = useForm({
 const showCurrent = ref(false);
 const showNew = ref(false);
 
+// Live preview: new local file if chosen, else the stored avatar (unless removed).
+const previewUrl = ref(props.profile.avatar ?? null);
+
+function onAvatarChange(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    profileForm.avatar = file;
+    profileForm.remove_avatar = false;
+    previewUrl.value = URL.createObjectURL(file);
+}
+
+function removeAvatar() {
+    profileForm.avatar = null;
+    profileForm.remove_avatar = true;
+    previewUrl.value = null;
+}
+
+const initial = computed(() => profileForm.name?.charAt(0)?.toUpperCase() ?? '?');
+
 function saveProfile() {
-    profileForm.patch('/admin/profile', { preserveScroll: true });
+    profileForm.post('/admin/profile', {
+        preserveScroll: true,
+        forceFormData: true,
+        onSuccess: () => {
+            profileForm.avatar = null;
+            profileForm.remove_avatar = false;
+        },
+    });
 }
 
 function savePassword() {
@@ -33,6 +61,10 @@ function savePassword() {
         preserveScroll: true,
         onSuccess: () => passwordForm.reset(),
     });
+}
+
+function resendVerification() {
+    router.post('/admin/profile/verification-notification', {}, { preserveScroll: true });
 }
 </script>
 
@@ -44,16 +76,38 @@ function savePassword() {
                 <p class="text-sm text-gray-500 mt-0.5">Manage your account details and password.</p>
             </div>
 
+            <!-- Email verification banner -->
+            <div v-if="!profile.email_verified" class="bg-amber-50 border border-amber-200 rounded-lg p-4 flex items-start gap-3">
+                <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-amber-800">Your email address is not verified.</p>
+                    <p class="text-xs text-amber-700 mt-0.5">Verify it to secure your account and receive notifications.</p>
+                </div>
+                <button type="button" @click="resendVerification"
+                    class="text-sm font-semibold text-amber-800 underline hover:text-amber-900 whitespace-nowrap">
+                    Resend link
+                </button>
+            </div>
+
             <!-- Profile information -->
             <form @submit.prevent="saveProfile" class="bg-white rounded-lg shadow-sm p-6 space-y-5">
                 <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-full bg-indigo-500 flex items-center justify-center text-white text-xl font-medium overflow-hidden">
-                        <img v-if="profileForm.avatar" :src="profileForm.avatar" alt="" class="w-full h-full object-cover" />
-                        <span v-else>{{ profileForm.name?.charAt(0)?.toUpperCase() }}</span>
+                    <div class="w-16 h-16 rounded-full bg-indigo-500 flex items-center justify-center text-white text-2xl font-medium overflow-hidden">
+                        <img v-if="previewUrl" :src="previewUrl" alt="" class="w-full h-full object-cover" />
+                        <span v-else>{{ initial }}</span>
                     </div>
                     <div>
                         <h3 class="text-sm font-semibold text-gray-900">Profile information</h3>
-                        <p class="text-xs text-gray-500 capitalize">Role: {{ profile.role }}</p>
+                        <p class="text-xs text-gray-500 capitalize mb-2">Role: {{ profile.role }}</p>
+                        <div class="flex items-center gap-3">
+                            <label class="cursor-pointer text-xs font-semibold text-indigo-600 hover:text-indigo-800">
+                                <span>Change photo</span>
+                                <input type="file" accept="image/*" class="hidden" @change="onAvatarChange" />
+                            </label>
+                            <button v-if="previewUrl" type="button" @click="removeAvatar"
+                                class="text-xs font-semibold text-red-500 hover:text-red-700">Remove</button>
+                        </div>
+                        <InputError :message="profileForm.errors.avatar" class="mt-1" />
                     </div>
                 </div>
 
@@ -72,11 +126,6 @@ function savePassword() {
                         <InputLabel value="Phone" />
                         <TextInput v-model="profileForm.phone" type="text" class="mt-1 block w-full" />
                         <InputError :message="profileForm.errors.phone" class="mt-1" />
-                    </div>
-                    <div>
-                        <InputLabel value="Avatar URL" />
-                        <TextInput v-model="profileForm.avatar" type="url" class="mt-1 block w-full" placeholder="https://…" />
-                        <InputError :message="profileForm.errors.avatar" class="mt-1" />
                     </div>
                 </div>
 
