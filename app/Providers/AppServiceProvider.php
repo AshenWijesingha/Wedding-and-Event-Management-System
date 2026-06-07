@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Auth\TenantlessUserProvider;
 use App\Services\BrandingService;
 use App\Services\SettingsService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,6 +30,13 @@ class AppServiceProvider extends ServiceProvider
         // Inertia pages read single API resources flat (e.g. booking.booking_number),
         // so drop the default "data" wrapper. Paginated collections keep data/meta/links.
         JsonResource::withoutWrapping();
+
+        // Authenticate users without the tenant scope so platform super admins
+        // (tenant_id NULL) are found regardless of the current tenant, while all
+        // ordinary data access keeps strict tenant isolation.
+        Auth::provider('eloquent-tenantless', function ($app, array $config) {
+            return new TenantlessUserProvider($app['hash'], $config['model']);
+        });
 
         RateLimiter::for('login', function (Request $request) {
             return Limit::perMinute(5)->by($request->ip());
