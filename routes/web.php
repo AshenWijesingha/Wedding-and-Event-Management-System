@@ -84,6 +84,7 @@ Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefi
     // Inquiries
     Route::get('/inquiries', [\App\Http\Controllers\Admin\InquiryController::class, 'index'])->name('inquiries.index');
     Route::get('/inquiries/{inquiry}', [\App\Http\Controllers\Admin\InquiryController::class, 'show'])->name('inquiries.show');
+    Route::get('/inquiries/{inquiry}/pdf', [\App\Http\Controllers\Admin\InquiryController::class, 'downloadPdf'])->name('inquiries.pdf');
     Route::patch('/inquiries/{inquiry}', [\App\Http\Controllers\Admin\InquiryController::class, 'update'])->name('inquiries.update');
 
     // Quotations
@@ -117,8 +118,8 @@ Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefi
     Route::post('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [\App\Http\Controllers\Admin\ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::post('/profile/verification-notification', [\App\Http\Controllers\Admin\ProfileController::class, 'sendVerification'])->name('profile.verification');
-    // System user management (super admin only)
-    Route::middleware('role:super_admin')->group(function () {
+    // User management (admins manage their own tenant; super admins manage system-wide)
+    Route::middleware('role:super_admin|admin')->group(function () {
         Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
         Route::get('/users/create', [\App\Http\Controllers\Admin\UserController::class, 'create'])->name('users.create');
         Route::post('/users', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('users.store');

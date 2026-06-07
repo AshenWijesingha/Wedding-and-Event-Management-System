@@ -65,9 +65,10 @@ function resetPassword() {
                     </div>
                     <div>
                         <InputLabel value="Tenant" :required="true" />
-                        <select v-model="form.tenant_id" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <select v-if="tenants.length > 1" v-model="form.tenant_id" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <option v-for="t in tenants" :key="t.id" :value="t.id">{{ t.name }}</option>
                         </select>
+                        <p v-else class="mt-1 block w-full border border-gray-200 bg-gray-50 rounded-md px-3 py-2 text-sm text-gray-600">{{ tenants[0]?.name ?? '—' }}</p>
                         <InputError :message="form.errors.tenant_id" class="mt-1" />
                     </div>
                     <div>

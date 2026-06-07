@@ -3,7 +3,7 @@ import { ref, watch } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
-const props = defineProps({ users: Object, filters: Object, roles: Array, stats: Object });
+const props = defineProps({ users: Object, filters: Object, roles: Array, stats: Object, systemWide: Boolean });
 
 const search = ref(props.filters?.search ?? '');
 const role = ref(props.filters?.role ?? '');
@@ -39,7 +39,7 @@ const roleColors = {
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-xl font-semibold text-gray-900">User Management</h2>
-                    <p class="text-sm text-gray-500 mt-0.5">System-wide accounts across all tenants.</p>
+                    <p class="text-sm text-gray-500 mt-0.5">{{ systemWide ? 'System-wide accounts across all tenants.' : 'Accounts in your organization.' }}</p>
                 </div>
                 <Link href="/admin/users/create" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg">
                     Add User
@@ -90,7 +90,7 @@ const roleColors = {
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tenant</th>
+                            <th v-if="systemWide" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tenant</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                             <th class="px-6 py-3"></th>
                         </tr>
@@ -117,7 +117,7 @@ const roleColors = {
                                     {{ u.role?.replace('_', ' ') }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ u.tenant ?? '—' }}</td>
+                            <td v-if="systemWide" class="px-6 py-4 text-sm text-gray-600">{{ u.tenant ?? '—' }}</td>
                             <td class="px-6 py-4">
                                 <span :class="u.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'"
                                     class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium">
