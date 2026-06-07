@@ -1,10 +1,11 @@
 <script setup>
 import { computed } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import ReportFilter from '@/Components/ReportFilter.vue';
 
 const props = defineProps({
-    months: Object,
+    months: Array,
     bookingsByStatus: Object,
     topVenues: Array,
     totals: Object,
@@ -14,10 +15,7 @@ const props = defineProps({
     years: Array,
 });
 
-const year = computed({
-    get: () => props.filters.year,
-    set: (val) => router.get('/admin/reports', { year: val }, { preserveState: true, replace: true }),
-});
+const period = computed(() => props.filters.label);
 
 const maxRevenue = computed(() => {
     const vals = Object.values(props.months).map(m => m.revenue);
@@ -37,12 +35,10 @@ const statusColors = {
 <template>
     <AppLayout title="Reports">
         <div class="space-y-5">
-            <!-- Header + year filter -->
-            <div class="flex items-center justify-between">
+            <!-- Header + filters -->
+            <div class="flex flex-wrap items-end justify-between gap-3">
                 <h2 class="text-xl font-semibold text-gray-900">Financial Dashboard</h2>
-                <select v-model="year" class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option v-for="y in years" :key="y" :value="y">{{ y }}</option>
-                </select>
+                <ReportFilter path="/admin/reports" :filters="filters" :years="years" />
             </div>
 
             <!-- Sub-report links -->
@@ -81,7 +77,7 @@ const statusColors = {
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs text-gray-500 uppercase tracking-wide">Total Revenue</p>
                     <p class="text-2xl font-bold text-gray-900 mt-1">${{ totals.revenue?.toLocaleString() ?? 0 }}</p>
-                    <p class="text-xs text-gray-400 mt-1">{{ year }}</p>
+                    <p class="text-xs text-gray-400 mt-1">{{ period }}</p>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs text-gray-500 uppercase tracking-wide">Total Bookings</p>
@@ -98,14 +94,14 @@ const statusColors = {
                     <p class="text-2xl font-bold text-gray-900 mt-1">
                         ${{ totals.bookings > 0 ? Math.round(totals.revenue / totals.bookings).toLocaleString() : 0 }}
                     </p>
-                    <p class="text-xs text-gray-400 mt-1">{{ year }}</p>
+                    <p class="text-xs text-gray-400 mt-1">{{ period }}</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <!-- Revenue bar chart -->
                 <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-5">
-                    <h3 class="text-sm font-semibold text-gray-900 mb-4">Monthly Revenue — {{ year }}</h3>
+                    <h3 class="text-sm font-semibold text-gray-900 mb-4">Revenue — {{ period }}</h3>
                     <div class="flex items-end gap-2 h-48">
                         <div
                             v-for="(data, m) in months"
@@ -140,7 +136,7 @@ const statusColors = {
 
             <!-- Top venues -->
             <div class="bg-white rounded-lg shadow-sm p-5">
-                <h3 class="text-sm font-semibold text-gray-900 mb-3">Top Venues — {{ year }}</h3>
+                <h3 class="text-sm font-semibold text-gray-900 mb-3">Top Venues — {{ period }}</h3>
                 <table class="min-w-full text-sm" v-if="topVenues.length">
                     <thead>
                         <tr class="text-left text-xs text-gray-500 uppercase">

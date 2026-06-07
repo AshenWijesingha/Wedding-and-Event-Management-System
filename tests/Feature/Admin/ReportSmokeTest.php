@@ -56,4 +56,23 @@ class ReportSmokeTest extends TestCase
             $this->assertStringContainsString('text/csv', $response->headers->get('content-type'));
         }
     }
+
+    public function test_reports_accept_custom_date_range(): void
+    {
+        $from = now()->startOfMonth()->toDateString();
+        $to   = now()->endOfMonth()->toDateString();
+
+        foreach (['/admin/reports', '/admin/reports/revenue', '/admin/reports/bookings', '/admin/reports/occupancy'] as $url) {
+            $this->actingAs($this->admin)->get("{$url}?from={$from}&to={$to}")->assertStatus(200);
+        }
+    }
+
+    public function test_report_pdfs_download(): void
+    {
+        foreach (['revenue', 'bookings', 'occupancy'] as $report) {
+            $response = $this->actingAs($this->admin)->get("/admin/reports/{$report}/pdf?year=" . now()->year);
+            $response->assertStatus(200);
+            $this->assertStringContainsString('application/pdf', $response->headers->get('content-type'));
+        }
+    }
 }
