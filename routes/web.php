@@ -96,8 +96,16 @@ Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefi
 
     Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/revenue', [\App\Http\Controllers\Admin\ReportController::class, 'revenue'])->name('reports.revenue');
+    Route::get('/reports/revenue/export', [\App\Http\Controllers\Admin\ReportController::class, 'exportRevenue'])->name('reports.revenue.export');
     Route::get('/reports/bookings', [\App\Http\Controllers\Admin\ReportController::class, 'bookings'])->name('reports.bookings');
+    Route::get('/reports/bookings/export', [\App\Http\Controllers\Admin\ReportController::class, 'exportBookings'])->name('reports.bookings.export');
     Route::get('/reports/occupancy', [\App\Http\Controllers\Admin\ReportController::class, 'occupancy'])->name('reports.occupancy');
+    Route::get('/reports/occupancy/export', [\App\Http\Controllers\Admin\ReportController::class, 'exportOccupancy'])->name('reports.occupancy.export');
+
+    // Profile (self-service account management)
+    Route::get('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [\App\Http\Controllers\Admin\ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::get('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings.index');
     Route::get('/themes', [\App\Http\Controllers\Admin\ThemeController::class, 'index'])->name('themes.index');
     Route::post('/themes/activate', [\App\Http\Controllers\Admin\ThemeController::class, 'activate'])->name('themes.activate');
