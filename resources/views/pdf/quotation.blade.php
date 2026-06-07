@@ -169,7 +169,7 @@
                             —
                         @endif
                     </td>
-                    <td>{{ number_format($item['amount'], 2) }}</td>
+                    <td>{{ number_format($item['total'] ?? $item['amount'] ?? (($item['unit_price'] ?? 0) * ($item['quantity'] ?? 1)), 2) }}</td>
                 </tr>
             @endforeach
         </tbody>
