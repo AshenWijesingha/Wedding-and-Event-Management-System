@@ -275,11 +275,22 @@ class ReportController extends Controller
     {
         return response()->streamDownload(function () use ($header, $rows) {
             $out = fopen('php://output', 'w');
-            fputcsv($out, $header);
+            fputcsv($out, array_map([$this, 'csvSafe'], $header));
             foreach ($rows as $row) {
-                fputcsv($out, $row);
+                fputcsv($out, array_map([$this, 'csvSafe'], $row));
             }
             fclose($out);
         }, $filename, ['Content-Type' => 'text/csv']);
+    }
+
+    /**
+     * Prevent CSV formula injection: prefix cells starting with a formula
+     * trigger character so spreadsheet apps treat them as text.
+     */
+    private function csvSafe($value): string
+    {
+        $string = (string) $value;
+
+        return preg_match('/^[=+\-@\t\r]/', $string) ? "'" . $string : $string;
     }
 }
