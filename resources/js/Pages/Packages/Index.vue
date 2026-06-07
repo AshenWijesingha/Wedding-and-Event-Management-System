@@ -24,9 +24,9 @@ function applyFilters() {
     });
 }
 
-function deletePackage(id) {
+function deletePackage(slug) {
     if (!confirm('Delete this package?')) return;
-    router.delete(`/admin/packages/${id}`, { preserveScroll: true });
+    router.delete(`/admin/packages/${slug}`, { preserveScroll: true });
 }
 
 const statusColors = {
@@ -90,8 +90,8 @@ const statusColors = {
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex items-center justify-end gap-3">
-                                    <Link :href="`/admin/packages/${pkg.id}/edit`" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">Edit</Link>
-                                    <button @click="deletePackage(pkg.id)" class="text-red-500 hover:text-red-700 text-sm font-medium">Delete</button>
+                                    <Link :href="`/admin/packages/${pkg.slug}/edit`" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">Edit</Link>
+                                    <button @click="deletePackage(pkg.slug)" class="text-red-500 hover:text-red-700 text-sm font-medium">Delete</button>
                                 </div>
                             </td>
                         </tr>

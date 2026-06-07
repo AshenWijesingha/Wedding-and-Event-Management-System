@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Booking;
 use App\Models\Client;
+use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PaymentFactory extends Factory
@@ -16,6 +17,17 @@ class PaymentFactory extends Factory
 
         return [
             'payment_number' => 'PAY' . date('Y') . $this->faker->unique()->numerify('####'),
+            // Inherit the tenant from the related booking; fall back to a new tenant.
+            'tenant_id' => function (array $attributes) {
+                if (! empty($attributes['booking_id'])) {
+                    $booking = Booking::find($attributes['booking_id']);
+                    if ($booking) {
+                        return $booking->tenant_id;
+                    }
+                }
+
+                return Tenant::factory();
+            },
             'booking_id' => Booking::factory(),
             'client_id' => Client::factory(),
             'installment_name' => $this->faker->randomElement($installments),

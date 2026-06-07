@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Client;
 use App\Models\Package;
+use App\Models\Tenant;
 use App\Models\Venue;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,6 +19,7 @@ class InquiryFactory extends Factory
         $preferredDate = $this->faker->dateTimeBetween('+1 month', '+18 months');
 
         return [
+            'tenant_id' => Tenant::factory(),
             'inquiry_number' => 'INQ' . date('Y') . $this->faker->unique()->numerify('####'),
             'client_id' => Client::factory(),
             'venue_id' => Venue::factory(),

@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
+use App\Models\Client;
+use App\Models\Package;
 use App\Models\Vendor;
+use App\Models\Venue;
+use App\Services\AvailabilityService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -35,6 +39,56 @@ class BookingController extends Controller
             'bookings' => BookingResource::collection($bookings),
             'filters' => $request->only(['search', 'status']),
         ]);
+    }
+
+    public function create(): Response
+    {
+        return Inertia::render('Bookings/Create', [
+            'venues'   => Venue::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
+            'packages' => Package::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
+            'clients'  => Client::orderBy('first_name')->get()->map(fn ($c) => [
+                'id'   => $c->id,
+                'name' => trim("{$c->first_name} {$c->last_name}"),
+            ]),
+        ]);
+    }
+
+    public function store(Request $request, AvailabilityService $availability): RedirectResponse
+    {
+        abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
+
+        $validated = $request->validate([
+            'client_id'        => 'required|exists:clients,id',
+            'venue_id'         => 'required|exists:venues,id',
+            'package_id'       => 'nullable|exists:packages,id',
+            'event_type'       => 'required|string|max:50',
+            'event_date'       => 'required|date|after_or_equal:today',
+            'setup_time'       => 'nullable|date_format:H:i',
+            'event_start_time' => 'nullable|date_format:H:i',
+            'event_end_time'   => 'nullable|date_format:H:i',
+            'guest_count'      => 'required|integer|min:1',
+            'total_amount'     => 'required|numeric|min:0',
+            'paid_amount'      => 'nullable|numeric|min:0',
+            'status'           => 'nullable|in:pending,tentative,confirmed',
+            'notes'            => 'nullable|string',
+        ]);
+
+        if (! $availability->isVenueAvailable($validated['venue_id'], $validated['event_date'])) {
+            return back()->withErrors(['event_date' => 'This venue is already booked on the selected date.'])->withInput();
+        }
+
+        $paid = (float) ($validated['paid_amount'] ?? 0);
+
+        Booking::create([
+            ...$validated,
+            'booking_number' => Booking::generateBookingNumber(),
+            'paid_amount'    => $paid,
+            'balance_amount' => (float) $validated['total_amount'] - $paid,
+            'status'         => $validated['status'] ?? 'tentative',
+            'created_by'     => $request->user()->id,
+        ]);
+
+        return redirect()->route('admin.bookings.index')->with('success', 'Booking created successfully.');
     }
 
     public function show(Booking $booking): Response

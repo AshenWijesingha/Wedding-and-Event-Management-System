@@ -10,11 +10,11 @@ class EnsureValidTenant
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (! app('currentTenant')) {
+        if (! \App\Models\Tenant::current()) {
             abort(404, 'Tenant not found.');
         }
 
-        $tenant = app('currentTenant');
+        $tenant = \App\Models\Tenant::current();
 
         if ($tenant->status === 'suspended') {
             abort(403, 'This account has been suspended.');

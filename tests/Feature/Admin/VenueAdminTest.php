@@ -79,7 +79,7 @@ class VenueAdminTest extends TestCase
         $venue = Venue::factory()->create();
 
         $response = $this->actingAs($this->admin)
-            ->get("/admin/venues/{$venue->id}/edit");
+            ->get("/admin/venues/{$venue->slug}/edit");
 
         $response->assertStatus(200);
         $response->assertInertia(fn ($page) => $page->component('Venues/Edit'));
@@ -90,7 +90,7 @@ class VenueAdminTest extends TestCase
         $venue = Venue::factory()->create();
 
         $response = $this->actingAs($this->admin)
-            ->put("/admin/venues/{$venue->id}", [
+            ->put("/admin/venues/{$venue->slug}", [
                 'name' => 'Updated Name',
                 'capacity_min' => 50,
                 'capacity_max' => 300,
@@ -107,7 +107,7 @@ class VenueAdminTest extends TestCase
         $venue = Venue::factory()->create();
 
         $response = $this->actingAs($this->admin)
-            ->delete("/admin/venues/{$venue->id}");
+            ->delete("/admin/venues/{$venue->slug}");
 
         $response->assertRedirect();
         $this->assertDatabaseMissing('venues', ['id' => $venue->id]);

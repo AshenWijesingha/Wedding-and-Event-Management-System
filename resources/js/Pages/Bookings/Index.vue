@@ -20,6 +20,7 @@ function applyFilters() {
 }
 
 const statusColors = {
+    pending: 'bg-gray-100 text-gray-600',
     tentative: 'bg-yellow-100 text-yellow-700',
     confirmed: 'bg-green-100 text-green-700',
     in_progress: 'bg-blue-100 text-blue-700',
@@ -46,6 +47,7 @@ const statusColors = {
                 <input v-model="search" type="text" placeholder="Search by booking number or client..." class="flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                 <select v-model="status" class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     <option value="">All statuses</option>
+                    <option value="pending">Pending</option>
                     <option value="tentative">Tentative</option>
                     <option value="confirmed">Confirmed</option>
                     <option value="in_progress">In Progress</option>

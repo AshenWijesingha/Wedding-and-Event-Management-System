@@ -17,7 +17,7 @@
         "laravel-vite-plugin": "^1.0",
         "postcss": "^8.4",
         "tailwindcss": "^3.4",
-        "vite": "^8.0.16",
+        "vite": "^6.0",
         "vue": "^3.4"
     },
     "dependencies": {
@@ -25,10 +25,11 @@
         "@fullcalendar/daygrid": "^6.1",
         "@fullcalendar/interaction": "^6.1",
         "@fullcalendar/timegrid": "^6.1",
+        "@fullcalendar/vue3": "^6.1",
         "@headlessui/vue": "^1.7",
         "@heroicons/vue": "^2.1",
         "alpinejs": "^3.13",
-        "apexcharts": "^4.0",
+        "apexcharts": "^5.10",
         "vue3-apexcharts": "^1.5"
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\Inquiry;
+use App\Models\Tenant;
 use Illuminate\Http\Request;
 
 class InquiryController extends Controller
@@ -22,10 +23,17 @@ class InquiryController extends Controller
             'guest_count' => 'nullable|integer|min:1',
         ]);
 
-        // Find or create client record from email
+        $tenant = Tenant::current()
+            ?? Tenant::where('status', '!=', 'suspended')->first();
+
+        abort_if($tenant === null, 422, 'No tenant is available to receive this inquiry.');
+
+        $tenant->makeCurrent();
+
+        // Find or create client record from email (scoped to the tenant)
         [$firstName, $lastName] = array_pad(explode(' ', trim($validated['name']), 2), 2, '');
         $client = Client::firstOrCreate(
-            ['email' => $validated['email']],
+            ['tenant_id' => $tenant->id, 'email' => $validated['email']],
             [
                 'first_name' => $firstName,
                 'last_name' => $lastName ?: $firstName,
@@ -34,6 +42,7 @@ class InquiryController extends Controller
         );
 
         Inquiry::create([
+            'tenant_id' => $tenant->id,
             'inquiry_number' => Inquiry::generateInquiryNumber(),
             'client_id' => $client->id,
             'venue_id' => $validated['venue_id'] ?? null,

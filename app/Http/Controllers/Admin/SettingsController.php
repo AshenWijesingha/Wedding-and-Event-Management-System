@@ -13,7 +13,7 @@ class SettingsController extends Controller
 {
     private function getTenant(): ?Tenant
     {
-        return app('currentTenant') ?? Tenant::first();
+        return Tenant::current() ?? Tenant::first();
     }
 
     public function index(): Response

@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Api;
 
-use App\Models\Inquiry;
 use App\Models\Tenant;
 use App\Models\Venue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,6 +13,8 @@ class InquiryApiTest extends TestCase
 
     public function test_inquiry_is_persisted_to_database(): void
     {
+        Tenant::factory()->create();
+
         $this->assertDatabaseCount('inquiries', 0);
 
         $response = $this->postJson('/api/v1/inquiries', [
@@ -25,14 +26,17 @@ class InquiryApiTest extends TestCase
 
         $response->assertCreated();
         $this->assertDatabaseCount('inquiries', 1);
-        $this->assertDatabaseHas('inquiries', [
-            'name'  => 'Jane Smith',
-            'email' => 'jane@example.com',
+        // Inquiries are normalized: name/email live on the related client record.
+        $this->assertDatabaseHas('clients', [
+            'first_name' => 'Jane',
+            'email'      => 'jane@example.com',
         ]);
     }
 
     public function test_inquiry_response_contains_created_record(): void
     {
+        Tenant::factory()->create();
+
         $response = $this->postJson('/api/v1/inquiries', [
             'name'    => 'John Doe',
             'email'   => 'john@example.com',
@@ -40,8 +44,8 @@ class InquiryApiTest extends TestCase
         ]);
 
         $response->assertCreated()
-            ->assertJsonPath('inquiry.name', 'John Doe')
-            ->assertJsonPath('inquiry.email', 'john@example.com');
+            ->assertJsonPath('inquiry.client.first_name', 'John')
+            ->assertJsonPath('inquiry.client.email', 'john@example.com');
 
         $this->assertNotNull($response->json('inquiry.id'), 'Response should include the DB-assigned id.');
     }

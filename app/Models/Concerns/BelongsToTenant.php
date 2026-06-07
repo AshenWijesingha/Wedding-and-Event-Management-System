@@ -18,13 +18,13 @@ trait BelongsToTenant
         // In single-tenant mode the finder still resolves a tenant, so scoping
         // is safe and prevents data leaks if the mode is ever changed.
         static::addGlobalScope('tenant', function (Builder $builder) {
-            if ($tenant = app('currentTenant')) {
+            if ($tenant = Tenant::current()) {
                 $builder->where($builder->getModel()->getTable() . '.tenant_id', $tenant->id);
             }
         });
 
         static::creating(function (Model $model) {
-            if ($tenant = app('currentTenant')) {
+            if ($tenant = Tenant::current()) {
                 if (!$model->tenant_id) {
                     $model->tenant_id = $tenant->id;
                 }

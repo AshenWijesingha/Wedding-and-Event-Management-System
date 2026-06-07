@@ -83,6 +83,14 @@ class Quotation extends Model
     }
 
     /**
+     * Get the package for this quotation.
+     */
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
+    }
+
+    /**
      * Get the user who prepared this quotation.
      */
     public function preparedBy()

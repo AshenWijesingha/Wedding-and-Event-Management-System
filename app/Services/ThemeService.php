@@ -19,7 +19,7 @@ class ThemeService
      */
     private function loadActiveTheme(): void
     {
-        $tenant = app('currentTenant');
+        $tenant = \App\Models\Tenant::current();
         if ($tenant) {
             $this->activeTheme = $tenant->getSetting('theme.active', 'default');
         }
@@ -86,7 +86,7 @@ class ThemeService
         $this->registerThemeViews();
 
         // Save to tenant settings if tenant exists
-        $tenant = app('currentTenant');
+        $tenant = \App\Models\Tenant::current();
         if ($tenant) {
             $tenant->setSetting('theme.active', $theme);
         }

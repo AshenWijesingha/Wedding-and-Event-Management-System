@@ -10,6 +10,7 @@ const props = defineProps({
 });
 
 const statusColors = {
+    pending:    'bg-gray-100 text-gray-600',
     tentative:  'bg-yellow-100 text-yellow-700',
     confirmed:  'bg-green-100 text-green-700',
     in_progress:'bg-blue-100 text-blue-700',
@@ -67,8 +68,8 @@ function dismissNotification(id) {
                         <h3 class="text-sm font-semibold text-gray-900">Upcoming Events</h3>
                         <Link href="/portal/bookings" class="text-xs text-indigo-600 hover:underline">View all</Link>
                     </div>
-                    <div v-if="upcomingEvents?.data?.length" class="space-y-3">
-                        <div v-for="b in upcomingEvents.data" :key="b.id" class="flex items-center justify-between text-sm border-b border-gray-100 pb-2">
+                    <div v-if="upcomingEvents?.length" class="space-y-3">
+                        <div v-for="b in upcomingEvents" :key="b.id" class="flex items-center justify-between text-sm border-b border-gray-100 pb-2">
                             <div>
                                 <p class="font-medium text-gray-900">{{ b.event?.date }}</p>
                                 <p class="text-xs text-gray-500">{{ b.venue?.name }}</p>
@@ -87,8 +88,8 @@ function dismissNotification(id) {
                         <h3 class="text-sm font-semibold text-gray-900">Recent Bookings</h3>
                         <Link href="/portal/bookings" class="text-xs text-indigo-600 hover:underline">View all</Link>
                     </div>
-                    <div v-if="recentBookings?.data?.length" class="space-y-3">
-                        <div v-for="b in recentBookings.data" :key="b.id" class="text-sm border-b border-gray-100 pb-2">
+                    <div v-if="recentBookings?.length" class="space-y-3">
+                        <div v-for="b in recentBookings" :key="b.id" class="text-sm border-b border-gray-100 pb-2">
                             <div class="flex items-center justify-between">
                                 <Link :href="`/portal/bookings/${b.id}`" class="font-medium text-indigo-600 hover:underline">{{ b.booking_number }}</Link>
                                 <span :class="['inline-flex px-2 py-0.5 rounded-full text-xs font-medium capitalize', statusColors[b.status] ?? 'bg-gray-100 text-gray-600']">

@@ -3,6 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\Booking;
+use App\Models\Client;
+use App\Models\Tenant;
+use App\Models\Venue;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class BookingFactory extends Factory
@@ -13,6 +16,9 @@ class BookingFactory extends Factory
         $paid = $this->faker->randomFloat(2, 0, $total);
 
         return [
+            'tenant_id' => Tenant::factory(),
+            'venue_id' => Venue::factory(),
+            'client_id' => Client::factory(),
             'booking_number' => Booking::generateBookingNumber(),
             'event_type' => $this->faker->randomElement(['wedding', 'corporate', 'birthday', 'conference', 'other']),
             'event_date' => $this->faker->dateTimeBetween('+1 month', '+2 years')->format('Y-m-d'),

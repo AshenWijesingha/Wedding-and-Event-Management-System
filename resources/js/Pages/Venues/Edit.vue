@@ -39,7 +39,7 @@ function removeAmenity(index) {
 }
 
 function submit() {
-    form.put(`/admin/venues/${props.venue.id}`);
+    form.put(`/admin/venues/${props.venue.slug}`);
 }
 </script>
 

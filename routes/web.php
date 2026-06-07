@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Admin panel routes (Inertia.js SPA)
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', fn () => inertia('Dashboard'))->name('dashboard');
 
     // Venues — full resource with web controller
@@ -52,7 +52,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
     // Bookings
     Route::get('/bookings', [\App\Http\Controllers\Admin\BookingController::class, 'index'])->name('bookings.index');
-    Route::get('/bookings/create', fn () => inertia('Bookings/Create'))->name('bookings.create');
+    Route::get('/bookings/create', [\App\Http\Controllers\Admin\BookingController::class, 'create'])->name('bookings.create');
+    Route::post('/bookings', [\App\Http\Controllers\Admin\BookingController::class, 'store'])->name('bookings.store');
     Route::get('/bookings/{booking}', [\App\Http\Controllers\Admin\BookingController::class, 'show'])->name('bookings.show');
     Route::post('/bookings/{booking}/confirm', [\App\Http\Controllers\Admin\BookingController::class, 'confirm'])->name('bookings.confirm');
     Route::post('/bookings/{booking}/cancel', [\App\Http\Controllers\Admin\BookingController::class, 'cancel'])->name('bookings.cancel');
@@ -80,11 +81,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // Quotations
     Route::get('/quotations', [\App\Http\Controllers\Admin\QuotationController::class, 'index'])->name('quotations.index');
-    Route::get('/quotations/create', fn () => inertia('Quotations/Create'))->name('quotations.create');
+    Route::get('/quotations/create', [\App\Http\Controllers\Admin\QuotationController::class, 'create'])->name('quotations.create');
+    Route::post('/quotations', [\App\Http\Controllers\Admin\QuotationController::class, 'store'])->name('quotations.store');
     Route::get('/quotations/{quotation}', [\App\Http\Controllers\Admin\QuotationController::class, 'show'])->name('quotations.show');
     Route::get('/quotations/{quotation}/pdf', [\App\Http\Controllers\Admin\QuotationController::class, 'downloadPdf'])->name('quotations.pdf');
 
-    Route::get('/clients', fn () => inertia('Clients/Index'))->name('clients.index');
+    Route::get('/clients', [\App\Http\Controllers\Admin\ClientController::class, 'index'])->name('clients.index');
     Route::get('/payments', [\App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('payments.index');
     // Custom Fields
     Route::get('/custom-fields', [\App\Http\Controllers\Admin\CustomFieldController::class, 'index'])->name('custom-fields.index');
@@ -110,7 +112,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 });
 
 // Client portal routes
-Route::middleware(['auth'])->prefix('portal')->name('portal.')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefix('portal')->name('portal.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Portal\PortalController::class, 'dashboard'])->name('dashboard');
     Route::get('/bookings', [\App\Http\Controllers\Portal\PortalController::class, 'bookings'])->name('bookings');
     Route::get('/bookings/{booking}', [\App\Http\Controllers\Portal\PortalController::class, 'bookingShow'])->name('bookings.show');

@@ -36,7 +36,8 @@ class VenueApiTest extends TestCase
     {
         $venue = Venue::factory()->create();
 
-        $response = $this->getJson("/api/v1/venues/{$venue->id}");
+        // Venues are bound by slug (see Venue::getRouteKeyName()).
+        $response = $this->getJson("/api/v1/venues/{$venue->slug}");
 
         $response->assertStatus(200);
         $response->assertJsonPath('data.id', $venue->id);
@@ -104,7 +105,7 @@ class VenueApiTest extends TestCase
         $venue = Venue::factory()->create();
 
         $response = $this->actingAs($admin, 'sanctum')
-            ->putJson("/api/v1/admin/venues/{$venue->id}", [
+            ->putJson("/api/v1/admin/venues/{$venue->slug}", [
                 'name' => 'Updated Name',
                 'capacity_min' => $venue->capacity_min,
                 'capacity_max' => $venue->capacity_max,
@@ -121,9 +122,9 @@ class VenueApiTest extends TestCase
         $venue = Venue::factory()->create();
 
         $response = $this->actingAs($admin, 'sanctum')
-            ->deleteJson("/api/v1/admin/venues/{$venue->id}");
+            ->deleteJson("/api/v1/admin/venues/{$venue->slug}");
 
-        $response->assertStatus(200);
+        $response->assertNoContent();
         $this->assertDatabaseMissing('venues', ['id' => $venue->id]);
     }
 

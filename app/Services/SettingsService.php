@@ -11,7 +11,7 @@ class SettingsService
 
     public function __construct(?Tenant $tenant = null)
     {
-        $this->tenant = $tenant ?? app('currentTenant');
+        $this->tenant = $tenant ?? Tenant::current();
         $this->defaults = config('eventpro.defaults', []);
     }
 
