@@ -46,6 +46,17 @@ select {
     @apply rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary;
 }
 
+/*
+ * Keep room for the dropdown arrow.
+ * @tailwindcss/forms reserves padding-right: 2.5rem for the chevron, but inline
+ * `px-3`/`px-*` utilities override it, so selected text overlaps the arrow.
+ * `select:not([multiple])` has specificity (0,1,1), beating `.px-*` (0,1,0), which
+ * restores the right padding without !important.
+ */
+select:not([multiple]) {
+    padding-right: 2.5rem;
+}
+
 /* Button styles */
 .btn-primary {
     @apply inline-flex items-center px-4 py-2 bg-primary border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition ease-in-out duration-150;
