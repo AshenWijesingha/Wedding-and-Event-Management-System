@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Tenant;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -14,12 +15,14 @@ use Inertia\Response;
 
 class UserController extends Controller
 {
-    /** Roles a super admin may assign. */
+    /** All roles in the system, ordered most to least privileged. */
     private const ROLES = ['super_admin', 'admin', 'manager', 'staff', 'client'];
 
     public function index(Request $request): Response
     {
-        $users = User::withoutTenantScope()
+        $actor = $request->user();
+
+        $users = $this->userQuery($actor)
             ->with('tenant:id,name')
             ->when($request->search, fn ($q, $s) =>
                 $q->where(fn ($w) => $w->where('name', 'like', "%{$s}%")->orWhere('email', 'like', "%{$s}%"))
@@ -41,47 +44,58 @@ class UserController extends Controller
                 'verified'   => ! is_null($u->email_verified_at),
             ]);
 
-        $all = User::withoutTenantScope();
-
         return Inertia::render('Users/Index', [
-            'users'   => $users,
-            'filters' => $request->only(['search', 'role', 'status']),
-            'roles'   => self::ROLES,
-            'stats'   => [
-                'total'    => (clone $all)->count(),
-                'active'   => (clone $all)->where('is_active', true)->count(),
-                'inactive' => (clone $all)->where('is_active', false)->count(),
-                'byRole'   => (clone $all)->selectRaw('role, COUNT(*) as count')->groupBy('role')->pluck('count', 'role'),
+            'users'      => $users,
+            'filters'    => $request->only(['search', 'role', 'status']),
+            'roles'      => $this->assignableRoles($actor),
+            'systemWide' => $actor->isSuperAdmin(),
+            'stats'      => [
+                'total'    => $this->userQuery($actor)->count(),
+                'active'   => $this->userQuery($actor)->where('is_active', true)->count(),
+                'inactive' => $this->userQuery($actor)->where('is_active', false)->count(),
+                'byRole'   => $this->userQuery($actor)->selectRaw('role, COUNT(*) as count')->groupBy('role')->pluck('count', 'role'),
             ],
         ]);
     }
 
-    public function create(): Response
+    public function create(Request $request): Response
     {
+        $actor = $request->user();
+
         return Inertia::render('Users/Create', [
-            'roles'   => self::ROLES,
-            'tenants' => Tenant::orderBy('name')->get(['id', 'name']),
+            'roles'   => $this->assignableRoles($actor),
+            'tenants' => $this->tenantsFor($actor),
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
+        $actor = $request->user();
+
+        $rules = [
             'name'      => 'required|string|max:255',
             'email'     => ['required', 'email', 'max:255', Rule::unique('users', 'email')],
-            'role'      => ['required', Rule::in(self::ROLES)],
-            'tenant_id' => ['required', 'exists:tenants,id'],
+            'role'      => ['required', Rule::in($this->assignableRoles($actor))],
             'phone'     => 'nullable|string|max:50',
             'is_active' => 'boolean',
             'password'  => ['required', 'confirmed', Password::defaults()],
-        ]);
+        ];
+
+        // Only a super admin chooses the tenant; an admin is pinned to their own.
+        if ($actor->isSuperAdmin()) {
+            $rules['tenant_id'] = ['required', 'exists:tenants,id'];
+        }
+
+        $validated = $request->validate($rules);
+
+        $tenantId = $actor->isSuperAdmin() ? $validated['tenant_id'] : $actor->tenant_id;
 
         $user = new User();
         $user->forceFill([
             'name'      => $validated['name'],
             'email'     => $validated['email'],
             'role'      => $validated['role'],
-            'tenant_id' => $validated['tenant_id'],
+            'tenant_id' => $tenantId,
             'phone'     => $validated['phone'] ?? null,
             'is_active' => $request->boolean('is_active', true),
             'password'  => $validated['password'],
@@ -92,9 +106,10 @@ class UserController extends Controller
         return redirect('/admin/users')->with('success', 'User created.');
     }
 
-    public function edit(int $id): Response
+    public function edit(Request $request, int $id): Response
     {
-        $user = User::withoutTenantScope()->findOrFail($id);
+        $actor = $request->user();
+        $user  = $this->findManageable($actor, $id);
 
         return Inertia::render('Users/Edit', [
             'user' => [
@@ -106,34 +121,45 @@ class UserController extends Controller
                 'phone'     => $user->phone,
                 'is_active' => $user->is_active,
             ],
-            'roles'   => self::ROLES,
-            'tenants' => Tenant::orderBy('name')->get(['id', 'name']),
+            'roles'   => $this->assignableRoles($actor),
+            'tenants' => $this->tenantsFor($actor),
         ]);
     }
 
     public function update(Request $request, int $id): RedirectResponse
     {
-        $user = User::withoutTenantScope()->findOrFail($id);
+        $actor = $request->user();
+        $user  = $this->findManageable($actor, $id);
 
-        $validated = $request->validate([
+        $rules = [
             'name'      => 'required|string|max:255',
             'email'     => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
-            'role'      => ['required', Rule::in(self::ROLES)],
-            'tenant_id' => ['required', 'exists:tenants,id'],
+            'role'      => ['required', Rule::in($this->assignableRoles($actor))],
             'phone'     => 'nullable|string|max:50',
             'is_active' => 'boolean',
-        ]);
+        ];
 
-        // A super admin must not lock themselves out of their own role/account.
-        if ($user->id === $request->user()->id && $validated['role'] !== 'super_admin') {
-            return back()->with('error', 'You cannot change your own super admin role.');
+        if ($actor->isSuperAdmin()) {
+            $rules['tenant_id'] = ['required', 'exists:tenants,id'];
+        }
+
+        $validated = $request->validate($rules);
+
+        // An actor must not lock themselves out of their own account.
+        if ($user->id === $actor->id) {
+            if ($validated['role'] !== $user->role) {
+                return back()->with('error', 'You cannot change your own role.');
+            }
+            if (! $request->boolean('is_active')) {
+                return back()->with('error', 'You cannot deactivate your own account.');
+            }
         }
 
         $user->forceFill([
             'name'      => $validated['name'],
             'email'     => $validated['email'],
             'role'      => $validated['role'],
-            'tenant_id' => $validated['tenant_id'],
+            'tenant_id' => $actor->isSuperAdmin() ? $validated['tenant_id'] : $user->tenant_id,
             'phone'     => $validated['phone'] ?? null,
             'is_active' => $request->boolean('is_active'),
         ])->save();
@@ -145,7 +171,8 @@ class UserController extends Controller
 
     public function resetPassword(Request $request, int $id): RedirectResponse
     {
-        $user = User::withoutTenantScope()->findOrFail($id);
+        $actor = $request->user();
+        $user  = $this->findManageable($actor, $id);
 
         $request->validate([
             'password' => ['required', 'confirmed', Password::defaults()],
@@ -158,14 +185,56 @@ class UserController extends Controller
 
     public function destroy(Request $request, int $id): RedirectResponse
     {
-        $user = User::withoutTenantScope()->findOrFail($id);
+        $actor = $request->user();
+        $user  = $this->findManageable($actor, $id);
 
-        if ($user->id === $request->user()->id) {
+        if ($user->id === $actor->id) {
             return back()->with('error', 'You cannot delete your own account.');
         }
 
         $user->delete();
 
         return redirect('/admin/users')->with('success', 'User deleted.');
+    }
+
+    /**
+     * Base query for users the actor is allowed to see.
+     * Super admins manage every tenant; admins are limited to their own tenant
+     * via the BelongsToTenant global scope (SetCurrentTenant sets the current tenant).
+     */
+    private function userQuery(User $actor): Builder
+    {
+        return $actor->isSuperAdmin() ? User::withoutTenantScope() : User::query();
+    }
+
+    /**
+     * Load a target user within the actor's scope, enforcing privilege limits.
+     * Cross-tenant ids 404 for admins; super_admin targets are off-limits to non-super actors.
+     */
+    private function findManageable(User $actor, int $id): User
+    {
+        $user = $this->userQuery($actor)->findOrFail($id);
+
+        if (! $actor->isSuperAdmin() && $user->hasRole('super_admin')) {
+            abort(403);
+        }
+
+        return $user;
+    }
+
+    /** Roles the actor may assign. Non-super admins cannot create or grant super_admin. */
+    private function assignableRoles(User $actor): array
+    {
+        return $actor->isSuperAdmin()
+            ? self::ROLES
+            : array_values(array_diff(self::ROLES, ['super_admin']));
+    }
+
+    /** Tenants the actor may assign a user to. Admins are limited to their own. */
+    private function tenantsFor(User $actor)
+    {
+        return $actor->isSuperAdmin()
+            ? Tenant::orderBy('name')->get(['id', 'name'])
+            : Tenant::where('id', $actor->tenant_id)->get(['id', 'name']);
     }
 }
