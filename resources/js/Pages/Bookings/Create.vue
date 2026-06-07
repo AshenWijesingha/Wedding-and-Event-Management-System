@@ -12,12 +12,14 @@ const props = defineProps({
     clients: Array,
 });
 
+const params = new URLSearchParams(window.location.search);
+
 const form = useForm({
     client_id: '',
-    venue_id: '',
+    venue_id: params.get('venue') ? Number(params.get('venue')) : '',
     package_id: '',
     event_type: 'wedding',
-    event_date: '',
+    event_date: params.get('date') ?? '',
     setup_time: '',
     event_start_time: '',
     event_end_time: '',
