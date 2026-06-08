@@ -136,7 +136,7 @@
             </div>
             <div class="event-item">
                 <label>Guest Count</label>
-                <span>{{ number_format($quotation->guest_count) }} guests</span>
+                <span>{{ $quotation->guest_count ? number_format($quotation->guest_count).' guests' : '—' }}</span>
             </div>
             @if($quotation->package)
                 <div class="event-item">
@@ -160,7 +160,12 @@
         <tbody>
             @foreach($quotation->items ?? [] as $item)
                 <tr>
-                    <td>{{ $item['description'] }}</td>
+                    <td>
+                        {{ $item['name'] ?? $item['description'] ?? '' }}
+                        @if(!empty($item['description']) && !empty($item['name']) && $item['description'] !== $item['name'])
+                            <div style="font-size:11px;color:#6b7280;margin-top:2px;">{{ $item['description'] }}</div>
+                        @endif
+                    </td>
                     <td>{{ $item['quantity'] ?? 1 }}</td>
                     <td>
                         @if(isset($item['unit_price']))
@@ -221,5 +226,8 @@
         For questions, contact us at {{ $branding['contact']['email'] ?? '' }}.
     </div>
 </div>
+@if(!empty($print))
+    <script>window.addEventListener('load', function () { window.print(); });</script>
+@endif
 </body>
 </html>

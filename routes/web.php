@@ -85,6 +85,7 @@ Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefi
     Route::get('/inquiries', [\App\Http\Controllers\Admin\InquiryController::class, 'index'])->name('inquiries.index');
     Route::get('/inquiries/{inquiry}', [\App\Http\Controllers\Admin\InquiryController::class, 'show'])->name('inquiries.show');
     Route::get('/inquiries/{inquiry}/pdf', [\App\Http\Controllers\Admin\InquiryController::class, 'downloadPdf'])->name('inquiries.pdf');
+    Route::get('/inquiries/{inquiry}/print', [\App\Http\Controllers\Admin\InquiryController::class, 'print'])->name('inquiries.print');
     Route::patch('/inquiries/{inquiry}', [\App\Http\Controllers\Admin\InquiryController::class, 'update'])->name('inquiries.update');
 
     // Quotations
@@ -93,6 +94,11 @@ Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefi
     Route::post('/quotations', [\App\Http\Controllers\Admin\QuotationController::class, 'store'])->name('quotations.store');
     Route::get('/quotations/{quotation}', [\App\Http\Controllers\Admin\QuotationController::class, 'show'])->name('quotations.show');
     Route::get('/quotations/{quotation}/pdf', [\App\Http\Controllers\Admin\QuotationController::class, 'downloadPdf'])->name('quotations.pdf');
+    Route::get('/quotations/{quotation}/print', [\App\Http\Controllers\Admin\QuotationController::class, 'print'])->name('quotations.print');
+    Route::post('/quotations/{quotation}/send', [\App\Http\Controllers\Admin\QuotationController::class, 'send'])->name('quotations.send');
+    Route::post('/quotations/{quotation}/accept', [\App\Http\Controllers\Admin\QuotationController::class, 'accept'])->name('quotations.accept');
+    Route::post('/quotations/{quotation}/reject', [\App\Http\Controllers\Admin\QuotationController::class, 'reject'])->name('quotations.reject');
+    Route::post('/quotations/{quotation}/expire', [\App\Http\Controllers\Admin\QuotationController::class, 'markExpired'])->name('quotations.expire');
 
     Route::get('/clients', [\App\Http\Controllers\Admin\ClientController::class, 'index'])->name('clients.index');
     Route::get('/payments', [\App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('payments.index');

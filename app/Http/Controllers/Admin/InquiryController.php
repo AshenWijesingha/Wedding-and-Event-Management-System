@@ -81,9 +81,23 @@ class InquiryController extends Controller
 
             return $pdf->download("inquiry_{$safeNumber}.pdf");
         } catch (\Throwable $e) {
-            logger()->error('Inquiry PDF generation failed', ['inquiry_id' => $inquiry->id, 'error' => $e->getMessage()]);
+            logger()->error('Inquiry PDF generation failed', ['inquiry_id' => $inquiry->id, 'exception' => $e]);
 
             return back()->with('error', 'PDF generation failed. Please try again.');
         }
+    }
+
+    /**
+     * Render a print-friendly HTML view that auto-opens the browser print dialog.
+     */
+    public function print(Inquiry $inquiry, BrandingService $brandingService): SymfonyResponse
+    {
+        $inquiry->load(['client', 'venue', 'package']);
+
+        return response()->view('pdf.inquiry', [
+            'inquiry'  => $inquiry,
+            'branding' => $brandingService->getBranding(),
+            'print'    => true,
+        ]);
     }
 }
