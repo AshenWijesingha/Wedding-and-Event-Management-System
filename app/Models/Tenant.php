@@ -3,12 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Multitenancy\Models\Tenant as BaseTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Tenant extends BaseTenant
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'slug', 'status', 'plan_id'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('tenant');
+    }
 
     protected static function booted(): void
     {

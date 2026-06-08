@@ -48,6 +48,18 @@ const statusColors = {
                         </span>
                     </div>
                 </div>
+                <div class="flex items-center gap-2">
+                    <a :href="`/admin/inquiries/${inquiry.id}/print`" target="_blank" rel="noopener"
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                        Print
+                    </a>
+                    <a :href="`/admin/inquiries/${inquiry.id}/pdf`"
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        Download PDF
+                    </a>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -147,7 +159,7 @@ const statusColors = {
                     <!-- Quick actions -->
                     <div class="bg-white rounded-lg shadow-sm p-5 space-y-2">
                         <h3 class="text-sm font-semibold text-gray-900 mb-3">Quick Actions</h3>
-                        <Link href="/admin/quotations/create" class="block w-full text-center py-2 border border-indigo-600 text-indigo-600 text-sm font-medium rounded-lg hover:bg-indigo-50">
+                        <Link :href="`/admin/quotations/create?inquiry_id=${inquiry.id}`" class="block w-full text-center py-2 border border-indigo-600 text-indigo-600 text-sm font-medium rounded-lg hover:bg-indigo-50">
                             Create Quotation
                         </Link>
                         <Link href="/admin/bookings/create" class="block w-full text-center py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50">

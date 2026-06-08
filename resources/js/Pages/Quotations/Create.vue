@@ -11,14 +11,18 @@ const props = defineProps({
     venues: Array,
     packages: Array,
     clients: Array,
+    prefill: { type: Object, default: () => ({}) },
 });
 
+const p = props.prefill ?? {};
+
 const form = useForm({
-    client_id: '',
-    venue_id: '',
-    package_id: '',
-    event_date: '',
-    guest_count: '',
+    client_id: p.client_id ?? '',
+    venue_id: p.venue_id ?? '',
+    package_id: p.package_id ?? '',
+    event_date: p.event_date ?? '',
+    guest_count: p.guest_count ?? '',
+    inquiry_id: p.inquiry_id ?? null,
     items: [
         { name: '', description: '', quantity: 1, unit_price: 0 },
     ],
@@ -114,9 +118,11 @@ function submit() {
                     <InputError :message="form.errors.items" class="mt-1" />
 
                     <div v-for="(item, i) in form.items" :key="i" class="grid grid-cols-12 gap-2 items-start">
-                        <div class="col-span-12 sm:col-span-5">
+                        <div class="col-span-12 sm:col-span-5 space-y-1">
                             <input v-model="item.name" type="text" placeholder="Item name *"
                                 class="w-full border-gray-300 rounded-md text-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                            <input v-model="item.description" type="text" placeholder="Description (optional)"
+                                class="w-full border-gray-200 rounded-md text-xs text-gray-600 focus:border-indigo-500 focus:ring-indigo-500" />
                         </div>
                         <div class="col-span-4 sm:col-span-2">
                             <input v-model.number="item.quantity" type="number" min="0" placeholder="Qty"

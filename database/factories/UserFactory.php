@@ -40,6 +40,11 @@ class UserFactory extends Factory
         });
     }
 
+    public function tenantOwner(): static
+    {
+        return $this->state(fn () => ['role' => 'tenant_owner']);
+    }
+
     public function admin(): static
     {
         return $this->state(fn () => ['role' => 'admin']);

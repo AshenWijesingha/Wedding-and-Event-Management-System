@@ -36,11 +36,21 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+    // Email verification (signed link delivered by the verification notification)
+    Route::get('verify-email/{id}/{hash}', function (\Illuminate\Foundation\Auth\EmailVerificationRequest $request) {
+        $request->fulfill();
+
+        return redirect('/admin/profile')->with('success', 'Email verified successfully.');
+    })->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
 });
 
 // Admin panel routes (Inertia.js SPA)
-Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', fn () => inertia('Dashboard'))->name('dashboard');
+Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class, 'tenant.active'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+
+    // Exit impersonation — reachable while acting as the impersonated user.
+    Route::post('/impersonate-stop', [\App\Http\Controllers\Admin\ImpersonationController::class, 'stop'])->name('impersonate.stop');
 
     // Venues — full resource with web controller
     Route::resource('venues', \App\Http\Controllers\Admin\VenueController::class)
@@ -77,6 +87,8 @@ Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefi
     // Inquiries
     Route::get('/inquiries', [\App\Http\Controllers\Admin\InquiryController::class, 'index'])->name('inquiries.index');
     Route::get('/inquiries/{inquiry}', [\App\Http\Controllers\Admin\InquiryController::class, 'show'])->name('inquiries.show');
+    Route::get('/inquiries/{inquiry}/pdf', [\App\Http\Controllers\Admin\InquiryController::class, 'downloadPdf'])->name('inquiries.pdf');
+    Route::get('/inquiries/{inquiry}/print', [\App\Http\Controllers\Admin\InquiryController::class, 'print'])->name('inquiries.print');
     Route::patch('/inquiries/{inquiry}', [\App\Http\Controllers\Admin\InquiryController::class, 'update'])->name('inquiries.update');
 
     // Quotations
@@ -85,6 +97,11 @@ Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefi
     Route::post('/quotations', [\App\Http\Controllers\Admin\QuotationController::class, 'store'])->name('quotations.store');
     Route::get('/quotations/{quotation}', [\App\Http\Controllers\Admin\QuotationController::class, 'show'])->name('quotations.show');
     Route::get('/quotations/{quotation}/pdf', [\App\Http\Controllers\Admin\QuotationController::class, 'downloadPdf'])->name('quotations.pdf');
+    Route::get('/quotations/{quotation}/print', [\App\Http\Controllers\Admin\QuotationController::class, 'print'])->name('quotations.print');
+    Route::post('/quotations/{quotation}/send', [\App\Http\Controllers\Admin\QuotationController::class, 'send'])->name('quotations.send');
+    Route::post('/quotations/{quotation}/accept', [\App\Http\Controllers\Admin\QuotationController::class, 'accept'])->name('quotations.accept');
+    Route::post('/quotations/{quotation}/reject', [\App\Http\Controllers\Admin\QuotationController::class, 'reject'])->name('quotations.reject');
+    Route::post('/quotations/{quotation}/expire', [\App\Http\Controllers\Admin\QuotationController::class, 'markExpired'])->name('quotations.expire');
 
     Route::get('/clients', [\App\Http\Controllers\Admin\ClientController::class, 'index'])->name('clients.index');
     Route::get('/payments', [\App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('payments.index');
@@ -96,8 +113,59 @@ Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefi
 
     Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/revenue', [\App\Http\Controllers\Admin\ReportController::class, 'revenue'])->name('reports.revenue');
+    Route::get('/reports/revenue/export', [\App\Http\Controllers\Admin\ReportController::class, 'exportRevenue'])->name('reports.revenue.export');
+    Route::get('/reports/revenue/pdf', [\App\Http\Controllers\Admin\ReportController::class, 'pdfRevenue'])->name('reports.revenue.pdf');
     Route::get('/reports/bookings', [\App\Http\Controllers\Admin\ReportController::class, 'bookings'])->name('reports.bookings');
+    Route::get('/reports/bookings/export', [\App\Http\Controllers\Admin\ReportController::class, 'exportBookings'])->name('reports.bookings.export');
+    Route::get('/reports/bookings/pdf', [\App\Http\Controllers\Admin\ReportController::class, 'pdfBookings'])->name('reports.bookings.pdf');
     Route::get('/reports/occupancy', [\App\Http\Controllers\Admin\ReportController::class, 'occupancy'])->name('reports.occupancy');
+    Route::get('/reports/occupancy/export', [\App\Http\Controllers\Admin\ReportController::class, 'exportOccupancy'])->name('reports.occupancy.export');
+    Route::get('/reports/occupancy/pdf', [\App\Http\Controllers\Admin\ReportController::class, 'pdfOccupancy'])->name('reports.occupancy.pdf');
+
+    // Profile (self-service account management)
+    Route::get('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [\App\Http\Controllers\Admin\ProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::post('/profile/verification-notification', [\App\Http\Controllers\Admin\ProfileController::class, 'sendVerification'])->name('profile.verification');
+    // User management (admins/owners manage their own tenant; super admins manage system-wide)
+    Route::middleware('role:super_admin|tenant_owner|admin')->group(function () {
+        Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+        Route::get('/users/create', [\App\Http\Controllers\Admin\UserController::class, 'create'])->name('users.create');
+        Route::post('/users', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('users.store');
+        Route::get('/users/{id}/edit', [\App\Http\Controllers\Admin\UserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
+        Route::put('/users/{id}/reset-password', [\App\Http\Controllers\Admin\UserController::class, 'resetPassword'])->name('users.reset-password');
+        Route::delete('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
+    });
+
+    // Platform administration (super admin only): tenants and plans.
+    Route::middleware('role:super_admin')->group(function () {
+        Route::get('/tenants', [\App\Http\Controllers\Admin\TenantController::class, 'index'])->name('tenants.index');
+        Route::get('/tenants/create', [\App\Http\Controllers\Admin\TenantController::class, 'create'])->name('tenants.create');
+        Route::post('/tenants', [\App\Http\Controllers\Admin\TenantController::class, 'store'])->name('tenants.store');
+        Route::get('/tenants/{tenant}/edit', [\App\Http\Controllers\Admin\TenantController::class, 'edit'])->name('tenants.edit');
+        Route::put('/tenants/{tenant}', [\App\Http\Controllers\Admin\TenantController::class, 'update'])->name('tenants.update');
+        Route::delete('/tenants/{tenant}', [\App\Http\Controllers\Admin\TenantController::class, 'destroy'])->name('tenants.destroy');
+        Route::post('/tenants/{tenant}/suspend', [\App\Http\Controllers\Admin\TenantController::class, 'suspend'])->name('tenants.suspend');
+        Route::post('/tenants/{tenant}/activate', [\App\Http\Controllers\Admin\TenantController::class, 'activate'])->name('tenants.activate');
+
+        // Impersonate a tenant (start). Stop is registered outside this group so it
+        // remains reachable while acting as the impersonated (non-super-admin) user.
+        Route::post('/impersonate/{tenant}', [\App\Http\Controllers\Admin\ImpersonationController::class, 'start'])->name('impersonate.start');
+
+        // Platform audit log + global settings.
+        Route::get('/audit-log', [\App\Http\Controllers\Admin\AuditLogController::class, 'index'])->name('audit-log.index');
+        Route::get('/platform-settings', [\App\Http\Controllers\Admin\PlatformSettingsController::class, 'edit'])->name('platform-settings.edit');
+        Route::put('/platform-settings', [\App\Http\Controllers\Admin\PlatformSettingsController::class, 'update'])->name('platform-settings.update');
+
+        Route::get('/plans', [\App\Http\Controllers\Admin\PlanController::class, 'index'])->name('plans.index');
+        Route::get('/plans/create', [\App\Http\Controllers\Admin\PlanController::class, 'create'])->name('plans.create');
+        Route::post('/plans', [\App\Http\Controllers\Admin\PlanController::class, 'store'])->name('plans.store');
+        Route::get('/plans/{plan}/edit', [\App\Http\Controllers\Admin\PlanController::class, 'edit'])->name('plans.edit');
+        Route::put('/plans/{plan}', [\App\Http\Controllers\Admin\PlanController::class, 'update'])->name('plans.update');
+        Route::delete('/plans/{plan}', [\App\Http\Controllers\Admin\PlanController::class, 'destroy'])->name('plans.destroy');
+    });
+
     Route::get('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings.index');
     Route::get('/themes', [\App\Http\Controllers\Admin\ThemeController::class, 'index'])->name('themes.index');
     Route::post('/themes/activate', [\App\Http\Controllers\Admin\ThemeController::class, 'activate'])->name('themes.activate');
@@ -112,7 +180,7 @@ Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefi
 });
 
 // Client portal routes
-Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefix('portal')->name('portal.')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class, 'tenant.active'])->prefix('portal')->name('portal.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Portal\PortalController::class, 'dashboard'])->name('dashboard');
     Route::get('/bookings', [\App\Http\Controllers\Portal\PortalController::class, 'bookings'])->name('bookings');
     Route::get('/bookings/{booking}', [\App\Http\Controllers\Portal\PortalController::class, 'bookingShow'])->name('bookings.show');
