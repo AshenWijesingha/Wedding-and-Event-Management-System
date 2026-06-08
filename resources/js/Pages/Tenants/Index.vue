@@ -23,6 +23,20 @@ function destroy(tenant) {
     router.delete(`/admin/tenants/${tenant.id}`, { preserveScroll: true });
 }
 
+function suspend(tenant) {
+    if (!window.confirm(`Suspend ${tenant.name}? Its users will be blocked from signing in.`)) return;
+    router.post(`/admin/tenants/${tenant.id}/suspend`, {}, { preserveScroll: true });
+}
+
+function activate(tenant) {
+    router.post(`/admin/tenants/${tenant.id}/activate`, {}, { preserveScroll: true });
+}
+
+function impersonate(tenant) {
+    if (!window.confirm(`Log in as ${tenant.name}? You can return to your account at any time.`)) return;
+    router.post(`/admin/impersonate/${tenant.id}`);
+}
+
 const statusColors = {
     active:    'bg-green-100 text-green-700',
     trial:     'bg-blue-100 text-blue-700',
@@ -98,7 +112,10 @@ const statusColors = {
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ t.users_count }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ t.bookings_count }}</td>
-                            <td class="px-6 py-4 text-right text-sm">
+                            <td class="px-6 py-4 text-right text-sm whitespace-nowrap">
+                                <button @click="impersonate(t)" class="text-amber-600 hover:text-amber-800 mr-3">Login as</button>
+                                <button v-if="t.status === 'suspended'" @click="activate(t)" class="text-green-600 hover:text-green-800 mr-3">Activate</button>
+                                <button v-else @click="suspend(t)" class="text-orange-600 hover:text-orange-800 mr-3">Suspend</button>
                                 <Link :href="`/admin/tenants/${t.id}/edit`" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</Link>
                                 <button @click="destroy(t)" class="text-red-500 hover:text-red-700">Delete</button>
                             </td>

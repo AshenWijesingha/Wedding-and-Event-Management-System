@@ -34,6 +34,9 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'impersonating' => fn () => $request->session()->has('impersonator_id')
+                ? ['tenant' => optional(\App\Models\Tenant::current())->name ?? 'tenant']
+                : null,
             'flash' => [
                 'message' => fn () => $request->session()->get('message'),
                 'success' => fn () => $request->session()->get('success'),
