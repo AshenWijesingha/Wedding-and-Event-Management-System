@@ -138,5 +138,8 @@
         {{ $branding['business_name'] ?? config('app.name') }} &middot; Inquiry {{ $inquiry->inquiry_number }}
     </div>
 </div>
+@if(!empty($print))
+    <script>window.addEventListener('load', function () { window.print(); });</script>
+@endif
 </body>
 </html>

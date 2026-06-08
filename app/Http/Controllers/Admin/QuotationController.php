@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\QuotationResource;
 use App\Models\Client;
+use App\Models\Inquiry;
 use App\Models\Package;
 use App\Models\Quotation;
 use App\Models\Venue;
@@ -43,8 +44,29 @@ class QuotationController extends Controller
         ]);
     }
 
-    public function create(): Response
+    /**
+     * Roles allowed to create or modify quotations.
+     */
+    private const MANAGE_ROLES = ['super_admin', 'tenant_owner', 'admin', 'manager'];
+
+    public function create(Request $request): Response
     {
+        // Prefill from an inquiry when converting (inquiry -> quotation).
+        $prefill = [];
+        if ($request->filled('inquiry_id')) {
+            $inquiry = Inquiry::find($request->integer('inquiry_id'));
+            if ($inquiry) {
+                $prefill = [
+                    'inquiry_id'  => $inquiry->id,
+                    'client_id'   => $inquiry->client_id,
+                    'venue_id'    => $inquiry->venue_id,
+                    'package_id'  => $inquiry->package_id,
+                    'event_date'  => optional($inquiry->preferred_date)->toDateString(),
+                    'guest_count' => $inquiry->guest_count,
+                ];
+            }
+        }
+
         return Inertia::render('Quotations/Create', [
             'venues'   => Venue::where('status', 'active')->orderBy('name')->get(['id', 'name']),
             'packages' => Package::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
@@ -52,21 +74,24 @@ class QuotationController extends Controller
                 'id'   => $c->id,
                 'name' => trim("{$c->first_name} {$c->last_name}"),
             ]),
+            'prefill'  => $prefill,
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
+        abort_unless($request->user()->hasAnyRole(self::MANAGE_ROLES), 403);
 
         $validated = $request->validate([
             'client_id'            => 'required|exists:clients,id',
+            'inquiry_id'           => 'nullable|exists:inquiries,id',
             'venue_id'             => 'nullable|exists:venues,id',
             'package_id'           => 'nullable|exists:packages,id',
             'event_date'           => 'nullable|date',
             'guest_count'          => 'nullable|integer|min:1',
             'items'                => 'required|array|min:1',
             'items.*.name'         => 'required|string|max:255',
+            'items.*.description'  => 'nullable|string|max:1000',
             'items.*.quantity'     => 'required|numeric|min:0',
             'items.*.unit_price'   => 'required|numeric|min:0',
             'discount_amount'      => 'nullable|numeric|min:0',
@@ -77,8 +102,13 @@ class QuotationController extends Controller
         ]);
 
         $items = array_map(function ($item) {
-            $item['total'] = round((float) $item['quantity'] * (float) $item['unit_price'], 2);
-            return $item;
+            return [
+                'name'        => $item['name'],
+                'description' => $item['description'] ?? null,
+                'quantity'    => (float) $item['quantity'],
+                'unit_price'  => (float) $item['unit_price'],
+                'total'       => round((float) $item['quantity'] * (float) $item['unit_price'], 2),
+            ];
         }, $validated['items']);
 
         $subtotal = array_sum(array_column($items, 'total'));
@@ -88,6 +118,7 @@ class QuotationController extends Controller
 
         Quotation::create([
             'quotation_number'     => Quotation::generateQuotationNumber(),
+            'inquiry_id'           => $validated['inquiry_id'] ?? null,
             'client_id'            => $validated['client_id'],
             'venue_id'             => $validated['venue_id'] ?? null,
             'package_id'           => $validated['package_id'] ?? null,
@@ -106,6 +137,55 @@ class QuotationController extends Controller
         ]);
 
         return redirect()->route('admin.quotations.index')->with('success', 'Quotation created successfully.');
+    }
+
+    /**
+     * Legal status transitions for a quotation.
+     */
+    private const TRANSITIONS = [
+        'send'   => ['from' => ['draft'],           'to' => 'sent',     'stamp' => 'sent_at'],
+        'accept' => ['from' => ['sent', 'viewed'],  'to' => 'accepted', 'stamp' => 'accepted_at'],
+        'reject' => ['from' => ['sent', 'viewed'],  'to' => 'rejected', 'stamp' => null],
+        'expire' => ['from' => ['draft', 'sent', 'viewed'], 'to' => 'expired', 'stamp' => null],
+    ];
+
+    public function send(Request $request, Quotation $quotation): RedirectResponse
+    {
+        return $this->transition($request, $quotation, 'send');
+    }
+
+    public function accept(Request $request, Quotation $quotation): RedirectResponse
+    {
+        return $this->transition($request, $quotation, 'accept');
+    }
+
+    public function reject(Request $request, Quotation $quotation): RedirectResponse
+    {
+        return $this->transition($request, $quotation, 'reject');
+    }
+
+    public function markExpired(Request $request, Quotation $quotation): RedirectResponse
+    {
+        return $this->transition($request, $quotation, 'expire');
+    }
+
+    private function transition(Request $request, Quotation $quotation, string $action): RedirectResponse
+    {
+        abort_unless($request->user()->hasAnyRole(self::MANAGE_ROLES), 403);
+
+        $rule = self::TRANSITIONS[$action];
+
+        if (! in_array($quotation->status, $rule['from'], true)) {
+            return back()->with('error', "Cannot {$action} a quotation that is '{$quotation->status}'.");
+        }
+
+        $attrs = ['status' => $rule['to']];
+        if ($rule['stamp']) {
+            $attrs[$rule['stamp']] = now();
+        }
+        $quotation->update($attrs);
+
+        return back()->with('success', "Quotation marked as {$rule['to']}.");
     }
 
     public function show(Quotation $quotation): Response
@@ -128,8 +208,22 @@ class QuotationController extends Controller
             $safeNumber = preg_replace('/[^a-zA-Z0-9_\-]/', '', $quotation->quotation_number);
             return $pdf->download("quotation_{$safeNumber}.pdf");
         } catch (\Throwable $e) {
-            logger()->error('Quotation PDF generation failed', ['quotation_id' => $quotation->id, 'error' => $e->getMessage()]);
+            logger()->error('Quotation PDF generation failed', ['quotation_id' => $quotation->id, 'exception' => $e]);
             return back()->with('error', 'PDF generation failed. Please try again.');
         }
+    }
+
+    /**
+     * Render a print-friendly HTML view that auto-opens the browser print dialog.
+     */
+    public function print(Quotation $quotation): SymfonyResponse
+    {
+        $quotation->load(['client', 'venue', 'package']);
+
+        return response()->view('pdf.quotation', [
+            'quotation' => $quotation,
+            'branding'  => $this->brandingService->getBranding(),
+            'print'     => true,
+        ]);
     }
 }
