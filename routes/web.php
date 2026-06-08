@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
 
 // Admin panel routes (Inertia.js SPA)
 Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', fn () => inertia('Dashboard'))->name('dashboard');
+    Route::get('/', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
     // Venues — full resource with web controller
     Route::resource('venues', \App\Http\Controllers\Admin\VenueController::class)
