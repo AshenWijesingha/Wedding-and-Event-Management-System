@@ -46,8 +46,11 @@ Route::middleware('auth')->group(function () {
 });
 
 // Admin panel routes (Inertia.js SPA)
-Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class, 'tenant.active'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+
+    // Exit impersonation — reachable while acting as the impersonated user.
+    Route::post('/impersonate-stop', [\App\Http\Controllers\Admin\ImpersonationController::class, 'stop'])->name('impersonate.stop');
 
     // Venues — full resource with web controller
     Route::resource('venues', \App\Http\Controllers\Admin\VenueController::class)
@@ -143,6 +146,17 @@ Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefi
         Route::get('/tenants/{tenant}/edit', [\App\Http\Controllers\Admin\TenantController::class, 'edit'])->name('tenants.edit');
         Route::put('/tenants/{tenant}', [\App\Http\Controllers\Admin\TenantController::class, 'update'])->name('tenants.update');
         Route::delete('/tenants/{tenant}', [\App\Http\Controllers\Admin\TenantController::class, 'destroy'])->name('tenants.destroy');
+        Route::post('/tenants/{tenant}/suspend', [\App\Http\Controllers\Admin\TenantController::class, 'suspend'])->name('tenants.suspend');
+        Route::post('/tenants/{tenant}/activate', [\App\Http\Controllers\Admin\TenantController::class, 'activate'])->name('tenants.activate');
+
+        // Impersonate a tenant (start). Stop is registered outside this group so it
+        // remains reachable while acting as the impersonated (non-super-admin) user.
+        Route::post('/impersonate/{tenant}', [\App\Http\Controllers\Admin\ImpersonationController::class, 'start'])->name('impersonate.start');
+
+        // Platform audit log + global settings.
+        Route::get('/audit-log', [\App\Http\Controllers\Admin\AuditLogController::class, 'index'])->name('audit-log.index');
+        Route::get('/platform-settings', [\App\Http\Controllers\Admin\PlatformSettingsController::class, 'edit'])->name('platform-settings.edit');
+        Route::put('/platform-settings', [\App\Http\Controllers\Admin\PlatformSettingsController::class, 'update'])->name('platform-settings.update');
 
         Route::get('/plans', [\App\Http\Controllers\Admin\PlanController::class, 'index'])->name('plans.index');
         Route::get('/plans/create', [\App\Http\Controllers\Admin\PlanController::class, 'create'])->name('plans.create');
@@ -166,7 +180,7 @@ Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefi
 });
 
 // Client portal routes
-Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class])->prefix('portal')->name('portal.')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class, 'tenant.active'])->prefix('portal')->name('portal.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Portal\PortalController::class, 'dashboard'])->name('dashboard');
     Route::get('/bookings', [\App\Http\Controllers\Portal\PortalController::class, 'bookings'])->name('bookings');
     Route::get('/bookings/{booking}', [\App\Http\Controllers\Portal\PortalController::class, 'bookingShow'])->name('bookings.show');

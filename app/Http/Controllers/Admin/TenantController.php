@@ -165,6 +165,20 @@ class TenantController extends Controller
         return redirect('/admin/tenants')->with('success', 'Tenant updated.');
     }
 
+    public function suspend(Tenant $tenant): RedirectResponse
+    {
+        $tenant->update(['status' => 'suspended']);
+
+        return back()->with('success', "{$tenant->name} has been suspended.");
+    }
+
+    public function activate(Tenant $tenant): RedirectResponse
+    {
+        $tenant->update(['status' => 'active']);
+
+        return back()->with('success', "{$tenant->name} has been reactivated.");
+    }
+
     public function destroy(Tenant $tenant): RedirectResponse
     {
         // Guard against destroying a tenant that still has booking history; suspend instead.
