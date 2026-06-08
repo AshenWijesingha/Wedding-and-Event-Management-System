@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\InquiryResource;
 use App\Models\Inquiry;
 use App\Models\User;
+use App\Services\BrandingService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class InquiryController extends Controller
 {
@@ -62,5 +65,39 @@ class InquiryController extends Controller
         $inquiry->update($validated);
 
         return back()->with('success', 'Inquiry updated.');
+    }
+
+    public function downloadPdf(Inquiry $inquiry, BrandingService $brandingService): SymfonyResponse
+    {
+        try {
+            $inquiry->load(['client', 'venue', 'package']);
+
+            $pdf = Pdf::loadView('pdf.inquiry', [
+                'inquiry'  => $inquiry,
+                'branding' => $brandingService->getBranding(),
+            ])->setPaper('a4', 'portrait');
+
+            $safeNumber = preg_replace('/[^a-zA-Z0-9_\-]/', '', $inquiry->inquiry_number);
+
+            return $pdf->download("inquiry_{$safeNumber}.pdf");
+        } catch (\Throwable $e) {
+            logger()->error('Inquiry PDF generation failed', ['inquiry_id' => $inquiry->id, 'exception' => $e]);
+
+            return back()->with('error', 'PDF generation failed. Please try again.');
+        }
+    }
+
+    /**
+     * Render a print-friendly HTML view that auto-opens the browser print dialog.
+     */
+    public function print(Inquiry $inquiry, BrandingService $brandingService): SymfonyResponse
+    {
+        $inquiry->load(['client', 'venue', 'package']);
+
+        return response()->view('pdf.inquiry', [
+            'inquiry'  => $inquiry,
+            'branding' => $brandingService->getBranding(),
+            'print'    => true,
+        ]);
     }
 }
