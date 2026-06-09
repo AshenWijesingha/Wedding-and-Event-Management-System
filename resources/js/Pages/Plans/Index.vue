@@ -9,7 +9,7 @@ function destroy(plan) {
     router.delete(`/admin/plans/${plan.id}`, { preserveScroll: true });
 }
 
-const money = (v) => '$' + Number(v ?? 0).toLocaleString(undefined, { minimumFractionDigits: 0 });
+const money = (v) => 'LKR ' + Number(v ?? 0).toLocaleString(undefined, { minimumFractionDigits: 0 });
 </script>
 
 <template>
@@ -41,7 +41,7 @@ const money = (v) => '$' + Number(v ?? 0).toLocaleString(undefined, { minimumFra
                     <div class="mt-3">
                         <span class="text-2xl font-bold text-gray-900">{{ money(plan.price_monthly) }}</span>
                         <span class="text-sm text-gray-500">/mo</span>
-                        <span class="text-sm text-gray-400 ml-2">· {{ money(plan.price_yearly) }}/yr</span>
+                        <span class="text-sm text-gray-400 ml-2">Â· {{ money(plan.price_yearly) }}/yr</span>
                     </div>
 
                     <p v-if="plan.description" class="text-sm text-gray-500 mt-2">{{ plan.description }}</p>

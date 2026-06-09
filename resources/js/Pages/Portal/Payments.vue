@@ -20,11 +20,11 @@ const statusColors = {
             <div class="grid grid-cols-2 gap-4">
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs text-gray-500 uppercase">Total Paid</p>
-                    <p class="text-2xl font-bold text-green-600 mt-1">${{ summary?.total_paid?.toLocaleString() ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-green-600 mt-1">LKR {{ summary?.total_paid?.toLocaleString() ?? 0 }}</p>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs text-gray-500 uppercase">Pending</p>
-                    <p class="text-2xl font-bold text-yellow-600 mt-1">${{ summary?.total_pending?.toLocaleString() ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-yellow-600 mt-1">LKR {{ summary?.total_pending?.toLocaleString() ?? 0 }}</p>
                 </div>
             </div>
 
@@ -44,7 +44,7 @@ const statusColors = {
                         <tr v-for="p in payments.data" :key="p.id" class="hover:bg-gray-50">
                             <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ p.payment_number }}</td>
                             <td class="px-4 py-3 text-sm text-gray-600">{{ p.installment_name }}</td>
-                            <td class="px-4 py-3 text-sm font-semibold text-gray-900">${{ p.amount?.toLocaleString() }}</td>
+                            <td class="px-4 py-3 text-sm font-semibold text-gray-900">LKR {{ p.amount?.toLocaleString() }}</td>
                             <td class="px-4 py-3 text-sm text-gray-600">{{ p.payment_date }}</td>
                             <td class="px-4 py-3">
                                 <span :class="['inline-flex px-2 py-0.5 rounded-full text-xs font-medium capitalize', statusColors[p.status] ?? 'bg-gray-100 text-gray-600']">

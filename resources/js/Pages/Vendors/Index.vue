@@ -78,7 +78,7 @@ const categories = ['photographer', 'caterer', 'florist', 'music', 'decor', 'tra
                                 <p class="text-xs">{{ vendor.phone }}</p>
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-900">
-                                <span v-if="vendor.base_rate">${{ vendor.base_rate?.toLocaleString() }}</span>
+                                <span v-if="vendor.base_rate">LKR {{ vendor.base_rate?.toLocaleString() }}</span>
                                 <span class="text-xs text-gray-500 ml-1 capitalize">{{ vendor.rate_type?.replace('_', ' ') }}</span>
                             </td>
                             <td class="px-6 py-4">
@@ -99,7 +99,7 @@ const categories = ['photographer', 'caterer', 'florist', 'music', 'decor', 'tra
                 </table>
 
                 <div v-if="vendors.meta?.last_page > 1" class="px-6 py-4 border-t border-gray-200 flex items-center justify-between text-sm text-gray-600">
-                    <span>Showing {{ vendors.meta.from }}–{{ vendors.meta.to }} of {{ vendors.meta.total }}</span>
+                    <span>Showing {{ vendors.meta.from }}â€“{{ vendors.meta.to }} of {{ vendors.meta.total }}</span>
                     <div class="flex gap-2">
                         <Link v-if="vendors.links?.prev" :href="vendors.links.prev" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">Previous</Link>
                         <Link v-if="vendors.links?.next" :href="vendors.links.next" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">Next</Link>

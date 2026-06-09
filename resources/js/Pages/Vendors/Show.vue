@@ -30,26 +30,26 @@ const props = defineProps({ vendor: Object });
                     <dl class="grid grid-cols-2 gap-3 text-sm">
                         <div>
                             <dt class="text-gray-500">Contact</dt>
-                            <dd class="font-medium">{{ vendor.contact_name ?? '—' }}</dd>
+                            <dd class="font-medium">{{ vendor.contact_name ?? 'â€”' }}</dd>
                         </div>
                         <div>
                             <dt class="text-gray-500">Email</dt>
-                            <dd>{{ vendor.email ?? '—' }}</dd>
+                            <dd>{{ vendor.email ?? 'â€”' }}</dd>
                         </div>
                         <div>
                             <dt class="text-gray-500">Phone</dt>
-                            <dd>{{ vendor.phone ?? '—' }}</dd>
+                            <dd>{{ vendor.phone ?? 'â€”' }}</dd>
                         </div>
                         <div>
                             <dt class="text-gray-500">Website</dt>
                             <dd>
                                 <a v-if="vendor.website" :href="vendor.website" target="_blank" class="text-indigo-600 hover:underline text-xs">{{ vendor.website }}</a>
-                                <span v-else>—</span>
+                                <span v-else>â€”</span>
                             </dd>
                         </div>
                         <div>
                             <dt class="text-gray-500">Base Rate</dt>
-                            <dd>${{ vendor.base_rate?.toLocaleString() ?? '—' }} <span class="text-xs text-gray-400 capitalize">{{ vendor.rate_type?.replace('_', ' ') }}</span></dd>
+                            <dd>LKR {{ vendor.base_rate?.toLocaleString() ?? 'â€”' }} <span class="text-xs text-gray-400 capitalize">{{ vendor.rate_type?.replace('_', ' ') }}</span></dd>
                         </div>
                         <div>
                             <dt class="text-gray-500">Status</dt>

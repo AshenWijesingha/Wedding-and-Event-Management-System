@@ -28,10 +28,10 @@ class UserSeeder extends Seeder
 
         if ($tenant) {
             $admin = User::updateOrCreate(
-                ['email' => 'john@grandvista.example.com'],
+                ['email' => 'nuwan@mangala.lk'],
                 [
                     'tenant_id' => $tenant->id,
-                    'name' => 'John Manager',
+                    'name' => 'Nuwan Perera',
                     'password' => Hash::make('password'),
                     'role' => 'admin',
                     'is_active' => true,
@@ -41,10 +41,10 @@ class UserSeeder extends Seeder
             $admin->syncRoles(['admin']);
 
             $staff = User::updateOrCreate(
-                ['email' => 'sarah@grandvista.example.com'],
+                ['email' => 'sanduni@mangala.lk'],
                 [
                     'tenant_id' => $tenant->id,
-                    'name' => 'Sarah Staff',
+                    'name' => 'Sanduni Fernando',
                     'password' => Hash::make('password'),
                     'role' => 'staff',
                     'is_active' => true,

@@ -47,12 +47,12 @@ return [
         'code' => [
             'type' => 'select',
             'options' => 'currencies',
-            'default' => 'USD',
+            'default' => 'LKR',
             'label' => 'Currency Code',
         ],
         'symbol' => [
             'type' => 'text',
-            'default' => '$',
+            'default' => 'Rs',
             'label' => 'Currency Symbol',
         ],
         'position' => [

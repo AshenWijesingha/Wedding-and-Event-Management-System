@@ -90,11 +90,11 @@ const statusColors = {
                             </div>
                             <div>
                                 <dt class="text-gray-500">Start Time</dt>
-                                <dd>{{ booking.event?.start_time ?? '—' }}</dd>
+                                <dd>{{ booking.event?.start_time ?? 'â€”' }}</dd>
                             </div>
                             <div>
                                 <dt class="text-gray-500">End Time</dt>
-                                <dd>{{ booking.event?.end_time ?? '—' }}</dd>
+                                <dd>{{ booking.event?.end_time ?? 'â€”' }}</dd>
                             </div>
                             <div>
                                 <dt class="text-gray-500">Guest Count</dt>
@@ -102,7 +102,7 @@ const statusColors = {
                             </div>
                             <div>
                                 <dt class="text-gray-500">Setup Time</dt>
-                                <dd>{{ booking.event?.setup_time ?? '—' }}</dd>
+                                <dd>{{ booking.event?.setup_time ?? 'â€”' }}</dd>
                             </div>
                         </dl>
                     </div>
@@ -117,7 +117,7 @@ const statusColors = {
                         </div>
                         <div>
                             <h3 class="text-sm font-semibold text-gray-900 mb-2">Venue</h3>
-                            <p class="text-sm font-medium text-gray-900">{{ booking.venue?.name ?? '—' }}</p>
+                            <p class="text-sm font-medium text-gray-900">{{ booking.venue?.name ?? 'â€”' }}</p>
                             <p class="text-sm text-gray-500" v-if="booking.package">{{ booking.package?.name }}</p>
                         </div>
                     </div>
@@ -141,7 +141,7 @@ const statusColors = {
                                 <tr v-for="payment in booking.payments" :key="payment.id">
                                     <td class="py-2 font-medium">{{ payment.payment_number }}</td>
                                     <td class="py-2 text-gray-600">{{ payment.installment_name }}</td>
-                                    <td class="py-2 font-medium">${{ payment.amount?.toLocaleString() }}</td>
+                                    <td class="py-2 font-medium">LKR {{ payment.amount?.toLocaleString() }}</td>
                                     <td class="py-2 text-gray-600">{{ payment.payment_date }}</td>
                                     <td class="py-2">
                                         <span :class="payment.status === 'completed' ? 'text-green-600' : 'text-yellow-600'" class="capitalize">
@@ -187,7 +187,7 @@ const statusColors = {
                                     <p v-if="vendor.pivot?.service_description" class="text-xs text-gray-500 mt-0.5">{{ vendor.pivot.service_description }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p v-if="vendor.pivot?.agreed_amount" class="font-semibold text-gray-900">${{ parseFloat(vendor.pivot.agreed_amount).toLocaleString() }}</p>
+                                    <p v-if="vendor.pivot?.agreed_amount" class="font-semibold text-gray-900">LKR {{ parseFloat(vendor.pivot.agreed_amount).toLocaleString() }}</p>
                                     <button @click="detachVendor(vendor.id)" class="text-xs text-red-500 hover:text-red-700 mt-1">Remove</button>
                                 </div>
                             </div>
@@ -203,16 +203,16 @@ const statusColors = {
                         <dl class="space-y-2 text-sm">
                             <div class="flex justify-between">
                                 <dt class="text-gray-500">Total Amount</dt>
-                                <dd class="font-semibold">${{ booking.financial?.total?.toLocaleString() }}</dd>
+                                <dd class="font-semibold">LKR {{ booking.financial?.total?.toLocaleString() }}</dd>
                             </div>
                             <div class="flex justify-between">
                                 <dt class="text-gray-500">Paid</dt>
-                                <dd class="text-green-600 font-medium">${{ booking.financial?.paid?.toLocaleString() }}</dd>
+                                <dd class="text-green-600 font-medium">LKR {{ booking.financial?.paid?.toLocaleString() }}</dd>
                             </div>
                             <div class="flex justify-between border-t border-gray-100 pt-2 mt-2">
                                 <dt class="text-gray-700 font-medium">Balance Due</dt>
                                 <dd :class="(booking.financial?.balance ?? 0) > 0 ? 'text-red-600' : 'text-green-600'" class="font-bold">
-                                    ${{ booking.financial?.balance?.toLocaleString() }}
+                                    LKR {{ booking.financial?.balance?.toLocaleString() }}
                                 </dd>
                             </div>
                         </dl>

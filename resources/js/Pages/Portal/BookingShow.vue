@@ -59,7 +59,7 @@ const statusColors = {
                             <tbody class="divide-y divide-gray-100">
                                 <tr v-for="p in booking.payments" :key="p.id">
                                     <td class="py-2 font-medium">{{ p.payment_number }}</td>
-                                    <td class="py-2">${{ p.amount?.toLocaleString() }}</td>
+                                    <td class="py-2">LKR {{ p.amount?.toLocaleString() }}</td>
                                     <td class="py-2 text-gray-600">{{ p.payment_date }}</td>
                                     <td class="py-2">
                                         <span :class="p.status === 'completed' ? 'text-green-600' : 'text-yellow-600'" class="capitalize">{{ p.status }}</span>
@@ -77,16 +77,16 @@ const statusColors = {
                     <dl class="space-y-2 text-sm">
                         <div class="flex justify-between">
                             <dt class="text-gray-500">Total</dt>
-                            <dd class="font-semibold">${{ booking.financial?.total?.toLocaleString() }}</dd>
+                            <dd class="font-semibold">LKR {{ booking.financial?.total?.toLocaleString() }}</dd>
                         </div>
                         <div class="flex justify-between">
                             <dt class="text-gray-500">Paid</dt>
-                            <dd class="text-green-600 font-medium">${{ booking.financial?.paid?.toLocaleString() }}</dd>
+                            <dd class="text-green-600 font-medium">LKR {{ booking.financial?.paid?.toLocaleString() }}</dd>
                         </div>
                         <div class="flex justify-between border-t border-gray-100 pt-2">
                             <dt class="font-medium text-gray-700">Balance</dt>
                             <dd :class="(booking.financial?.balance ?? 0) > 0 ? 'text-red-600' : 'text-green-600'" class="font-bold">
-                                ${{ booking.financial?.balance?.toLocaleString() }}
+                                LKR {{ booking.financial?.balance?.toLocaleString() }}
                             </dd>
                         </div>
                     </dl>

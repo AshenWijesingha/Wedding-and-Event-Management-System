@@ -78,12 +78,12 @@ const statusColors = {
                             <td class="px-6 py-4 text-sm text-gray-700">{{ booking.client?.full_name }}</td>
                             <td class="px-6 py-4">
                                 <div class="text-sm text-gray-900 capitalize">{{ booking.event?.type }}</div>
-                                <div class="text-xs text-gray-500">{{ booking.event?.date }} · {{ booking.event?.guest_count }} guests</div>
+                                <div class="text-xs text-gray-500">{{ booking.event?.date }} Â· {{ booking.event?.guest_count }} guests</div>
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ booking.venue?.name ?? '—' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ booking.venue?.name ?? 'â€”' }}</td>
                             <td class="px-6 py-4">
-                                <div class="text-sm font-medium text-gray-900">${{ booking.financial?.total?.toLocaleString() }}</div>
-                                <div class="text-xs text-gray-500">Balance: ${{ booking.financial?.balance?.toLocaleString() }}</div>
+                                <div class="text-sm font-medium text-gray-900">LKR {{ booking.financial?.total?.toLocaleString() }}</div>
+                                <div class="text-xs text-gray-500">Balance: LKR {{ booking.financial?.balance?.toLocaleString() }}</div>
                             </td>
                             <td class="px-6 py-4">
                                 <span :class="['inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize', statusColors[booking.status] ?? 'bg-gray-100 text-gray-600']">
@@ -101,7 +101,7 @@ const statusColors = {
                 </table>
 
                 <div v-if="bookings.meta?.last_page > 1" class="px-6 py-4 border-t border-gray-200 flex items-center justify-between text-sm text-gray-600">
-                    <span>Showing {{ bookings.meta.from }}–{{ bookings.meta.to }} of {{ bookings.meta.total }}</span>
+                    <span>Showing {{ bookings.meta.from }}â€“{{ bookings.meta.to }} of {{ bookings.meta.total }}</span>
                     <div class="flex gap-2">
                         <Link v-if="bookings.links?.prev" :href="bookings.links.prev" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">Previous</Link>
                         <Link v-if="bookings.links?.next" :href="bookings.links.next" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">Next</Link>

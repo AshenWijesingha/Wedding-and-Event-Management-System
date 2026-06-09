@@ -44,28 +44,28 @@ const maxRevenue = computed(() => Math.max(...props.months.map(m => m.revenue), 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs text-gray-500 uppercase">Collected</p>
-                    <p class="text-2xl font-bold text-green-600 mt-1">${{ totals.collected?.toLocaleString() ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-green-600 mt-1">LKR {{ totals.collected?.toLocaleString() ?? 0 }}</p>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs text-gray-500 uppercase">Outstanding</p>
-                    <p class="text-2xl font-bold text-red-600 mt-1">${{ totals.outstanding?.toLocaleString() ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-red-600 mt-1">LKR {{ totals.outstanding?.toLocaleString() ?? 0 }}</p>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs text-gray-500 uppercase">Refunded</p>
-                    <p class="text-2xl font-bold text-orange-600 mt-1">${{ totals.refunded?.toLocaleString() ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-orange-600 mt-1">LKR {{ totals.refunded?.toLocaleString() ?? 0 }}</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <!-- Monthly bar chart -->
                 <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-5">
-                    <h3 class="text-sm font-semibold text-gray-900 mb-4">Revenue — {{ period }}</h3>
+                    <h3 class="text-sm font-semibold text-gray-900 mb-4">Revenue â€” {{ period }}</h3>
                     <div class="flex items-end gap-2 h-48">
                         <div v-for="m in months" :key="m.label" class="flex-1 flex flex-col items-center gap-1">
-                            <span class="text-xs text-gray-500">{{ m.revenue > 0 ? '$' + Math.round(m.revenue / 1000) + 'k' : '' }}</span>
+                            <span class="text-xs text-gray-500">{{ m.revenue > 0 ? 'LKR ' + Math.round(m.revenue / 1000) + 'k' : '' }}</span>
                             <div class="w-full bg-green-500 rounded-t hover:bg-green-600 transition-colors"
                                 :style="{ height: Math.max(4, (m.revenue / maxRevenue) * 160) + 'px' }"
-                                :title="'$' + m.revenue.toLocaleString() + ' (' + m.count + ' payments)'"></div>
+                                :title="'LKR ' + m.revenue.toLocaleString() + ' (' + m.count + ' payments)'"></div>
                             <span class="text-xs text-gray-500">{{ m.label.slice(0, 3) }}</span>
                         </div>
                     </div>
@@ -78,7 +78,7 @@ const maxRevenue = computed(() => Math.max(...props.months.map(m => m.revenue), 
                         <div v-for="m in byMethod" :key="m.method" class="text-sm">
                             <div class="flex justify-between mb-1">
                                 <span class="capitalize text-gray-600">{{ m.method?.replace('_', ' ') }}</span>
-                                <span class="font-semibold text-gray-900">${{ m.total.toLocaleString() }}</span>
+                                <span class="font-semibold text-gray-900">LKR {{ m.total.toLocaleString() }}</span>
                             </div>
                             <p class="text-xs text-gray-400">{{ m.count }} transactions</p>
                         </div>
@@ -100,7 +100,7 @@ const maxRevenue = computed(() => Math.max(...props.months.map(m => m.revenue), 
                     <tbody class="divide-y divide-gray-100">
                         <tr v-for="m in months" :key="m.label" :class="m.revenue > 0 ? '' : 'text-gray-400'">
                             <td class="px-6 py-3">{{ m.label }}</td>
-                            <td class="px-6 py-3 font-semibold">${{ m.revenue.toLocaleString() }}</td>
+                            <td class="px-6 py-3 font-semibold">LKR {{ m.revenue.toLocaleString() }}</td>
                             <td class="px-6 py-3">{{ m.count }}</td>
                         </tr>
                     </tbody>

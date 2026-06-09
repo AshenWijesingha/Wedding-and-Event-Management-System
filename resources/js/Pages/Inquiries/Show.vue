@@ -79,7 +79,7 @@ const statusColors = {
                             </div>
                             <div>
                                 <dt class="text-gray-500">Phone</dt>
-                                <dd>{{ inquiry.client?.phone ?? '—' }}</dd>
+                                <dd>{{ inquiry.client?.phone ?? 'â€”' }}</dd>
                             </div>
                         </dl>
                     </div>
@@ -106,7 +106,7 @@ const statusColors = {
                             </div>
                             <div v-if="inquiry.budget?.min || inquiry.budget?.max">
                                 <dt class="text-gray-500">Budget Range</dt>
-                                <dd>${{ inquiry.budget.min?.toLocaleString() }} – ${{ inquiry.budget.max?.toLocaleString() }}</dd>
+                                <dd>LKR {{ inquiry.budget.min?.toLocaleString() }} â€“ LKR {{ inquiry.budget.max?.toLocaleString() }}</dd>
                             </div>
                             <div v-if="inquiry.venue">
                                 <dt class="text-gray-500">Venue Interest</dt>

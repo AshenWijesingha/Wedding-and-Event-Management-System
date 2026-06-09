@@ -35,15 +35,15 @@ const statusColors = {
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-sm text-gray-500">Total Received</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">${{ summary?.total?.toLocaleString() ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-gray-900 mt-1">LKR {{ summary?.total?.toLocaleString() ?? 0 }}</p>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-sm text-gray-500">This Month</p>
-                    <p class="text-2xl font-bold text-green-600 mt-1">${{ summary?.this_month?.toLocaleString() ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-green-600 mt-1">LKR {{ summary?.this_month?.toLocaleString() ?? 0 }}</p>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-sm text-gray-500">Pending</p>
-                    <p class="text-2xl font-bold text-yellow-600 mt-1">${{ summary?.pending?.toLocaleString() ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-yellow-600 mt-1">LKR {{ summary?.pending?.toLocaleString() ?? 0 }}</p>
                 </div>
             </div>
 
@@ -81,7 +81,7 @@ const statusColors = {
                         <tr v-for="payment in payments.data" :key="payment.id" class="hover:bg-gray-50">
                             <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ payment.payment_number }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ payment.installment_name }}</td>
-                            <td class="px-6 py-4 text-sm font-semibold text-gray-900">${{ payment.amount?.toLocaleString() }}</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-gray-900">LKR {{ payment.amount?.toLocaleString() }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600 capitalize">{{ payment.payment_method?.replace('_', ' ') }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ payment.payment_date }}</td>
                             <td class="px-6 py-4">
@@ -97,7 +97,7 @@ const statusColors = {
                 </table>
 
                 <div v-if="payments.meta?.last_page > 1" class="px-6 py-4 border-t border-gray-200 flex items-center justify-between text-sm text-gray-600">
-                    <span>Showing {{ payments.meta.from }}–{{ payments.meta.to }} of {{ payments.meta.total }}</span>
+                    <span>Showing {{ payments.meta.from }}â€“{{ payments.meta.to }} of {{ payments.meta.total }}</span>
                     <div class="flex gap-2">
                         <Link v-if="payments.links?.prev" :href="payments.links.prev" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">Previous</Link>
                         <Link v-if="payments.links?.next" :href="payments.links.next" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">Next</Link>

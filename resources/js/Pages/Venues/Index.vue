@@ -91,10 +91,10 @@ const statusColors = {
                                 <div class="text-sm text-gray-500">{{ venue.slug }}</div>
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-600">
-                                {{ venue.capacity?.min ?? '—' }} – {{ venue.capacity?.max ?? '—' }} guests
+                                {{ venue.capacity?.min ?? 'â€”' }} â€“ {{ venue.capacity?.max ?? 'â€”' }} guests
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-600">
-                                ${{ venue.pricing?.base_price?.toLocaleString() ?? '—' }}
+                                LKR {{ venue.pricing?.base_price?.toLocaleString() ?? 'â€”' }}
                             </td>
                             <td class="px-6 py-4">
                                 <span :class="['inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize', statusColors[venue.status] ?? 'bg-gray-100 text-gray-600']">
@@ -120,7 +120,7 @@ const statusColors = {
 
                 <!-- Pagination -->
                 <div v-if="venues.meta?.last_page > 1" class="px-6 py-4 border-t border-gray-200 flex items-center justify-between text-sm text-gray-600">
-                    <span>Showing {{ venues.meta.from }}–{{ venues.meta.to }} of {{ venues.meta.total }}</span>
+                    <span>Showing {{ venues.meta.from }}â€“{{ venues.meta.to }} of {{ venues.meta.total }}</span>
                     <div class="flex gap-2">
                         <Link
                             v-if="venues.links?.prev"

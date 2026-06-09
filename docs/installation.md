@@ -72,7 +72,7 @@ php artisan db:seed
 
 The seeder creates:
 - Plans (starter, professional, enterprise)
-- Demo tenant: **Grand Vista Events**
+- Demo tenant: **Mangala Events (Pvt) Ltd**
 - Demo admin user: `admin@demo.eventpro.test` / `password`
 - Demo venues, packages, clients, bookings, staff
 

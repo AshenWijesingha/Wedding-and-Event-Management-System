@@ -30,7 +30,7 @@ class DemoDataSeeder extends Seeder
         $admin = User::updateOrCreate(
             ['email' => 'admin@demo.eventpro.test'],
             [
-                'name' => 'Admin User',
+                'name' => 'Kasun Rajapaksha',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
                 'is_active' => true,
@@ -42,50 +42,50 @@ class DemoDataSeeder extends Seeder
         // Venues
         $venues = [
             [
-                'name' => 'The Grand Ballroom',
-                'slug' => 'the-grand-ballroom',
+                'name' => 'Mahaweli Grand Ballroom',
+                'slug' => 'mahaweli-grand-ballroom',
                 'description' => 'Our flagship venue featuring crystal chandeliers and a capacity for up to 500 guests.',
                 'capacity_min' => 100,
                 'capacity_max' => 500,
-                'base_price' => 8000,
-                'weekend_surcharge' => 1500,
+                'base_price' => 1500000,
+                'weekend_surcharge' => 350000,
                 'amenities' => ['parking', 'valet', 'catering', 'av_equipment', 'dance_floor', 'stage'],
                 'images' => [
-                    'https://picsum.photos/seed/grand-ballroom-1/1200/800',
-                    'https://picsum.photos/seed/grand-ballroom-2/1200/800',
-                    'https://picsum.photos/seed/grand-ballroom-3/1200/800',
+                    'https://picsum.photos/seed/mahaweli-ballroom-1/1200/800',
+                    'https://picsum.photos/seed/mahaweli-ballroom-2/1200/800',
+                    'https://picsum.photos/seed/mahaweli-ballroom-3/1200/800',
                 ],
                 'status' => 'active',
             ],
             [
-                'name' => 'Garden Terrace',
-                'slug' => 'garden-terrace',
+                'name' => 'Pol Watta Garden Terrace',
+                'slug' => 'pol-watta-garden-terrace',
                 'description' => 'An intimate outdoor space surrounded by manicured gardens. Perfect for smaller celebrations.',
                 'capacity_min' => 20,
                 'capacity_max' => 150,
-                'base_price' => 3500,
-                'weekend_surcharge' => 800,
+                'base_price' => 650000,
+                'weekend_surcharge' => 150000,
                 'amenities' => ['parking', 'wifi', 'catering'],
                 'images' => [
-                    'https://picsum.photos/seed/garden-terrace-1/1200/800',
-                    'https://picsum.photos/seed/garden-terrace-2/1200/800',
-                    'https://picsum.photos/seed/garden-terrace-3/1200/800',
+                    'https://picsum.photos/seed/pol-watta-1/1200/800',
+                    'https://picsum.photos/seed/pol-watta-2/1200/800',
+                    'https://picsum.photos/seed/pol-watta-3/1200/800',
                 ],
                 'status' => 'active',
             ],
             [
-                'name' => 'Rooftop Pavilion',
-                'slug' => 'rooftop-pavilion',
+                'name' => 'Galle Face Rooftop Pavilion',
+                'slug' => 'galle-face-rooftop-pavilion',
                 'description' => 'Stunning panoramic city views from our rooftop venue. Ideal for cocktail receptions.',
                 'capacity_min' => 50,
                 'capacity_max' => 200,
-                'base_price' => 5500,
-                'weekend_surcharge' => 1000,
+                'base_price' => 1000000,
+                'weekend_surcharge' => 200000,
                 'amenities' => ['parking', 'bar', 'av_equipment'],
                 'images' => [
-                    'https://picsum.photos/seed/rooftop-pavilion-1/1200/800',
-                    'https://picsum.photos/seed/rooftop-pavilion-2/1200/800',
-                    'https://picsum.photos/seed/rooftop-pavilion-3/1200/800',
+                    'https://picsum.photos/seed/galle-face-1/1200/800',
+                    'https://picsum.photos/seed/galle-face-2/1200/800',
+                    'https://picsum.photos/seed/galle-face-3/1200/800',
                 ],
                 'status' => 'active',
             ],
@@ -99,35 +99,35 @@ class DemoDataSeeder extends Seeder
         // Packages
         $packages = [
             [
-                'name' => 'Classic Wedding',
-                'slug' => 'classic-wedding',
+                'name' => 'Poruwa Classic Wedding',
+                'slug' => 'poruwa-classic-wedding',
                 'description' => 'Our most popular wedding package with everything you need for a perfect day.',
-                'base_price' => 5000,
+                'base_price' => 950000,
                 'min_guests' => 50,
                 'max_guests' => 300,
-                'guest_pricing' => [['from' => 50, 'to' => 300, 'price_per_guest' => 85]],
+                'guest_pricing' => [['from' => 50, 'to' => 300, 'price_per_guest' => 6500]],
                 'included_services' => ['Floral arrangements', 'DJ & sound system', 'Wedding coordinator', 'Catering setup'],
                 'status' => 'active',
             ],
             [
-                'name' => 'Corporate Gala',
-                'slug' => 'corporate-gala',
+                'name' => 'Corporate Sangamaya',
+                'slug' => 'corporate-sangamaya',
                 'description' => 'Elevate your corporate events with our premium gala package.',
-                'base_price' => 3000,
+                'base_price' => 600000,
                 'min_guests' => 30,
                 'max_guests' => 500,
-                'guest_pricing' => [['from' => 30, 'to' => 500, 'price_per_guest' => 60]],
+                'guest_pricing' => [['from' => 30, 'to' => 500, 'price_per_guest' => 4500]],
                 'included_services' => ['AV equipment', 'Stage setup', 'Catering', 'Registration desk'],
                 'status' => 'active',
             ],
             [
-                'name' => 'Intimate Celebration',
-                'slug' => 'intimate-celebration',
+                'name' => 'Punchi Sumaruma',
+                'slug' => 'punchi-sumaruma',
                 'description' => 'Perfect for milestone birthdays, anniversaries, and small gatherings.',
-                'base_price' => 1500,
+                'base_price' => 300000,
                 'min_guests' => 10,
                 'max_guests' => 80,
-                'guest_pricing' => [['from' => 10, 'to' => 80, 'price_per_guest' => 45]],
+                'guest_pricing' => [['from' => 10, 'to' => 80, 'price_per_guest' => 3000]],
                 'included_services' => ['Basic decor', 'Sound system', 'Event coordinator'],
                 'status' => 'active',
             ],
@@ -140,10 +140,10 @@ class DemoDataSeeder extends Seeder
 
         // Clients
         $clientsData = [
-            ['first_name' => 'Emily', 'last_name' => 'Johnson', 'email' => 'emily.johnson@demo.test', 'phone' => '+1 555-1001'],
-            ['first_name' => 'Michael', 'last_name' => 'Chen', 'email' => 'michael.chen@demo.test', 'phone' => '+1 555-1002'],
-            ['first_name' => 'Sarah', 'last_name' => 'Williams', 'email' => 'sarah.williams@demo.test', 'phone' => '+1 555-1003'],
-            ['first_name' => 'David', 'last_name' => 'Martinez', 'email' => 'david.martinez@demo.test', 'phone' => '+1 555-1004'],
+            ['first_name' => 'Nimal', 'last_name' => 'Jayawardena', 'email' => 'nimal.jayawardena@demo.test', 'phone' => '+94 77 123 4501'],
+            ['first_name' => 'Dilani', 'last_name' => 'Wickramasinghe', 'email' => 'dilani.wickramasinghe@demo.test', 'phone' => '+94 71 123 4502'],
+            ['first_name' => 'Ruwan', 'last_name' => 'Bandara', 'email' => 'ruwan.bandara@demo.test', 'phone' => '+94 76 123 4503'],
+            ['first_name' => 'Tharushi', 'last_name' => 'Senanayake', 'email' => 'tharushi.senanayake@demo.test', 'phone' => '+94 70 123 4504'],
         ];
 
         $createdClients = [];
@@ -159,8 +159,8 @@ class DemoDataSeeder extends Seeder
         $createdBookings = [];
         for ($i = 0; $i < 4; $i++) {
             $eventDate = now()->addDays(rand(30, 365));
-            $total = rand(8000, 30000);
-            $paid  = $bookingStatuses[$i] === 'completed' ? $total : rand(2000, (int) ($total * 0.5));
+            $total = rand(800000, 3000000);
+            $paid  = $bookingStatuses[$i] === 'completed' ? $total : rand(200000, (int) ($total * 0.5));
 
             $createdBookings[] = Booking::updateOrCreate(
                 ['booking_number' => sprintf('BK%s%04d', date('Y'), $i + 1)],
@@ -186,10 +186,10 @@ class DemoDataSeeder extends Seeder
 
         // Vendors
         $vendorsData = [
-            ['name' => 'Bloom & Co Florists', 'category' => 'florist', 'contact_name' => 'Rosa Bloom', 'email' => 'rosa@bloomco.demo', 'status' => 'active'],
-            ['name' => 'Premier Photography', 'category' => 'photographer', 'contact_name' => 'James Hart', 'email' => 'james@premierphoto.demo', 'status' => 'active'],
-            ['name' => 'Sounds Unlimited DJ', 'category' => 'entertainment', 'contact_name' => 'DJ Max', 'email' => 'dj@soundsunlimited.demo', 'status' => 'active'],
-            ['name' => 'Gourmet Catering Co', 'category' => 'catering', 'contact_name' => 'Chef Marie', 'email' => 'chef@gourmetcc.demo', 'status' => 'active'],
+            ['name' => 'Kandurata Mal Sewaya', 'category' => 'florist', 'contact_name' => 'Kumari Silva', 'email' => 'kumari@kanduratamal.demo', 'status' => 'active'],
+            ['name' => 'Studio Chaya Photography', 'category' => 'photographer', 'contact_name' => 'Chaminda Pradeep', 'email' => 'chaminda@studiochaya.demo', 'status' => 'active'],
+            ['name' => 'DJ Saman Sounds', 'category' => 'entertainment', 'contact_name' => 'Saman Kumara', 'email' => 'saman@djsamansounds.demo', 'status' => 'active'],
+            ['name' => 'Ammige Kibula Catering', 'category' => 'catering', 'contact_name' => 'Chef Lakshman', 'email' => 'lakshman@ammigekibula.demo', 'status' => 'active'],
         ];
 
         $createdVendors = [];
@@ -210,7 +210,7 @@ class DemoDataSeeder extends Seeder
                 $booking->vendors()->syncWithoutDetaching([
                     $vendorId => [
                         'service_description' => 'Demo service for ' . $booking->booking_number,
-                        'agreed_amount'       => rand(800, 4000),
+                        'agreed_amount'       => rand(80000, 400000),
                         'status'              => 'confirmed',
                     ],
                 ]);
@@ -219,9 +219,9 @@ class DemoDataSeeder extends Seeder
 
         // Staff
         $staffData = [
-            ['first_name' => 'Jessica', 'last_name' => 'Park', 'email' => 'jessica@grandvista.demo', 'role' => 'coordinator', 'status' => 'active'],
-            ['first_name' => 'Tom', 'last_name' => 'Richards', 'email' => 'tom@grandvista.demo', 'role' => 'operations', 'status' => 'active'],
-            ['first_name' => 'Priya', 'last_name' => 'Nair', 'email' => 'priya@grandvista.demo', 'role' => 'sales', 'status' => 'active'],
+            ['first_name' => 'Sachini', 'last_name' => 'Gunawardena', 'email' => 'sachini@mangala.demo', 'role' => 'coordinator', 'status' => 'active'],
+            ['first_name' => 'Pasindu', 'last_name' => 'Madushanka', 'email' => 'pasindu@mangala.demo', 'role' => 'operations', 'status' => 'active'],
+            ['first_name' => 'Ishara', 'last_name' => 'Dissanayake', 'email' => 'ishara@mangala.demo', 'role' => 'sales', 'status' => 'active'],
         ];
 
         $createdStaff = [];
@@ -271,8 +271,8 @@ class DemoDataSeeder extends Seeder
                     'event_type'       => $inq['event_type'],
                     'preferred_date'   => now()->addDays(rand(45, 300))->toDateString(),
                     'guest_count'      => $inq['guests'],
-                    'budget_range_min' => 5000,
-                    'budget_range_max' => 25000,
+                    'budget_range_min' => 500000,
+                    'budget_range_max' => 5000000,
                     'message'          => $inq['message'],
                     'source'           => ['website', 'referral', 'social_media', 'phone'][$idx % 4],
                     'status'           => $inq['status'],
@@ -290,10 +290,10 @@ class DemoDataSeeder extends Seeder
 
         foreach ($quotationStates as $idx => $qs) {
             $items = [
-                ['name' => 'Venue Hire',  'description' => 'Full-day exclusive venue access', 'quantity' => 1,   'unit_price' => 6000, 'total' => 6000],
-                ['name' => 'Catering',    'description' => 'Three-course plated dinner',      'quantity' => 150, 'unit_price' => 75,   'total' => 11250],
-                ['name' => 'Decoration',  'description' => 'Floral and table styling',        'quantity' => 1,   'unit_price' => 2500, 'total' => 2500],
-                ['name' => 'Photography', 'description' => 'Full event coverage',             'quantity' => 1,   'unit_price' => 1800, 'total' => 1800],
+                ['name' => 'Venue Hire',  'description' => 'Full-day exclusive venue access', 'quantity' => 1,   'unit_price' => 1200000, 'total' => 1200000],
+                ['name' => 'Catering',    'description' => 'Three-course plated dinner',      'quantity' => 150, 'unit_price' => 6500,    'total' => 975000],
+                ['name' => 'Decoration',  'description' => 'Floral and table styling',        'quantity' => 1,   'unit_price' => 350000,  'total' => 350000],
+                ['name' => 'Photography', 'description' => 'Full event coverage',             'quantity' => 1,   'unit_price' => 180000,  'total' => 180000],
             ];
             $subtotal = array_sum(array_column($items, 'total'));
             $discount = (int) ($subtotal * 0.05);

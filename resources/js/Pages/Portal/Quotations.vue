@@ -33,15 +33,15 @@ const statusColors = {
                     <div class="mt-3 grid grid-cols-3 gap-3 text-sm">
                         <div>
                             <p class="text-xs text-gray-400">Total</p>
-                            <p class="font-semibold">${{ q.total?.toLocaleString() ?? '—' }}</p>
+                            <p class="font-semibold">LKR {{ q.total?.toLocaleString() ?? 'â€”' }}</p>
                         </div>
                         <div>
                             <p class="text-xs text-gray-400">Event Date</p>
-                            <p>{{ q.event_date ?? '—' }}</p>
+                            <p>{{ q.event_date ?? 'â€”' }}</p>
                         </div>
                         <div>
                             <p class="text-xs text-gray-400">Valid Until</p>
-                            <p>{{ q.valid_until ?? '—' }}</p>
+                            <p>{{ q.valid_until ?? 'â€”' }}</p>
                         </div>
                     </div>
                 </div>

@@ -18,7 +18,7 @@ const statusColors = {
     cancelled: 'bg-gray-100 text-gray-500',
 };
 
-const money = (n) => '$' + Number(n ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 });
+const money = (n) => 'LKR ' + Number(n ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 });
 </script>
 
 <template>
@@ -68,18 +68,18 @@ const money = (n) => '$' + Number(n ?? 0).toLocaleString(undefined, { minimumFra
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs font-medium text-gray-400 uppercase">Client</p>
-                    <p class="text-sm font-medium text-gray-900 mt-1">{{ quotation.client?.full_name ?? '—' }}</p>
+                    <p class="text-sm font-medium text-gray-900 mt-1">{{ quotation.client?.full_name ?? 'â€”' }}</p>
                     <p class="text-xs text-gray-500">{{ quotation.client?.email }}</p>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs font-medium text-gray-400 uppercase">Venue</p>
-                    <p class="text-sm font-medium text-gray-900 mt-1">{{ quotation.venue?.name ?? '—' }}</p>
+                    <p class="text-sm font-medium text-gray-900 mt-1">{{ quotation.venue?.name ?? 'â€”' }}</p>
                     <p class="text-xs text-gray-500">{{ quotation.guest_count ? quotation.guest_count + ' guests' : '' }}</p>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs font-medium text-gray-400 uppercase">Dates</p>
-                    <p class="text-sm font-medium text-gray-900 mt-1">Event: {{ quotation.event_date ?? '—' }}</p>
-                    <p class="text-xs text-gray-500">Valid until: {{ quotation.valid_until ?? '—' }}</p>
+                    <p class="text-sm font-medium text-gray-900 mt-1">Event: {{ quotation.event_date ?? 'â€”' }}</p>
+                    <p class="text-xs text-gray-500">Valid until: {{ quotation.valid_until ?? 'â€”' }}</p>
                 </div>
             </div>
 
