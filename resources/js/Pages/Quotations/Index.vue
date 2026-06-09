@@ -77,7 +77,7 @@ const statusColors = {
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-700">{{ q.client?.full_name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ q.event_date }}</td>
-                            <td class="px-6 py-4 text-sm font-medium text-gray-900">${{ q.financial?.total?.toLocaleString() }}</td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">LKR {{ q.financial?.total?.toLocaleString() }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ q.valid_until }}</td>
                             <td class="px-6 py-4">
                                 <span :class="['inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize', statusColors[q.status] ?? 'bg-gray-100 text-gray-600']">
@@ -97,7 +97,7 @@ const statusColors = {
                 </table>
 
                 <div v-if="quotations.meta?.last_page > 1" class="px-6 py-4 border-t border-gray-200 flex items-center justify-between text-sm text-gray-600">
-                    <span>Showing {{ quotations.meta.from }}–{{ quotations.meta.to }} of {{ quotations.meta.total }}</span>
+                    <span>Showing {{ quotations.meta.from }}â€“{{ quotations.meta.to }} of {{ quotations.meta.total }}</span>
                     <div class="flex gap-2">
                         <Link v-if="quotations.links?.prev" :href="quotations.links.prev" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">Previous</Link>
                         <Link v-if="quotations.links?.next" :href="quotations.links.next" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">Next</Link>

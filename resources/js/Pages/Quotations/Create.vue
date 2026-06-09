@@ -44,7 +44,7 @@ const lineTotal = (item) => (Number(item.quantity) || 0) * (Number(item.unit_pri
 const subtotal = computed(() => form.items.reduce((s, i) => s + lineTotal(i), 0));
 const tax = computed(() => (subtotal.value - (Number(form.discount_amount) || 0)) * ((Number(form.tax_rate) || 0) / 100));
 const grandTotal = computed(() => subtotal.value - (Number(form.discount_amount) || 0) + tax.value);
-const money = (n) => '$' + Number(n ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 });
+const money = (n) => 'LKR ' + Number(n ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 });
 
 function submit() {
     form.post('/admin/quotations');

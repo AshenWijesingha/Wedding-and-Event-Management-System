@@ -21,8 +21,8 @@ return [
         ],
 
         'currency' => [
-            'code' => env('EVENTPRO_DEFAULT_CURRENCY', 'USD'),
-            'symbol' => '$',
+            'code' => env('EVENTPRO_DEFAULT_CURRENCY', 'LKR'),
+            'symbol' => 'Rs',
             'position' => 'before',
             'decimal_places' => 2,
         ],

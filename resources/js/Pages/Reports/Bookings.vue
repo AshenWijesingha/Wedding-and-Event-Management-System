@@ -56,14 +56,14 @@ const maxTotal = computed(() => Math.max(...props.months.map(m => m.total), 1));
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs text-gray-500 uppercase">Total Revenue</p>
-                    <p class="text-2xl font-bold text-indigo-600 mt-1">${{ totals.revenue?.toLocaleString() ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-indigo-600 mt-1">LKR {{ totals.revenue?.toLocaleString() ?? 0 }}</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <!-- Monthly bar chart -->
                 <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-5">
-                    <h3 class="text-sm font-semibold text-gray-900 mb-4">Bookings — {{ period }}</h3>
+                    <h3 class="text-sm font-semibold text-gray-900 mb-4">Bookings â€” {{ period }}</h3>
                     <div class="flex items-end gap-2 h-48">
                         <div v-for="m in months" :key="m.label" class="flex-1 flex flex-col items-center gap-1">
                             <span class="text-xs text-gray-500">{{ m.total > 0 ? m.total : '' }}</span>
@@ -84,7 +84,7 @@ const maxTotal = computed(() => Math.max(...props.months.map(m => m.total), 1));
                                 <span class="capitalize text-gray-600">{{ t.type }}</span>
                                 <span class="font-semibold">{{ t.count }}</span>
                             </div>
-                            <p class="text-xs text-gray-400">${{ t.revenue.toLocaleString() }}</p>
+                            <p class="text-xs text-gray-400">LKR {{ t.revenue.toLocaleString() }}</p>
                         </div>
                         <p v-if="!byEventType.length" class="text-sm text-gray-400">No data.</p>
                     </div>

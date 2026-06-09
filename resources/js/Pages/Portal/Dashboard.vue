@@ -38,7 +38,7 @@ function dismissNotification(id) {
                     <div>
                         <p class="font-medium text-blue-800">Payment Reminder</p>
                         <p class="text-blue-600 text-xs mt-0.5">
-                            {{ n.data?.payment_number }} — ${{ n.data?.amount }} due {{ n.data?.due_date }}
+                            {{ n.data?.payment_number }} â€” LKR {{ n.data?.amount }} due {{ n.data?.due_date }}
                         </p>
                     </div>
                     <button @click="dismissNotification(n.id)" class="text-blue-400 hover:text-blue-600 ml-3">&times;</button>
@@ -49,15 +49,15 @@ function dismissNotification(id) {
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs text-gray-500 uppercase">Total Booked</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">${{ financialSummary?.total_booked?.toLocaleString() ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-gray-900 mt-1">LKR {{ financialSummary?.total_booked?.toLocaleString() ?? 0 }}</p>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs text-gray-500 uppercase">Total Paid</p>
-                    <p class="text-2xl font-bold text-green-600 mt-1">${{ financialSummary?.total_paid?.toLocaleString() ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-green-600 mt-1">LKR {{ financialSummary?.total_paid?.toLocaleString() ?? 0 }}</p>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs text-gray-500 uppercase">Balance Due</p>
-                    <p class="text-2xl font-bold text-red-600 mt-1">${{ financialSummary?.total_balance?.toLocaleString() ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-red-600 mt-1">LKR {{ financialSummary?.total_balance?.toLocaleString() ?? 0 }}</p>
                 </div>
             </div>
 
@@ -96,7 +96,7 @@ function dismissNotification(id) {
                                     {{ b.status }}
                                 </span>
                             </div>
-                            <p class="text-xs text-gray-500 mt-0.5">{{ b.event?.date }} · {{ b.venue?.name }}</p>
+                            <p class="text-xs text-gray-500 mt-0.5">{{ b.event?.date }} Â· {{ b.venue?.name }}</p>
                         </div>
                     </div>
                     <p v-else class="text-sm text-gray-400">No bookings yet.</p>

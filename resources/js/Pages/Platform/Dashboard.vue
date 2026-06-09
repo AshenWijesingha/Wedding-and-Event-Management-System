@@ -4,7 +4,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 
 defineProps({ stats: Object, recentTenants: Array, planDistribution: Array });
 
-const money = (v) => '$' + Number(v ?? 0).toLocaleString(undefined, { minimumFractionDigits: 0 });
+const money = (v) => 'LKR ' + Number(v ?? 0).toLocaleString(undefined, { minimumFractionDigits: 0 });
 
 const statusColors = {
     active:    'bg-green-100 text-green-700',
@@ -73,7 +73,7 @@ const statusColors = {
                             <tr v-for="t in recentTenants" :key="t.id" class="hover:bg-gray-50">
                                 <td class="px-5 py-3">
                                     <Link :href="`/admin/tenants/${t.id}/edit`" class="text-sm font-medium text-gray-900 hover:text-indigo-600">{{ t.name }}</Link>
-                                    <p class="text-xs text-gray-400">{{ t.plan ?? 'No plan' }} · {{ t.created_at }}</p>
+                                    <p class="text-xs text-gray-400">{{ t.plan ?? 'No plan' }} Â· {{ t.created_at }}</p>
                                 </td>
                                 <td class="px-5 py-3 text-sm text-gray-500">{{ t.users_count }} users</td>
                                 <td class="px-5 py-3 text-sm text-gray-500">{{ t.bookings_count }} bookings</td>

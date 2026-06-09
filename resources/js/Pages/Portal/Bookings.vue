@@ -58,7 +58,7 @@ const statusColors = {
                         <div>
                             <p class="text-xs text-gray-400">Balance Due</p>
                             <p :class="(b.financial?.balance ?? 0) > 0 ? 'font-semibold text-red-600' : 'font-semibold text-green-600'">
-                                ${{ b.financial?.balance?.toLocaleString() ?? 0 }}
+                                LKR {{ b.financial?.balance?.toLocaleString() ?? 0 }}
                             </p>
                         </div>
                     </div>
@@ -66,11 +66,11 @@ const statusColors = {
             </div>
             <div v-else class="bg-white rounded-lg shadow-sm p-12 text-center text-gray-400">
                 <p class="text-sm">No bookings found.</p>
-                <Link href="/venues" class="mt-2 inline-block text-sm text-indigo-600 hover:underline">Browse venues →</Link>
+                <Link href="/venues" class="mt-2 inline-block text-sm text-indigo-600 hover:underline">Browse venues â†’</Link>
             </div>
 
             <div v-if="bookings.meta?.last_page > 1" class="flex items-center justify-between text-sm text-gray-600">
-                <span>Showing {{ bookings.meta.from }}–{{ bookings.meta.to }} of {{ bookings.meta.total }}</span>
+                <span>Showing {{ bookings.meta.from }}â€“{{ bookings.meta.to }} of {{ bookings.meta.total }}</span>
                 <div class="flex gap-2">
                     <Link v-if="bookings.links?.prev" :href="bookings.links.prev" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">Previous</Link>
                     <Link v-if="bookings.links?.next" :href="bookings.links.next" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">Next</Link>

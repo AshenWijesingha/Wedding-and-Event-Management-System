@@ -31,7 +31,7 @@ const calendarOptions = ref({
     },
     events: (props.events ?? []).map(e => ({
         id: e.id,
-        title: `${e.booking_number} — ${e.client_name}`,
+        title: `${e.booking_number} â€” ${e.client_name}`,
         start: e.event_date,
         allDay: true,
         backgroundColor: statusColors[e.status]?.bg ?? '#F3F4F6',
@@ -75,7 +75,7 @@ const statusLabels = {
 </script>
 
 <template>
-    <AppLayout :title="`${venue.name} — Availability`">
+    <AppLayout :title="`${venue.name} â€” Availability`">
         <div class="space-y-4">
             <!-- Header -->
             <div class="flex items-center justify-between">
@@ -141,7 +141,7 @@ const statusLabels = {
                                 </dd>
                             </div>
                         </dl>
-                        <button @click="selectedEvent = null" class="mt-3 text-xs text-gray-400 hover:text-gray-600">Close ×</button>
+                        <button @click="selectedEvent = null" class="mt-3 text-xs text-gray-400 hover:text-gray-600">Close Ã—</button>
                     </div>
 
                     <!-- Date selected -->
@@ -155,7 +155,7 @@ const statusLabels = {
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                             Create booking
                         </Link>
-                        <button @click="selectedDate = null" class="block mt-2 text-xs text-gray-400 hover:text-gray-600">Close ×</button>
+                        <button @click="selectedDate = null" class="block mt-2 text-xs text-gray-400 hover:text-gray-600">Close Ã—</button>
                     </div>
 
                     <!-- Venue stats -->
@@ -164,11 +164,11 @@ const statusLabels = {
                         <dl class="space-y-2 text-sm">
                             <div class="flex justify-between">
                                 <dt class="text-gray-500">Capacity</dt>
-                                <dd class="text-gray-900">{{ venue.capacity?.min ?? '—' }}–{{ venue.capacity?.max ?? '—' }}</dd>
+                                <dd class="text-gray-900">{{ venue.capacity?.min ?? 'â€”' }}â€“{{ venue.capacity?.max ?? 'â€”' }}</dd>
                             </div>
                             <div class="flex justify-between">
                                 <dt class="text-gray-500">Base Price</dt>
-                                <dd class="text-gray-900">${{ venue.pricing?.base_price?.toLocaleString() ?? '—' }}</dd>
+                                <dd class="text-gray-900">LKR {{ venue.pricing?.base_price?.toLocaleString() ?? 'â€”' }}</dd>
                             </div>
                             <div class="flex justify-between">
                                 <dt class="text-gray-500">Status</dt>

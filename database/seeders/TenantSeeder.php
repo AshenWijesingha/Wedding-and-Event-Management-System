@@ -19,22 +19,22 @@ class TenantSeeder extends Seeder
         Tenant::updateOrCreate(
             ['slug' => 'grand-vista'],
             [
-                'name' => 'Grand Vista Events',
-                'domain' => 'grandvista.localhost',
+                'name' => 'Mangala Events (Pvt) Ltd',
+                'domain' => 'mangala.localhost',
                 'plan_id' => $plan?->id,
-                'email' => 'info@grandvista.example.com',
-                'phone' => '+1 555-0123',
+                'email' => 'info@mangala.lk',
+                'phone' => '+94 11 234 5678',
                 'primary_color' => '#3B82F6',
                 'status' => 'active',
                 'settings' => [
                     'general' => [
-                        'business_name' => 'Grand Vista Events',
+                        'business_name' => 'Mangala Events (Pvt) Ltd',
                         'tagline' => 'Creating Unforgettable Moments',
-                        'timezone' => 'America/New_York',
+                        'timezone' => 'Asia/Colombo',
                     ],
-                    'currency' => ['code' => 'USD', 'symbol' => '$', 'position' => 'before'],
+                    'currency' => ['code' => 'LKR', 'symbol' => 'Rs', 'position' => 'before'],
                     'booking' => ['min_advance_days' => 14, 'max_advance_days' => 365, 'deposit_percentage' => 25],
-                    'contact' => ['address' => '123 Event Boulevard', 'city' => 'New York', 'country' => 'United States'],
+                    'contact' => ['address' => '45, Galle Road', 'city' => 'Colombo 03', 'country' => 'Sri Lanka'],
                 ],
             ]
         );

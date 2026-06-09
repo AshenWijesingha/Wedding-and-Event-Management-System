@@ -76,7 +76,7 @@ const statusColors = {
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs text-gray-500 uppercase tracking-wide">Total Revenue</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">${{ totals.revenue?.toLocaleString() ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-gray-900 mt-1">LKR {{ totals.revenue?.toLocaleString() ?? 0 }}</p>
                     <p class="text-xs text-gray-400 mt-1">{{ period }}</p>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-4">
@@ -86,13 +86,13 @@ const statusColors = {
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs text-gray-500 uppercase tracking-wide">Outstanding</p>
-                    <p class="text-2xl font-bold text-red-600 mt-1">${{ totals.outstanding?.toLocaleString() ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-red-600 mt-1">LKR {{ totals.outstanding?.toLocaleString() ?? 0 }}</p>
                     <p class="text-xs text-gray-400 mt-1">balance due</p>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-4">
                     <p class="text-xs text-gray-500 uppercase tracking-wide">Avg per Booking</p>
                     <p class="text-2xl font-bold text-gray-900 mt-1">
-                        ${{ totals.bookings > 0 ? Math.round(totals.revenue / totals.bookings).toLocaleString() : 0 }}
+                        LKR {{ totals.bookings > 0 ? Math.round(totals.revenue / totals.bookings).toLocaleString() : 0 }}
                     </p>
                     <p class="text-xs text-gray-400 mt-1">{{ period }}</p>
                 </div>
@@ -101,18 +101,18 @@ const statusColors = {
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <!-- Revenue bar chart -->
                 <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-5">
-                    <h3 class="text-sm font-semibold text-gray-900 mb-4">Revenue — {{ period }}</h3>
+                    <h3 class="text-sm font-semibold text-gray-900 mb-4">Revenue â€” {{ period }}</h3>
                     <div class="flex items-end gap-2 h-48">
                         <div
                             v-for="(data, m) in months"
                             :key="m"
                             class="flex-1 flex flex-col items-center gap-1"
                         >
-                            <span class="text-xs text-gray-500">{{ data.revenue > 0 ? '$' + Math.round(data.revenue / 1000) + 'k' : '' }}</span>
+                            <span class="text-xs text-gray-500">{{ data.revenue > 0 ? 'LKR ' + Math.round(data.revenue / 1000) + 'k' : '' }}</span>
                             <div
                                 class="w-full bg-indigo-500 rounded-t hover:bg-indigo-600 transition-colors"
                                 :style="{ height: Math.max(4, (data.revenue / maxRevenue) * 160) + 'px' }"
-                                :title="'$' + data.revenue.toLocaleString()"
+                                :title="'LKR ' + data.revenue.toLocaleString()"
                             ></div>
                             <span class="text-xs text-gray-500">{{ data.label }}</span>
                         </div>
@@ -136,7 +136,7 @@ const statusColors = {
 
             <!-- Top venues -->
             <div class="bg-white rounded-lg shadow-sm p-5">
-                <h3 class="text-sm font-semibold text-gray-900 mb-3">Top Venues — {{ period }}</h3>
+                <h3 class="text-sm font-semibold text-gray-900 mb-3">Top Venues â€” {{ period }}</h3>
                 <table class="min-w-full text-sm" v-if="topVenues.length">
                     <thead>
                         <tr class="text-left text-xs text-gray-500 uppercase">
@@ -149,7 +149,7 @@ const statusColors = {
                         <tr v-for="row in topVenues" :key="row.venue">
                             <td class="py-2 pr-4 font-medium text-gray-900">{{ row.venue }}</td>
                             <td class="py-2 pr-4 text-gray-600">{{ row.bookings }}</td>
-                            <td class="py-2 text-gray-900 font-semibold">${{ row.revenue?.toLocaleString() }}</td>
+                            <td class="py-2 text-gray-900 font-semibold">LKR {{ row.revenue?.toLocaleString() }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -164,10 +164,10 @@ const statusColors = {
                         <div v-for="b in recentBookings" :key="b.booking_number" class="flex items-center justify-between py-2 border-b border-gray-100 text-sm">
                             <div>
                                 <p class="font-medium text-gray-900">{{ b.booking_number }}</p>
-                                <p class="text-xs text-gray-500">{{ b.client }} · {{ b.venue }}</p>
+                                <p class="text-xs text-gray-500">{{ b.client }} Â· {{ b.venue }}</p>
                             </div>
                             <div class="text-right">
-                                <p class="font-semibold text-gray-900">${{ b.total_amount?.toLocaleString() }}</p>
+                                <p class="font-semibold text-gray-900">LKR {{ b.total_amount?.toLocaleString() }}</p>
                                 <p class="text-xs text-gray-500 capitalize">{{ b.status }}</p>
                             </div>
                         </div>
