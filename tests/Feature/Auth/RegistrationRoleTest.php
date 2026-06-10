@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -9,6 +10,13 @@ use Tests\TestCase;
 class RegistrationRoleTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Public signups attach to a tenant; ensure one exists.
+        Tenant::factory()->create();
+    }
 
     public function test_new_registration_receives_client_role_not_admin(): void
     {

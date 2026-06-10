@@ -19,9 +19,22 @@ class PortalController extends Controller
     private function getClientId(): int
     {
         $user = Auth::user();
-        $clientId = $user->client?->id;
-        abort_if($clientId === null, 403, 'No client profile associated with this account.');
-        return $clientId;
+
+        // Resilience: any `client` account missing its profile (e.g. created before the
+        // profile was linked at registration) gets one created on first portal visit,
+        // so the portal never dead-ends on a 403.
+        $client = $user->client;
+        if ($client === null) {
+            $parts = preg_split('/\s+/', trim($user->name ?? ''), 2);
+            $client = $user->client()->create([
+                'tenant_id' => $user->tenant_id ?? optional(\App\Models\Tenant::current())->id,
+                'first_name' => $parts[0] ?? ($user->name ?? 'Guest'),
+                'last_name' => $parts[1] ?? '',
+                'email' => $user->email,
+            ]);
+        }
+
+        return $client->id;
     }
 
     public function dashboard(): Response
