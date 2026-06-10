@@ -78,7 +78,24 @@ class ProfileController extends Controller
             'password' => $request->password,
         ]);
 
-        return back()->with('success', 'Password updated successfully.');
+        // Security: a password change invalidates every OTHER session, so a leaked or
+        // stolen session elsewhere is cut off. Under the database driver this is done by
+        // deleting the other session rows; the current session is kept (re-id'd).
+        $endedSessions = 0;
+        if (config('session.driver') === 'database') {
+            $request->session()->regenerate();
+            $endedSessions = \Illuminate\Support\Facades\DB::table('sessions')
+                ->where('user_id', $request->user()->id)
+                ->where('id', '!=', $request->session()->getId())
+                ->delete();
+        }
+
+        $message = 'Password updated successfully.';
+        if ($endedSessions > 0) {
+            $message .= " Signed out of {$endedSessions} other session(s).";
+        }
+
+        return back()->with('success', $message);
     }
 
     /**

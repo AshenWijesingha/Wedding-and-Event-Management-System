@@ -87,12 +87,14 @@ class PlatformManagementTest extends TestCase
     {
         $superAdmin = $this->superAdmin();
 
-        $this->actingAs($superAdmin)->put('/admin/platform-settings', [
-            'platform_name' => 'My Platform',
-            'default_plan_id' => null,
-            'signups_enabled' => false,
-            'support_email' => 'help@example.com',
-        ])->assertRedirect();
+        $this->actingAs($superAdmin)
+            ->withSession(['auth.password_confirmed_at' => time()])
+            ->put('/admin/platform-settings', [
+                'platform_name' => 'My Platform',
+                'default_plan_id' => null,
+                'signups_enabled' => false,
+                'support_email' => 'help@example.com',
+            ])->assertRedirect();
 
         $settings = app(PlatformSettings::class);
         $this->assertEquals('My Platform', $settings->platform_name);
