@@ -4,9 +4,20 @@ use Illuminate\Support\Str;
 
 return [
     'driver' => env('SESSION_DRIVER', 'database'),
-    'lifetime' => env('SESSION_LIFETIME', 120),
+    'lifetime' => env('SESSION_LIFETIME', 60),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Idle & Absolute Timeouts (enforced by EnforceSessionTimeout middleware)
+    |--------------------------------------------------------------------------
+    | idle_timeout: seconds of inactivity before the session is force-expired.
+    | absolute_timeout: max session age in seconds regardless of activity.
+    */
+    'idle_timeout' => (int) env('SESSION_IDLE_TIMEOUT', 3600),       // 60 minutes
+    'absolute_timeout' => (int) env('SESSION_ABSOLUTE_TIMEOUT', 43200), // 12 hours
+
     'expire_on_close' => env('SESSION_EXPIRE_ON_CLOSE', false),
-    'encrypt' => env('SESSION_ENCRYPT', false),
+    'encrypt' => env('SESSION_ENCRYPT', true),
     'files' => storage_path('framework/sessions'),
     'connection' => env('SESSION_CONNECTION'),
     'table' => env('SESSION_TABLE', 'sessions'),
@@ -18,7 +29,10 @@ return [
     ),
     'path' => env('SESSION_PATH', '/'),
     'domain' => env('SESSION_DOMAIN'),
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    // Secure (HTTPS-only) cookie: on by default in production, overridable per env
+    // so local HTTP development still works. (Config is loaded before facades exist,
+    // so this reads APP_ENV directly rather than via the App facade.)
+    'secure' => env('SESSION_SECURE_COOKIE', env('APP_ENV') === 'production'),
     'http_only' => env('SESSION_HTTP_ONLY', true),
     'same_site' => env('SESSION_SAME_SITE', 'lax'),
     'partitioned' => env('SESSION_PARTITIONED_COOKIE', false),

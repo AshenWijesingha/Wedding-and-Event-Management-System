@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
@@ -37,6 +38,10 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
+    // Password re-confirmation gate for sensitive actions.
+    Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])->name('password.confirm');
+    Route::post('confirm-password', [ConfirmablePasswordController::class, 'store'])->middleware('throttle:6,1');
+
     // Email verification (signed link delivered by the verification notification)
     Route::get('verify-email/{id}/{hash}', function (\Illuminate\Foundation\Auth\EmailVerificationRequest $request) {
         $request->fulfill();
@@ -55,6 +60,7 @@ Route::middleware('auth')->group(function () {
 // most sensitive ones, explicit permission middleware below.
 Route::middleware([
     'auth',
+    \App\Http\Middleware\EnforceSessionTimeout::class,
     \App\Http\Middleware\SetCurrentTenant::class,
     'tenant.active',
     'role:super_admin|tenant_owner|admin|manager|staff',
@@ -171,6 +177,11 @@ Route::middleware([
     Route::put('/profile/password', [\App\Http\Controllers\Admin\ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::post('/profile/verification-notification', [\App\Http\Controllers\Admin\ProfileController::class, 'sendVerification'])->name('profile.verification');
 
+    // Active sessions / device management (self-service, every admin-area user).
+    Route::get('/profile/sessions', [\App\Http\Controllers\Admin\SessionManagementController::class, 'index'])->name('sessions.index');
+    Route::delete('/profile/sessions/{id}', [\App\Http\Controllers\Admin\SessionManagementController::class, 'destroy'])->middleware('password.confirm')->name('sessions.destroy');
+    Route::delete('/profile/sessions', [\App\Http\Controllers\Admin\SessionManagementController::class, 'destroyOthers'])->middleware('password.confirm')->name('sessions.destroy-others');
+
     // User management. Viewing/managing requires users.view; deletion requires users.delete
     // (which `admin` deliberately lacks — only owners/super admins can delete users).
     Route::middleware('permission:users.view')->group(function () {
@@ -181,7 +192,7 @@ Route::middleware([
         Route::put('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
         Route::put('/users/{id}/reset-password', [\App\Http\Controllers\Admin\UserController::class, 'resetPassword'])->name('users.reset-password');
         Route::delete('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])
-            ->middleware('permission:users.delete')->name('users.destroy');
+            ->middleware(['permission:users.delete', 'password.confirm'])->name('users.destroy');
     });
 
     // Platform administration (super admin only): tenants and plans.
@@ -202,7 +213,7 @@ Route::middleware([
         // Platform audit log + global settings.
         Route::get('/audit-log', [\App\Http\Controllers\Admin\AuditLogController::class, 'index'])->name('audit-log.index');
         Route::get('/platform-settings', [\App\Http\Controllers\Admin\PlatformSettingsController::class, 'edit'])->name('platform-settings.edit');
-        Route::put('/platform-settings', [\App\Http\Controllers\Admin\PlatformSettingsController::class, 'update'])->name('platform-settings.update');
+        Route::put('/platform-settings', [\App\Http\Controllers\Admin\PlatformSettingsController::class, 'update'])->middleware('password.confirm')->name('platform-settings.update');
 
         Route::get('/plans', [\App\Http\Controllers\Admin\PlanController::class, 'index'])->name('plans.index');
         Route::get('/plans/create', [\App\Http\Controllers\Admin\PlanController::class, 'create'])->name('plans.create');
@@ -233,11 +244,16 @@ Route::middleware([
 });
 
 // Client portal routes — restricted to the `client` role.
-Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class, 'tenant.active', 'role:client'])->prefix('portal')->name('portal.')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\EnforceSessionTimeout::class, \App\Http\Middleware\SetCurrentTenant::class, 'tenant.active', 'role:client'])->prefix('portal')->name('portal.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Portal\PortalController::class, 'dashboard'])->name('dashboard');
     Route::get('/bookings', [\App\Http\Controllers\Portal\PortalController::class, 'bookings'])->name('bookings');
     Route::get('/bookings/{booking}', [\App\Http\Controllers\Portal\PortalController::class, 'bookingShow'])->name('bookings.show');
     Route::get('/quotations', [\App\Http\Controllers\Portal\PortalController::class, 'quotations'])->name('quotations');
     Route::get('/payments', [\App\Http\Controllers\Portal\PortalController::class, 'payments'])->name('payments');
     Route::post('/notifications/read', [\App\Http\Controllers\Portal\PortalController::class, 'markNotificationRead'])->name('notifications.read');
+
+    // Active sessions / device management for clients.
+    Route::get('/sessions', [\App\Http\Controllers\Admin\SessionManagementController::class, 'index'])->name('sessions.index');
+    Route::delete('/sessions/{id}', [\App\Http\Controllers\Admin\SessionManagementController::class, 'destroy'])->middleware('password.confirm')->name('sessions.destroy');
+    Route::delete('/sessions', [\App\Http\Controllers\Admin\SessionManagementController::class, 'destroyOthers'])->middleware('password.confirm')->name('sessions.destroy-others');
 });

@@ -184,7 +184,10 @@ class UserManagementTest extends TestCase
         // does have it) so this still proves cross-tenant records are invisible (404)
         // rather than merely permission-blocked.
         $owner = User::factory()->tenantOwner()->create(['tenant_id' => $this->tenant->id]);
-        $this->actingAs($owner)->delete("/admin/users/{$foreign->id}")->assertNotFound();
+        $this->actingAs($owner)
+            ->withSession(['auth.password_confirmed_at' => time()])
+            ->delete("/admin/users/{$foreign->id}")
+            ->assertNotFound();
     }
 
     public function test_admin_cannot_promote_existing_user_to_super_admin(): void
@@ -249,6 +252,7 @@ class UserManagementTest extends TestCase
     public function test_super_admin_cannot_delete_self(): void
     {
         $this->actingAs($this->superAdmin)
+            ->withSession(['auth.password_confirmed_at' => time()])
             ->delete("/admin/users/{$this->superAdmin->id}")
             ->assertSessionHas('error');
 

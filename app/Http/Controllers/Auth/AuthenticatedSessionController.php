@@ -40,6 +40,11 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Stamp session lifetimes for EnforceSessionTimeout (idle + absolute).
+        $now = time();
+        $request->session()->put('auth.login_at', $now);
+        $request->session()->put('auth.last_activity_at', $now);
+
         return redirect()->intended($this->homeFor($request->user()));
     }
 
