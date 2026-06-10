@@ -27,6 +27,14 @@ class RolePermissionSeeder extends Seeder
             'bookings.view', 'bookings.create', 'bookings.edit', 'bookings.delete', 'bookings.confirm', 'bookings.cancel',
             // Payments
             'payments.view', 'payments.create', 'payments.edit', 'payments.delete', 'payments.refund',
+            // Vendors
+            'vendors.view', 'vendors.create', 'vendors.edit', 'vendors.delete',
+            // Tasks
+            'tasks.view', 'tasks.create', 'tasks.edit', 'tasks.delete',
+            // Custom fields
+            'custom_fields.view', 'custom_fields.create', 'custom_fields.edit', 'custom_fields.delete',
+            // Staff (employee records)
+            'staff.view', 'staff.create', 'staff.edit', 'staff.delete',
             // Reports
             'reports.view', 'reports.export',
             // Settings
@@ -54,12 +62,15 @@ class RolePermissionSeeder extends Seeder
         $tenantOwner = Role::firstOrCreate(['name' => 'tenant_owner', 'guard_name' => 'web']);
         $tenantOwner->syncPermissions(Permission::whereIn('name', $permissions)->get());
 
+        // Admin: full tenant authority except editing settings and deleting users.
         $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         $admin->syncPermissions(Permission::whereIn('name', $permissions)->whereNotIn('name', [
             'settings.edit',
             'users.delete',
         ])->get());
 
+        // Manager: sales/operations. Create/edit across the pipeline; tasks; view reports.
+        // No settings, no user management, no vendors/custom-fields/staff management, no deletes.
         $manager = Role::firstOrCreate(['name' => 'manager', 'guard_name' => 'web']);
         $manager->syncPermissions([
             'venues.view', 'packages.view',
@@ -68,9 +79,11 @@ class RolePermissionSeeder extends Seeder
             'quotations.view', 'quotations.create', 'quotations.edit', 'quotations.send',
             'bookings.view', 'bookings.create', 'bookings.edit', 'bookings.confirm', 'bookings.cancel',
             'payments.view', 'payments.create',
+            'tasks.view', 'tasks.create', 'tasks.edit',
             'reports.view',
         ]);
 
+        // Staff: mostly read-only execution. View pipeline, log inquiries, see tasks.
         $staff = Role::firstOrCreate(['name' => 'staff', 'guard_name' => 'web']);
         $staff->syncPermissions([
             'venues.view', 'packages.view',
@@ -79,6 +92,7 @@ class RolePermissionSeeder extends Seeder
             'quotations.view',
             'bookings.view',
             'payments.view',
+            'tasks.view',
         ]);
 
         $client = Role::firstOrCreate(['name' => 'client', 'guard_name' => 'web']);

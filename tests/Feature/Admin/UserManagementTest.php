@@ -177,8 +177,14 @@ class UserManagementTest extends TestCase
         $other = Tenant::factory()->create();
         $foreign = User::factory()->create(['tenant_id' => $other->id]);
 
+        // A foreign-tenant user is hidden by the tenant scope (404, not 403).
         $this->actingAs($admin)->get("/admin/users/{$foreign->id}/edit")->assertNotFound();
-        $this->actingAs($admin)->delete("/admin/users/{$foreign->id}")->assertNotFound();
+
+        // Deletion requires users.delete, which admins lack. Use a tenant owner (who
+        // does have it) so this still proves cross-tenant records are invisible (404)
+        // rather than merely permission-blocked.
+        $owner = User::factory()->tenantOwner()->create(['tenant_id' => $this->tenant->id]);
+        $this->actingAs($owner)->delete("/admin/users/{$foreign->id}")->assertNotFound();
     }
 
     public function test_admin_cannot_promote_existing_user_to_super_admin(): void

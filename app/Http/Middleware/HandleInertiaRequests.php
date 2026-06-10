@@ -33,6 +33,15 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+                // Flattened permission + role names so the frontend can gate nav items
+                // and action buttons. Server-side middleware/policies remain the source
+                // of truth; this is purely for showing/hiding UI.
+                'permissions' => fn () => $request->user()
+                    ? $request->user()->getAllPermissions()->pluck('name')->values()
+                    : [],
+                'roles' => fn () => $request->user()
+                    ? $request->user()->getRoleNames()->values()
+                    : [],
             ],
             'impersonating' => fn () => $request->session()->has('impersonator_id')
                 ? ['tenant' => optional(\App\Models\Tenant::current())->name ?? 'tenant']

@@ -14,6 +14,11 @@ use Inertia\Response;
 
 class StaffController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(\App\Models\Staff::class, 'staff');
+    }
+
     public function index(Request $request): Response
     {
         $staff = Staff::withCount('tasks')

@@ -2,6 +2,9 @@
 import { ref, watch } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import { usePermissions } from '@/composables/usePermissions';
+
+const { can } = usePermissions();
 
 const props = defineProps({
     vendors: Object,
@@ -33,7 +36,7 @@ const categories = ['photographer', 'caterer', 'florist', 'music', 'decor', 'tra
         <div class="space-y-4">
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-semibold text-gray-900">Vendors</h2>
-                <Link href="/admin/vendors/create" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg">
+                <Link v-if="can('vendors.create')" href="/admin/vendors/create" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg">
                     Add Vendor
                 </Link>
             </div>
@@ -88,8 +91,8 @@ const categories = ['photographer', 'caterer', 'florist', 'music', 'decor', 'tra
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-right text-sm">
-                                <Link :href="`/admin/vendors/${vendor.id}/edit`" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</Link>
-                                <button @click="destroy(vendor)" class="text-red-500 hover:text-red-700">Delete</button>
+                                <Link v-if="can('vendors.edit')" :href="`/admin/vendors/${vendor.id}/edit`" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</Link>
+                                <button v-if="can('vendors.delete')" @click="destroy(vendor)" class="text-red-500 hover:text-red-700">Delete</button>
                             </td>
                         </tr>
                         <tr v-if="!vendors.data?.length">

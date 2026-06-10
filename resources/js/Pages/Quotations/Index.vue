@@ -2,6 +2,9 @@
 import { ref, watch } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import { usePermissions } from '@/composables/usePermissions';
+
+const { can } = usePermissions();
 
 const props = defineProps({
     quotations: Object,
@@ -38,7 +41,7 @@ const statusColors = {
                     <h2 class="text-xl font-semibold text-gray-900">Quotations</h2>
                     <p class="text-sm text-gray-500 mt-0.5">Manage quotations and proposals</p>
                 </div>
-                <Link href="/admin/quotations/create" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg">
+                <Link v-if="can('quotations.create')" href="/admin/quotations/create" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     New Quotation
                 </Link>

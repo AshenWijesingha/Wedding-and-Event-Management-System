@@ -2,6 +2,9 @@
 import { ref, watch } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import { usePermissions } from '@/composables/usePermissions';
+
+const { can } = usePermissions();
 
 const props = defineProps({
     packages: Object,
@@ -44,7 +47,7 @@ const statusColors = {
                     <h2 class="text-xl font-semibold text-gray-900">Packages</h2>
                     <p class="text-sm text-gray-500 mt-0.5">Manage your event packages</p>
                 </div>
-                <Link href="/admin/packages/create" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
+                <Link v-if="can('packages.create')" href="/admin/packages/create" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     Add Package
                 </Link>
@@ -90,15 +93,15 @@ const statusColors = {
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex items-center justify-end gap-3">
-                                    <Link :href="`/admin/packages/${pkg.slug}/edit`" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">Edit</Link>
-                                    <button @click="deletePackage(pkg.slug)" class="text-red-500 hover:text-red-700 text-sm font-medium">Delete</button>
+                                    <Link v-if="can('packages.edit')" :href="`/admin/packages/${pkg.slug}/edit`" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">Edit</Link>
+                                    <button v-if="can('packages.delete')" @click="deletePackage(pkg.slug)" class="text-red-500 hover:text-red-700 text-sm font-medium">Delete</button>
                                 </div>
                             </td>
                         </tr>
                         <tr v-if="!packages.data?.length">
                             <td colspan="5" class="px-6 py-12 text-center text-gray-400 text-sm">
                                 No packages found.
-                                <Link href="/admin/packages/create" class="text-indigo-600 hover:underline ml-1">Add one now.</Link>
+                                <Link v-if="can('packages.create')" href="/admin/packages/create" class="text-indigo-600 hover:underline ml-1">Add one now.</Link>
                             </td>
                         </tr>
                     </tbody>

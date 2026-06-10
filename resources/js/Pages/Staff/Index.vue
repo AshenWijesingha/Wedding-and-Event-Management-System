@@ -2,6 +2,9 @@
 import { ref, watch } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import { usePermissions } from '@/composables/usePermissions';
+
+const { can } = usePermissions();
 
 const props = defineProps({ staff: Object, filters: Object });
 
@@ -27,7 +30,7 @@ function destroy(person) {
         <div class="space-y-4">
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-semibold text-gray-900">Staff</h2>
-                <Link href="/admin/staff/create" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg">
+                <Link v-if="can('staff.create')" href="/admin/staff/create" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg">
                     Add Staff Member
                 </Link>
             </div>
@@ -72,8 +75,8 @@ function destroy(person) {
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-right text-sm">
-                                <Link :href="`/admin/staff/${person.id}/edit`" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</Link>
-                                <button @click="destroy(person)" class="text-red-500 hover:text-red-700">Delete</button>
+                                <Link v-if="can('staff.edit')" :href="`/admin/staff/${person.id}/edit`" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</Link>
+                                <button v-if="can('staff.delete')" @click="destroy(person)" class="text-red-500 hover:text-red-700">Delete</button>
                             </td>
                         </tr>
                         <tr v-if="!staff.data?.length">

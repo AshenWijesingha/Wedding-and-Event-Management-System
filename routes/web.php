@@ -41,101 +41,147 @@ Route::middleware('auth')->group(function () {
     Route::get('verify-email/{id}/{hash}', function (\Illuminate\Foundation\Auth\EmailVerificationRequest $request) {
         $request->fulfill();
 
-        return redirect('/admin/profile')->with('success', 'Email verified successfully.');
+        // Clients manage their account in the portal; everyone else in the admin area.
+        $target = $request->user()->hasRole('client') ? '/portal' : '/admin/profile';
+
+        return redirect($target)->with('success', 'Email verified successfully.');
     })->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
 });
 
-// Admin panel routes (Inertia.js SPA)
-Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class, 'tenant.active'])->prefix('admin')->name('admin.')->group(function () {
+// Admin panel routes (Inertia.js SPA).
+// The whole area is locked to staff-and-above; the `client` role is redirected to the
+// portal. Each section is gated by its `<resource>.view` permission, and individual
+// mutating actions are protected further by policies (see app/Policies) and, for the
+// most sensitive ones, explicit permission middleware below.
+Route::middleware([
+    'auth',
+    \App\Http\Middleware\SetCurrentTenant::class,
+    'tenant.active',
+    'role:super_admin|tenant_owner|admin|manager|staff',
+])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
     // Exit impersonation — reachable while acting as the impersonated user.
     Route::post('/impersonate-stop', [\App\Http\Controllers\Admin\ImpersonationController::class, 'stop'])->name('impersonate.stop');
 
     // Venues — full resource with web controller
-    Route::resource('venues', \App\Http\Controllers\Admin\VenueController::class)
-        ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
-    Route::get('venues/{venue}/availability', [\App\Http\Controllers\Admin\VenueController::class, 'availability'])->name('admin.venues.availability');
+    Route::middleware('permission:venues.view')->group(function () {
+        Route::resource('venues', \App\Http\Controllers\Admin\VenueController::class)
+            ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+        Route::get('venues/{venue}/availability', [\App\Http\Controllers\Admin\VenueController::class, 'availability'])->name('admin.venues.availability');
+    });
 
     // Packages
-    Route::resource('packages', \App\Http\Controllers\Admin\PackageController::class)
-        ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+    Route::middleware('permission:packages.view')->group(function () {
+        Route::resource('packages', \App\Http\Controllers\Admin\PackageController::class)
+            ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+    });
+
     // Bookings
-    Route::get('/bookings', [\App\Http\Controllers\Admin\BookingController::class, 'index'])->name('bookings.index');
-    Route::get('/bookings/create', [\App\Http\Controllers\Admin\BookingController::class, 'create'])->name('bookings.create');
-    Route::post('/bookings', [\App\Http\Controllers\Admin\BookingController::class, 'store'])->name('bookings.store');
-    Route::get('/bookings/{booking}', [\App\Http\Controllers\Admin\BookingController::class, 'show'])->name('bookings.show');
-    Route::post('/bookings/{booking}/confirm', [\App\Http\Controllers\Admin\BookingController::class, 'confirm'])->name('bookings.confirm');
-    Route::post('/bookings/{booking}/cancel', [\App\Http\Controllers\Admin\BookingController::class, 'cancel'])->name('bookings.cancel');
-    Route::post('/bookings/{booking}/vendors', [\App\Http\Controllers\Admin\BookingController::class, 'attachVendor'])->name('bookings.vendors.attach');
-    Route::delete('/bookings/{booking}/vendors/{vendor}', [\App\Http\Controllers\Admin\BookingController::class, 'detachVendor'])->name('bookings.vendors.detach');
+    Route::middleware('permission:bookings.view')->group(function () {
+        Route::get('/bookings', [\App\Http\Controllers\Admin\BookingController::class, 'index'])->name('bookings.index');
+        Route::get('/bookings/create', [\App\Http\Controllers\Admin\BookingController::class, 'create'])->middleware('permission:bookings.create')->name('bookings.create');
+        Route::post('/bookings', [\App\Http\Controllers\Admin\BookingController::class, 'store'])->middleware('permission:bookings.create')->name('bookings.store');
+        Route::get('/bookings/{booking}', [\App\Http\Controllers\Admin\BookingController::class, 'show'])->name('bookings.show');
+        Route::post('/bookings/{booking}/confirm', [\App\Http\Controllers\Admin\BookingController::class, 'confirm'])->middleware('permission:bookings.confirm')->name('bookings.confirm');
+        Route::post('/bookings/{booking}/cancel', [\App\Http\Controllers\Admin\BookingController::class, 'cancel'])->middleware('permission:bookings.cancel')->name('bookings.cancel');
+        Route::post('/bookings/{booking}/vendors', [\App\Http\Controllers\Admin\BookingController::class, 'attachVendor'])->middleware('permission:bookings.edit')->name('bookings.vendors.attach');
+        Route::delete('/bookings/{booking}/vendors/{vendor}', [\App\Http\Controllers\Admin\BookingController::class, 'detachVendor'])->middleware('permission:bookings.edit')->name('bookings.vendors.detach');
+    });
 
     // Vendors
-    Route::resource('vendors', \App\Http\Controllers\Admin\VendorController::class)
-        ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
+    Route::middleware('permission:vendors.view')->group(function () {
+        Route::resource('vendors', \App\Http\Controllers\Admin\VendorController::class)
+            ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
+    });
 
-    // Staff
-    Route::resource('staff', \App\Http\Controllers\Admin\StaffController::class)
-        ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
+    // Staff (employee records)
+    Route::middleware('permission:staff.view')->group(function () {
+        Route::resource('staff', \App\Http\Controllers\Admin\StaffController::class)
+            ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
+    });
 
     // Tasks
-    Route::get('/tasks', [\App\Http\Controllers\Admin\TaskController::class, 'index'])->name('tasks.index');
-    Route::post('/tasks', [\App\Http\Controllers\Admin\TaskController::class, 'store'])->name('tasks.store');
-    Route::patch('/tasks/{task}', [\App\Http\Controllers\Admin\TaskController::class, 'update'])->name('tasks.update');
-    Route::delete('/tasks/{task}', [\App\Http\Controllers\Admin\TaskController::class, 'destroy'])->name('tasks.destroy');
+    Route::middleware('permission:tasks.view')->group(function () {
+        Route::get('/tasks', [\App\Http\Controllers\Admin\TaskController::class, 'index'])->name('tasks.index');
+        Route::post('/tasks', [\App\Http\Controllers\Admin\TaskController::class, 'store'])->middleware('permission:tasks.create')->name('tasks.store');
+        Route::patch('/tasks/{task}', [\App\Http\Controllers\Admin\TaskController::class, 'update'])->middleware('permission:tasks.edit')->name('tasks.update');
+        Route::delete('/tasks/{task}', [\App\Http\Controllers\Admin\TaskController::class, 'destroy'])->middleware('permission:tasks.delete')->name('tasks.destroy');
+    });
 
     // Inquiries
-    Route::get('/inquiries', [\App\Http\Controllers\Admin\InquiryController::class, 'index'])->name('inquiries.index');
-    Route::get('/inquiries/{inquiry}', [\App\Http\Controllers\Admin\InquiryController::class, 'show'])->name('inquiries.show');
-    Route::get('/inquiries/{inquiry}/pdf', [\App\Http\Controllers\Admin\InquiryController::class, 'downloadPdf'])->name('inquiries.pdf');
-    Route::get('/inquiries/{inquiry}/print', [\App\Http\Controllers\Admin\InquiryController::class, 'print'])->name('inquiries.print');
-    Route::patch('/inquiries/{inquiry}', [\App\Http\Controllers\Admin\InquiryController::class, 'update'])->name('inquiries.update');
+    Route::middleware('permission:inquiries.view')->group(function () {
+        Route::get('/inquiries', [\App\Http\Controllers\Admin\InquiryController::class, 'index'])->name('inquiries.index');
+        Route::get('/inquiries/{inquiry}', [\App\Http\Controllers\Admin\InquiryController::class, 'show'])->name('inquiries.show');
+        Route::get('/inquiries/{inquiry}/pdf', [\App\Http\Controllers\Admin\InquiryController::class, 'downloadPdf'])->name('inquiries.pdf');
+        Route::get('/inquiries/{inquiry}/print', [\App\Http\Controllers\Admin\InquiryController::class, 'print'])->name('inquiries.print');
+        Route::patch('/inquiries/{inquiry}', [\App\Http\Controllers\Admin\InquiryController::class, 'update'])->middleware('permission:inquiries.edit')->name('inquiries.update');
+    });
 
     // Quotations
-    Route::get('/quotations', [\App\Http\Controllers\Admin\QuotationController::class, 'index'])->name('quotations.index');
-    Route::get('/quotations/create', [\App\Http\Controllers\Admin\QuotationController::class, 'create'])->name('quotations.create');
-    Route::post('/quotations', [\App\Http\Controllers\Admin\QuotationController::class, 'store'])->name('quotations.store');
-    Route::get('/quotations/{quotation}', [\App\Http\Controllers\Admin\QuotationController::class, 'show'])->name('quotations.show');
-    Route::get('/quotations/{quotation}/pdf', [\App\Http\Controllers\Admin\QuotationController::class, 'downloadPdf'])->name('quotations.pdf');
-    Route::get('/quotations/{quotation}/print', [\App\Http\Controllers\Admin\QuotationController::class, 'print'])->name('quotations.print');
-    Route::post('/quotations/{quotation}/send', [\App\Http\Controllers\Admin\QuotationController::class, 'send'])->name('quotations.send');
-    Route::post('/quotations/{quotation}/accept', [\App\Http\Controllers\Admin\QuotationController::class, 'accept'])->name('quotations.accept');
-    Route::post('/quotations/{quotation}/reject', [\App\Http\Controllers\Admin\QuotationController::class, 'reject'])->name('quotations.reject');
-    Route::post('/quotations/{quotation}/expire', [\App\Http\Controllers\Admin\QuotationController::class, 'markExpired'])->name('quotations.expire');
+    Route::middleware('permission:quotations.view')->group(function () {
+        Route::get('/quotations', [\App\Http\Controllers\Admin\QuotationController::class, 'index'])->name('quotations.index');
+        Route::get('/quotations/create', [\App\Http\Controllers\Admin\QuotationController::class, 'create'])->middleware('permission:quotations.create')->name('quotations.create');
+        Route::post('/quotations', [\App\Http\Controllers\Admin\QuotationController::class, 'store'])->middleware('permission:quotations.create')->name('quotations.store');
+        Route::get('/quotations/{quotation}', [\App\Http\Controllers\Admin\QuotationController::class, 'show'])->name('quotations.show');
+        Route::get('/quotations/{quotation}/pdf', [\App\Http\Controllers\Admin\QuotationController::class, 'downloadPdf'])->name('quotations.pdf');
+        Route::get('/quotations/{quotation}/print', [\App\Http\Controllers\Admin\QuotationController::class, 'print'])->name('quotations.print');
+        Route::post('/quotations/{quotation}/send', [\App\Http\Controllers\Admin\QuotationController::class, 'send'])->middleware('permission:quotations.send')->name('quotations.send');
+        Route::post('/quotations/{quotation}/accept', [\App\Http\Controllers\Admin\QuotationController::class, 'accept'])->middleware('permission:quotations.edit')->name('quotations.accept');
+        Route::post('/quotations/{quotation}/reject', [\App\Http\Controllers\Admin\QuotationController::class, 'reject'])->middleware('permission:quotations.edit')->name('quotations.reject');
+        Route::post('/quotations/{quotation}/expire', [\App\Http\Controllers\Admin\QuotationController::class, 'markExpired'])->middleware('permission:quotations.edit')->name('quotations.expire');
+    });
 
-    Route::get('/clients', [\App\Http\Controllers\Admin\ClientController::class, 'index'])->name('clients.index');
-    Route::get('/payments', [\App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('payments.index');
+    Route::middleware('permission:clients.view')->group(function () {
+        Route::get('/clients', [\App\Http\Controllers\Admin\ClientController::class, 'index'])->name('clients.index');
+    });
+
+    Route::middleware('permission:payments.view')->group(function () {
+        Route::get('/payments', [\App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('payments.index');
+    });
+
     // Custom Fields
-    Route::get('/custom-fields', [\App\Http\Controllers\Admin\CustomFieldController::class, 'index'])->name('custom-fields.index');
-    Route::post('/custom-fields', [\App\Http\Controllers\Admin\CustomFieldController::class, 'store'])->name('custom-fields.store');
-    Route::patch('/custom-fields/{customField}', [\App\Http\Controllers\Admin\CustomFieldController::class, 'update'])->name('custom-fields.update');
-    Route::delete('/custom-fields/{customField}', [\App\Http\Controllers\Admin\CustomFieldController::class, 'destroy'])->name('custom-fields.destroy');
+    Route::middleware('permission:custom_fields.view')->group(function () {
+        Route::get('/custom-fields', [\App\Http\Controllers\Admin\CustomFieldController::class, 'index'])->name('custom-fields.index');
+        Route::post('/custom-fields', [\App\Http\Controllers\Admin\CustomFieldController::class, 'store'])->middleware('permission:custom_fields.create')->name('custom-fields.store');
+        Route::patch('/custom-fields/{customField}', [\App\Http\Controllers\Admin\CustomFieldController::class, 'update'])->middleware('permission:custom_fields.edit')->name('custom-fields.update');
+        Route::delete('/custom-fields/{customField}', [\App\Http\Controllers\Admin\CustomFieldController::class, 'destroy'])->middleware('permission:custom_fields.delete')->name('custom-fields.destroy');
+    });
 
-    Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
-    Route::get('/reports/revenue', [\App\Http\Controllers\Admin\ReportController::class, 'revenue'])->name('reports.revenue');
-    Route::get('/reports/revenue/export', [\App\Http\Controllers\Admin\ReportController::class, 'exportRevenue'])->name('reports.revenue.export');
-    Route::get('/reports/revenue/pdf', [\App\Http\Controllers\Admin\ReportController::class, 'pdfRevenue'])->name('reports.revenue.pdf');
-    Route::get('/reports/bookings', [\App\Http\Controllers\Admin\ReportController::class, 'bookings'])->name('reports.bookings');
-    Route::get('/reports/bookings/export', [\App\Http\Controllers\Admin\ReportController::class, 'exportBookings'])->name('reports.bookings.export');
-    Route::get('/reports/bookings/pdf', [\App\Http\Controllers\Admin\ReportController::class, 'pdfBookings'])->name('reports.bookings.pdf');
-    Route::get('/reports/occupancy', [\App\Http\Controllers\Admin\ReportController::class, 'occupancy'])->name('reports.occupancy');
-    Route::get('/reports/occupancy/export', [\App\Http\Controllers\Admin\ReportController::class, 'exportOccupancy'])->name('reports.occupancy.export');
-    Route::get('/reports/occupancy/pdf', [\App\Http\Controllers\Admin\ReportController::class, 'pdfOccupancy'])->name('reports.occupancy.pdf');
+    // Reports — viewing gated by reports.view; CSV/PDF exports require reports.export.
+    Route::middleware('permission:reports.view')->group(function () {
+        Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/revenue', [\App\Http\Controllers\Admin\ReportController::class, 'revenue'])->name('reports.revenue');
+        Route::get('/reports/bookings', [\App\Http\Controllers\Admin\ReportController::class, 'bookings'])->name('reports.bookings');
+        Route::get('/reports/occupancy', [\App\Http\Controllers\Admin\ReportController::class, 'occupancy'])->name('reports.occupancy');
 
-    // Profile (self-service account management)
+        Route::middleware('permission:reports.export')->group(function () {
+            Route::get('/reports/revenue/export', [\App\Http\Controllers\Admin\ReportController::class, 'exportRevenue'])->name('reports.revenue.export');
+            Route::get('/reports/revenue/pdf', [\App\Http\Controllers\Admin\ReportController::class, 'pdfRevenue'])->name('reports.revenue.pdf');
+            Route::get('/reports/bookings/export', [\App\Http\Controllers\Admin\ReportController::class, 'exportBookings'])->name('reports.bookings.export');
+            Route::get('/reports/bookings/pdf', [\App\Http\Controllers\Admin\ReportController::class, 'pdfBookings'])->name('reports.bookings.pdf');
+            Route::get('/reports/occupancy/export', [\App\Http\Controllers\Admin\ReportController::class, 'exportOccupancy'])->name('reports.occupancy.export');
+            Route::get('/reports/occupancy/pdf', [\App\Http\Controllers\Admin\ReportController::class, 'pdfOccupancy'])->name('reports.occupancy.pdf');
+        });
+    });
+
+    // Profile (self-service account management) — available to every admin-area user.
     Route::get('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [\App\Http\Controllers\Admin\ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::post('/profile/verification-notification', [\App\Http\Controllers\Admin\ProfileController::class, 'sendVerification'])->name('profile.verification');
-    // User management (admins/owners manage their own tenant; super admins manage system-wide)
-    Route::middleware('role:super_admin|tenant_owner|admin')->group(function () {
+
+    // User management. Viewing/managing requires users.view; deletion requires users.delete
+    // (which `admin` deliberately lacks — only owners/super admins can delete users).
+    Route::middleware('permission:users.view')->group(function () {
         Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
         Route::get('/users/create', [\App\Http\Controllers\Admin\UserController::class, 'create'])->name('users.create');
         Route::post('/users', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('users.store');
         Route::get('/users/{id}/edit', [\App\Http\Controllers\Admin\UserController::class, 'edit'])->name('users.edit');
         Route::put('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
         Route::put('/users/{id}/reset-password', [\App\Http\Controllers\Admin\UserController::class, 'resetPassword'])->name('users.reset-password');
-        Route::delete('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
+        Route::delete('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])
+            ->middleware('permission:users.delete')->name('users.destroy');
     });
 
     // Platform administration (super admin only): tenants and plans.
@@ -166,21 +212,28 @@ Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class, 'tenant
         Route::delete('/plans/{plan}', [\App\Http\Controllers\Admin\PlanController::class, 'destroy'])->name('plans.destroy');
     });
 
-    Route::get('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings.index');
-    Route::get('/themes', [\App\Http\Controllers\Admin\ThemeController::class, 'index'])->name('themes.index');
-    Route::post('/themes/activate', [\App\Http\Controllers\Admin\ThemeController::class, 'activate'])->name('themes.activate');
-    Route::get('/plugins', [\App\Http\Controllers\Admin\PluginController::class, 'index'])->name('plugins.index');
-    Route::post('/plugins/enable', [\App\Http\Controllers\Admin\PluginController::class, 'enable'])->name('plugins.enable');
-    Route::post('/plugins/disable', [\App\Http\Controllers\Admin\PluginController::class, 'disable'])->name('plugins.disable');
-    Route::post('/settings/general', [\App\Http\Controllers\Admin\SettingsController::class, 'updateGeneral'])->name('settings.general');
-    Route::post('/settings/branding', [\App\Http\Controllers\Admin\SettingsController::class, 'updateBranding'])->name('settings.branding');
-    Route::post('/settings/email-templates', [\App\Http\Controllers\Admin\SettingsController::class, 'updateEmailTemplates'])->name('settings.email-templates');
-    Route::post('/settings/document-templates', [\App\Http\Controllers\Admin\SettingsController::class, 'updateDocumentTemplates'])->name('settings.document-templates');
-    Route::post('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'updateSettings'])->name('settings.update');
+    // Settings, themes and plugins. Viewing requires settings.view; every mutation
+    // requires settings.edit (which `admin` deliberately lacks — view-only for them).
+    Route::middleware('permission:settings.view')->group(function () {
+        Route::get('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings.index');
+        Route::get('/themes', [\App\Http\Controllers\Admin\ThemeController::class, 'index'])->name('themes.index');
+        Route::get('/plugins', [\App\Http\Controllers\Admin\PluginController::class, 'index'])->name('plugins.index');
+
+        Route::middleware('permission:settings.edit')->group(function () {
+            Route::post('/themes/activate', [\App\Http\Controllers\Admin\ThemeController::class, 'activate'])->name('themes.activate');
+            Route::post('/plugins/enable', [\App\Http\Controllers\Admin\PluginController::class, 'enable'])->name('plugins.enable');
+            Route::post('/plugins/disable', [\App\Http\Controllers\Admin\PluginController::class, 'disable'])->name('plugins.disable');
+            Route::post('/settings/general', [\App\Http\Controllers\Admin\SettingsController::class, 'updateGeneral'])->name('settings.general');
+            Route::post('/settings/branding', [\App\Http\Controllers\Admin\SettingsController::class, 'updateBranding'])->name('settings.branding');
+            Route::post('/settings/email-templates', [\App\Http\Controllers\Admin\SettingsController::class, 'updateEmailTemplates'])->name('settings.email-templates');
+            Route::post('/settings/document-templates', [\App\Http\Controllers\Admin\SettingsController::class, 'updateDocumentTemplates'])->name('settings.document-templates');
+            Route::post('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'updateSettings'])->name('settings.update');
+        });
+    });
 });
 
-// Client portal routes
-Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class, 'tenant.active'])->prefix('portal')->name('portal.')->group(function () {
+// Client portal routes — restricted to the `client` role.
+Route::middleware(['auth', \App\Http\Middleware\SetCurrentTenant::class, 'tenant.active', 'role:client'])->prefix('portal')->name('portal.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Portal\PortalController::class, 'dashboard'])->name('dashboard');
     Route::get('/bookings', [\App\Http\Controllers\Portal\PortalController::class, 'bookings'])->name('bookings');
     Route::get('/bookings/{booking}', [\App\Http\Controllers\Portal\PortalController::class, 'bookingShow'])->name('bookings.show');
