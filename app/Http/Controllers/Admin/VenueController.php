@@ -14,6 +14,11 @@ use Inertia\Response;
 
 class VenueController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Venue::class, 'venue');
+    }
+
     public function index(Request $request): Response
     {
         $venues = Venue::query()

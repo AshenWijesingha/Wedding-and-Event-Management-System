@@ -14,9 +14,14 @@ class AuthenticatedSessionController extends Controller
 {
     public function create(): Response
     {
+        // Demo prefill buttons (incl. the super-admin one) are only exposed outside
+        // production so real deployments never surface seeded credentials.
+        $canUseDemo = ! app()->environment('production');
+
         return Inertia::render('Auth/Login', [
             'canResetPassword' => true,
             'status' => session('status'),
+            'canUseDemo' => $canUseDemo,
         ]);
     }
 
@@ -35,7 +40,21 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('admin.dashboard'));
+        return redirect()->intended($this->homeFor($request->user()));
+    }
+
+    /**
+     * Landing route for a freshly authenticated user, by role. Clients live in the
+     * portal; everyone else (staff and above) lands in the admin area, whose own
+     * controller further branches super admins to the platform dashboard.
+     */
+    private function homeFor(\App\Models\User $user): string
+    {
+        if ($user->hasRole('client')) {
+            return route('portal.dashboard');
+        }
+
+        return route('admin.dashboard');
     }
 
     public function destroy(Request $request): RedirectResponse

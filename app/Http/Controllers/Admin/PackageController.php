@@ -13,6 +13,11 @@ use Inertia\Response;
 
 class PackageController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(\App\Models\Package::class, 'package');
+    }
+
     public function index(Request $request): Response
     {
         $packages = Package::query()

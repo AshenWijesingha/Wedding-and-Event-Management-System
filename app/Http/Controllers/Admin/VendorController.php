@@ -12,6 +12,11 @@ use Inertia\Response;
 
 class VendorController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(\App\Models\Vendor::class, 'vendor');
+    }
+
     public function index(Request $request): Response
     {
         $vendors = Vendor::query()
