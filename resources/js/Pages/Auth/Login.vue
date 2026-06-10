@@ -6,7 +6,15 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
-const props = defineProps({ canResetPassword: Boolean, status: String, demoEmail: String, demoPassword: String });
+const props = defineProps({
+    canResetPassword: Boolean,
+    status: String,
+    demoEmail: String,
+    demoPassword: String,
+    superAdminEmail: String,
+    superAdminPassword: String,
+    canUseDemo: { type: Boolean, default: true },
+});
 
 const form = useForm({ email: '', password: '', remember: false });
 
@@ -17,6 +25,12 @@ const submit = () => form.post('/login', { onFinish: () => form.reset('password'
 const fillDemo = () => {
     form.email = props.demoEmail || 'admin@demo.eventpro.test';
     form.password = props.demoPassword || 'password';
+    form.remember = true;
+};
+
+const fillSuperAdminDemo = () => {
+    form.email = props.superAdminEmail || 'admin@eventpro.io';
+    form.password = props.superAdminPassword || 'password';
     form.remember = true;
 };
 </script>
@@ -71,15 +85,19 @@ const fillDemo = () => {
         </form>
 
         <!-- Quick demo access -->
-        <div class="mt-6 rounded-xl border border-dashed border-[#c8a96a]/50 bg-[#c8a96a]/5 px-4 py-3">
-            <div class="flex items-center justify-between gap-3">
-                <p class="text-xs leading-relaxed text-[#7a6f61]">
-                    <span class="font-medium text-[#1a1512]">Reviewing the demo?</span><br>
-                    Prefill a sample admin account.
-                </p>
+        <div v-if="canUseDemo" class="mt-6 rounded-xl border border-dashed border-[#c8a96a]/50 bg-[#c8a96a]/5 px-4 py-3">
+            <p class="text-xs leading-relaxed text-[#7a6f61]">
+                <span class="font-medium text-[#1a1512]">Reviewing the demo?</span><br>
+                Prefill a sample account, then press Sign in.
+            </p>
+            <div class="mt-3 grid grid-cols-2 gap-2">
                 <button type="button" @click="fillDemo"
-                    class="shrink-0 rounded-full border border-[#9a7b3f]/40 px-4 py-1.5 text-xs font-semibold text-[#9a7b3f] transition-colors hover:bg-[#9a7b3f] hover:text-white">
-                    Use demo
+                    class="rounded-full border border-[#9a7b3f]/40 px-4 py-1.5 text-xs font-semibold text-[#9a7b3f] transition-colors hover:bg-[#9a7b3f] hover:text-white">
+                    Tenant admin
+                </button>
+                <button type="button" @click="fillSuperAdminDemo"
+                    class="rounded-full border border-[#1a1512]/40 px-4 py-1.5 text-xs font-semibold text-[#1a1512] transition-colors hover:bg-[#1a1512] hover:text-white">
+                    Super admin
                 </button>
             </div>
         </div>
