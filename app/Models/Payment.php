@@ -17,21 +17,28 @@ class Payment extends Model
         'client_id',
         'installment_name',
         'amount',
+        'currency',
         'payment_method',
+        'gateway',
+        'gateway_payment_id',
+        'gateway_status_code',
         'payment_date',
         'reference_number',
         'status',
         'notes',
+        'gateway_response',
         'received_by',
         'due_date',
         'reminder_sent_at',
     ];
 
     protected $casts = [
-        'amount'           => 'decimal:2',
-        'payment_date'     => 'date',
-        'due_date'         => 'date',
-        'reminder_sent_at' => 'datetime',
+        'amount'              => 'decimal:2',
+        'payment_date'        => 'date',
+        'due_date'            => 'date',
+        'reminder_sent_at'    => 'datetime',
+        'gateway_status_code' => 'integer',
+        'gateway_response'    => 'array',
     ];
 
     /**
