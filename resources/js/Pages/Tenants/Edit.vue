@@ -28,13 +28,13 @@ function submit() {
     <AppLayout title="Edit Tenant">
         <div class="max-w-2xl mx-auto space-y-5">
             <div class="flex items-center gap-3">
-                <Link href="/admin/tenants" class="text-gray-400 hover:text-gray-600">
+                <Link href="/admin/tenants" class="text-ink-subtle hover:text-ink-muted">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                 </Link>
-                <h2 class="text-xl font-semibold text-gray-900">Edit {{ tenant.name }}</h2>
+                <h2 class="text-xl font-semibold text-ink">Edit {{ tenant.name }}</h2>
             </div>
 
-            <form @submit.prevent="submit" class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+            <form @submit.prevent="submit" class="bg-surface rounded-lg shadow-sm p-6 space-y-5">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <InputLabel value="Name" :required="true" />
@@ -53,7 +53,7 @@ function submit() {
                     </div>
                     <div>
                         <InputLabel value="Plan" />
-                        <select v-model="form.plan_id" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm">
+                        <select v-model="form.plan_id" class="mt-1 block w-full border border-border rounded-md px-3 py-2 text-sm">
                             <option :value="null">No plan</option>
                             <option v-for="p in plans" :key="p.id" :value="p.id">{{ p.name }}</option>
                         </select>
@@ -61,7 +61,7 @@ function submit() {
                     </div>
                     <div>
                         <InputLabel value="Status" :required="true" />
-                        <select v-model="form.status" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm capitalize">
+                        <select v-model="form.status" class="mt-1 block w-full border border-border rounded-md px-3 py-2 text-sm capitalize">
                             <option v-for="s in statuses" :key="s" :value="s">{{ s }}</option>
                         </select>
                         <InputError :message="form.errors.status" class="mt-1" />
@@ -83,24 +83,24 @@ function submit() {
                     </div>
                 </div>
 
-                <div class="flex items-center justify-end gap-3 border-t border-gray-100 pt-5">
-                    <Link href="/admin/tenants" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800">Cancel</Link>
+                <div class="flex items-center justify-end gap-3 border-t border-border pt-5">
+                    <Link href="/admin/tenants" class="px-4 py-2 text-sm text-ink-muted hover:text-ink">Cancel</Link>
                     <button type="submit" :disabled="form.processing"
-                        class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg disabled:opacity-60">
+                        class="px-5 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-semibold rounded-lg disabled:opacity-60">
                         {{ form.processing ? 'Saving…' : 'Save changes' }}
                     </button>
                 </div>
             </form>
 
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <h3 class="text-sm font-semibold text-gray-900 mb-3">Tenant Owners</h3>
-                <ul v-if="owners?.length" class="divide-y divide-gray-100">
+            <div class="bg-surface rounded-lg shadow-sm p-6">
+                <h3 class="text-sm font-semibold text-ink mb-3">Tenant Owners</h3>
+                <ul v-if="owners?.length" class="divide-y divide-border">
                     <li v-for="o in owners" :key="o.id" class="py-2 flex justify-between text-sm">
-                        <span class="font-medium text-gray-800">{{ o.name }}</span>
-                        <span class="text-gray-500">{{ o.email }}</span>
+                        <span class="font-medium text-ink">{{ o.name }}</span>
+                        <span class="text-ink-subtle">{{ o.email }}</span>
                     </li>
                 </ul>
-                <p v-else class="text-sm text-gray-400">No owner assigned.</p>
+                <p v-else class="text-sm text-ink-subtle">No owner assigned.</p>
             </div>
         </div>
     </AppLayout>

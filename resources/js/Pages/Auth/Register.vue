@@ -15,7 +15,7 @@ const submit = () => form.post('/register', { onFinish: () => form.reset('passwo
     <GuestLayout>
         <Head title="Register" />
 
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Create your account</h2>
+        <h2 class="text-2xl font-bold text-ink mb-6">Create your account</h2>
 
         <form @submit.prevent="submit" class="space-y-5">
             <div>
@@ -47,9 +47,9 @@ const submit = () => form.post('/register', { onFinish: () => form.reset('passwo
             </PrimaryButton>
         </form>
 
-        <p class="mt-6 text-center text-sm text-gray-600">
+        <p class="mt-6 text-center text-sm text-ink-muted">
             Already have an account?
-            <Link href="/login" class="font-medium text-indigo-600 hover:text-indigo-500">Sign in</Link>
+            <Link href="/login" class="font-medium text-primary hover:text-primary">Sign in</Link>
         </p>
     </GuestLayout>
 </template>

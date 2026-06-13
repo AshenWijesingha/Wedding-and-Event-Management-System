@@ -24,11 +24,11 @@ function submit() {
     <AppLayout title="Platform Settings">
         <div class="max-w-2xl mx-auto space-y-4">
             <div>
-                <h2 class="text-xl font-semibold text-gray-900">Platform Settings</h2>
-                <p class="text-sm text-gray-500 mt-0.5">Global configuration applied across the whole platform.</p>
+                <h2 class="text-xl font-semibold text-ink">Platform Settings</h2>
+                <p class="text-sm text-ink-subtle mt-0.5">Global configuration applied across the whole platform.</p>
             </div>
 
-            <form @submit.prevent="submit" class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+            <form @submit.prevent="submit" class="bg-surface rounded-lg shadow-sm p-6 space-y-5">
                 <div>
                     <InputLabel for="platform_name" value="Platform Name" />
                     <TextInput id="platform_name" v-model="form.platform_name" type="text" class="mt-1 block w-full" required />
@@ -38,7 +38,7 @@ function submit() {
                 <div>
                     <InputLabel for="default_plan_id" value="Default Plan for New Tenants" />
                     <select id="default_plan_id" v-model="form.default_plan_id"
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        class="mt-1 block w-full border-border rounded-md shadow-sm text-sm focus:border-primary focus:ring-primary">
                         <option value="">None</option>
                         <option v-for="p in plans" :key="p.id" :value="p.id">{{ p.name }}</option>
                     </select>
@@ -53,8 +53,8 @@ function submit() {
 
                 <label class="flex items-center gap-2">
                     <input type="checkbox" v-model="form.signups_enabled"
-                        class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <span class="text-sm text-gray-700">Allow public sign-ups</span>
+                        class="rounded border-border text-primary focus:ring-primary" />
+                    <span class="text-sm text-ink-muted">Allow public sign-ups</span>
                 </label>
 
                 <div class="flex justify-end">

@@ -26,9 +26,9 @@ function destroy(user) {
 
 const roleColors = {
     super_admin: 'bg-purple-100 text-purple-700',
-    admin:       'bg-indigo-100 text-indigo-700',
+    admin:       'bg-primary/10 text-primary-dark',
     manager:     'bg-blue-100 text-blue-700',
-    staff:       'bg-gray-100 text-gray-700',
+    staff:       'bg-surface-sunken text-ink-muted',
     client:      'bg-green-100 text-green-700',
 };
 </script>
@@ -38,45 +38,45 @@ const roleColors = {
         <div class="space-y-5">
             <div class="flex items-center justify-between">
                 <div>
-                    <h2 class="text-xl font-semibold text-gray-900">User Management</h2>
-                    <p class="text-sm text-gray-500 mt-0.5">{{ systemWide ? 'System-wide accounts across all tenants.' : 'Accounts in your organization.' }}</p>
+                    <h2 class="text-xl font-semibold text-ink">User Management</h2>
+                    <p class="text-sm text-ink-subtle mt-0.5">{{ systemWide ? 'System-wide accounts across all tenants.' : 'Accounts in your organization.' }}</p>
                 </div>
-                <Link href="/admin/users/create" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg">
+                <Link href="/admin/users/create" class="px-4 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-medium rounded-lg">
                     Add User
                 </Link>
             </div>
 
             <!-- Stats -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white rounded-lg shadow-sm p-4">
-                    <p class="text-xs text-gray-500 uppercase tracking-wide">Total Users</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ stats.total }}</p>
+                <div class="bg-surface rounded-lg shadow-sm p-4">
+                    <p class="text-xs text-ink-subtle uppercase tracking-wide">Total Users</p>
+                    <p class="text-2xl font-bold text-ink mt-1">{{ stats.total }}</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-4">
-                    <p class="text-xs text-gray-500 uppercase tracking-wide">Active</p>
+                <div class="bg-surface rounded-lg shadow-sm p-4">
+                    <p class="text-xs text-ink-subtle uppercase tracking-wide">Active</p>
                     <p class="text-2xl font-bold text-green-600 mt-1">{{ stats.active }}</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-4">
-                    <p class="text-xs text-gray-500 uppercase tracking-wide">Inactive</p>
-                    <p class="text-2xl font-bold text-gray-400 mt-1">{{ stats.inactive }}</p>
+                <div class="bg-surface rounded-lg shadow-sm p-4">
+                    <p class="text-xs text-ink-subtle uppercase tracking-wide">Inactive</p>
+                    <p class="text-2xl font-bold text-ink-subtle mt-1">{{ stats.inactive }}</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-4">
-                    <p class="text-xs text-gray-500 uppercase tracking-wide">Admins</p>
-                    <p class="text-2xl font-bold text-indigo-600 mt-1">
+                <div class="bg-surface rounded-lg shadow-sm p-4">
+                    <p class="text-xs text-ink-subtle uppercase tracking-wide">Admins</p>
+                    <p class="text-2xl font-bold text-primary mt-1">
                         {{ (stats.byRole?.super_admin ?? 0) + (stats.byRole?.admin ?? 0) }}
                     </p>
                 </div>
             </div>
 
             <!-- Filters -->
-            <div class="bg-white rounded-lg shadow-sm p-4 flex flex-wrap gap-3">
+            <div class="bg-surface rounded-lg shadow-sm p-4 flex flex-wrap gap-3">
                 <input v-model="search" type="text" placeholder="Search name or email..."
-                    class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 flex-1 min-w-[180px]" />
-                <select v-model="role" class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    class="border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary flex-1 min-w-[180px]" />
+                <select v-model="role" class="border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
                     <option value="">All roles</option>
                     <option v-for="r in roles" :key="r" :value="r" class="capitalize">{{ r.replace('_', ' ') }}</option>
                 </select>
-                <select v-model="status" class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <select v-model="status" class="border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
                     <option value="">All statuses</option>
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
@@ -84,28 +84,28 @@ const roleColors = {
             </div>
 
             <!-- Table -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+            <div class="bg-surface rounded-lg shadow-sm overflow-hidden">
+                <table class="min-w-full divide-y divide-border">
+                    <thead class="bg-surface-muted">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                            <th v-if="systemWide" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tenant</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-ink-subtle uppercase tracking-wider">User</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-ink-subtle uppercase tracking-wider">Role</th>
+                            <th v-if="systemWide" class="px-6 py-3 text-left text-xs font-medium text-ink-subtle uppercase tracking-wider">Tenant</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-ink-subtle uppercase tracking-wider">Status</th>
                             <th class="px-6 py-3"></th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <tr v-for="u in users.data" :key="u.id" class="hover:bg-gray-50">
+                    <tbody class="bg-surface divide-y divide-border">
+                        <tr v-for="u in users.data" :key="u.id" class="hover:bg-surface-muted">
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-9 h-9 rounded-full bg-indigo-500 flex items-center justify-center text-white text-sm font-medium overflow-hidden">
+                                    <div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white text-sm font-medium overflow-hidden">
                                         <img v-if="u.avatar_url" :src="u.avatar_url" alt="" class="w-full h-full object-cover" />
                                         <span v-else>{{ u.name?.charAt(0)?.toUpperCase() }}</span>
                                     </div>
                                     <div>
-                                        <p class="text-sm font-medium text-gray-900">{{ u.name }}</p>
-                                        <p class="text-xs text-gray-500">
+                                        <p class="text-sm font-medium text-ink">{{ u.name }}</p>
+                                        <p class="text-xs text-ink-subtle">
                                             {{ u.email }}
                                             <span v-if="!u.verified" class="ml-1 text-amber-500">· unverified</span>
                                         </p>
@@ -113,33 +113,33 @@ const roleColors = {
                                 </div>
                             </td>
                             <td class="px-6 py-4">
-                                <span :class="['inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize', roleColors[u.role] ?? 'bg-gray-100 text-gray-600']">
+                                <span :class="['inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize', roleColors[u.role] ?? 'bg-surface-sunken text-ink-muted']">
                                     {{ u.role?.replace('_', ' ') }}
                                 </span>
                             </td>
-                            <td v-if="systemWide" class="px-6 py-4 text-sm text-gray-600">{{ u.tenant ?? '—' }}</td>
+                            <td v-if="systemWide" class="px-6 py-4 text-sm text-ink-muted">{{ u.tenant ?? '—' }}</td>
                             <td class="px-6 py-4">
-                                <span :class="u.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'"
+                                <span :class="u.is_active ? 'bg-green-100 text-green-700' : 'bg-surface-sunken text-ink-subtle'"
                                     class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium">
                                     {{ u.is_active ? 'Active' : 'Inactive' }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-right text-sm">
-                                <Link :href="`/admin/users/${u.id}/edit`" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</Link>
+                                <Link :href="`/admin/users/${u.id}/edit`" class="text-primary hover:text-primary-dark mr-3">Edit</Link>
                                 <button @click="destroy(u)" class="text-red-500 hover:text-red-700">Delete</button>
                             </td>
                         </tr>
                         <tr v-if="!users.data?.length">
-                            <td colspan="5" class="px-6 py-12 text-center text-gray-400 text-sm">No users found.</td>
+                            <td colspan="5" class="px-6 py-12 text-center text-ink-subtle text-sm">No users found.</td>
                         </tr>
                     </tbody>
                 </table>
 
-                <div v-if="users.last_page > 1" class="px-6 py-4 border-t border-gray-200 flex items-center justify-between text-sm text-gray-600">
+                <div v-if="users.last_page > 1" class="px-6 py-4 border-t border-border flex items-center justify-between text-sm text-ink-muted">
                     <span>Showing {{ users.from }}–{{ users.to }} of {{ users.total }}</span>
                     <div class="flex gap-2">
-                        <Link v-if="users.prev_page_url" :href="users.prev_page_url" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">Previous</Link>
-                        <Link v-if="users.next_page_url" :href="users.next_page_url" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">Next</Link>
+                        <Link v-if="users.prev_page_url" :href="users.prev_page_url" class="px-3 py-1 border border-border rounded hover:bg-surface-muted">Previous</Link>
+                        <Link v-if="users.next_page_url" :href="users.next_page_url" class="px-3 py-1 border border-border rounded hover:bg-surface-muted">Next</Link>
                     </div>
                 </div>
             </div>

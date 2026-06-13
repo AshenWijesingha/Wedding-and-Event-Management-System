@@ -22,7 +22,7 @@ const submit = () => form.post('/reset-password', { onFinish: () => form.reset('
     <GuestLayout>
         <Head title="Reset Password" />
 
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Set new password</h2>
+        <h2 class="text-2xl font-bold text-ink mb-6">Set new password</h2>
 
         <form @submit.prevent="submit" class="space-y-5">
             <div>

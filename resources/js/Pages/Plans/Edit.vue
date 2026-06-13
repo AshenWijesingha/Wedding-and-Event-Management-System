@@ -30,10 +30,10 @@ function submit() {
     <AppLayout title="Edit Plan">
         <div class="max-w-2xl mx-auto space-y-5">
             <div class="flex items-center gap-3">
-                <Link href="/admin/plans" class="text-gray-400 hover:text-gray-600">
+                <Link href="/admin/plans" class="text-ink-subtle hover:text-ink-muted">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                 </Link>
-                <h2 class="text-xl font-semibold text-gray-900">Edit {{ plan.name }}</h2>
+                <h2 class="text-xl font-semibold text-ink">Edit {{ plan.name }}</h2>
             </div>
             <PlanForm :form="form" :limit-keys="limitKeys" submit-label="Save changes" @submit="submit" />
         </div>

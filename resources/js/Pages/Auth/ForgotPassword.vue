@@ -16,8 +16,8 @@ const submit = () => form.post('/forgot-password');
     <GuestLayout>
         <Head title="Forgot Password" />
 
-        <h2 class="text-2xl font-bold text-gray-900 mb-2">Reset password</h2>
-        <p class="text-sm text-gray-600 mb-6">Enter your email and we'll send a reset link.</p>
+        <h2 class="text-2xl font-bold text-ink mb-2">Reset password</h2>
+        <p class="text-sm text-ink-muted mb-6">Enter your email and we'll send a reset link.</p>
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">{{ status }}</div>
 

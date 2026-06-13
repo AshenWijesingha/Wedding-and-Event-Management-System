@@ -16,87 +16,87 @@ const statusColors = {
 <template>
     <AppLayout title="Platform">
         <div class="space-y-6">
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 class="text-xl font-semibold text-gray-900">Platform Overview</h2>
-                <p class="text-gray-500 mt-1 text-sm">Activity across every tenant on the platform.</p>
+            <div class="bg-surface rounded-lg shadow-sm p-6">
+                <h2 class="text-xl font-semibold text-ink">Platform Overview</h2>
+                <p class="text-ink-subtle mt-1 text-sm">Activity across every tenant on the platform.</p>
             </div>
 
             <!-- Primary KPIs -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white rounded-lg shadow-sm p-5">
-                    <p class="text-sm text-gray-500">Tenants</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ stats.tenants_total }}</p>
-                    <p class="text-xs text-gray-400 mt-1">+{{ stats.tenants_new }} this month</p>
+                <div class="bg-surface rounded-lg shadow-sm p-5">
+                    <p class="text-sm text-ink-subtle">Tenants</p>
+                    <p class="text-2xl font-bold text-ink mt-1">{{ stats.tenants_total }}</p>
+                    <p class="text-xs text-ink-subtle mt-1">+{{ stats.tenants_new }} this month</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-5">
-                    <p class="text-sm text-gray-500">MRR</p>
-                    <p class="text-2xl font-bold text-indigo-600 mt-1">{{ money(stats.mrr) }}</p>
-                    <p class="text-xs text-gray-400 mt-1">monthly recurring</p>
+                <div class="bg-surface rounded-lg shadow-sm p-5">
+                    <p class="text-sm text-ink-subtle">MRR</p>
+                    <p class="text-2xl font-bold text-primary mt-1">{{ money(stats.mrr) }}</p>
+                    <p class="text-xs text-ink-subtle mt-1">monthly recurring</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-5">
-                    <p class="text-sm text-gray-500">Revenue (Month)</p>
+                <div class="bg-surface rounded-lg shadow-sm p-5">
+                    <p class="text-sm text-ink-subtle">Revenue (Month)</p>
                     <p class="text-2xl font-bold text-green-600 mt-1">{{ money(stats.revenue_month) }}</p>
-                    <p class="text-xs text-gray-400 mt-1">{{ money(stats.revenue_all_time) }} all time</p>
+                    <p class="text-xs text-ink-subtle mt-1">{{ money(stats.revenue_all_time) }} all time</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-5">
-                    <p class="text-sm text-gray-500">Bookings</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ stats.bookings_total }}</p>
-                    <p class="text-xs text-gray-400 mt-1">{{ stats.users_total }} users</p>
+                <div class="bg-surface rounded-lg shadow-sm p-5">
+                    <p class="text-sm text-ink-subtle">Bookings</p>
+                    <p class="text-2xl font-bold text-ink mt-1">{{ stats.bookings_total }}</p>
+                    <p class="text-xs text-ink-subtle mt-1">{{ stats.users_total }} users</p>
                 </div>
             </div>
 
             <!-- Tenant status breakdown -->
             <div class="grid grid-cols-3 gap-4">
-                <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <div class="bg-surface rounded-lg shadow-sm p-4 text-center">
                     <p class="text-2xl font-bold text-green-600">{{ stats.tenants_active }}</p>
-                    <p class="text-xs text-gray-500 uppercase tracking-wide mt-1">Active</p>
+                    <p class="text-xs text-ink-subtle uppercase tracking-wide mt-1">Active</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <div class="bg-surface rounded-lg shadow-sm p-4 text-center">
                     <p class="text-2xl font-bold text-blue-600">{{ stats.tenants_trial }}</p>
-                    <p class="text-xs text-gray-500 uppercase tracking-wide mt-1">Trial</p>
+                    <p class="text-xs text-ink-subtle uppercase tracking-wide mt-1">Trial</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <div class="bg-surface rounded-lg shadow-sm p-4 text-center">
                     <p class="text-2xl font-bold text-red-500">{{ stats.tenants_suspended }}</p>
-                    <p class="text-xs text-gray-500 uppercase tracking-wide mt-1">Suspended</p>
+                    <p class="text-xs text-ink-subtle uppercase tracking-wide mt-1">Suspended</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <!-- Recent tenants -->
-                <div class="lg:col-span-2 bg-white rounded-lg shadow-sm overflow-hidden">
-                    <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-                        <h3 class="font-semibold text-gray-900">Recent Tenants</h3>
-                        <Link href="/admin/tenants" class="text-sm text-indigo-600 hover:text-indigo-800">View all</Link>
+                <div class="lg:col-span-2 bg-surface rounded-lg shadow-sm overflow-hidden">
+                    <div class="px-5 py-4 border-b border-border flex items-center justify-between">
+                        <h3 class="font-semibold text-ink">Recent Tenants</h3>
+                        <Link href="/admin/tenants" class="text-sm text-primary hover:text-primary-dark">View all</Link>
                     </div>
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <tbody class="divide-y divide-gray-100">
-                            <tr v-for="t in recentTenants" :key="t.id" class="hover:bg-gray-50">
+                    <table class="min-w-full divide-y divide-border">
+                        <tbody class="divide-y divide-border">
+                            <tr v-for="t in recentTenants" :key="t.id" class="hover:bg-surface-muted">
                                 <td class="px-5 py-3">
-                                    <Link :href="`/admin/tenants/${t.id}/edit`" class="text-sm font-medium text-gray-900 hover:text-indigo-600">{{ t.name }}</Link>
-                                    <p class="text-xs text-gray-400">{{ t.plan ?? 'No plan' }} Â· {{ t.created_at }}</p>
+                                    <Link :href="`/admin/tenants/${t.id}/edit`" class="text-sm font-medium text-ink hover:text-primary">{{ t.name }}</Link>
+                                    <p class="text-xs text-ink-subtle">{{ t.plan ?? 'No plan' }} Â· {{ t.created_at }}</p>
                                 </td>
-                                <td class="px-5 py-3 text-sm text-gray-500">{{ t.users_count }} users</td>
-                                <td class="px-5 py-3 text-sm text-gray-500">{{ t.bookings_count }} bookings</td>
+                                <td class="px-5 py-3 text-sm text-ink-subtle">{{ t.users_count }} users</td>
+                                <td class="px-5 py-3 text-sm text-ink-subtle">{{ t.bookings_count }} bookings</td>
                                 <td class="px-5 py-3">
-                                    <span :class="['inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize', statusColors[t.status] ?? 'bg-gray-100 text-gray-600']">{{ t.status }}</span>
+                                    <span :class="['inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize', statusColors[t.status] ?? 'bg-surface-sunken text-ink-muted']">{{ t.status }}</span>
                                 </td>
                             </tr>
                             <tr v-if="!recentTenants.length">
-                                <td colspan="4" class="px-5 py-10 text-center text-gray-400 text-sm">No tenants yet.</td>
+                                <td colspan="4" class="px-5 py-10 text-center text-ink-subtle text-sm">No tenants yet.</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Plan distribution -->
-                <div class="bg-white rounded-lg shadow-sm p-5">
-                    <h3 class="font-semibold text-gray-900 mb-4">Plan Distribution</h3>
+                <div class="bg-surface rounded-lg shadow-sm p-5">
+                    <h3 class="font-semibold text-ink mb-4">Plan Distribution</h3>
                     <ul class="space-y-3">
                         <li v-for="p in planDistribution" :key="p.name" class="flex items-center justify-between text-sm">
-                            <span class="text-gray-600">{{ p.name }}</span>
-                            <span class="font-semibold text-gray-900">{{ p.count }}</span>
+                            <span class="text-ink-muted">{{ p.name }}</span>
+                            <span class="font-semibold text-ink">{{ p.count }}</span>
                         </li>
-                        <li v-if="!planDistribution.length" class="text-sm text-gray-400">No plans configured.</li>
+                        <li v-if="!planDistribution.length" class="text-sm text-ink-subtle">No plans configured.</li>
                     </ul>
                 </div>
             </div>

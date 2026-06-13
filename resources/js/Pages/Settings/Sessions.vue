@@ -22,11 +22,11 @@ const revokeOthers = () => {
 <template>
     <AppLayout title="Active Sessions">
         <div class="max-w-3xl space-y-6">
-            <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="bg-surface rounded-lg shadow-sm p-6">
                 <div class="flex items-start justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-semibold text-gray-900">Active Sessions</h2>
-                        <p class="text-sm text-gray-500 mt-1">
+                        <h2 class="text-xl font-semibold text-ink">Active Sessions</h2>
+                        <p class="text-sm text-ink-subtle mt-1">
                             Devices currently signed in to your account. If you see something you
                             don't recognise, sign it out.
                         </p>
@@ -46,20 +46,20 @@ const revokeOthers = () => {
                 driver. Set <code>SESSION_DRIVER=database</code> to enable device management.
             </div>
 
-            <div v-else class="bg-white rounded-lg shadow-sm divide-y divide-gray-100">
+            <div v-else class="bg-surface rounded-lg shadow-sm divide-y divide-border">
                 <div
                     v-for="s in sessions"
                     :key="s.id"
                     class="flex items-center justify-between gap-4 px-6 py-4"
                 >
                     <div class="min-w-0">
-                        <p class="text-sm font-medium text-gray-900">
+                        <p class="text-sm font-medium text-ink">
                             {{ s.device }}
                             <span v-if="s.is_current" class="ml-2 inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
                                 This device
                             </span>
                         </p>
-                        <p class="text-xs text-gray-500 mt-0.5">
+                        <p class="text-xs text-ink-subtle mt-0.5">
                             {{ s.ip || 'Unknown IP' }} · Last active {{ s.last_active }}
                         </p>
                     </div>
@@ -72,7 +72,7 @@ const revokeOthers = () => {
                     </button>
                 </div>
 
-                <div v-if="!sessions.length" class="px-6 py-10 text-center text-sm text-gray-400">
+                <div v-if="!sessions.length" class="px-6 py-10 text-center text-sm text-ink-subtle">
                     No active sessions found.
                 </div>
             </div>
