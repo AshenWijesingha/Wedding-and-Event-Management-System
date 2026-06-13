@@ -31,7 +31,61 @@ class SettingsController extends Controller
                 'logo'          => $tenant->logo,
             ] : null,
             'settings' => $settings,
+            'payhere'  => $this->payhereStatus($settings),
         ]);
+    }
+
+    /**
+     * PayHere config exposed to the UI — never the secret itself (write-only).
+     */
+    private function payhereStatus(array $settings): array
+    {
+        $payhere = $settings['payhere'] ?? [];
+
+        return [
+            'merchant_id'      => $payhere['merchant_id'] ?? '',
+            'sandbox'          => (bool) ($payhere['sandbox'] ?? true),
+            'currency'         => $payhere['currency'] ?? 'LKR',
+            'secret_configured'=> ! empty($payhere['merchant_secret']),
+        ];
+    }
+
+    /**
+     * Save per-tenant PayHere credentials. The merchant secret is encrypted at
+     * rest and only updated when a new value is submitted (write-only field).
+     */
+    public function updatePayHere(Request $request, \App\Services\PayHereService $payhere): RedirectResponse
+    {
+        $request->validate([
+            'merchant_id'     => 'nullable|string|max:50',
+            'merchant_secret' => 'nullable|string|max:255',
+            'sandbox'         => 'sometimes|boolean',
+            'currency'        => 'nullable|string|size:3',
+        ]);
+
+        $tenant = $this->getTenant();
+        if (! $tenant) {
+            return back()->with('error', 'No tenant in context.');
+        }
+
+        $existing = $tenant->getSetting('payhere') ?? [];
+
+        $config = [
+            'merchant_id' => $request->input('merchant_id', $existing['merchant_id'] ?? ''),
+            'sandbox'     => (bool) $request->input('sandbox', $existing['sandbox'] ?? true),
+            'currency'    => strtoupper($request->input('currency', $existing['currency'] ?? 'LKR')),
+        ];
+
+        // Only overwrite the stored secret when a new one is actually provided.
+        if ($request->filled('merchant_secret')) {
+            $config['merchant_secret'] = $payhere->encryptSecret($request->input('merchant_secret'));
+        } elseif (! empty($existing['merchant_secret'])) {
+            $config['merchant_secret'] = $existing['merchant_secret'];
+        }
+
+        $tenant->setSetting('payhere', $config);
+
+        return back()->with('success', 'PayHere settings saved.');
     }
 
     public function updateGeneral(Request $request): RedirectResponse

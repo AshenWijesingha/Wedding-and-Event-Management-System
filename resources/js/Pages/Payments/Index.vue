@@ -75,6 +75,7 @@ const statusColors = {
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -82,16 +83,23 @@ const statusColors = {
                             <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ payment.payment_number }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ payment.installment_name }}</td>
                             <td class="px-6 py-4 text-sm font-semibold text-gray-900">LKR {{ payment.amount?.toLocaleString() }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600 capitalize">{{ payment.payment_method?.replace('_', ' ') }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600 capitalize">
+                                {{ payment.payment_method?.replace('_', ' ') }}
+                                <span v-if="payment.gateway" class="ml-1 inline-flex px-1.5 py-0.5 rounded text-[10px] font-medium bg-indigo-50 text-indigo-600 uppercase">{{ payment.gateway }}</span>
+                            </td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ payment.payment_date }}</td>
                             <td class="px-6 py-4">
                                 <span :class="['inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize', statusColors[payment.status] ?? 'bg-gray-100 text-gray-600']">
                                     {{ payment.status }}
                                 </span>
                             </td>
+                            <td class="px-6 py-4 text-right text-sm whitespace-nowrap">
+                                <Link :href="`/admin/payments/${payment.id}`" class="text-gray-500 hover:text-gray-700 mr-3">View</Link>
+                                <a v-if="payment.status === 'completed'" :href="`/admin/payments/${payment.id}/receipt`" class="text-indigo-600 hover:text-indigo-800">Receipt</a>
+                            </td>
                         </tr>
                         <tr v-if="!payments.data?.length">
-                            <td colspan="6" class="px-6 py-12 text-center text-gray-400 text-sm">No payments found.</td>
+                            <td colspan="7" class="px-6 py-12 text-center text-gray-400 text-sm">No payments found.</td>
                         </tr>
                     </tbody>
                 </table>

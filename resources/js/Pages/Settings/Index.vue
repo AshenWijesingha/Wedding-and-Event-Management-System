@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
-const props = defineProps({ tenant: Object, settings: Object });
+const props = defineProps({ tenant: Object, settings: Object, payhere: Object });
 
 const activeTab = ref('general');
 
@@ -54,9 +54,19 @@ const docForm = useForm({
     contract_header:  docTemplates.contract_header ?? '',
 });
 
+// PayHere payment gateway form. The merchant secret is write-only — the server
+// reports only whether one is configured, never the value itself.
+const payhereForm = useForm({
+    merchant_id:     props.payhere?.merchant_id ?? '',
+    merchant_secret: '',
+    sandbox:         props.payhere?.sandbox ?? true,
+    currency:        props.payhere?.currency ?? 'LKR',
+});
+
 const tabs = [
     { id: 'general', label: 'General' },
     { id: 'branding', label: 'Branding' },
+    { id: 'payhere', label: 'Payments' },
     { id: 'email', label: 'Email Templates' },
     { id: 'documents', label: 'Documents' },
 ];
@@ -153,6 +163,49 @@ const tabs = [
                 <button type="submit" :disabled="brandingForm.processing"
                     class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg disabled:opacity-50">
                     Save Branding
+                </button>
+            </form>
+
+            <!-- PayHere -->
+            <form v-if="activeTab === 'payhere'" @submit.prevent="payhereForm.post('/admin/settings/payhere', { preserveScroll: true, onSuccess: () => payhereForm.reset('merchant_secret') })"
+                class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                <h3 class="text-sm font-semibold text-gray-900">PayHere Payment Gateway</h3>
+                <p class="text-xs text-gray-500">Collect online payments into your own PayHere merchant account. Find these values in your PayHere dashboard under Settings &rarr; Domains &amp; Credentials.</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Merchant ID</label>
+                        <input v-model="payhereForm.merchant_id" type="text" class="w-full border-gray-300 rounded-md text-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Currency</label>
+                        <select v-model="payhereForm.currency" class="w-full border-gray-300 rounded-md text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <option value="LKR">LKR</option>
+                            <option value="USD">USD</option>
+                            <option value="GBP">GBP</option>
+                            <option value="EUR">EUR</option>
+                            <option value="AUD">AUD</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Merchant Secret
+                            <span v-if="payhere?.secret_configured" class="ml-1 text-xs text-green-600 font-normal">(configured — leave blank to keep)</span>
+                        </label>
+                        <input v-model="payhereForm.merchant_secret" type="password" autocomplete="new-password"
+                            :placeholder="payhere?.secret_configured ? '••••••••••••' : 'Enter merchant secret'"
+                            class="w-full border-gray-300 rounded-md text-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                        <p class="text-xs text-gray-400 mt-1">Stored encrypted. Never displayed after saving.</p>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="flex items-center gap-2 text-sm text-gray-700">
+                            <input v-model="payhereForm.sandbox" type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                            Sandbox mode (use for testing — no real charges)
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" :disabled="payhereForm.processing"
+                    class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg disabled:opacity-50">
+                    Save PayHere Settings
                 </button>
             </form>
 

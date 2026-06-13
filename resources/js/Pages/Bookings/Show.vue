@@ -126,6 +126,7 @@ const statusColors = {
                     <div class="bg-white rounded-lg shadow-sm p-5">
                         <div class="flex items-center justify-between mb-3">
                             <h3 class="text-sm font-semibold text-gray-900">Payment History</h3>
+                            <Link :href="`/admin/bookings/${booking.id}/payments/create`" class="text-xs text-indigo-600 hover:underline">+ Add payment</Link>
                         </div>
                         <table class="w-full text-sm" v-if="booking.payments?.length">
                             <thead>
@@ -135,6 +136,7 @@ const statusColors = {
                                     <th class="pb-2">Amount</th>
                                     <th class="pb-2">Date</th>
                                     <th class="pb-2">Status</th>
+                                    <th class="pb-2 text-right">Receipt</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -147,6 +149,9 @@ const statusColors = {
                                         <span :class="payment.status === 'completed' ? 'text-green-600' : 'text-yellow-600'" class="capitalize">
                                             {{ payment.status }}
                                         </span>
+                                    </td>
+                                    <td class="py-2 text-right">
+                                        <a v-if="payment.status === 'completed'" :href="`/admin/payments/${payment.id}/receipt`" class="text-indigo-600 hover:underline text-xs">Download</a>
                                     </td>
                                 </tr>
                             </tbody>
