@@ -25,10 +25,10 @@ function applyFilters() {
 const statusColors = {
     pending: 'bg-yellow-100 text-yellow-700',
     contacted: 'bg-blue-100 text-blue-700',
-    qualified: 'bg-indigo-100 text-indigo-700',
+    qualified: 'bg-primary/10 text-primary-dark',
     proposal_sent: 'bg-purple-100 text-purple-700',
     converted: 'bg-green-100 text-green-700',
-    closed: 'bg-gray-100 text-gray-600',
+    closed: 'bg-surface-sunken text-ink-muted',
 };
 </script>
 
@@ -37,14 +37,14 @@ const statusColors = {
         <div class="space-y-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <h2 class="text-xl font-semibold text-gray-900">Inquiries</h2>
-                    <p class="text-sm text-gray-500 mt-0.5">Manage incoming event inquiries</p>
+                    <h2 class="text-xl font-semibold text-ink">Inquiries</h2>
+                    <p class="text-sm text-ink-subtle mt-0.5">Manage incoming event inquiries</p>
                 </div>
             </div>
 
-            <div class="bg-white rounded-lg shadow-sm p-4 flex flex-col sm:flex-row gap-3">
-                <input v-model="search" type="text" placeholder="Search by client name or email..." class="flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-                <select v-model="status" class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <div class="bg-surface rounded-lg shadow-sm p-4 flex flex-col sm:flex-row gap-3">
+                <input v-model="search" type="text" placeholder="Search by client name or email..." class="flex-1 border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+                <select v-model="status" class="border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
                     <option value="">All statuses</option>
                     <option value="pending">Pending</option>
                     <option value="contacted">Contacted</option>
@@ -53,7 +53,7 @@ const statusColors = {
                     <option value="converted">Converted</option>
                     <option value="closed">Closed</option>
                 </select>
-                <select v-model="eventType" class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <select v-model="eventType" class="border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
                     <option value="">All event types</option>
                     <option value="wedding">Wedding</option>
                     <option value="corporate">Corporate</option>
@@ -63,55 +63,55 @@ const statusColors = {
                 </select>
             </div>
 
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+            <div class="bg-surface rounded-lg shadow-sm overflow-hidden">
+                <table class="min-w-full divide-y divide-border">
+                    <thead class="bg-surface-muted">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Inquiry</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Event</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Preferred Date</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-ink-subtle uppercase tracking-wider">Inquiry</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-ink-subtle uppercase tracking-wider">Client</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-ink-subtle uppercase tracking-wider">Event</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-ink-subtle uppercase tracking-wider">Preferred Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-ink-subtle uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-ink-subtle uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <tr v-for="inquiry in inquiries.data" :key="inquiry.id" class="hover:bg-gray-50">
+                    <tbody class="bg-surface divide-y divide-border">
+                        <tr v-for="inquiry in inquiries.data" :key="inquiry.id" class="hover:bg-surface-muted">
                             <td class="px-6 py-4">
-                                <div class="font-medium text-gray-900 text-sm">{{ inquiry.inquiry_number }}</div>
-                                <div class="text-xs text-gray-400">{{ inquiry.created_at }}</div>
+                                <div class="font-medium text-ink text-sm">{{ inquiry.inquiry_number }}</div>
+                                <div class="text-xs text-ink-subtle">{{ inquiry.created_at }}</div>
                             </td>
                             <td class="px-6 py-4">
-                                <div class="text-sm font-medium text-gray-900">{{ inquiry.client?.full_name }}</div>
-                                <div class="text-xs text-gray-500">{{ inquiry.client?.email }}</div>
+                                <div class="text-sm font-medium text-ink">{{ inquiry.client?.full_name }}</div>
+                                <div class="text-xs text-ink-subtle">{{ inquiry.client?.email }}</div>
                             </td>
                             <td class="px-6 py-4">
-                                <div class="text-sm text-gray-900 capitalize">{{ inquiry.event_type }}</div>
-                                <div class="text-xs text-gray-500">{{ inquiry.guest_count }} guests</div>
+                                <div class="text-sm text-ink capitalize">{{ inquiry.event_type }}</div>
+                                <div class="text-xs text-ink-subtle">{{ inquiry.guest_count }} guests</div>
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-600">
+                            <td class="px-6 py-4 text-sm text-ink-muted">
                                 {{ inquiry.preferred_date }}
                             </td>
                             <td class="px-6 py-4">
-                                <span :class="['inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize', statusColors[inquiry.status] ?? 'bg-gray-100 text-gray-600']">
+                                <span :class="['inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize', statusColors[inquiry.status] ?? 'bg-surface-sunken text-ink-muted']">
                                     {{ inquiry.status?.replace('_', ' ') }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-right">
-                                <Link :href="`/admin/inquiries/${inquiry.id}`" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">View</Link>
+                                <Link :href="`/admin/inquiries/${inquiry.id}`" class="text-primary hover:text-primary-dark text-sm font-medium">View</Link>
                             </td>
                         </tr>
                         <tr v-if="!inquiries.data?.length">
-                            <td colspan="6" class="px-6 py-12 text-center text-gray-400 text-sm">No inquiries found.</td>
+                            <td colspan="6" class="px-6 py-12 text-center text-ink-subtle text-sm">No inquiries found.</td>
                         </tr>
                     </tbody>
                 </table>
 
-                <div v-if="inquiries.meta?.last_page > 1" class="px-6 py-4 border-t border-gray-200 flex items-center justify-between text-sm text-gray-600">
+                <div v-if="inquiries.meta?.last_page > 1" class="px-6 py-4 border-t border-border flex items-center justify-between text-sm text-ink-muted">
                     <span>Showing {{ inquiries.meta.from }}–{{ inquiries.meta.to }} of {{ inquiries.meta.total }}</span>
                     <div class="flex gap-2">
-                        <Link v-if="inquiries.links?.prev" :href="inquiries.links.prev" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">Previous</Link>
-                        <Link v-if="inquiries.links?.next" :href="inquiries.links.next" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">Next</Link>
+                        <Link v-if="inquiries.links?.prev" :href="inquiries.links.prev" class="px-3 py-1 border border-border rounded hover:bg-surface-muted">Previous</Link>
+                        <Link v-if="inquiries.links?.next" :href="inquiries.links.next" class="px-3 py-1 border border-border rounded hover:bg-surface-muted">Next</Link>
                     </div>
                 </div>
             </div>

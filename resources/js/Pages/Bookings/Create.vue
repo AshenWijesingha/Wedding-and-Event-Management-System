@@ -46,18 +46,18 @@ function submit() {
     <AppLayout title="New Booking">
         <div class="max-w-2xl mx-auto space-y-4">
             <div class="flex items-center gap-3">
-                <Link href="/admin/bookings" class="text-gray-400 hover:text-gray-600">
+                <Link href="/admin/bookings" class="text-ink-subtle hover:text-ink-muted">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                 </Link>
-                <h2 class="text-xl font-semibold text-gray-900">New Booking</h2>
+                <h2 class="text-xl font-semibold text-ink">New Booking</h2>
             </div>
 
-            <form @submit.prevent="submit" class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+            <form @submit.prevent="submit" class="bg-surface rounded-lg shadow-sm p-6 space-y-5">
                 <!-- Client -->
                 <div>
                     <InputLabel for="client_id" value="Client *" />
                     <select id="client_id" v-model="form.client_id" required
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        class="mt-1 block w-full border-border rounded-md shadow-sm text-sm focus:border-primary focus:ring-primary">
                         <option value="" disabled>Select a client</option>
                         <option v-for="c in clients" :key="c.id" :value="c.id">{{ c.name }}</option>
                     </select>
@@ -69,7 +69,7 @@ function submit() {
                     <div>
                         <InputLabel for="venue_id" value="Venue *" />
                         <select id="venue_id" v-model="form.venue_id" required
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            class="mt-1 block w-full border-border rounded-md shadow-sm text-sm focus:border-primary focus:ring-primary">
                             <option value="" disabled>Select a venue</option>
                             <option v-for="v in venues" :key="v.id" :value="v.id">{{ v.name }}</option>
                         </select>
@@ -78,7 +78,7 @@ function submit() {
                     <div>
                         <InputLabel for="package_id" value="Package" />
                         <select id="package_id" v-model="form.package_id" @change="onPackageChange"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            class="mt-1 block w-full border-border rounded-md shadow-sm text-sm focus:border-primary focus:ring-primary">
                             <option value="">No package</option>
                             <option v-for="p in packages" :key="p.id" :value="p.id">{{ p.name }}</option>
                         </select>
@@ -91,7 +91,7 @@ function submit() {
                     <div>
                         <InputLabel for="event_type" value="Event Type *" />
                         <select id="event_type" v-model="form.event_type"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm text-sm capitalize focus:border-indigo-500 focus:ring-indigo-500">
+                            class="mt-1 block w-full border-border rounded-md shadow-sm text-sm capitalize focus:border-primary focus:ring-primary">
                             <option v-for="t in eventTypes" :key="t" :value="t">{{ t }}</option>
                         </select>
                         <InputError :message="form.errors.event_type" class="mt-1" />
@@ -142,7 +142,7 @@ function submit() {
                 <div>
                     <InputLabel for="status" value="Status" />
                     <select id="status" v-model="form.status"
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        class="mt-1 block w-full border-border rounded-md shadow-sm text-sm focus:border-primary focus:ring-primary">
                         <option value="tentative">Tentative</option>
                         <option value="pending">Pending</option>
                         <option value="confirmed">Confirmed</option>
@@ -153,11 +153,11 @@ function submit() {
                 <div>
                     <InputLabel for="notes" value="Notes" />
                     <textarea id="notes" v-model="form.notes" rows="3"
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                        class="mt-1 block w-full border-border rounded-md shadow-sm text-sm focus:border-primary focus:ring-primary" />
                 </div>
 
                 <div class="flex items-center justify-between pt-2">
-                    <Link href="/admin/bookings" class="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:text-gray-800">Cancel</Link>
+                    <Link href="/admin/bookings" class="px-4 py-2 text-sm text-ink-muted border border-border rounded-lg hover:text-ink">Cancel</Link>
                     <PrimaryButton :disabled="form.processing">{{ form.processing ? 'Saving...' : 'Create Booking' }}</PrimaryButton>
                 </div>
             </form>

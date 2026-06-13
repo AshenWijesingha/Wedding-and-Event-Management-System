@@ -11,7 +11,7 @@ defineExpose({ focus: () => input.value.focus() });
         ref="input"
         v-model="model"
         :type="type"
-        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+        class="mt-1 block w-full rounded-md border-border shadow-sm focus:border-primary focus:ring-primary text-sm"
         v-bind="$attrs"
     />
 </template>

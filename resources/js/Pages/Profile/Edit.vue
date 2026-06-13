@@ -72,8 +72,8 @@ function resendVerification() {
     <AppLayout title="My Profile">
         <div class="max-w-3xl mx-auto space-y-6">
             <div>
-                <h2 class="text-xl font-semibold text-gray-900">My Profile</h2>
-                <p class="text-sm text-gray-500 mt-0.5">Manage your account details and password.</p>
+                <h2 class="text-xl font-semibold text-ink">My Profile</h2>
+                <p class="text-sm text-ink-subtle mt-0.5">Manage your account details and password.</p>
             </div>
 
             <!-- Email verification banner -->
@@ -90,17 +90,17 @@ function resendVerification() {
             </div>
 
             <!-- Profile information -->
-            <form @submit.prevent="saveProfile" class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+            <form @submit.prevent="saveProfile" class="bg-surface rounded-lg shadow-sm p-6 space-y-5">
                 <div class="flex items-center gap-4">
-                    <div class="w-16 h-16 rounded-full bg-indigo-500 flex items-center justify-center text-white text-2xl font-medium overflow-hidden">
+                    <div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white text-2xl font-medium overflow-hidden">
                         <img v-if="previewUrl" :src="previewUrl" alt="" class="w-full h-full object-cover" />
                         <span v-else>{{ initial }}</span>
                     </div>
                     <div>
-                        <h3 class="text-sm font-semibold text-gray-900">Profile information</h3>
-                        <p class="text-xs text-gray-500 capitalize mb-2">Role: {{ profile.role }}</p>
+                        <h3 class="text-sm font-semibold text-ink">Profile information</h3>
+                        <p class="text-xs text-ink-subtle capitalize mb-2">Role: {{ profile.role }}</p>
                         <div class="flex items-center gap-3">
-                            <label class="cursor-pointer text-xs font-semibold text-indigo-600 hover:text-indigo-800">
+                            <label class="cursor-pointer text-xs font-semibold text-primary hover:text-primary-dark">
                                 <span>Change photo</span>
                                 <input type="file" accept="image/*" class="hidden" @change="onAvatarChange" />
                             </label>
@@ -142,17 +142,17 @@ function resendVerification() {
             </form>
 
             <!-- Update password -->
-            <form @submit.prevent="savePassword" class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+            <form @submit.prevent="savePassword" class="bg-surface rounded-lg shadow-sm p-6 space-y-5">
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-900">Update password</h3>
-                    <p class="text-xs text-gray-500 mt-0.5">Use a strong password you don't reuse elsewhere.</p>
+                    <h3 class="text-sm font-semibold text-ink">Update password</h3>
+                    <p class="text-xs text-ink-subtle mt-0.5">Use a strong password you don't reuse elsewhere.</p>
                 </div>
 
                 <div>
                     <InputLabel value="Current password" :required="true" />
                     <div class="relative">
                         <TextInput v-model="passwordForm.current_password" :type="showCurrent ? 'text' : 'password'" class="mt-1 block w-full pr-11" autocomplete="current-password" />
-                        <button type="button" @click="showCurrent = !showCurrent" class="absolute inset-y-0 right-0 mt-1 flex items-center px-3 text-gray-400 hover:text-gray-700">
+                        <button type="button" @click="showCurrent = !showCurrent" class="absolute inset-y-0 right-0 mt-1 flex items-center px-3 text-ink-subtle hover:text-ink-muted">
                             <span class="text-xs">{{ showCurrent ? 'Hide' : 'Show' }}</span>
                         </button>
                     </div>
@@ -164,7 +164,7 @@ function resendVerification() {
                         <InputLabel value="New password" :required="true" />
                         <div class="relative">
                             <TextInput v-model="passwordForm.password" :type="showNew ? 'text' : 'password'" class="mt-1 block w-full pr-11" autocomplete="new-password" />
-                            <button type="button" @click="showNew = !showNew" class="absolute inset-y-0 right-0 mt-1 flex items-center px-3 text-gray-400 hover:text-gray-700">
+                            <button type="button" @click="showNew = !showNew" class="absolute inset-y-0 right-0 mt-1 flex items-center px-3 text-ink-subtle hover:text-ink-muted">
                                 <span class="text-xs">{{ showNew ? 'Hide' : 'Show' }}</span>
                             </button>
                         </div>

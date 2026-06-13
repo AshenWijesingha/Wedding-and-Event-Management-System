@@ -80,27 +80,27 @@ const statusLabels = {
             <!-- Header -->
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <Link href="/admin/venues" class="text-gray-400 hover:text-gray-600">
+                    <Link href="/admin/venues" class="text-ink-subtle hover:text-ink-muted">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                     </Link>
                     <div>
-                        <h2 class="text-xl font-semibold text-gray-900">{{ venue.name }}</h2>
-                        <p class="text-sm text-gray-500">Availability Calendar</p>
+                        <h2 class="text-xl font-semibold text-ink">{{ venue.name }}</h2>
+                        <p class="text-sm text-ink-subtle">Availability Calendar</p>
                     </div>
                 </div>
-                <Link :href="`/admin/venues/${venue.slug}/edit`" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
+                <Link :href="`/admin/venues/${venue.slug}/edit`" class="text-sm text-primary hover:text-primary-dark font-medium">
                     Edit Venue
                 </Link>
             </div>
 
             <div class="flex gap-4">
                 <!-- Calendar -->
-                <div class="flex-1 bg-white rounded-lg shadow-sm p-4">
+                <div class="flex-1 bg-surface rounded-lg shadow-sm p-4">
                     <!-- Legend -->
                     <div class="flex flex-wrap gap-3 mb-4">
                         <div v-for="(color, key) in statusColors" :key="key" class="flex items-center gap-1.5">
                             <span class="w-3 h-3 rounded-sm inline-block" :style="{ backgroundColor: color.border }"></span>
-                            <span class="text-xs text-gray-600">{{ statusLabels[key] }}</span>
+                            <span class="text-xs text-ink-muted">{{ statusLabels[key] }}</span>
                         </div>
                     </div>
 
@@ -110,27 +110,27 @@ const statusLabels = {
                 <!-- Side panel -->
                 <div class="w-64 flex-shrink-0 space-y-3">
                     <!-- Event detail -->
-                    <div v-if="selectedEvent" class="bg-white rounded-lg shadow-sm p-4">
-                        <h3 class="text-sm font-semibold text-gray-900 mb-3">Booking Details</h3>
+                    <div v-if="selectedEvent" class="bg-surface rounded-lg shadow-sm p-4">
+                        <h3 class="text-sm font-semibold text-ink mb-3">Booking Details</h3>
                         <dl class="space-y-2 text-sm">
                             <div>
-                                <dt class="text-gray-500">Booking #</dt>
-                                <dd class="font-medium text-gray-900">{{ selectedEvent.booking_number }}</dd>
+                                <dt class="text-ink-subtle">Booking #</dt>
+                                <dd class="font-medium text-ink">{{ selectedEvent.booking_number }}</dd>
                             </div>
                             <div>
-                                <dt class="text-gray-500">Client</dt>
-                                <dd class="font-medium text-gray-900">{{ selectedEvent.client_name }}</dd>
+                                <dt class="text-ink-subtle">Client</dt>
+                                <dd class="font-medium text-ink">{{ selectedEvent.client_name }}</dd>
                             </div>
                             <div>
-                                <dt class="text-gray-500">Event Type</dt>
-                                <dd class="font-medium text-gray-900 capitalize">{{ selectedEvent.event_type }}</dd>
+                                <dt class="text-ink-subtle">Event Type</dt>
+                                <dd class="font-medium text-ink capitalize">{{ selectedEvent.event_type }}</dd>
                             </div>
                             <div>
-                                <dt class="text-gray-500">Guests</dt>
-                                <dd class="font-medium text-gray-900">{{ selectedEvent.guest_count }}</dd>
+                                <dt class="text-ink-subtle">Guests</dt>
+                                <dd class="font-medium text-ink">{{ selectedEvent.guest_count }}</dd>
                             </div>
                             <div>
-                                <dt class="text-gray-500">Status</dt>
+                                <dt class="text-ink-subtle">Status</dt>
                                 <dd>
                                     <span
                                         class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium capitalize"
@@ -141,38 +141,38 @@ const statusLabels = {
                                 </dd>
                             </div>
                         </dl>
-                        <button @click="selectedEvent = null" class="mt-3 text-xs text-gray-400 hover:text-gray-600">Close Ã—</button>
+                        <button @click="selectedEvent = null" class="mt-3 text-xs text-ink-subtle hover:text-ink-muted">Close Ã—</button>
                     </div>
 
                     <!-- Date selected -->
-                    <div v-else-if="selectedDate" class="bg-white rounded-lg shadow-sm p-4">
-                        <h3 class="text-sm font-semibold text-gray-900 mb-2">{{ selectedDate }}</h3>
-                        <p class="text-sm text-gray-500 mb-3">No booking selected.</p>
+                    <div v-else-if="selectedDate" class="bg-surface rounded-lg shadow-sm p-4">
+                        <h3 class="text-sm font-semibold text-ink mb-2">{{ selectedDate }}</h3>
+                        <p class="text-sm text-ink-subtle mb-3">No booking selected.</p>
                         <Link
                             :href="`/admin/bookings/create?date=${selectedDate}&venue=${venue.id}`"
-                            class="inline-flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+                            class="inline-flex items-center gap-1 text-sm text-primary hover:text-primary-dark font-medium"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                             Create booking
                         </Link>
-                        <button @click="selectedDate = null" class="block mt-2 text-xs text-gray-400 hover:text-gray-600">Close Ã—</button>
+                        <button @click="selectedDate = null" class="block mt-2 text-xs text-ink-subtle hover:text-ink-muted">Close Ã—</button>
                     </div>
 
                     <!-- Venue stats -->
-                    <div class="bg-white rounded-lg shadow-sm p-4">
-                        <h3 class="text-sm font-semibold text-gray-900 mb-3">Venue Info</h3>
+                    <div class="bg-surface rounded-lg shadow-sm p-4">
+                        <h3 class="text-sm font-semibold text-ink mb-3">Venue Info</h3>
                         <dl class="space-y-2 text-sm">
                             <div class="flex justify-between">
-                                <dt class="text-gray-500">Capacity</dt>
-                                <dd class="text-gray-900">{{ venue.capacity?.min ?? 'â€”' }}â€“{{ venue.capacity?.max ?? 'â€”' }}</dd>
+                                <dt class="text-ink-subtle">Capacity</dt>
+                                <dd class="text-ink">{{ venue.capacity?.min ?? 'â€”' }}â€“{{ venue.capacity?.max ?? 'â€”' }}</dd>
                             </div>
                             <div class="flex justify-between">
-                                <dt class="text-gray-500">Base Price</dt>
-                                <dd class="text-gray-900">LKR {{ venue.pricing?.base_price?.toLocaleString() ?? 'â€”' }}</dd>
+                                <dt class="text-ink-subtle">Base Price</dt>
+                                <dd class="text-ink">LKR {{ venue.pricing?.base_price?.toLocaleString() ?? 'â€”' }}</dd>
                             </div>
                             <div class="flex justify-between">
-                                <dt class="text-gray-500">Status</dt>
-                                <dd class="capitalize text-gray-900">{{ venue.status }}</dd>
+                                <dt class="text-ink-subtle">Status</dt>
+                                <dd class="capitalize text-ink">{{ venue.status }}</dd>
                             </div>
                         </dl>
                     </div>

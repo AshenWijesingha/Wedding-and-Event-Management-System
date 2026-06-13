@@ -37,14 +37,14 @@ function resetPassword() {
     <AppLayout title="Edit User">
         <div class="max-w-2xl mx-auto space-y-5">
             <div class="flex items-center gap-3">
-                <Link href="/admin/users" class="text-gray-400 hover:text-gray-600">
+                <Link href="/admin/users" class="text-ink-subtle hover:text-ink-muted">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                 </Link>
-                <h2 class="text-xl font-semibold text-gray-900">Edit {{ user.name }}</h2>
+                <h2 class="text-xl font-semibold text-ink">Edit {{ user.name }}</h2>
             </div>
 
             <!-- Details -->
-            <form @submit.prevent="submit" class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+            <form @submit.prevent="submit" class="bg-surface rounded-lg shadow-sm p-6 space-y-5">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <InputLabel value="Full name" :required="true" />
@@ -58,17 +58,17 @@ function resetPassword() {
                     </div>
                     <div>
                         <InputLabel value="Role" :required="true" />
-                        <select v-model="form.role" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 capitalize">
+                        <select v-model="form.role" class="mt-1 block w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary capitalize">
                             <option v-for="r in roles" :key="r" :value="r">{{ r.replace('_', ' ') }}</option>
                         </select>
                         <InputError :message="form.errors.role" class="mt-1" />
                     </div>
                     <div>
                         <InputLabel value="Tenant" :required="true" />
-                        <select v-if="tenants.length > 1" v-model="form.tenant_id" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <select v-if="tenants.length > 1" v-model="form.tenant_id" class="mt-1 block w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
                             <option v-for="t in tenants" :key="t.id" :value="t.id">{{ t.name }}</option>
                         </select>
-                        <p v-else class="mt-1 block w-full border border-gray-200 bg-gray-50 rounded-md px-3 py-2 text-sm text-gray-600">{{ tenants[0]?.name ?? '—' }}</p>
+                        <p v-else class="mt-1 block w-full border border-border bg-surface-muted rounded-md px-3 py-2 text-sm text-ink-muted">{{ tenants[0]?.name ?? '—' }}</p>
                         <InputError :message="form.errors.tenant_id" class="mt-1" />
                     </div>
                     <div>
@@ -77,8 +77,8 @@ function resetPassword() {
                         <InputError :message="form.errors.phone" class="mt-1" />
                     </div>
                     <div class="flex items-end">
-                        <label class="flex items-center gap-2 text-sm text-gray-700">
-                            <input v-model="form.is_active" type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                        <label class="flex items-center gap-2 text-sm text-ink-muted">
+                            <input v-model="form.is_active" type="checkbox" class="rounded border-border text-primary focus:ring-primary" />
                             Active account
                         </label>
                     </div>
@@ -89,17 +89,17 @@ function resetPassword() {
                         <span v-if="form.recentlySuccessful" class="text-sm text-green-600">Saved.</span>
                     </transition>
                     <button type="submit" :disabled="form.processing"
-                        class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg disabled:opacity-60">
+                        class="px-5 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-semibold rounded-lg disabled:opacity-60">
                         {{ form.processing ? 'Saving…' : 'Save changes' }}
                     </button>
                 </div>
             </form>
 
             <!-- Reset password -->
-            <form @submit.prevent="resetPassword" class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+            <form @submit.prevent="resetPassword" class="bg-surface rounded-lg shadow-sm p-6 space-y-5">
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-900">Reset password</h3>
-                    <p class="text-xs text-gray-500 mt-0.5">Set a new password for this user. They are not notified automatically.</p>
+                    <h3 class="text-sm font-semibold text-ink">Reset password</h3>
+                    <p class="text-xs text-ink-subtle mt-0.5">Set a new password for this user. They are not notified automatically.</p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -117,7 +117,7 @@ function resetPassword() {
                         <span v-if="passwordForm.recentlySuccessful" class="text-sm text-green-600">Password reset.</span>
                     </transition>
                     <button type="submit" :disabled="passwordForm.processing"
-                        class="px-5 py-2 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-semibold rounded-lg disabled:opacity-60">
+                        class="px-5 py-2 border border-border text-ink-muted hover:bg-surface-muted text-sm font-semibold rounded-lg disabled:opacity-60">
                         {{ passwordForm.processing ? 'Resetting…' : 'Reset password' }}
                     </button>
                 </div>

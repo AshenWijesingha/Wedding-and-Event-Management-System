@@ -67,7 +67,7 @@ const fillSuperAdminDemo = () => {
 
             <div class="flex items-center justify-between">
                 <label class="flex items-center">
-                    <input v-model="form.remember" type="checkbox" class="rounded border-gray-300 shadow-sm focus:ring-2" style="color: var(--color-primary);" />
+                    <input v-model="form.remember" type="checkbox" class="rounded border-border shadow-sm focus:ring-2" style="color: var(--color-primary);" />
                     <span class="ml-2 text-sm text-[#5c5246]">Remember me</span>
                 </label>
                 <Link v-if="canResetPassword" href="/forgot-password" class="text-sm font-medium text-[#9a7b3f] hover:text-[#1a1512]">
