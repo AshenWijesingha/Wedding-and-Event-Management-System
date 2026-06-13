@@ -130,9 +130,29 @@ class PortalController extends Controller
             'total_pending' => (float) \App\Models\Payment::where('client_id', $clientId)->where('status', 'pending')->sum('amount'),
         ];
 
+        // Bookings still owing money — the "Pay now" targets. Hidden entirely when
+        // the tenant has no PayHere credentials configured.
+        $tenant         = \App\Models\Tenant::current();
+        $payhereEnabled = $tenant ? app(\App\Services\PayHereService::class)->isConfigured($tenant) : false;
+
+        $payable = \App\Models\Booking::where('client_id', $clientId)
+            ->where('balance_amount', '>', 0)
+            ->orderByDesc('event_date')
+            ->get(['id', 'booking_number', 'event_date', 'total_amount', 'paid_amount', 'balance_amount'])
+            ->map(fn ($b) => [
+                'id'             => $b->id,
+                'booking_number' => $b->booking_number,
+                'event_date'     => $b->event_date?->toDateString(),
+                'total_amount'   => (float) $b->total_amount,
+                'paid_amount'    => (float) $b->paid_amount,
+                'balance_amount' => (float) $b->balance_amount,
+            ]);
+
         return Inertia::render('Portal/Payments', [
-            'payments' => PaymentResource::collection($payments),
-            'summary'  => $summary,
+            'payments'        => PaymentResource::collection($payments),
+            'summary'         => $summary,
+            'payableBookings' => $payable,
+            'payhereEnabled'  => $payhereEnabled,
         ]);
     }
 

@@ -144,6 +144,10 @@ Route::middleware([
 
     Route::middleware('permission:payments.view')->group(function () {
         Route::get('/payments', [\App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('payments.index');
+        Route::get('/payments/{payment}', [\App\Http\Controllers\Admin\PaymentController::class, 'show'])->name('payments.show');
+        Route::get('/payments/{payment}/receipt', [\App\Http\Controllers\Admin\PaymentController::class, 'receipt'])->name('payments.receipt');
+        Route::get('/bookings/{booking}/payments/create', [\App\Http\Controllers\Admin\PaymentController::class, 'create'])->middleware('permission:payments.create')->name('payments.create');
+        Route::post('/bookings/{booking}/payments', [\App\Http\Controllers\Admin\PaymentController::class, 'store'])->middleware('permission:payments.create')->name('payments.store');
     });
 
     // Custom Fields
@@ -238,6 +242,7 @@ Route::middleware([
             Route::post('/settings/branding', [\App\Http\Controllers\Admin\SettingsController::class, 'updateBranding'])->name('settings.branding');
             Route::post('/settings/email-templates', [\App\Http\Controllers\Admin\SettingsController::class, 'updateEmailTemplates'])->name('settings.email-templates');
             Route::post('/settings/document-templates', [\App\Http\Controllers\Admin\SettingsController::class, 'updateDocumentTemplates'])->name('settings.document-templates');
+            Route::post('/settings/payhere', [\App\Http\Controllers\Admin\SettingsController::class, 'updatePayHere'])->name('settings.payhere');
             Route::post('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'updateSettings'])->name('settings.update');
         });
     });
@@ -250,6 +255,10 @@ Route::middleware(['auth', \App\Http\Middleware\EnforceSessionTimeout::class, \A
     Route::get('/bookings/{booking}', [\App\Http\Controllers\Portal\PortalController::class, 'bookingShow'])->name('bookings.show');
     Route::get('/quotations', [\App\Http\Controllers\Portal\PortalController::class, 'quotations'])->name('quotations');
     Route::get('/payments', [\App\Http\Controllers\Portal\PortalController::class, 'payments'])->name('payments');
+    Route::post('/payments/initiate', [\App\Http\Controllers\Portal\PaymentController::class, 'initiate'])->name('payments.initiate');
+    Route::get('/payments/return', [\App\Http\Controllers\Portal\PaymentController::class, 'return'])->name('payments.return');
+    Route::get('/payments/{payment}/cancel', [\App\Http\Controllers\Portal\PaymentController::class, 'cancel'])->name('payments.cancel');
+    Route::get('/payments/{payment}/receipt', [\App\Http\Controllers\Portal\PaymentController::class, 'receipt'])->name('payments.receipt');
     Route::post('/notifications/read', [\App\Http\Controllers\Portal\PortalController::class, 'markNotificationRead'])->name('notifications.read');
 
     // Active sessions / device management for clients.
@@ -257,3 +266,7 @@ Route::middleware(['auth', \App\Http\Middleware\EnforceSessionTimeout::class, \A
     Route::delete('/sessions/{id}', [\App\Http\Controllers\Admin\SessionManagementController::class, 'destroy'])->middleware('password.confirm')->name('sessions.destroy');
     Route::delete('/sessions', [\App\Http\Controllers\Admin\SessionManagementController::class, 'destroyOthers'])->middleware('password.confirm')->name('sessions.destroy-others');
 });
+
+// PayHere server-to-server webhook. Public, CSRF-exempt (see bootstrap/app.php),
+// no auth and no tenant middleware — it resolves the tenant from the Payment.
+Route::post('/payhere/notify', [\App\Http\Controllers\PayHereWebhookController::class, 'notify'])->name('payhere.notify');

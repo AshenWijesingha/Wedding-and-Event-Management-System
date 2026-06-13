@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import { Head } from '@inertiajs/vue3';
 import { usePermissions } from '@/composables/usePermissions';
+import Avatar from '@/Components/ui/Avatar.vue';
 
 defineProps({ title: String });
 
@@ -55,35 +56,35 @@ const logout = () => router.post('/logout');
 
 <template>
     <Head :title="title" />
-    <div class="min-h-screen bg-gray-50 flex">
+    <div class="min-h-screen bg-surface-muted flex">
         <!-- Sidebar -->
         <aside
-            :class="[sidebarOpen ? 'translate-x-0' : '-translate-x-full', 'fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0']"
+            :class="[sidebarOpen ? 'translate-x-0' : '-translate-x-full', 'fixed inset-y-0 left-0 z-50 w-64 bg-surface border-r border-border flex flex-col transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0']"
         >
             <!-- Logo -->
-            <div class="flex items-center justify-between h-16 px-6 bg-gray-800">
-                <Link href="/admin" class="flex items-center space-x-2">
-                    <span class="text-xl font-bold text-white">EventPro</span>
+            <div class="flex items-center justify-between h-16 px-6 border-b border-border flex-shrink-0">
+                <Link href="/admin" class="flex items-center gap-2">
+                    <span class="font-display text-xl font-semibold text-ink">EventPro</span>
                 </Link>
-                <button @click="sidebarOpen = false" class="lg:hidden text-gray-400 hover:text-white">
+                <button @click="sidebarOpen = false" class="lg:hidden text-ink-subtle hover:text-ink">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
 
             <!-- Navigation -->
-            <nav class="mt-4 px-3 flex-1 overflow-y-auto">
+            <nav class="mt-3 px-3 flex-1 overflow-y-auto">
                 <Link
                     v-for="item in visibleNav"
                     :key="item.name"
                     :href="item.href"
                     :class="[
                         isActive(item.href)
-                            ? 'bg-indigo-600 text-white'
-                            : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                        'group flex items-center px-3 py-2 text-sm font-medium rounded-md mb-1 transition-colors'
+                            ? 'bg-primary/10 text-primary'
+                            : 'text-ink-muted hover:bg-surface-sunken hover:text-ink',
+                        'group flex items-center px-3 py-2 text-sm font-medium rounded-lg mb-0.5 transition-colors'
                     ]"
                 >
-                    <svg class="mr-3 h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <svg class="mr-3 h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                         <path stroke-linecap="round" stroke-linejoin="round" :d="item.icon" />
                     </svg>
                     {{ item.name }}
@@ -91,19 +92,16 @@ const logout = () => router.post('/logout');
             </nav>
 
             <!-- User profile -->
-            <div class="absolute bottom-0 w-full p-4 bg-gray-800">
-                <div class="flex items-center space-x-3">
-                    <Link href="/admin/profile" class="flex items-center space-x-3 flex-1 min-w-0 group" title="My Profile">
-                        <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white text-sm font-medium overflow-hidden">
-                            <img v-if="user?.avatar_url" :src="user.avatar_url" alt="" class="w-full h-full object-cover" />
-                            <span v-else>{{ user?.name?.charAt(0)?.toUpperCase() }}</span>
-                        </div>
+            <div class="p-3 border-t border-border flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <Link href="/admin/profile" class="flex items-center gap-3 flex-1 min-w-0 group" title="My Profile">
+                        <Avatar :name="user?.name" :src="user?.avatar_url" size="sm" />
                         <div class="flex-1 min-w-0">
-                            <p class="text-sm font-medium text-white truncate group-hover:underline">{{ user?.name }}</p>
-                            <p class="text-xs text-gray-400 truncate capitalize">{{ user?.role }}</p>
+                            <p class="text-sm font-medium text-ink truncate group-hover:underline">{{ user?.name }}</p>
+                            <p class="text-xs text-ink-subtle truncate capitalize">{{ user?.role }}</p>
                         </div>
                     </Link>
-                    <button @click="logout" class="text-gray-400 hover:text-white transition-colors" title="Logout">
+                    <button @click="logout" class="text-ink-subtle hover:text-ink transition-colors" title="Logout">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                     </button>
                 </div>
@@ -111,33 +109,30 @@ const logout = () => router.post('/logout');
         </aside>
 
         <!-- Mobile overlay -->
-        <div v-if="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden" />
+        <div v-if="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 z-40 bg-ink/40 lg:hidden" />
 
         <!-- Main content -->
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- Impersonation banner -->
-            <div v-if="impersonating" class="flex items-center justify-between gap-3 bg-amber-500 text-white px-4 lg:px-6 py-2 text-sm font-medium">
+            <div v-if="impersonating" class="flex items-center justify-between gap-3 bg-warning text-white px-4 lg:px-6 py-2 text-sm font-medium">
                 <span class="flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                     Impersonating <strong>{{ impersonating.tenant }}</strong>
                 </span>
-                <button @click="stopImpersonating" class="bg-white/20 hover:bg-white/30 rounded px-3 py-1">Exit impersonation</button>
+                <button @click="stopImpersonating" class="bg-white/20 hover:bg-white/30 rounded-lg px-3 py-1">Exit impersonation</button>
             </div>
             <!-- Top bar -->
-            <header class="bg-white shadow-sm h-16 flex items-center px-4 lg:px-6">
-                <button @click="sidebarOpen = true" class="lg:hidden mr-4 text-gray-500 hover:text-gray-700">
+            <header class="bg-surface border-b border-border h-16 flex items-center px-4 lg:px-6">
+                <button @click="sidebarOpen = true" class="lg:hidden mr-4 text-ink-muted hover:text-ink">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
                 <div class="flex-1">
-                    <h1 class="text-lg font-semibold text-gray-800">{{ title }}</h1>
+                    <h1 class="font-display text-lg font-semibold text-ink">{{ title }}</h1>
                 </div>
                 <!-- Flash messages -->
-                <div v-if="$page.props.flash?.success" class="mr-4 px-3 py-1 bg-green-100 text-green-700 rounded text-sm">
-                    {{ $page.props.flash.success }}
-                </div>
-                <div v-if="$page.props.flash?.error" class="mr-4 px-3 py-1 bg-red-100 text-red-700 rounded text-sm">
-                    {{ $page.props.flash.error }}
-                </div>
+                <div v-if="$page.props.flash?.success" class="mr-3 px-3 py-1 bg-success-soft text-success rounded-lg text-sm">{{ $page.props.flash.success }}</div>
+                <div v-if="$page.props.flash?.error" class="mr-3 px-3 py-1 bg-danger-soft text-danger rounded-lg text-sm">{{ $page.props.flash.error }}</div>
+                <div v-if="$page.props.flash?.info" class="mr-3 px-3 py-1 bg-info-soft text-info rounded-lg text-sm">{{ $page.props.flash.info }}</div>
             </header>
 
             <!-- Page content -->
