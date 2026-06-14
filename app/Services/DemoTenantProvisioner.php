@@ -71,41 +71,191 @@ class DemoTenantProvisioner
      */
     private function seed(int $tid): void
     {
-        $venues   = Venue::factory(3)->create(['tenant_id' => $tid]);
-        $packages = Package::factory(4)->create(['tenant_id' => $tid]);
-        $clients  = Client::factory(6)->create(['tenant_id' => $tid]);
-        $staff    = Staff::factory(3)->create(['tenant_id' => $tid]);
-        Vendor::factory(4)->create(['tenant_id' => $tid]);
+        $venues   = $this->seedVenues($tid);
+        $packages = $this->seedPackages($tid);
+        $clients  = $this->seedClients($tid);
+        $staff    = $this->seedTeam($tid);
 
-        Task::factory(5)->create([
-            'tenant_id'   => $tid,
-            'assigned_to' => $staff->random()->id,
-        ]);
+        $this->seedHeroStory($tid, $clients[0], $venues[0], $packages[2]);
+        $this->seedSupporting($tid, $clients, $venues, $packages, $staff);
+    }
 
-        $bookings = collect(range(1, 8))->map(fn () => Booking::factory()->create([
-            'tenant_id'  => $tid,
-            'venue_id'   => $venues->random()->id,
-            'client_id'  => $clients->random()->id,
-            'package_id' => $packages->random()->id,
-        ]));
-
-        $bookings->take(5)->each(fn (Booking $b) => Payment::factory()->completed()->create([
-            'tenant_id'  => $tid,
-            'booking_id' => $b->id,
-            'client_id'  => $b->client_id,
-        ]));
-
-        Inquiry::factory(5)->create([
-            'tenant_id'  => $tid,
-            'client_id'  => $clients->random()->id,
-            'venue_id'   => $venues->random()->id,
-            'package_id' => $packages->random()->id,
-        ]);
-
-        Quotation::factory(4)->create([
+    private function seedVenues(int $tid)
+    {
+        return collect([
+            ['name' => 'Mahaweli Grand Ballroom', 'capacity_min' => 100, 'capacity_max' => 500, 'base_price' => 1500000],
+            ['name' => 'Cinnamon Garden Lawns',   'capacity_min' => 50,  'capacity_max' => 250, 'base_price' => 850000],
+            ['name' => 'Galle Face Terrace',      'capacity_min' => 30,  'capacity_max' => 150, 'base_price' => 650000],
+        ])->map(fn ($v) => Venue::factory()->create($v + [
             'tenant_id' => $tid,
-            'client_id' => $clients->random()->id,
-            'venue_id'  => $venues->random()->id,
+            'slug'      => Str::slug($v['name']).'-'.Str::lower(Str::random(4)),
+        ]));
+    }
+
+    private function seedPackages(int $tid)
+    {
+        return collect([
+            ['name' => 'Silver Collection',  'base_price' => 450000,  'min_guests' => 50,  'max_guests' => 150],
+            ['name' => 'Gold Collection',    'base_price' => 850000,  'min_guests' => 100, 'max_guests' => 300],
+            ['name' => 'Platinum Collection','base_price' => 1500000, 'min_guests' => 150, 'max_guests' => 500],
+            ['name' => 'Bespoke Experience', 'base_price' => 2500000, 'min_guests' => 50,  'max_guests' => 500],
+        ])->map(fn ($p) => Package::factory()->create($p + [
+            'tenant_id' => $tid,
+            'slug'      => Str::slug($p['name']).'-'.Str::lower(Str::random(4)),
+        ]));
+    }
+
+    private function seedClients(int $tid)
+    {
+        return collect([
+            ['first_name' => 'Priya & Arjun', 'last_name' => 'Fernando-Mendis', 'email' => 'priya.arjun@example.lk'],
+            ['first_name' => 'Nimal',    'last_name' => 'Perera',        'email' => 'nimal.perera@example.lk'],
+            ['first_name' => 'Sanduni',  'last_name' => 'Jayawardena',   'email' => 'sanduni.j@example.lk'],
+            ['first_name' => 'Ruwan',    'last_name' => 'Silva',         'email' => 'ruwan.silva@example.lk'],
+            ['first_name' => 'Aisha',    'last_name' => 'Hussain',       'email' => 'aisha.hussain@example.lk'],
+            ['first_name' => 'Kavya',    'last_name' => 'Rajapaksha',    'email' => 'kavya.r@example.lk'],
+        ])->map(fn ($c) => Client::factory()->create($c + ['tenant_id' => $tid]));
+    }
+
+    private function seedTeam(int $tid)
+    {
+        $vendors = [
+            ['name' => 'Lanka Lens Photography', 'category' => 'photographer'],
+            ['name' => 'Spice Route Catering',   'category' => 'caterer'],
+            ['name' => 'Orchid & Ivory Florals', 'category' => 'florist'],
+            ['name' => 'Rhythm Nation DJs',      'category' => 'music'],
+        ];
+        foreach ($vendors as $v) {
+            Vendor::factory()->create($v + [
+                'tenant_id' => $tid,
+                'slug'      => Str::slug($v['name']).'-'.Str::lower(Str::random(4)),
+            ]);
+        }
+
+        return collect([
+            ['first_name' => 'Dilani',   'last_name' => 'Wickramasinghe', 'role' => 'coordinator'],
+            ['first_name' => 'Tharindu', 'last_name' => 'Bandara',        'role' => 'manager'],
+            ['first_name' => 'Maya',     'last_name' => 'Gunasekara',     'role' => 'assistant'],
+        ])->map(fn ($s) => Staff::factory()->create($s + ['tenant_id' => $tid]));
+    }
+
+    /**
+     * The thread the sales runbook walks: inquiry → accepted quotation →
+     * confirmed booking → completed deposit, with a real outstanding balance.
+     */
+    private function seedHeroStory(int $tid, $client, $venue, $package): void
+    {
+        $eventDate = now()->addDays(90)->toDateString();
+
+        $booking = Booking::factory()->create([
+            'tenant_id'      => $tid,
+            'venue_id'       => $venue->id,
+            'client_id'      => $client->id,
+            'package_id'     => $package->id,
+            'event_type'     => 'wedding',
+            'event_date'     => $eventDate,
+            'guest_count'    => 250,
+            'total_amount'   => 1850000,
+            'paid_amount'    => 500000,
+            'balance_amount' => 1350000,
+            'status'         => 'confirmed',
         ]);
+
+        Payment::factory()->create([
+            'tenant_id'        => $tid,
+            'booking_id'       => $booking->id,
+            'client_id'        => $client->id,
+            'installment_name' => 'Deposit',
+            'amount'           => 500000,
+            'payment_method'   => 'bank_transfer',
+            'status'           => 'completed',
+            'payment_date'     => now()->subDays(14)->toDateString(),
+        ]);
+
+        Inquiry::factory()->create([
+            'tenant_id'  => $tid,
+            'client_id'  => $client->id,
+            'venue_id'   => $venue->id,
+            'package_id' => $package->id,
+            'event_type' => 'wedding',
+            'guest_count'=> 250,
+            'status'     => 'proposal_sent',
+        ]);
+
+        Quotation::factory()->create([
+            'tenant_id'       => $tid,
+            'client_id'       => $client->id,
+            'venue_id'        => $venue->id,
+            'package_id'      => $package->id,
+            'event_date'      => $eventDate,
+            'guest_count'     => 250,
+            'subtotal'        => 1750000,
+            'discount_amount' => 0,
+            'tax_amount'      => 100000,
+            'total_amount'    => 1850000,
+            'valid_until'     => now()->addDays(30)->toDateString(),
+            'status'          => 'accepted',
+        ]);
+    }
+
+    private function seedSupporting(int $tid, $clients, $venues, $packages, $staff): void
+    {
+        // A spread of bookings across statuses for a populated-but-clean app.
+        $statuses = ['pending', 'tentative', 'confirmed', 'completed', 'confirmed'];
+        foreach ($statuses as $i => $status) {
+            $venue = $venues[$i % 3];
+            $package = $packages[$i % 4];
+            $client = $clients[$i + 1];
+            $total = (float) $package->base_price + (float) $venue->base_price;
+            $paid = in_array($status, ['confirmed', 'completed'], true) ? round($total * 0.4) : 0;
+
+            $booking = Booking::factory()->create([
+                'tenant_id'      => $tid,
+                'venue_id'       => $venue->id,
+                'client_id'      => $client->id,
+                'package_id'     => $package->id,
+                'event_type'     => 'wedding',
+                'event_date'     => now()->addDays(30 + $i * 20)->toDateString(),
+                'guest_count'    => 120 + $i * 20,
+                'total_amount'   => $total,
+                'paid_amount'    => $paid,
+                'balance_amount' => $total - $paid,
+                'status'         => $status,
+            ]);
+
+            if ($paid > 0) {
+                Payment::factory()->create([
+                    'tenant_id'        => $tid,
+                    'booking_id'       => $booking->id,
+                    'client_id'        => $client->id,
+                    'installment_name' => 'Deposit',
+                    'amount'           => $paid,
+                    'payment_method'   => 'card',
+                    'status'           => 'completed',
+                    'payment_date'     => now()->subDays(7)->toDateString(),
+                ]);
+            }
+        }
+
+        // A couple more quotations + inquiries in varied states.
+        Quotation::factory()->create(['tenant_id' => $tid, 'client_id' => $clients[1]->id, 'venue_id' => $venues[1]->id, 'package_id' => $packages[1]->id, 'status' => 'sent']);
+        Quotation::factory()->create(['tenant_id' => $tid, 'client_id' => $clients[2]->id, 'venue_id' => $venues[2]->id, 'package_id' => $packages[0]->id, 'status' => 'draft']);
+        Inquiry::factory()->create(['tenant_id' => $tid, 'client_id' => $clients[3]->id, 'venue_id' => $venues[0]->id, 'package_id' => $packages[1]->id, 'event_type' => 'corporate', 'status' => 'pending']);
+        Inquiry::factory()->create(['tenant_id' => $tid, 'client_id' => $clients[4]->id, 'venue_id' => $venues[1]->id, 'package_id' => $packages[2]->id, 'event_type' => 'birthday', 'status' => 'contacted']);
+
+        // Tasks tied to the wedding, assigned across the team.
+        $tasks = [
+            ['title' => 'Confirm floral arrangements with Orchid & Ivory', 'priority' => 'high'],
+            ['title' => 'Finalize menu tasting with Spice Route', 'priority' => 'medium'],
+            ['title' => 'Send balance payment reminder to the Fernando-Mendis wedding', 'priority' => 'high'],
+            ['title' => 'Book photographer walkthrough', 'priority' => 'low'],
+        ];
+        foreach ($tasks as $i => $t) {
+            Task::factory()->create($t + [
+                'tenant_id'   => $tid,
+                'assigned_to' => $staff[$i % 3]->id,
+                'status'      => 'pending',
+            ]);
+        }
     }
 }

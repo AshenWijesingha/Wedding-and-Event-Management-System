@@ -3,6 +3,8 @@
 namespace Tests\Feature\Demo;
 
 use App\Models\Booking;
+use App\Models\Client;
+use App\Models\Payment;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Models\Venue;
@@ -26,9 +28,28 @@ class DemoSandboxTest extends TestCase
         $this->assertTrue($user->hasRole('tenant_owner'));
 
         $this->assertSame(3, Venue::withoutGlobalScopes()->where('tenant_id', $tenant->id)->count());
-        $this->assertSame(8, Booking::withoutGlobalScopes()->where('tenant_id', $tenant->id)->count());
+        $this->assertSame(6, Booking::withoutGlobalScopes()->where('tenant_id', $tenant->id)->count());
         // Onboarding wizard skipped.
         $this->assertTrue($tenant->getSetting('onboarding')['dismissed']);
+    }
+
+    public function test_provision_seeds_the_hero_story(): void
+    {
+        $tenant = app(DemoTenantProvisioner::class)->provision()['tenant'];
+        $tid = $tenant->id;
+
+        $hero = Client::withoutGlobalScopes()->where('tenant_id', $tid)
+            ->where('first_name', 'Priya & Arjun')->first();
+        $this->assertNotNull($hero, 'Hero client seeded');
+
+        $booking = Booking::withoutGlobalScopes()->where('tenant_id', $tid)
+            ->where('client_id', $hero->id)->where('status', 'confirmed')->first();
+        $this->assertNotNull($booking, 'Hero booking confirmed');
+        $this->assertEquals(500000, $booking->paid_amount);
+        $this->assertEquals(1350000, $booking->balance_amount);
+
+        $this->assertSame(1, Payment::withoutGlobalScopes()->where('tenant_id', $tid)
+            ->where('booking_id', $booking->id)->where('status', 'completed')->where('amount', 500000)->count());
     }
 
     public function test_two_demos_are_isolated(): void
@@ -37,7 +58,7 @@ class DemoSandboxTest extends TestCase
         $b = app(DemoTenantProvisioner::class)->provision()['tenant'];
 
         $this->assertNotSame($a->id, $b->id);
-        $this->assertSame(8, Booking::withoutGlobalScopes()->where('tenant_id', $a->id)->count());
+        $this->assertSame(6, Booking::withoutGlobalScopes()->where('tenant_id', $a->id)->count());
         $this->assertSame(0, Booking::withoutGlobalScopes()
             ->where('tenant_id', $a->id)->where('venue_id', function ($q) use ($b) {
                 $q->select('id')->from('venues')->where('tenant_id', $b->id)->limit(1);
