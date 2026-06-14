@@ -57,6 +57,7 @@ const logout = () => router.post('/logout');
 
 <template>
     <Head :title="title" />
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-[60] focus:top-2 focus:left-2 focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:rounded-lg">Skip to content</a>
     <div class="min-h-screen bg-surface-muted flex">
         <!-- Sidebar -->
         <aside
@@ -67,7 +68,7 @@ const logout = () => router.post('/logout');
                 <Link href="/admin" class="flex items-center gap-2">
                     <span class="font-display text-xl font-semibold text-ink">EventPro</span>
                 </Link>
-                <button @click="sidebarOpen = false" class="lg:hidden text-ink-subtle hover:text-ink">
+                <button @click="sidebarOpen = false" aria-label="Close menu" class="lg:hidden text-ink-subtle hover:text-ink rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
@@ -78,11 +79,12 @@ const logout = () => router.post('/logout');
                     v-for="item in visibleNav"
                     :key="item.name"
                     :href="item.href"
+                    :aria-current="isActive(item.href) ? 'page' : undefined"
                     :class="[
                         isActive(item.href)
                             ? 'bg-primary/10 text-primary'
                             : 'text-ink-muted hover:bg-surface-sunken hover:text-ink',
-                        'group flex items-center px-3 py-2 text-sm font-medium rounded-lg mb-0.5 transition-colors'
+                        'group flex items-center px-3 py-2 text-sm font-medium rounded-lg mb-0.5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary'
                     ]"
                 >
                     <svg class="mr-3 h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
@@ -102,7 +104,7 @@ const logout = () => router.post('/logout');
                             <p class="text-xs text-ink-subtle truncate capitalize">{{ user?.role }}</p>
                         </div>
                     </Link>
-                    <button @click="logout" class="text-ink-subtle hover:text-ink transition-colors" title="Logout">
+                    <button @click="logout" aria-label="Log out" class="text-ink-subtle hover:text-ink transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary" title="Logout">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                     </button>
                 </div>
@@ -129,7 +131,7 @@ const logout = () => router.post('/logout');
             </div>
             <!-- Top bar -->
             <header class="bg-surface border-b border-border h-16 flex items-center px-4 lg:px-6">
-                <button @click="sidebarOpen = true" class="lg:hidden mr-4 text-ink-muted hover:text-ink">
+                <button @click="sidebarOpen = true" aria-label="Open menu" class="lg:hidden mr-4 text-ink-muted hover:text-ink rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
                 <div class="flex-1">
@@ -142,7 +144,7 @@ const logout = () => router.post('/logout');
             </header>
 
             <!-- Page content -->
-            <main class="flex-1 overflow-y-auto p-4 lg:p-6">
+            <main id="main" class="flex-1 overflow-y-auto p-4 lg:p-6">
                 <slot />
             </main>
         </div>

@@ -11,10 +11,11 @@ defineEmits(['update:modelValue']);
 
 <template>
     <FormField :label="label" :error="error" :hint="hint" :required="required">
-        <template #default="{ id }">
+        <template #default="{ id, describedby, invalid }">
             <textarea :id="id" :value="modelValue" :rows="rows"
                       @input="$emit('update:modelValue', $event.target.value)"
                       :placeholder="placeholder" :required="required" :disabled="disabled"
+                      :aria-describedby="describedby" :aria-invalid="invalid"
                       class="w-full rounded-lg border-border text-sm text-ink focus:border-primary focus:ring-primary disabled:bg-surface-sunken"></textarea>
         </template>
     </FormField>
