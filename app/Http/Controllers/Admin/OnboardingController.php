@@ -79,8 +79,9 @@ class OnboardingController extends Controller
         ]);
 
         Venue::create($data + [
-            'slug'   => Str::slug($data['name']).'-'.Str::lower(Str::random(5)),
-            'status' => 'active',
+            'tenant_id' => $this->tenant()->id,
+            'slug'      => Str::slug($data['name']).'-'.Str::lower(Str::random(5)),
+            'status'    => 'active',
         ]);
 
         return redirect()->route('admin.onboarding.show')->with('success', 'Venue added.');
@@ -97,6 +98,7 @@ class OnboardingController extends Controller
         ]);
 
         Package::create([
+            'tenant_id'   => $this->tenant()->id,
             'name'        => $data['name'],
             'base_price'  => $data['base_price'],
             'description' => $data['description'] ?? null,
@@ -144,11 +146,28 @@ class OnboardingController extends Controller
         return redirect()->route('admin.dashboard')->with('success', 'Setup complete. You can revisit any step from the dashboard.');
     }
 
+    /**
+     * The acting user's own tenant. Bound to the authenticated user's tenant_id
+     * (never a blind "first tenant" fallback, which could write to another
+     * tenant if the current-tenant resolver ever returned null). Falls back to
+     * the impersonated/current tenant only when the user has no tenant_id of
+     * their own (e.g. a super admin impersonating).
+     */
     private function tenant(): Tenant
     {
-        $tenant = Tenant::current() ?? Tenant::query()->orderBy('id')->first();
-        abort_if($tenant === null, 503, 'No tenant configured.');
+        $current = Tenant::current();
+        $userTenantId = auth()->user()?->tenant_id;
 
-        return $tenant;
+        // Bind to the acting user's own tenant. Prefer the resolved current
+        // tenant when it matches (same instance the onboarding state/redirect
+        // reads), but never fall back to an arbitrary tenant — only the user's
+        // own, or the impersonated current tenant when the user has none.
+        if ($userTenantId && (! $current || $current->id !== $userTenantId)) {
+            $current = Tenant::find($userTenantId);
+        }
+
+        abort_if($current === null, 403, 'No tenant configured.');
+
+        return $current;
     }
 }
