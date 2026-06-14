@@ -89,6 +89,31 @@ select:not([multiple]) {
     padding-right: 2.5rem;
 }
 
+/* driver.js guided-tour popover — themed to editorial-pro tokens */
+.driver-popover.driverjs-theme {
+    background: var(--surface);
+    color: var(--ink);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 18px 40px -16px rgba(31, 29, 26, .35);
+}
+.driver-popover.driverjs-theme .driver-popover-title { color: var(--ink); font-weight: 600; }
+.driver-popover.driverjs-theme .driver-popover-description { color: var(--ink-muted); }
+.driver-popover.driverjs-theme .driver-popover-progress-text { color: var(--ink-subtle); }
+.driver-popover.driverjs-theme button {
+    background: var(--surface-sunken);
+    color: var(--ink-muted);
+    border-radius: var(--radius-sm);
+    text-shadow: none;
+    border: 1px solid var(--border);
+}
+.driver-popover.driverjs-theme button:hover { background: var(--border); }
+.driver-popover.driverjs-theme .driver-popover-next-btn {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: transparent;
+}
+.driver-popover.driverjs-theme .driver-popover-arrow { border-color: var(--surface); }
+
 /* Legacy button utilities — prefer the <Button> component. Kept for any Blade. */
 .btn-primary {
     @apply inline-flex items-center px-4 py-2 bg-primary border border-transparent rounded-lg font-semibold text-sm text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition ease-in-out duration-150;

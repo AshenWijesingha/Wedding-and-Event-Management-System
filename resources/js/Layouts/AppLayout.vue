@@ -4,8 +4,9 @@ import { Link, usePage, router } from '@inertiajs/vue3';
 import { Head } from '@inertiajs/vue3';
 import { usePermissions } from '@/composables/usePermissions';
 import Avatar from '@/Components/ui/Avatar.vue';
+import PageTour from '@/Components/PageTour.vue';
 
-defineProps({ title: String });
+defineProps({ title: String, tour: String });
 
 const page = usePage();
 const user = computed(() => page.props.auth.user);
@@ -72,7 +73,7 @@ const logout = () => router.post('/logout');
             </div>
 
             <!-- Navigation -->
-            <nav class="mt-3 px-3 flex-1 overflow-y-auto">
+            <nav data-tour="t-nav" class="mt-3 px-3 flex-1 overflow-y-auto">
                 <Link
                     v-for="item in visibleNav"
                     :key="item.name"
@@ -140,5 +141,8 @@ const logout = () => router.post('/logout');
                 <slot />
             </main>
         </div>
+
+        <!-- Per-page guided tour (auto-runs once, replayable via the "?" button) -->
+        <PageTour v-if="tour" :key="tour" :tour-key="tour" />
     </div>
 </template>

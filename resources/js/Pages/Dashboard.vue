@@ -9,7 +9,7 @@ const user = computed(() => page.props.auth.user);
 </script>
 
 <template>
-    <AppLayout title="Dashboard">
+    <AppLayout title="Dashboard" tour="dashboard">
         <div class="space-y-6">
             <!-- First-run setup checklist (auto-hides when complete or dismissed) -->
             <OnboardingChecklist />
@@ -23,7 +23,7 @@ const user = computed(() => page.props.auth.user);
             </div>
 
             <!-- Stats grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div data-tour="dashboard.stats" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-surface rounded-lg shadow-sm p-5 flex items-center space-x-4">
                     <div class="p-3 rounded-full bg-primary/10 text-primary">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
@@ -66,7 +66,7 @@ const user = computed(() => page.props.auth.user);
             </div>
 
             <!-- Quick actions -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div data-tour="dashboard.actions" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <a href="/admin/bookings" class="bg-surface rounded-lg shadow-sm p-5 hover:shadow-md transition-shadow group">
                     <div class="flex items-center justify-between mb-3">
                         <h3 class="font-semibold text-ink">Manage Bookings</h3>
