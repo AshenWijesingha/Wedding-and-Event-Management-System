@@ -3,7 +3,7 @@
 **Date:** 2026-06-14
 **Sub-project:** 4 of 5 in the redesign + demo roadmap
 (1 design system ✓ → 2 onboarding wizard ✓ → 3 guided tours ✓ → **4 public demo sandbox** → 5 sales-demo script).
-**Status:** Approved design, ready for implementation.
+**Status:** Implemented on branch `feat/demo-sandbox` (7 tests; suite 237 green).
 
 ## Goal
 
