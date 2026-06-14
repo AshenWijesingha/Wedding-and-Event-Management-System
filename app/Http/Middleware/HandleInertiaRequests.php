@@ -60,6 +60,24 @@ class HandleInertiaRequests extends Middleware
             'onboarding' => fn () => $this->onboardingState($request),
             // Guided-tour keys this user has already completed.
             'completedTours' => fn () => $request->user()?->preferences['completed_tours'] ?? [],
+            // Demo-sandbox banner state when the current tenant is a demo.
+            'demo' => fn () => $this->demoState(),
+        ];
+    }
+
+    /**
+     * Banner state for an ephemeral demo tenant, or null.
+     */
+    private function demoState(): ?array
+    {
+        $tenant = \App\Models\Tenant::current();
+        if (! $tenant || ! $tenant->is_demo) {
+            return null;
+        }
+
+        return [
+            'is_demo'    => true,
+            'expires_at' => optional($tenant->demo_expires_at)->toIso8601String(),
         ];
     }
 
