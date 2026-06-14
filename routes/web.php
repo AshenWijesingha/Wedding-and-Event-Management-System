@@ -21,6 +21,11 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
+// Directory of all user-facing public pages, each linked separately.
+Route::get('/links', function () {
+    return view('links');
+})->name('links');
+
 Route::post('/inquiry', [\App\Http\Controllers\InquiryController::class, 'store'])->name('inquiry.store')->middleware('throttle:inquiry');
 
 // Authentication routes
