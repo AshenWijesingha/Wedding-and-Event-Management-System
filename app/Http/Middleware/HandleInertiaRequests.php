@@ -58,6 +58,8 @@ class HandleInertiaRequests extends Middleware
             // First-run setup progress, for admin-area roles with a current tenant.
             // Powers the dashboard "Getting started" checklist.
             'onboarding' => fn () => $this->onboardingState($request),
+            // Guided-tour keys this user has already completed.
+            'completedTours' => fn () => $request->user()?->preferences['completed_tours'] ?? [],
         ];
     }
 
