@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 Schedule::command('payments:send-reminders')->dailyAt('08:00');
+Schedule::command('demo:reap')->everyFifteenMinutes();
