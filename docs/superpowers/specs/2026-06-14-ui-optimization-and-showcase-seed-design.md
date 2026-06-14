@@ -1,5 +1,10 @@
 # UI Optimization + Showcase Seed — Design Spec
 
+> **Status: IMPLEMENTED (2026-06-14).** SP-A `ShowcaseSeeder` + test; SP-B shared-shell
+> a11y/responsive pass; SP-C dashboard data-wiring + token cleanup. Suite 243 green,
+> build clean. Page audit found the design system already token-clean (only the
+> dashboard had stray palette colors, now fixed).
+
 Date: 2026-06-14
 Branch: `feat/ui-optimization`
 
