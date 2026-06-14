@@ -19,6 +19,8 @@ class SessionTimeoutTest extends TestCase
         parent::setUp();
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
         $this->tenant = Tenant::factory()->create();
+        // Skip the first-run wizard so /admin renders the dashboard for these tests.
+        $this->tenant->setSetting('onboarding', ['seen' => true, 'dismissed' => true]);
         $this->admin = User::factory()->state(['role' => 'admin'])->create(['tenant_id' => $this->tenant->id]);
     }
 

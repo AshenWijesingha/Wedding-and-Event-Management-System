@@ -51,7 +51,31 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
                 'info' => fn () => $request->session()->get('info'),
+                // One-time credentials shown after inviting a team member.
+                'invited_email' => fn () => $request->session()->get('invited_email'),
+                'invited_password' => fn () => $request->session()->get('invited_password'),
             ],
+            // First-run setup progress, for admin-area roles with a current tenant.
+            // Powers the dashboard "Getting started" checklist.
+            'onboarding' => fn () => $this->onboardingState($request),
         ];
+    }
+
+    /**
+     * Onboarding state for the current tenant, or null when not applicable.
+     */
+    private function onboardingState(Request $request): ?array
+    {
+        $user = $request->user();
+        if (! $user || $user->role === 'client') {
+            return null;
+        }
+
+        $tenant = \App\Models\Tenant::current();
+        if (! $tenant) {
+            return null;
+        }
+
+        return app(\App\Services\OnboardingService::class)->state($tenant);
     }
 }

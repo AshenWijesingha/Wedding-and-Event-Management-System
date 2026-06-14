@@ -2,6 +2,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import OnboardingChecklist from '@/Components/OnboardingChecklist.vue';
 
 const page = usePage();
 const user = computed(() => page.props.auth.user);
@@ -10,6 +11,9 @@ const user = computed(() => page.props.auth.user);
 <template>
     <AppLayout title="Dashboard">
         <div class="space-y-6">
+            <!-- First-run setup checklist (auto-hides when complete or dismissed) -->
+            <OnboardingChecklist />
+
             <!-- Welcome banner -->
             <div class="bg-surface rounded-lg shadow-sm p-6">
                 <h2 class="text-xl font-semibold text-ink">
