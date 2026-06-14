@@ -3,7 +3,7 @@
 **Date:** 2026-06-14
 **Sub-project:** 5 of 5 (final) in the redesign + demo roadmap
 (1 design system ✓ → 2 onboarding wizard ✓ → 3 guided tours ✓ → 4 public demo sandbox ✓ → **5 sales-demo script**).
-**Status:** Approved design, ready for implementation.
+**Status:** Implemented on branch `feat/sales-demo-script` (curated provisioner + runbook; suite 238 green). Note: inquiry status enum is `pending/contacted/qualified/proposal_sent/negotiating/converted/closed` — hero inquiry uses `proposal_sent`.
 
 ## Goal
 
