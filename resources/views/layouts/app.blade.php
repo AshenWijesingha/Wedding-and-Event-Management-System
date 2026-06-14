@@ -68,7 +68,7 @@
                             class="inline-flex items-center rounded-full px-5 py-2 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
                             style="background-color: var(--color-primary);">My Account</a>
                     @else
-                        <a href="{{ route('contact') }}" class="hidden text-sm font-medium text-[#5c5246] transition-colors hover:text-[#1a1512] sm:inline">Get in touch</a>
+                        <a href="{{ route('register') }}" class="hidden text-sm font-medium text-[#5c5246] transition-colors hover:text-[#1a1512] sm:inline">Create account</a>
                         <a href="{{ route('login') }}"
                             class="inline-flex items-center gap-2 rounded-full border border-[#2b211b]/15 bg-white/40 px-5 py-2 text-sm font-semibold text-[#1a1512] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#c8a96a] hover:bg-white/70">
                             <svg class="h-4 w-4 text-[#9a7b3f]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14M3 12a9 9 0 1018 0 9 9 0 00-18 0z"/></svg>
@@ -101,12 +101,20 @@
                         Ready to plan<br><span class="italic">your perfect event?</span>
                     </h2>
                 </div>
-                <a href="{{ route('contact') }}"
-                    class="group inline-flex shrink-0 items-center gap-3 rounded-full px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-black/30 transition-transform duration-300 hover:-translate-y-0.5"
-                    style="background-color: var(--color-primary);">
-                    Get Started
-                    <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                </a>
+                <div class="flex shrink-0 flex-wrap items-center gap-4">
+                    {{-- Placeholder: sub-project 4 (public demo sandbox) will repoint this at the one-click demo tenant. --}}
+                    <a href="{{ route('register') }}"
+                        class="group inline-flex items-center gap-2 text-sm font-semibold text-[#cdbfae] transition-colors hover:text-[#f5efe7]">
+                        Try the demo
+                        <span class="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
+                    </a>
+                    <a href="{{ route('contact') }}"
+                        class="group inline-flex items-center gap-3 rounded-full px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-black/30 transition-transform duration-300 hover:-translate-y-0.5"
+                        style="background-color: var(--color-primary);">
+                        Get Started
+                        <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
+                </div>
             </div>
 
             <!-- Columns -->
