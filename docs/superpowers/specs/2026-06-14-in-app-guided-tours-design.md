@@ -3,7 +3,7 @@
 **Date:** 2026-06-14
 **Sub-project:** 3 of 5 in the redesign + demo roadmap
 (1 design system ✓ → 2 onboarding wizard ✓ → **3 in-app demo tour** → 4 public demo sandbox → 5 sales-demo script).
-**Status:** Approved design, ready for implementation.
+**Status:** Implemented on branch `feat/guided-tours` (driver.js; 5 tests; suite 230 green). `AppLayout` renders the tour via a `tour="key"` prop (one attribute per page) rather than each page importing `PageTour`.
 
 ## Goal
 
