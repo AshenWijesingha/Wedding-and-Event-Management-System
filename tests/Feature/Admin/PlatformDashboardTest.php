@@ -28,6 +28,7 @@ class PlatformDashboardTest extends TestCase
     public function test_tenant_user_sees_tenant_dashboard(): void
     {
         $tenant = Tenant::factory()->create();
+        $tenant->setSetting('onboarding', ['seen' => true, 'dismissed' => true]);
         $owner = User::factory()->tenantOwner()->create(['tenant_id' => $tenant->id]);
 
         $this->actingAs($owner)

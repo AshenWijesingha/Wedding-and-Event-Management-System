@@ -65,7 +65,21 @@ Route::middleware([
     'tenant.active',
     'role:super_admin|tenant_owner|admin|manager|staff',
 ])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+    // Only the dashboard landing redirects first-time owners/admins to the
+    // setup wizard (once). Scoped here so it never intercepts other admin pages.
+    Route::get('/', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])
+        ->middleware(\App\Http\Middleware\EnsureOnboarded::class)
+        ->name('dashboard');
+
+    // First-run setup wizard — owner/admin only.
+    Route::middleware('role:super_admin|tenant_owner|admin')->group(function () {
+        Route::get('/onboarding', [\App\Http\Controllers\Admin\OnboardingController::class, 'show'])->name('onboarding.show');
+        Route::post('/onboarding/branding', [\App\Http\Controllers\Admin\OnboardingController::class, 'storeBranding'])->name('onboarding.branding');
+        Route::post('/onboarding/venue', [\App\Http\Controllers\Admin\OnboardingController::class, 'storeVenue'])->name('onboarding.venue');
+        Route::post('/onboarding/package', [\App\Http\Controllers\Admin\OnboardingController::class, 'storePackage'])->name('onboarding.package');
+        Route::post('/onboarding/invite', [\App\Http\Controllers\Admin\OnboardingController::class, 'invite'])->name('onboarding.invite');
+        Route::post('/onboarding/finish', [\App\Http\Controllers\Admin\OnboardingController::class, 'finish'])->name('onboarding.finish');
+    });
 
     // Exit impersonation — reachable while acting as the impersonated user.
     Route::post('/impersonate-stop', [\App\Http\Controllers\Admin\ImpersonationController::class, 'stop'])->name('impersonate.stop');
