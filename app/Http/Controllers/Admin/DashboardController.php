@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Client;
+use App\Models\Inquiry;
 use App\Models\Payment;
 use App\Models\Plan;
 use App\Models\Tenant;
@@ -21,8 +23,58 @@ class DashboardController extends Controller
             return $this->platform();
         }
 
-        // Tenant-level dashboard (data wiring handled separately).
-        return Inertia::render('Dashboard');
+        return $this->tenant();
+    }
+
+    /**
+     * Tenant-level dashboard. All models here use BelongsToTenant, so the
+     * aggregates are automatically scoped to the current tenant.
+     */
+    private function tenant(): Response
+    {
+        $monthStart = Carbon::now()->startOfMonth();
+        $today = Carbon::today();
+
+        $stats = [
+            'bookings_total' => Booking::count(),
+            'inquiries_open' => Inquiry::whereIn('status', ['pending', 'contacted', 'qualified', 'proposal_sent', 'negotiating'])->count(),
+            'revenue_month'  => (float) Payment::completed()->where('payment_date', '>=', $monthStart)->sum('amount'),
+            'clients_total'  => Client::count(),
+        ];
+
+        $upcomingEvents = Booking::with(['client:id,first_name,last_name', 'venue:id,name'])
+            ->whereDate('event_date', '>=', $today)
+            ->whereIn('status', ['pending', 'tentative', 'confirmed'])
+            ->orderBy('event_date')
+            ->take(6)
+            ->get()
+            ->map(fn (Booking $b) => [
+                'id'         => $b->id,
+                'client'     => $b->client?->full_name,
+                'venue'      => $b->venue?->name,
+                'event_type' => $b->event_type,
+                'event_date' => $b->event_date?->toDateString(),
+                'status'     => $b->status,
+                'guest_count' => $b->guest_count,
+            ]);
+
+        $recentInquiries = Inquiry::with('client:id,first_name,last_name')
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(fn (Inquiry $i) => [
+                'id'         => $i->id,
+                'client'     => $i->client?->full_name,
+                'event_type' => $i->event_type,
+                'status'     => $i->status,
+                'created_at' => $i->created_at?->diffForHumans(),
+            ]);
+
+        return Inertia::render('Dashboard', [
+            'stats'           => $stats,
+            'upcomingEvents'  => $upcomingEvents,
+            'recentInquiries' => $recentInquiries,
+        ]);
     }
 
     /**
