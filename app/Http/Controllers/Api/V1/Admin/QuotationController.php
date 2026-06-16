@@ -42,9 +42,9 @@ class QuotationController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'client_id' => 'required|exists:clients,id',
-            'venue_id' => 'required|exists:venues,id',
-            'inquiry_id' => 'nullable|exists:inquiries,id',
+            'client_id' => ['required', \App\Support\TenantRule::exists('clients')],
+            'venue_id' => ['required', \App\Support\TenantRule::exists('venues')],
+            'inquiry_id' => ['nullable', \App\Support\TenantRule::exists('inquiries')],
             'event_date' => 'required|date',
             'guest_count' => 'required|integer|min:1',
             'items' => 'required|array|min:1',
@@ -79,7 +79,7 @@ class QuotationController extends Controller
     public function update(Request $request, Quotation $quotation): JsonResponse
     {
         $validated = $request->validate([
-            'venue_id' => 'sometimes|exists:venues,id',
+            'venue_id' => ['sometimes', \App\Support\TenantRule::exists('venues')],
             'event_date' => 'sometimes|date',
             'guest_count' => 'sometimes|integer|min:1',
             'items' => 'sometimes|array|min:1',

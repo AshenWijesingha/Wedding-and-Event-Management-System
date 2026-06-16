@@ -83,10 +83,10 @@ class QuotationController extends Controller
         abort_unless($request->user()->hasAnyRole(self::MANAGE_ROLES), 403);
 
         $validated = $request->validate([
-            'client_id'            => 'required|exists:clients,id',
-            'inquiry_id'           => 'nullable|exists:inquiries,id',
-            'venue_id'             => 'nullable|exists:venues,id',
-            'package_id'           => 'nullable|exists:packages,id',
+            'client_id'            => ['required', \App\Support\TenantRule::exists('clients')],
+            'inquiry_id'           => ['nullable', \App\Support\TenantRule::exists('inquiries')],
+            'venue_id'             => ['nullable', \App\Support\TenantRule::exists('venues')],
+            'package_id'           => ['nullable', \App\Support\TenantRule::exists('packages')],
             'event_date'           => 'nullable|date',
             'guest_count'          => 'nullable|integer|min:1',
             'items'                => 'required|array|min:1',

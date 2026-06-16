@@ -44,7 +44,7 @@ class VendorApiTest extends TestCase
     public function test_admin_can_show_vendor(): void
     {
         $admin = User::factory()->admin()->create();
-        $vendor = Vendor::factory()->create();
+        $vendor = Vendor::factory()->create(['tenant_id' => $admin->tenant_id]);
 
         $response = $this->actingAs($admin, 'sanctum')
             ->getJson("/api/v1/admin/vendors/{$vendor->id}");
@@ -56,7 +56,7 @@ class VendorApiTest extends TestCase
     public function test_admin_can_delete_vendor_without_bookings(): void
     {
         $admin = User::factory()->admin()->create();
-        $vendor = Vendor::factory()->create();
+        $vendor = Vendor::factory()->create(['tenant_id' => $admin->tenant_id]);
 
         $response = $this->actingAs($admin, 'sanctum')
             ->deleteJson("/api/v1/admin/vendors/{$vendor->id}");
