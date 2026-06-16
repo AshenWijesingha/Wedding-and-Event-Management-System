@@ -25,6 +25,7 @@ class ClientResource extends JsonResource
                 'country' => $this->country,
             ],
             'company_name' => $this->company_name,
+            'notes' => $this->notes,
             'tags' => $this->tags ?? [],
             'bookings_count' => $this->whenCounted('bookings'),
             'created_at' => $this->created_at?->toDateTimeString(),
