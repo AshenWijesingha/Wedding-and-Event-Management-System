@@ -54,7 +54,7 @@ class StaffAdminTest extends TestCase
 
     public function test_admin_can_view_staff_show(): void
     {
-        $staff = Staff::factory()->create();
+        $staff = Staff::factory()->create(['tenant_id' => $this->admin->tenant_id]);
 
         $response = $this->actingAs($this->admin)
             ->get("/admin/staff/{$staff->id}");
@@ -65,7 +65,7 @@ class StaffAdminTest extends TestCase
 
     public function test_admin_can_delete_staff(): void
     {
-        $staff = Staff::factory()->create();
+        $staff = Staff::factory()->create(['tenant_id' => $this->admin->tenant_id]);
 
         $response = $this->actingAs($this->admin)
             ->delete("/admin/staff/{$staff->id}");

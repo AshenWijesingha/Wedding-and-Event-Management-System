@@ -50,9 +50,9 @@ class BookingController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'client_id' => 'required|exists:clients,id',
-            'venue_id' => 'required|exists:venues,id',
-            'package_id' => 'nullable|exists:packages,id',
+            'client_id' => ['required', \App\Support\TenantRule::exists('clients')],
+            'venue_id' => ['required', \App\Support\TenantRule::exists('venues')],
+            'package_id' => ['nullable', \App\Support\TenantRule::exists('packages')],
             'event_type' => 'required|string|max:100',
             'event_date' => 'required|date|after_or_equal:today',
             'setup_time' => 'nullable|date_format:H:i',

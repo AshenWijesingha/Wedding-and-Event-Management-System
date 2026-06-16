@@ -17,6 +17,15 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\SecurityHeaders::class,
         ]);
 
+        // The current tenant must be resolved BEFORE route-model binding runs,
+        // otherwise the BelongsToTenant global scope is inactive while a bound
+        // model is fetched — letting an authenticated user load another tenant's
+        // record by ID. Force SetCurrentTenant ahead of SubstituteBindings.
+        $middleware->prependToPriorityList(
+            before: \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            prepend: \App\Http\Middleware\SetCurrentTenant::class,
+        );
+
         // PayHere posts to /payhere/notify server-to-server (no session/CSRF token).
         $middleware->validateCsrfTokens(except: ['payhere/notify']);
 

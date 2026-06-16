@@ -40,8 +40,8 @@ class TaskController extends Controller
             'description' => 'nullable|string',
             'priority'    => 'nullable|in:low,medium,high,urgent',
             'due_date'    => 'nullable|date',
-            'booking_id'  => 'nullable|exists:bookings,id',
-            'assigned_to' => 'nullable|exists:staff,id',
+            'booking_id'  => ['nullable', \App\Support\TenantRule::exists('bookings')],
+            'assigned_to' => ['nullable', \App\Support\TenantRule::exists('staff')],
         ]);
 
         Task::create($data);

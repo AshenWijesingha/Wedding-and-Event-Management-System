@@ -58,9 +58,9 @@ class BookingController extends Controller
         abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
 
         $validated = $request->validate([
-            'client_id'        => 'required|exists:clients,id',
-            'venue_id'         => 'required|exists:venues,id',
-            'package_id'       => 'nullable|exists:packages,id',
+            'client_id'        => ['required', \App\Support\TenantRule::exists('clients')],
+            'venue_id'         => ['required', \App\Support\TenantRule::exists('venues')],
+            'package_id'       => ['nullable', \App\Support\TenantRule::exists('packages')],
             'event_type'       => 'required|string|max:50',
             'event_date'       => 'required|date|after_or_equal:today',
             'setup_time'       => 'nullable|date_format:H:i',
@@ -138,7 +138,7 @@ class BookingController extends Controller
     {
         abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
         $data = $request->validate([
-            'vendor_id'           => 'required|exists:vendors,id',
+            'vendor_id'           => ['required', \App\Support\TenantRule::exists('vendors')],
             'service_description' => 'nullable|string|max:500',
             'agreed_amount'       => 'nullable|numeric|min:0',
             'notes'               => 'nullable|string|max:500',
