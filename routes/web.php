@@ -158,7 +158,8 @@ Route::middleware([
     });
 
     Route::middleware('permission:clients.view')->group(function () {
-        Route::get('/clients', [\App\Http\Controllers\Admin\ClientController::class, 'index'])->name('clients.index');
+        Route::resource('clients', \App\Http\Controllers\Admin\ClientController::class)
+            ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
     });
 
     Route::middleware('permission:payments.view')->group(function () {
