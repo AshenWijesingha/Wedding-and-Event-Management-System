@@ -12,11 +12,12 @@ class AvailabilityService
     /**
      * Check if a venue is available on a specific date.
      */
-    public function isVenueAvailable(int $venueId, string $date): bool
+    public function isVenueAvailable(int $venueId, string $date, ?int $ignoreBookingId = null): bool
     {
         return !Booking::where('venue_id', $venueId)
-            ->where('event_date', $date)
+            ->whereDate('event_date', $date)
             ->whereNotIn('status', ['cancelled'])
+            ->when($ignoreBookingId, fn ($q, $id) => $q->where('id', '!=', $id))
             ->exists();
     }
 
