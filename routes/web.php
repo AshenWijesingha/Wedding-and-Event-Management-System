@@ -116,6 +116,10 @@ Route::middleware([
         Route::delete('/bookings/{booking}/vendors/{vendor}', [\App\Http\Controllers\Admin\BookingController::class, 'detachVendor'])->middleware('permission:bookings.edit')->name('bookings.vendors.detach');
     });
 
+    // Calendar (unified events view of all bookings)
+    Route::get('/calendar', [\App\Http\Controllers\Admin\CalendarController::class, 'index'])
+        ->middleware('permission:bookings.view')->name('calendar.index');
+
     // Vendors
     Route::middleware('permission:vendors.view')->group(function () {
         Route::resource('vendors', \App\Http\Controllers\Admin\VendorController::class)
