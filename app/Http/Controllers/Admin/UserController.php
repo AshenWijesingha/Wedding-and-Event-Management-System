@@ -103,6 +103,8 @@ class UserController extends Controller
 
         $user->syncRoles([$validated['role']]);
 
+        \App\Support\Notifier::mail($user->email, new \App\Mail\UserInvitedMail($user));
+
         return redirect('/admin/users')->with('success', 'User created.');
     }
 

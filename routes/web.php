@@ -120,6 +120,10 @@ Route::middleware([
     Route::get('/calendar', [\App\Http\Controllers\Admin\CalendarController::class, 'index'])
         ->middleware('permission:bookings.view')->name('calendar.index');
 
+    // In-app notifications (mark read)
+    Route::post('/notifications/read', [\App\Http\Controllers\Admin\NotificationController::class, 'read'])
+        ->name('notifications.read');
+
     // Vendors
     Route::middleware('permission:vendors.view')->group(function () {
         Route::resource('vendors', \App\Http\Controllers\Admin\VendorController::class)

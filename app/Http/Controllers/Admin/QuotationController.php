@@ -185,6 +185,22 @@ class QuotationController extends Controller
         }
         $quotation->update($attrs);
 
+        if ($action === 'send') {
+            \App\Support\Notifier::mail(
+                optional($quotation->client)->email,
+                new \App\Mail\QuotationSentMail($quotation),
+            );
+        } elseif (in_array($action, ['accept', 'reject'], true)) {
+            \App\Support\Notifier::staff(
+                \App\Models\Tenant::current(),
+                new \App\Notifications\StaffNotification(
+                    "quotation_{$rule['to']}",
+                    "Quotation {$quotation->quotation_number} was {$rule['to']}.",
+                    "/admin/quotations/{$quotation->id}",
+                ),
+            );
+        }
+
         return back()->with('success', "Quotation marked as {$rule['to']}.");
     }
 
