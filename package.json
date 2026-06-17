@@ -30,9 +30,6 @@
         "@fullcalendar/vue3": "^6.1",
         "@headlessui/vue": "^1.7",
         "@heroicons/vue": "^2.1",
-        "alpinejs": "^3.13",
-        "apexcharts": "^5.10",
-        "driver.js": "^1.4.0",
-        "vue3-apexcharts": "^1.5"
+        "driver.js": "^1.4.0"
     }
 }
