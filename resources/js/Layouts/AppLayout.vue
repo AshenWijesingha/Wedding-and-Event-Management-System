@@ -5,6 +5,7 @@ import { Head } from '@inertiajs/vue3';
 import { usePermissions } from '@/composables/usePermissions';
 import Avatar from '@/Components/ui/Avatar.vue';
 import PageTour from '@/Components/PageTour.vue';
+import NotificationBell from '@/Components/NotificationBell.vue';
 
 defineProps({ title: String, tour: String });
 
@@ -142,6 +143,7 @@ const logout = () => router.post('/logout');
                 <div v-if="$page.props.flash?.success" class="mr-3 px-3 py-1 bg-success-soft text-success rounded-lg text-sm">{{ $page.props.flash.success }}</div>
                 <div v-if="$page.props.flash?.error" class="mr-3 px-3 py-1 bg-danger-soft text-danger rounded-lg text-sm">{{ $page.props.flash.error }}</div>
                 <div v-if="$page.props.flash?.info" class="mr-3 px-3 py-1 bg-info-soft text-info rounded-lg text-sm">{{ $page.props.flash.info }}</div>
+                <NotificationBell />
             </header>
 
             <!-- Page content -->

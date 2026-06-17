@@ -165,6 +165,19 @@ class BookingController extends Controller
             $booking->update(['status' => 'confirmed']);
         });
 
+        \App\Support\Notifier::mail(
+            optional($booking->client)->email,
+            new \App\Mail\BookingConfirmedMail($booking),
+        );
+        \App\Support\Notifier::staff(
+            \App\Models\Tenant::current(),
+            new \App\Notifications\StaffNotification(
+                'booking_confirmed',
+                "Booking {$booking->booking_number} was confirmed.",
+                "/admin/bookings/{$booking->id}",
+            ),
+        );
+
         return back()->with('success', 'Booking confirmed successfully.');
     }
 
