@@ -284,3 +284,12 @@ Route::middleware(['auth', \App\Http\Middleware\EnforceSessionTimeout::class, \A
 // PayHere server-to-server webhook. Public, CSRF-exempt (see bootstrap/app.php),
 // no auth and no tenant middleware — it resolves the tenant from the Payment.
 Route::post('/payhere/notify', [\App\Http\Controllers\PayHereWebhookController::class, 'notify'])->name('payhere.notify');
+
+// Mark an in-app guided tour complete for the current user (any authenticated role).
+Route::middleware('auth')->post('/tours/complete', [\App\Http\Controllers\TourController::class, 'complete'])->name('tours.complete');
+
+// Public demo sandbox — provisions a throwaway tenant. Gated by DEMO_MODE inside
+// the controller; per-IP throttled to limit abuse.
+Route::post('/demo/start', [\App\Http\Controllers\DemoController::class, 'start'])
+    ->middleware('throttle:'.config('eventpro.demo.throttle', 5).',60')
+    ->name('demo.start');

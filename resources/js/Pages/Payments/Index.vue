@@ -25,14 +25,14 @@ const statusColors = {
 </script>
 
 <template>
-    <AppLayout title="Payments">
+    <AppLayout tour="payments" title="Payments">
         <div class="space-y-4">
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-semibold text-ink">Payments</h2>
             </div>
 
             <!-- Summary cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div data-tour="payments.summary" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-surface rounded-lg shadow-sm p-4">
                     <p class="text-sm text-ink-subtle">Total Received</p>
                     <p class="text-2xl font-bold text-ink mt-1">LKR {{ summary?.total?.toLocaleString() ?? 0 }}</p>
@@ -65,7 +65,7 @@ const statusColors = {
                 </select>
             </div>
 
-            <div class="bg-surface rounded-lg shadow-sm overflow-hidden">
+            <div data-tour="payments.list" class="bg-surface rounded-lg shadow-sm overflow-hidden">
                 <table class="min-w-full divide-y divide-border">
                     <thead class="bg-surface-muted">
                         <tr>

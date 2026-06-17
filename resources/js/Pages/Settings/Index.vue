@@ -73,12 +73,12 @@ const tabs = [
 </script>
 
 <template>
-    <AppLayout title="Settings">
+    <AppLayout tour="settings" title="Settings">
         <div class="max-w-3xl mx-auto space-y-4">
             <h2 class="text-xl font-semibold text-ink">Settings</h2>
 
             <!-- Tab nav -->
-            <div class="border-b border-border flex gap-4">
+            <div data-tour="settings.tabs" class="border-b border-border flex gap-4">
                 <button v-for="tab in tabs" :key="tab.id"
                     @click="activeTab = tab.id"
                     :class="[

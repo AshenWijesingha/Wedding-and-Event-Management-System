@@ -32,7 +32,7 @@ const categories = ['photographer', 'caterer', 'florist', 'music', 'decor', 'tra
 </script>
 
 <template>
-    <AppLayout title="Vendors">
+    <AppLayout tour="vendors" title="Vendors">
         <div class="space-y-4">
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-semibold text-ink">Vendors</h2>

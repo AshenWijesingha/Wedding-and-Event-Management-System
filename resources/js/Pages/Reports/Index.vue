@@ -33,7 +33,7 @@ const statusColors = {
 </script>
 
 <template>
-    <AppLayout title="Reports">
+    <AppLayout tour="reports" title="Reports">
         <div class="space-y-5">
             <!-- Header + filters -->
             <div class="flex flex-wrap items-end justify-between gap-3">

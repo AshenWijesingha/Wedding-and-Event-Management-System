@@ -22,7 +22,7 @@ const money = (n) => 'LKR ' + Number(n ?? 0).toLocaleString(undefined, { minimum
 </script>
 
 <template>
-    <AppLayout title="Quotation">
+    <AppLayout tour="quotation-show" title="Quotation">
         <div class="max-w-4xl mx-auto space-y-4">
             <!-- Header -->
             <div class="flex items-center justify-between gap-3">
