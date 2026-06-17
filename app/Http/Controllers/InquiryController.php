@@ -41,7 +41,7 @@ class InquiryController extends Controller
             ]
         );
 
-        Inquiry::create([
+        $inquiry = Inquiry::create([
             'tenant_id' => $tenant->id,
             'inquiry_number' => Inquiry::generateInquiryNumber(),
             'client_id' => $client->id,
@@ -53,6 +53,18 @@ class InquiryController extends Controller
             'source' => 'website',
             'status' => 'pending',
         ]);
+        $inquiry->setRelation('client', $client);
+
+        $inbox = $tenant->getSetting('notification_email') ?: $tenant->email;
+        \App\Support\Notifier::mail($inbox, new \App\Mail\NewInquiryMail($inquiry));
+        \App\Support\Notifier::staff(
+            $tenant,
+            new \App\Notifications\StaffNotification(
+                'new_inquiry',
+                "New inquiry from {$client->full_name}.",
+                "/admin/inquiries/{$inquiry->id}",
+            ),
+        );
 
         return back()->with('success', 'Thank you for your inquiry! We will get back to you soon.');
     }

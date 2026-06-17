@@ -24,7 +24,7 @@ class PaymentService
      */
     public function recordManual(Booking $booking, array $data, User $receivedBy): Payment
     {
-        return DB::transaction(function () use ($booking, $data, $receivedBy) {
+        $payment = DB::transaction(function () use ($booking, $data, $receivedBy) {
             $payment = Payment::create([
                 'tenant_id'        => $booking->tenant_id,
                 'payment_number'   => $this->generatePaymentNumber($booking->tenant_id),
@@ -45,6 +45,34 @@ class PaymentService
 
             return $payment;
         });
+
+        $this->notifyPaymentReceived($payment);
+
+        return $payment;
+    }
+
+    /**
+     * Best-effort client email + staff notification for a completed payment.
+     * Tenant is derived from the payment (current tenant is unset in the webhook).
+     */
+    private function notifyPaymentReceived(Payment $payment): void
+    {
+        if ($payment->status !== 'completed') {
+            return;
+        }
+
+        \App\Support\Notifier::mail(
+            optional($payment->client)->email,
+            new \App\Mail\PaymentReceivedMail($payment),
+        );
+        \App\Support\Notifier::staff(
+            $payment->tenant,
+            new \App\Notifications\StaffNotification(
+                'payment_received',
+                "Payment {$payment->payment_number} was received.",
+                "/admin/payments/{$payment->id}",
+            ),
+        );
     }
 
     /**
@@ -76,6 +104,8 @@ class PaymentService
                 }
             }
         });
+
+        $this->notifyPaymentReceived($payment);
     }
 
     /**

@@ -32,7 +32,7 @@ class BookingAdminTest extends TestCase
 
     public function test_admin_can_view_booking_detail(): void
     {
-        $booking = Booking::factory()->create();
+        $booking = Booking::factory()->create(['tenant_id' => $this->admin->tenant_id]);
 
         $response = $this->actingAs($this->admin)
             ->get("/admin/bookings/{$booking->id}");
@@ -43,7 +43,7 @@ class BookingAdminTest extends TestCase
 
     public function test_admin_can_confirm_booking(): void
     {
-        $booking = Booking::factory()->create(['status' => 'pending']);
+        $booking = Booking::factory()->create(['status' => 'pending', 'tenant_id' => $this->admin->tenant_id]);
 
         $response = $this->actingAs($this->admin)
             ->post("/admin/bookings/{$booking->id}/confirm");
@@ -57,7 +57,7 @@ class BookingAdminTest extends TestCase
 
     public function test_admin_can_cancel_booking(): void
     {
-        $booking = Booking::factory()->create(['status' => 'confirmed']);
+        $booking = Booking::factory()->create(['status' => 'confirmed', 'tenant_id' => $this->admin->tenant_id]);
 
         $response = $this->actingAs($this->admin)
             ->post("/admin/bookings/{$booking->id}/cancel");

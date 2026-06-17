@@ -21,6 +21,11 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
+// Directory of all user-facing public pages, each linked separately.
+Route::get('/links', function () {
+    return view('links');
+})->name('links');
+
 Route::post('/inquiry', [\App\Http\Controllers\InquiryController::class, 'store'])->name('inquiry.store')->middleware('throttle:inquiry');
 
 // Authentication routes
@@ -102,12 +107,22 @@ Route::middleware([
         Route::get('/bookings', [\App\Http\Controllers\Admin\BookingController::class, 'index'])->name('bookings.index');
         Route::get('/bookings/create', [\App\Http\Controllers\Admin\BookingController::class, 'create'])->middleware('permission:bookings.create')->name('bookings.create');
         Route::post('/bookings', [\App\Http\Controllers\Admin\BookingController::class, 'store'])->middleware('permission:bookings.create')->name('bookings.store');
+        Route::get('/bookings/{booking}/edit', [\App\Http\Controllers\Admin\BookingController::class, 'edit'])->middleware('permission:bookings.edit')->name('bookings.edit');
+        Route::put('/bookings/{booking}', [\App\Http\Controllers\Admin\BookingController::class, 'update'])->middleware('permission:bookings.edit')->name('bookings.update');
         Route::get('/bookings/{booking}', [\App\Http\Controllers\Admin\BookingController::class, 'show'])->name('bookings.show');
         Route::post('/bookings/{booking}/confirm', [\App\Http\Controllers\Admin\BookingController::class, 'confirm'])->middleware('permission:bookings.confirm')->name('bookings.confirm');
         Route::post('/bookings/{booking}/cancel', [\App\Http\Controllers\Admin\BookingController::class, 'cancel'])->middleware('permission:bookings.cancel')->name('bookings.cancel');
         Route::post('/bookings/{booking}/vendors', [\App\Http\Controllers\Admin\BookingController::class, 'attachVendor'])->middleware('permission:bookings.edit')->name('bookings.vendors.attach');
         Route::delete('/bookings/{booking}/vendors/{vendor}', [\App\Http\Controllers\Admin\BookingController::class, 'detachVendor'])->middleware('permission:bookings.edit')->name('bookings.vendors.detach');
     });
+
+    // Calendar (unified events view of all bookings)
+    Route::get('/calendar', [\App\Http\Controllers\Admin\CalendarController::class, 'index'])
+        ->middleware('permission:bookings.view')->name('calendar.index');
+
+    // In-app notifications (mark read)
+    Route::post('/notifications/read', [\App\Http\Controllers\Admin\NotificationController::class, 'read'])
+        ->name('notifications.read');
 
     // Vendors
     Route::middleware('permission:vendors.view')->group(function () {
@@ -153,7 +168,8 @@ Route::middleware([
     });
 
     Route::middleware('permission:clients.view')->group(function () {
-        Route::get('/clients', [\App\Http\Controllers\Admin\ClientController::class, 'index'])->name('clients.index');
+        Route::resource('clients', \App\Http\Controllers\Admin\ClientController::class)
+            ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
     });
 
     Route::middleware('permission:payments.view')->group(function () {

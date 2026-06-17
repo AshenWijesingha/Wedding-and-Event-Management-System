@@ -46,8 +46,8 @@ class StaffApiTest extends TestCase
     public function test_admin_can_get_staff_schedule(): void
     {
         $admin = User::factory()->admin()->create();
-        $staff = Staff::factory()->create();
-        Task::factory()->count(3)->create(['assigned_to' => $staff->id]);
+        $staff = Staff::factory()->create(['tenant_id' => $admin->tenant_id]);
+        Task::factory()->count(3)->create(['assigned_to' => $staff->id, 'tenant_id' => $admin->tenant_id]);
 
         $response = $this->actingAs($admin, 'sanctum')
             ->getJson("/api/v1/admin/staff/{$staff->id}/schedule");
@@ -58,7 +58,7 @@ class StaffApiTest extends TestCase
     public function test_admin_can_delete_staff(): void
     {
         $admin = User::factory()->admin()->create();
-        $staff = Staff::factory()->create();
+        $staff = Staff::factory()->create(['tenant_id' => $admin->tenant_id]);
 
         $response = $this->actingAs($admin, 'sanctum')
             ->deleteJson("/api/v1/admin/staff/{$staff->id}");

@@ -10,10 +10,11 @@ defineEmits(['update:modelValue']);
 
 <template>
     <FormField :label="label" :error="error" :hint="hint" :required="required">
-        <template #default="{ id }">
+        <template #default="{ id, describedby, invalid }">
             <select :id="id" :value="modelValue"
                     @change="$emit('update:modelValue', $event.target.value)"
                     :required="required" :disabled="disabled"
+                    :aria-describedby="describedby" :aria-invalid="invalid"
                     class="w-full rounded-lg border-border text-sm text-ink focus:border-primary focus:ring-primary disabled:bg-surface-sunken">
                 <slot />
             </select>

@@ -5,6 +5,7 @@ import { Head } from '@inertiajs/vue3';
 import { usePermissions } from '@/composables/usePermissions';
 import Avatar from '@/Components/ui/Avatar.vue';
 import PageTour from '@/Components/PageTour.vue';
+import NotificationBell from '@/Components/NotificationBell.vue';
 
 defineProps({ title: String, tour: String });
 
@@ -18,6 +19,7 @@ const sidebarOpen = ref(false);
 const navigation = [
     { name: 'Dashboard',     href: '/admin',                   icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
     { name: 'Bookings',      href: '/admin/bookings',          icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', permission: 'bookings.view' },
+    { name: 'Calendar',      href: '/admin/calendar',          icon: 'M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2zM7 14h.01M11 14h.01M15 14h.01M7 17h.01M11 17h.01M15 17h.01', permission: 'bookings.view' },
     { name: 'Inquiries',     href: '/admin/inquiries',         icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z', permission: 'inquiries.view' },
     { name: 'Quotations',    href: '/admin/quotations',        icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', permission: 'quotations.view' },
     { name: 'Clients',       href: '/admin/clients',           icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', permission: 'clients.view' },
@@ -57,6 +59,7 @@ const logout = () => router.post('/logout');
 
 <template>
     <Head :title="title" />
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-[60] focus:top-2 focus:left-2 focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:rounded-lg">Skip to content</a>
     <div class="min-h-screen bg-surface-muted flex">
         <!-- Sidebar -->
         <aside
@@ -67,7 +70,7 @@ const logout = () => router.post('/logout');
                 <Link href="/admin" class="flex items-center gap-2">
                     <span class="font-display text-xl font-semibold text-ink">EventPro</span>
                 </Link>
-                <button @click="sidebarOpen = false" class="lg:hidden text-ink-subtle hover:text-ink">
+                <button @click="sidebarOpen = false" aria-label="Close menu" class="lg:hidden text-ink-subtle hover:text-ink rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
@@ -78,11 +81,12 @@ const logout = () => router.post('/logout');
                     v-for="item in visibleNav"
                     :key="item.name"
                     :href="item.href"
+                    :aria-current="isActive(item.href) ? 'page' : undefined"
                     :class="[
                         isActive(item.href)
                             ? 'bg-primary/10 text-primary'
                             : 'text-ink-muted hover:bg-surface-sunken hover:text-ink',
-                        'group flex items-center px-3 py-2 text-sm font-medium rounded-lg mb-0.5 transition-colors'
+                        'group flex items-center px-3 py-2 text-sm font-medium rounded-lg mb-0.5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary'
                     ]"
                 >
                     <svg class="mr-3 h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
@@ -102,7 +106,7 @@ const logout = () => router.post('/logout');
                             <p class="text-xs text-ink-subtle truncate capitalize">{{ user?.role }}</p>
                         </div>
                     </Link>
-                    <button @click="logout" class="text-ink-subtle hover:text-ink transition-colors" title="Logout">
+                    <button @click="logout" aria-label="Log out" class="text-ink-subtle hover:text-ink transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary" title="Logout">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                     </button>
                 </div>
@@ -129,7 +133,7 @@ const logout = () => router.post('/logout');
             </div>
             <!-- Top bar -->
             <header class="bg-surface border-b border-border h-16 flex items-center px-4 lg:px-6">
-                <button @click="sidebarOpen = true" class="lg:hidden mr-4 text-ink-muted hover:text-ink">
+                <button @click="sidebarOpen = true" aria-label="Open menu" class="lg:hidden mr-4 text-ink-muted hover:text-ink rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
                 <div class="flex-1">
@@ -139,10 +143,11 @@ const logout = () => router.post('/logout');
                 <div v-if="$page.props.flash?.success" class="mr-3 px-3 py-1 bg-success-soft text-success rounded-lg text-sm">{{ $page.props.flash.success }}</div>
                 <div v-if="$page.props.flash?.error" class="mr-3 px-3 py-1 bg-danger-soft text-danger rounded-lg text-sm">{{ $page.props.flash.error }}</div>
                 <div v-if="$page.props.flash?.info" class="mr-3 px-3 py-1 bg-info-soft text-info rounded-lg text-sm">{{ $page.props.flash.info }}</div>
+                <NotificationBell />
             </header>
 
             <!-- Page content -->
-            <main class="flex-1 overflow-y-auto p-4 lg:p-6">
+            <main id="main" class="flex-1 overflow-y-auto p-4 lg:p-6">
                 <slot />
             </main>
         </div>

@@ -45,7 +45,7 @@ class PaymentController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'booking_id' => 'required|exists:bookings,id',
+            'booking_id' => ['required', \App\Support\TenantRule::exists('bookings')],
             'installment_name' => 'required|string|max:100',
             'amount' => 'required|numeric|min:0.01',
             'payment_method' => 'required|in:cash,bank_transfer,credit_card,cheque,online',
