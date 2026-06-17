@@ -61,6 +61,11 @@ const statusColors = {
 
                 <!-- Actions -->
                 <div class="flex gap-2">
+                    <Link v-if="!['completed', 'cancelled'].includes(booking.status)"
+                        :href="`/admin/bookings/${booking.id}/edit`"
+                        class="px-4 py-2 border border-border text-ink-muted hover:text-ink text-sm font-medium rounded-lg">
+                        Edit
+                    </Link>
                     <button v-if="booking.status === 'tentative'" @click="confirm"
                         class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg">
                         Confirm Booking

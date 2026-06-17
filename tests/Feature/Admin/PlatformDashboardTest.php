@@ -34,6 +34,13 @@ class PlatformDashboardTest extends TestCase
         $this->actingAs($owner)
             ->get('/admin')
             ->assertStatus(200)
-            ->assertInertia(fn ($p) => $p->component('Dashboard'));
+            ->assertInertia(fn ($p) => $p->component('Dashboard')
+                ->has('stats', fn ($s) => $s
+                    ->has('bookings_total')
+                    ->has('inquiries_open')
+                    ->has('revenue_month')
+                    ->has('clients_total'))
+                ->has('upcomingEvents')
+                ->has('recentInquiries'));
     }
 }

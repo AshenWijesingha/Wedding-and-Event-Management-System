@@ -102,7 +102,7 @@ class VenueApiTest extends TestCase
     public function test_admin_can_update_venue(): void
     {
         $admin = User::factory()->admin()->create();
-        $venue = Venue::factory()->create();
+        $venue = Venue::factory()->create(['tenant_id' => $admin->tenant_id]);
 
         $response = $this->actingAs($admin, 'sanctum')
             ->putJson("/api/v1/admin/venues/{$venue->slug}", [
@@ -119,7 +119,7 @@ class VenueApiTest extends TestCase
     public function test_admin_can_delete_venue(): void
     {
         $admin = User::factory()->admin()->create();
-        $venue = Venue::factory()->create();
+        $venue = Venue::factory()->create(['tenant_id' => $admin->tenant_id]);
 
         $response = $this->actingAs($admin, 'sanctum')
             ->deleteJson("/api/v1/admin/venues/{$venue->slug}");

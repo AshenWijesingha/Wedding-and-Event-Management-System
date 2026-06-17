@@ -58,9 +58,13 @@ class BrandingService
     {
         $branding = $this->getBranding();
 
-        $primary = $branding['colors']['primary'];
-        $secondary = $branding['colors']['secondary'];
-        $accent = $branding['colors']['accent'] ?? '#10B981';
+        // These values are interpolated raw into an inline <style> block, so they
+        // MUST be sanitized to a CSS-color shape. Tenant colors are attacker-
+        // controlled (tenant admins set them via settings), and an unsanitized
+        // value like "</style><script>…" would be stored XSS on every page.
+        $primary = $this->safeColor($branding['colors']['primary'] ?? null, '#3B82F6');
+        $secondary = $this->safeColor($branding['colors']['secondary'] ?? null, '#1E40AF');
+        $accent = $this->safeColor($branding['colors']['accent'] ?? null, '#10B981');
 
         return <<<CSS
 :root {
@@ -127,6 +131,32 @@ CSS;
             ],
             'social' => [],
         ];
+    }
+
+    /**
+     * Whitelist a CSS color value. Returns the value only when it matches a safe
+     * color shape (#hex, rgb()/rgba(), hsl()/hsla(), or a bare keyword); otherwise
+     * the fallback. None of these shapes can contain the characters needed to break
+     * out of a CSS value or the surrounding <style> element.
+     */
+    private function safeColor(?string $value, string $fallback): string
+    {
+        $value = trim((string) $value);
+
+        $patterns = [
+            '/^#(?:[0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i', // hex
+            '/^rgba?\(\s*[0-9.,%\s\/]+\)$/i',                            // rgb()/rgba()
+            '/^hsla?\(\s*[0-9.,%\s\/]+\)$/i',                            // hsl()/hsla()
+            '/^[a-z]{1,30}$/i',                                          // named keyword
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $value)) {
+                return $value;
+            }
+        }
+
+        return $fallback;
     }
 
     /**

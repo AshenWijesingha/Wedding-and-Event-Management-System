@@ -76,7 +76,7 @@ class VenueAdminTest extends TestCase
 
     public function test_admin_can_view_venue_edit(): void
     {
-        $venue = Venue::factory()->create();
+        $venue = Venue::factory()->create(['tenant_id' => $this->admin->tenant_id]);
 
         $response = $this->actingAs($this->admin)
             ->get("/admin/venues/{$venue->slug}/edit");
@@ -87,7 +87,7 @@ class VenueAdminTest extends TestCase
 
     public function test_admin_can_update_venue(): void
     {
-        $venue = Venue::factory()->create();
+        $venue = Venue::factory()->create(['tenant_id' => $this->admin->tenant_id]);
 
         $response = $this->actingAs($this->admin)
             ->put("/admin/venues/{$venue->slug}", [
@@ -104,7 +104,7 @@ class VenueAdminTest extends TestCase
 
     public function test_admin_can_delete_venue(): void
     {
-        $venue = Venue::factory()->create();
+        $venue = Venue::factory()->create(['tenant_id' => $this->admin->tenant_id]);
 
         $response = $this->actingAs($this->admin)
             ->delete("/admin/venues/{$venue->slug}");

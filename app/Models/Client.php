@@ -68,6 +68,14 @@ class Client extends Model
     }
 
     /**
+     * Get all quotations for this client.
+     */
+    public function quotations(): HasMany
+    {
+        return $this->hasMany(Quotation::class);
+    }
+
+    /**
      * Get the client's full name.
      */
     public function getFullNameAttribute(): string

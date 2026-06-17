@@ -83,10 +83,10 @@ class QuotationController extends Controller
         abort_unless($request->user()->hasAnyRole(self::MANAGE_ROLES), 403);
 
         $validated = $request->validate([
-            'client_id'            => 'required|exists:clients,id',
-            'inquiry_id'           => 'nullable|exists:inquiries,id',
-            'venue_id'             => 'nullable|exists:venues,id',
-            'package_id'           => 'nullable|exists:packages,id',
+            'client_id'            => ['required', \App\Support\TenantRule::exists('clients')],
+            'inquiry_id'           => ['nullable', \App\Support\TenantRule::exists('inquiries')],
+            'venue_id'             => ['nullable', \App\Support\TenantRule::exists('venues')],
+            'package_id'           => ['nullable', \App\Support\TenantRule::exists('packages')],
             'event_date'           => 'nullable|date',
             'guest_count'          => 'nullable|integer|min:1',
             'items'                => 'required|array|min:1',
@@ -184,6 +184,22 @@ class QuotationController extends Controller
             $attrs[$rule['stamp']] = now();
         }
         $quotation->update($attrs);
+
+        if ($action === 'send') {
+            \App\Support\Notifier::mail(
+                optional($quotation->client)->email,
+                new \App\Mail\QuotationSentMail($quotation),
+            );
+        } elseif (in_array($action, ['accept', 'reject'], true)) {
+            \App\Support\Notifier::staff(
+                \App\Models\Tenant::current(),
+                new \App\Notifications\StaffNotification(
+                    "quotation_{$rule['to']}",
+                    "Quotation {$quotation->quotation_number} was {$rule['to']}.",
+                    "/admin/quotations/{$quotation->id}",
+                ),
+            );
+        }
 
         return back()->with('success', "Quotation marked as {$rule['to']}.");
     }

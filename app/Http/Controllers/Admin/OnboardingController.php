@@ -131,8 +131,10 @@ class OnboardingController extends Controller
         ]);
         $user->assignRole($data['role']);
 
+        \App\Support\Notifier::mail($user->email, new \App\Mail\UserInvitedMail($user, $password));
+
         // The plaintext password is flashed once for the owner to hand over.
-        // It is never stored or logged. Real invite emails arrive later.
+        // It is never stored or logged.
         return redirect()->route('admin.onboarding.show')->with([
             'invited_email'    => $user->email,
             'invited_password' => $password,

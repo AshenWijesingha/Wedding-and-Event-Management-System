@@ -62,6 +62,31 @@ class HandleInertiaRequests extends Middleware
             'completedTours' => fn () => $request->user()?->preferences['completed_tours'] ?? [],
             // Demo-sandbox banner state when the current tenant is a demo.
             'demo' => fn () => $this->demoState(),
+            // In-app notifications for the topbar bell (recent + unread count).
+            'notifications' => fn () => $this->notificationsState($request),
+        ];
+    }
+
+    /**
+     * Recent in-app notifications + unread count for the authenticated user.
+     */
+    private function notificationsState(Request $request): ?array
+    {
+        $user = $request->user();
+        if (! $user) {
+            return null;
+        }
+
+        return [
+            'items' => $user->notifications()->latest()->limit(10)->get()->map(fn ($n) => [
+                'id'         => $n->id,
+                'event'      => $n->data['event'] ?? null,
+                'message'    => $n->data['message'] ?? '',
+                'url'        => $n->data['url'] ?? null,
+                'read_at'    => optional($n->read_at)->toIso8601String(),
+                'created_at' => optional($n->created_at)->diffForHumans(),
+            ])->all(),
+            'unread_count' => $user->unreadNotifications()->count(),
         ];
     }
 
