@@ -4,6 +4,9 @@
 
 *Customizable for Hotels, Resorts, Banquet Halls, and Event Venues*
 
+> 📋 **Presenting this project?** See the [Demonstration Guide](docs/DEMONSTRATION_GUIDE.md) —
+> setup, login credentials, a scene-by-scene script covering every feature, and a feature checklist.
+
 ---
 
 ## Table of Contents
