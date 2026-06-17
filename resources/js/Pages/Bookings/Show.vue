@@ -43,7 +43,7 @@ const statusColors = {
 </script>
 
 <template>
-    <AppLayout :title="`Booking ${booking.booking_number}`">
+    <AppLayout tour="booking-show" :title="`Booking ${booking.booking_number}`">
         <div class="max-w-4xl mx-auto space-y-4">
             <!-- Header -->
             <div class="flex items-center justify-between">

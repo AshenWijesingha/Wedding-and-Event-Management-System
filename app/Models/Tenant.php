@@ -43,12 +43,16 @@ class Tenant extends BaseTenant
         'phone',
         'settings',
         'status',
+        'is_demo',
+        'demo_expires_at',
         'trial_ends_at',
     ];
 
     protected $casts = [
         'settings' => 'array',
         'trial_ends_at' => 'datetime',
+        'is_demo' => 'boolean',
+        'demo_expires_at' => 'datetime',
     ];
 
     /**

@@ -42,7 +42,7 @@ const statusColors = {
 </script>
 
 <template>
-    <AppLayout title="Venues">
+    <AppLayout tour="venues" title="Venues">
         <div class="space-y-4">
             <!-- Header -->
             <div class="flex items-center justify-between">

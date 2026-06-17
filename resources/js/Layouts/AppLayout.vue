@@ -4,8 +4,9 @@ import { Link, usePage, router } from '@inertiajs/vue3';
 import { Head } from '@inertiajs/vue3';
 import { usePermissions } from '@/composables/usePermissions';
 import Avatar from '@/Components/ui/Avatar.vue';
+import PageTour from '@/Components/PageTour.vue';
 
-defineProps({ title: String });
+defineProps({ title: String, tour: String });
 
 const page = usePage();
 const user = computed(() => page.props.auth.user);
@@ -72,7 +73,7 @@ const logout = () => router.post('/logout');
             </div>
 
             <!-- Navigation -->
-            <nav class="mt-3 px-3 flex-1 overflow-y-auto">
+            <nav data-tour="t-nav" class="mt-3 px-3 flex-1 overflow-y-auto">
                 <Link
                     v-for="item in visibleNav"
                     :key="item.name"
@@ -113,6 +114,11 @@ const logout = () => router.post('/logout');
 
         <!-- Main content -->
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+            <!-- Demo sandbox banner -->
+            <div v-if="$page.props.demo?.is_demo" class="flex items-center justify-center gap-2 bg-info text-white px-4 lg:px-6 py-2 text-sm font-medium">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                You're exploring a live demo — it resets automatically and your changes won't be saved.
+            </div>
             <!-- Impersonation banner -->
             <div v-if="impersonating" class="flex items-center justify-between gap-3 bg-warning text-white px-4 lg:px-6 py-2 text-sm font-medium">
                 <span class="flex items-center gap-2">
@@ -140,5 +146,8 @@ const logout = () => router.post('/logout');
                 <slot />
             </main>
         </div>
+
+        <!-- Per-page guided tour (auto-runs once, replayable via the "?" button) -->
+        <PageTour v-if="tour" :key="tour" :tour-key="tour" />
     </div>
 </template>

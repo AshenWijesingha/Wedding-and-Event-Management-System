@@ -33,14 +33,14 @@ const statusColors = {
 </script>
 
 <template>
-    <AppLayout title="Bookings">
+    <AppLayout title="Bookings" tour="bookings">
         <div class="space-y-4">
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-xl font-semibold text-ink">Bookings</h2>
                     <p class="text-sm text-ink-subtle mt-0.5">Manage event bookings</p>
                 </div>
-                <Link v-if="can('bookings.create')" href="/admin/bookings/create" class="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white text-sm font-medium px-4 py-2 rounded-lg">
+                <Link v-if="can('bookings.create')" data-tour="bookings.new" href="/admin/bookings/create" class="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white text-sm font-medium px-4 py-2 rounded-lg">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     New Booking
                 </Link>
@@ -59,7 +59,7 @@ const statusColors = {
                 </select>
             </div>
 
-            <div class="bg-surface rounded-lg shadow-sm overflow-hidden">
+            <div data-tour="bookings.list" class="bg-surface rounded-lg shadow-sm overflow-hidden">
                 <table class="min-w-full divide-y divide-border">
                     <thead class="bg-surface-muted">
                         <tr>

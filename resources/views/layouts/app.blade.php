@@ -102,12 +102,17 @@
                     </h2>
                 </div>
                 <div class="flex shrink-0 flex-wrap items-center gap-4">
-                    {{-- Placeholder: sub-project 4 (public demo sandbox) will repoint this at the one-click demo tenant. --}}
-                    <a href="{{ route('register') }}"
-                        class="group inline-flex items-center gap-2 text-sm font-semibold text-[#cdbfae] transition-colors hover:text-[#f5efe7]">
-                        Try the demo
-                        <span class="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
-                    </a>
+                    @if(config('eventpro.demo.enabled'))
+                        {{-- One-click public demo: provisions a throwaway tenant and logs the visitor in. --}}
+                        <form method="POST" action="{{ route('demo.start') }}">
+                            @csrf
+                            <button type="submit"
+                                class="group inline-flex items-center gap-2 text-sm font-semibold text-[#cdbfae] transition-colors hover:text-[#f5efe7]">
+                                Try the demo
+                                <span class="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
+                            </button>
+                        </form>
+                    @endif
                     <a href="{{ route('contact') }}"
                         class="group inline-flex items-center gap-3 rounded-full px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-black/30 transition-transform duration-300 hover:-translate-y-0.5"
                         style="background-color: var(--color-primary);">

@@ -43,7 +43,7 @@ function submit() {
 </script>
 
 <template>
-    <AppLayout title="New Booking">
+    <AppLayout tour="booking-create" title="New Booking">
         <div class="max-w-2xl mx-auto space-y-4">
             <div class="flex items-center gap-3">
                 <Link href="/admin/bookings" class="text-ink-subtle hover:text-ink-muted">

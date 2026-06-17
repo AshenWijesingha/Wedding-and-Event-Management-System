@@ -20,7 +20,7 @@ watch(search, () => {
 </script>
 
 <template>
-    <AppLayout title="Clients">
+    <AppLayout tour="clients" title="Clients">
         <div class="space-y-4">
             <div class="flex items-center justify-between">
                 <div>

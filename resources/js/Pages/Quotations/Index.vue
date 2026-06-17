@@ -34,7 +34,7 @@ const statusColors = {
 </script>
 
 <template>
-    <AppLayout title="Quotations">
+    <AppLayout tour="quotations" title="Quotations">
         <div class="space-y-4">
             <div class="flex items-center justify-between">
                 <div>

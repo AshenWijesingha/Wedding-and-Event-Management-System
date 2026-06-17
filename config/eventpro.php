@@ -112,4 +112,22 @@ return [
         'allowed_image_types' => ['jpg', 'jpeg', 'png', 'gif', 'webp'],
         'allowed_document_types' => ['pdf', 'doc', 'docx', 'xls', 'xlsx'],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Public Demo Sandbox
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, the landing page offers a one-click "Try the demo" that
+    | provisions an isolated, throwaway demo tenant. Demos expire after
+    | `lifetime_minutes` and are reaped by the `demo:reap` schedule.
+    |
+    */
+
+    'demo' => [
+        'enabled'          => env('DEMO_MODE', false),
+        'lifetime_minutes' => (int) env('DEMO_LIFETIME', 60),
+        'max_live'         => (int) env('DEMO_MAX_LIVE', 50),
+        'throttle'         => (int) env('DEMO_THROTTLE', 5), // new demos per IP per hour
+    ],
 ];
