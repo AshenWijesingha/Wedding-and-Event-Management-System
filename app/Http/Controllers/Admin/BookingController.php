@@ -91,6 +91,61 @@ class BookingController extends Controller
         return redirect()->route('admin.bookings.index')->with('success', 'Booking created successfully.');
     }
 
+    public function edit(Booking $booking): Response
+    {
+        return Inertia::render('Bookings/Edit', [
+            'booking'  => new BookingResource($booking->load(['client', 'venue', 'package'])),
+            'venues'   => Venue::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
+            'packages' => Package::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
+            'clients'  => Client::orderBy('first_name')->get()->map(fn ($c) => [
+                'id'   => $c->id,
+                'name' => trim("{$c->first_name} {$c->last_name}"),
+            ]),
+        ]);
+    }
+
+    public function update(Request $request, Booking $booking, AvailabilityService $availability): RedirectResponse
+    {
+        abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
+
+        if (in_array($booking->status, ['completed', 'cancelled'], true)) {
+            return back()->with('error', 'Completed or cancelled bookings cannot be edited.');
+        }
+
+        $validated = $request->validate([
+            'client_id'        => ['required', \App\Support\TenantRule::exists('clients')],
+            'venue_id'         => ['required', \App\Support\TenantRule::exists('venues')],
+            'package_id'       => ['nullable', \App\Support\TenantRule::exists('packages')],
+            'event_type'       => 'required|string|max:50',
+            'event_date'       => 'required|date|after_or_equal:today',
+            'setup_time'       => 'nullable|date_format:H:i',
+            'event_start_time' => 'nullable|date_format:H:i',
+            'event_end_time'   => 'nullable|date_format:H:i',
+            'guest_count'      => 'required|integer|min:1',
+            'total_amount'     => 'required|numeric|min:0',
+            'paid_amount'      => 'nullable|numeric|min:0',
+            'status'           => 'nullable|in:pending,tentative,confirmed',
+            'notes'            => 'nullable|string',
+        ]);
+
+        // Re-check availability but exclude THIS booking, so saving the same date
+        // is not a false self-conflict.
+        if (! $availability->isVenueAvailable($validated['venue_id'], $validated['event_date'], $booking->id)) {
+            return back()->withErrors(['event_date' => 'This venue is already booked on the selected date.'])->withInput();
+        }
+
+        $paid = (float) ($validated['paid_amount'] ?? $booking->paid_amount);
+
+        $booking->update([
+            ...$validated,
+            'paid_amount'    => $paid,
+            'balance_amount' => (float) $validated['total_amount'] - $paid,
+            'status'         => $validated['status'] ?? $booking->status,
+        ]);
+
+        return redirect()->route('admin.bookings.show', $booking)->with('success', 'Booking updated successfully.');
+    }
+
     public function show(Booking $booking): Response
     {
         return Inertia::render('Bookings/Show', [

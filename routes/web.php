@@ -107,6 +107,8 @@ Route::middleware([
         Route::get('/bookings', [\App\Http\Controllers\Admin\BookingController::class, 'index'])->name('bookings.index');
         Route::get('/bookings/create', [\App\Http\Controllers\Admin\BookingController::class, 'create'])->middleware('permission:bookings.create')->name('bookings.create');
         Route::post('/bookings', [\App\Http\Controllers\Admin\BookingController::class, 'store'])->middleware('permission:bookings.create')->name('bookings.store');
+        Route::get('/bookings/{booking}/edit', [\App\Http\Controllers\Admin\BookingController::class, 'edit'])->middleware('permission:bookings.edit')->name('bookings.edit');
+        Route::put('/bookings/{booking}', [\App\Http\Controllers\Admin\BookingController::class, 'update'])->middleware('permission:bookings.edit')->name('bookings.update');
         Route::get('/bookings/{booking}', [\App\Http\Controllers\Admin\BookingController::class, 'show'])->name('bookings.show');
         Route::post('/bookings/{booking}/confirm', [\App\Http\Controllers\Admin\BookingController::class, 'confirm'])->middleware('permission:bookings.confirm')->name('bookings.confirm');
         Route::post('/bookings/{booking}/cancel', [\App\Http\Controllers\Admin\BookingController::class, 'cancel'])->middleware('permission:bookings.cancel')->name('bookings.cancel');
