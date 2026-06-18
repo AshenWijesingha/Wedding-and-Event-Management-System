@@ -41,6 +41,7 @@ php artisan migrate:fresh --seed
 npm run build
 
 # 4. Link storage for uploaded images/avatars
+#    (safe to skip — "The link already exists" just means it's already done)
 php artisan storage:link
 
 # 5. Start the app
