@@ -34,6 +34,10 @@ storage/framework/views/*
 storage/logs/*
 !storage/logs/.gitkeep
 
+# User/seed-generated uploads (keep the dir, ignore its contents)
+storage/app/public/avatars/*
+!storage/app/public/avatars/.gitkeep
+
 # Compiled assets
 public/css
 public/js
