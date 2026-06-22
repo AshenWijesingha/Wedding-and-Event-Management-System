@@ -18,15 +18,15 @@ class UserInvitedMail extends Mailable implements ShouldQueue
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'You have been invited to '.($this->user->tenant->name ?? 'EventPro'));
+        return new Envelope(subject: 'You have been invited to ' . ($this->user->tenant->name ?? 'EventPro'));
     }
 
     public function content(): Content
     {
         return new Content(markdown: 'mail.user-invited', with: [
-            'user'         => $this->user,
+            'user' => $this->user,
             'tempPassword' => $this->tempPassword,
-            'loginUrl'     => url('/login'),
+            'loginUrl' => url('/login'),
         ]);
     }
 }

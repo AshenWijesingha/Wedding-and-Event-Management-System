@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\Concerns\BelongsToTenant;
 
 class Quotation extends Model
 {
-    use HasFactory, BelongsToTenant, LogsActivity;
+    use BelongsToTenant, HasFactory, LogsActivity;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -135,6 +135,7 @@ class Quotation extends Model
         return DB::transaction(function () use ($prefix) {
             $year = date('Y');
             $count = static::withoutGlobalScopes()->whereYear('created_at', $year)->lockForUpdate()->count() + 1;
+
             return sprintf('%s%s%04d', $prefix, $year, $count);
         });
     }
@@ -145,6 +146,6 @@ class Quotation extends Model
     public function scopeValid($query)
     {
         return $query->where('valid_until', '>=', now()->toDateString())
-                     ->whereNotIn('status', ['expired', 'cancelled']);
+            ->whereNotIn('status', ['expired', 'cancelled']);
     }
 }

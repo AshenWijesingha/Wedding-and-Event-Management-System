@@ -6,7 +6,6 @@ use App\Models\Booking;
 use App\Models\Client;
 use App\Models\Payment;
 use App\Models\Tenant;
-use App\Models\User;
 use App\Models\Venue;
 use App\Services\DemoTenantProvisioner;
 use Illuminate\Foundation\Testing\RefreshDatabase;

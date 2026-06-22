@@ -19,7 +19,7 @@ class BrandingService
      */
     public function getBranding(): array
     {
-        if (!$this->tenant) {
+        if (! $this->tenant) {
             return $this->getDefaultBranding();
         }
 
@@ -86,7 +86,7 @@ CSS;
     {
         $settingKey = $variant ? "branding.logo_{$variant}" : 'branding.logo';
         $logo = $this->tenant?->getSetting($settingKey) ?? $this->tenant?->logo;
-        
+
         if ($logo && Storage::disk('public')->exists($logo)) {
             return Storage::disk('public')->url($logo);
         }
@@ -100,7 +100,7 @@ CSS;
     private function getFaviconUrl(): string
     {
         $favicon = $this->tenant?->getSetting('branding.favicon') ?? $this->tenant?->favicon;
-        
+
         if ($favicon && Storage::disk('public')->exists($favicon)) {
             return Storage::disk('public')->url($favicon);
         }
@@ -181,7 +181,7 @@ CSS;
     private function adjustBrightness(string $hex, int $percent): string
     {
         $hex = ltrim($hex, '#');
-        
+
         $r = hexdec(substr($hex, 0, 2));
         $g = hexdec(substr($hex, 2, 2));
         $b = hexdec(substr($hex, 4, 2));

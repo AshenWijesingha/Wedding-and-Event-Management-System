@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskResource;
 use App\Http\Traits\ApiResponse;
 use App\Models\Task;
+use App\Support\TenantRule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -31,13 +32,13 @@ class TaskController extends Controller
     public function store(Request $request): JsonResponse
     {
         $data = $request->validate([
-            'title'       => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'priority'    => 'nullable|in:low,medium,high,urgent',
-            'status'      => 'nullable|in:pending,in_progress,completed,cancelled',
-            'due_date'    => 'nullable|date',
-            'booking_id'  => ['nullable', \App\Support\TenantRule::exists('bookings')],
-            'assigned_to' => ['nullable', \App\Support\TenantRule::exists('staff')],
+            'priority' => 'nullable|in:low,medium,high,urgent',
+            'status' => 'nullable|in:pending,in_progress,completed,cancelled',
+            'due_date' => 'nullable|date',
+            'booking_id' => ['nullable', TenantRule::exists('bookings')],
+            'assigned_to' => ['nullable', TenantRule::exists('staff')],
         ]);
 
         $task = Task::create($data);
@@ -53,11 +54,11 @@ class TaskController extends Controller
     public function update(Request $request, Task $task): JsonResponse
     {
         $data = $request->validate([
-            'title'       => 'sometimes|string|max:255',
+            'title' => 'sometimes|string|max:255',
             'description' => 'nullable|string',
-            'priority'    => 'nullable|in:low,medium,high,urgent',
-            'status'      => 'nullable|in:pending,in_progress,completed,cancelled',
-            'due_date'    => 'nullable|date',
+            'priority' => 'nullable|in:low,medium,high,urgent',
+            'status' => 'nullable|in:pending,in_progress,completed,cancelled',
+            'due_date' => 'nullable|date',
             'assigned_to' => 'nullable|exists:staff,id',
         ]);
 
@@ -73,6 +74,7 @@ class TaskController extends Controller
     public function destroy(Task $task): JsonResponse
     {
         $task->delete();
+
         return $this->success(null, 'Task deleted.');
     }
 }

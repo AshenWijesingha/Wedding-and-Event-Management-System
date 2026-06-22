@@ -15,8 +15,7 @@ class PackageController extends Controller
     public function index(Request $request): JsonResponse
     {
         $packages = Package::query()
-            ->when($request->venue_id, fn ($query, $venueId) => 
-                $query->where('venue_id', $venueId)
+            ->when($request->venue_id, fn ($query, $venueId) => $query->where('venue_id', $venueId)
             )
             ->paginate($request->per_page ?? 15);
 

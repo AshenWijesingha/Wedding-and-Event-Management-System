@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tenant;
+use App\Services\PayHereService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -18,20 +19,20 @@ class SettingsController extends Controller
 
     public function index(): Response
     {
-        $tenant   = $this->getTenant();
+        $tenant = $this->getTenant();
         $settings = $tenant?->settings ?? [];
 
         return Inertia::render('Settings/Index', [
-            'tenant'   => $tenant ? [
-                'id'            => $tenant->id,
-                'name'          => $tenant->name,
-                'email'         => $tenant->email,
-                'phone'         => $tenant->phone,
+            'tenant' => $tenant ? [
+                'id' => $tenant->id,
+                'name' => $tenant->name,
+                'email' => $tenant->email,
+                'phone' => $tenant->phone,
                 'primary_color' => $tenant->primary_color,
-                'logo'          => $tenant->logo,
+                'logo' => $tenant->logo,
             ] : null,
             'settings' => $settings,
-            'payhere'  => $this->payhereStatus($settings),
+            'payhere' => $this->payhereStatus($settings),
         ]);
     }
 
@@ -43,10 +44,10 @@ class SettingsController extends Controller
         $payhere = $settings['payhere'] ?? [];
 
         return [
-            'merchant_id'      => $payhere['merchant_id'] ?? '',
-            'sandbox'          => (bool) ($payhere['sandbox'] ?? true),
-            'currency'         => $payhere['currency'] ?? 'LKR',
-            'secret_configured'=> ! empty($payhere['merchant_secret']),
+            'merchant_id' => $payhere['merchant_id'] ?? '',
+            'sandbox' => (bool) ($payhere['sandbox'] ?? true),
+            'currency' => $payhere['currency'] ?? 'LKR',
+            'secret_configured' => ! empty($payhere['merchant_secret']),
         ];
     }
 
@@ -54,13 +55,13 @@ class SettingsController extends Controller
      * Save per-tenant PayHere credentials. The merchant secret is encrypted at
      * rest and only updated when a new value is submitted (write-only field).
      */
-    public function updatePayHere(Request $request, \App\Services\PayHereService $payhere): RedirectResponse
+    public function updatePayHere(Request $request, PayHereService $payhere): RedirectResponse
     {
         $request->validate([
-            'merchant_id'     => 'nullable|string|max:50',
+            'merchant_id' => 'nullable|string|max:50',
             'merchant_secret' => 'nullable|string|max:255',
-            'sandbox'         => 'sometimes|boolean',
-            'currency'        => 'nullable|string|size:3',
+            'sandbox' => 'sometimes|boolean',
+            'currency' => 'nullable|string|size:3',
         ]);
 
         $tenant = $this->getTenant();
@@ -72,8 +73,8 @@ class SettingsController extends Controller
 
         $config = [
             'merchant_id' => $request->input('merchant_id', $existing['merchant_id'] ?? ''),
-            'sandbox'     => (bool) $request->input('sandbox', $existing['sandbox'] ?? true),
-            'currency'    => strtoupper($request->input('currency', $existing['currency'] ?? 'LKR')),
+            'sandbox' => (bool) $request->input('sandbox', $existing['sandbox'] ?? true),
+            'currency' => strtoupper($request->input('currency', $existing['currency'] ?? 'LKR')),
         ];
 
         // Only overwrite the stored secret when a new one is actually provided.
@@ -91,10 +92,10 @@ class SettingsController extends Controller
     public function updateGeneral(Request $request): RedirectResponse
     {
         $request->validate([
-            'name'         => 'required|string|max:255',
-            'email'        => 'nullable|email|max:255',
-            'phone'        => 'nullable|string|max:50',
-            'primary_color'=> 'nullable|string|max:20',
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:50',
+            'primary_color' => 'nullable|string|max:20',
         ]);
 
         $tenant = $this->getTenant();
@@ -108,7 +109,7 @@ class SettingsController extends Controller
     public function updateSettings(Request $request): RedirectResponse
     {
         $request->validate([
-            'key'   => 'required|string|max:255',
+            'key' => 'required|string|max:255',
             'value' => 'present',
         ]);
 
@@ -123,11 +124,11 @@ class SettingsController extends Controller
     public function updateBranding(Request $request): RedirectResponse
     {
         $request->validate([
-            'company_name'  => 'nullable|string|max:255',
-            'tagline'       => 'nullable|string|max:500',
+            'company_name' => 'nullable|string|max:255',
+            'tagline' => 'nullable|string|max:500',
             'primary_color' => 'nullable|string|max:20',
-            'font_family'   => 'nullable|string|max:100',
-            'logo_url'      => 'nullable|url|max:500',
+            'font_family' => 'nullable|string|max:100',
+            'logo_url' => 'nullable|url|max:500',
         ]);
 
         $tenant = $this->getTenant();
@@ -142,9 +143,9 @@ class SettingsController extends Controller
     {
         $request->validate([
             'quotation_footer' => 'nullable|string',
-            'quotation_terms'  => 'nullable|string',
-            'invoice_footer'   => 'nullable|string',
-            'contract_header'  => 'nullable|string',
+            'quotation_terms' => 'nullable|string',
+            'invoice_footer' => 'nullable|string',
+            'contract_header' => 'nullable|string',
         ]);
 
         $tenant = $this->getTenant();
@@ -158,8 +159,8 @@ class SettingsController extends Controller
     public function updateEmailTemplates(Request $request): RedirectResponse
     {
         $request->validate([
-            'templates'        => 'nullable|array',
-            'templates.*.key'  => 'required|string|max:100',
+            'templates' => 'nullable|array',
+            'templates.*.key' => 'required|string|max:100',
             'templates.*.subject' => 'required|string|max:255',
             'templates.*.body' => 'required|string',
         ]);

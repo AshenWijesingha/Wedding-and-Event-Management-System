@@ -14,9 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class EnsureOnboarded
 {
-    public function __construct(private OnboardingService $onboarding)
-    {
-    }
+    public function __construct(private OnboardingService $onboarding) {}
 
     public function handle(Request $request, Closure $next): Response
     {

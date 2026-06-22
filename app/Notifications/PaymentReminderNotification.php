@@ -31,17 +31,17 @@ class PaymentReminderNotification extends Notification
             ->line("This is a reminder that your payment of \${$this->payment->amount} for booking {$booking->booking_number} is {$urgency}.")
             ->line("Due date: {$this->payment->due_date->format('M d, Y')}")
             ->line("Installment: {$this->payment->installment_name}")
-            ->action('View Booking', url("/portal/bookings"))
+            ->action('View Booking', url('/portal/bookings'))
             ->line('Please contact us if you have any questions.');
     }
 
     public function toArray(object $notifiable): array
     {
         return [
-            'payment_id'     => $this->payment->id,
+            'payment_id' => $this->payment->id,
             'payment_number' => $this->payment->payment_number,
-            'amount'         => $this->payment->amount,
-            'due_date'       => $this->payment->due_date?->toDateString(),
+            'amount' => $this->payment->amount,
+            'due_date' => $this->payment->due_date?->toDateString(),
             'booking_number' => $this->payment->booking->booking_number ?? null,
         ];
     }

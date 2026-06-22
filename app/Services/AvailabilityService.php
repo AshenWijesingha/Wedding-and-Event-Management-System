@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Venue;
 use App\Models\Booking;
+use App\Models\Venue;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -14,7 +14,7 @@ class AvailabilityService
      */
     public function isVenueAvailable(int $venueId, string $date, ?int $ignoreBookingId = null): bool
     {
-        return !Booking::where('venue_id', $venueId)
+        return ! Booking::where('venue_id', $venueId)
             ->whereDate('event_date', $date)
             ->whereNotIn('status', ['cancelled'])
             ->when($ignoreBookingId, fn ($q, $id) => $q->where('id', '!=', $id))
@@ -38,13 +38,13 @@ class AvailabilityService
         while ($current <= $end) {
             $dateStr = $current->format('Y-m-d');
             $booking = $bookings->firstWhere('event_date', $dateStr);
-            
+
             $calendar[] = [
                 'date' => $dateStr,
                 'status' => $booking ? $this->mapStatus($booking->status) : 'available',
                 'event_type' => $booking ? $booking->event_type : null,
             ];
-            
+
             $current->addDay();
         }
 
@@ -62,7 +62,7 @@ class AvailabilityService
             ->get(['venue_id', 'event_date', 'status']);
 
         $availability = [];
-        
+
         foreach ($venueIds as $venueId) {
             $availability[$venueId] = [];
             $current = Carbon::parse($startDate);
@@ -73,9 +73,9 @@ class AvailabilityService
                 $booking = $bookings->first(function ($b) use ($venueId, $dateStr) {
                     return $b->venue_id == $venueId && $b->event_date?->format('Y-m-d') === $dateStr;
                 });
-                
+
                 $availability[$venueId][$dateStr] = $booking ? $this->mapStatus($booking->status) : 'available';
-                
+
                 $current->addDay();
             }
         }
@@ -95,7 +95,7 @@ class AvailabilityService
                 ->lockForUpdate()
                 ->exists();
 
-            return !$exists;
+            return ! $exists;
         });
     }
 
@@ -112,13 +112,13 @@ class AvailabilityService
             ->whereBetween('event_date', [$from->format('Y-m-d'), $end->format('Y-m-d')])
             ->whereNotIn('status', ['cancelled'])
             ->pluck('event_date')
-            ->map(fn($date) => $date->format('Y-m-d'))
+            ->map(fn ($date) => $date->format('Y-m-d'))
             ->toArray();
 
         $current = $from->copy();
         while ($current <= $end) {
             $dateStr = $current->format('Y-m-d');
-            if (!in_array($dateStr, $bookedDates)) {
+            if (! in_array($dateStr, $bookedDates)) {
                 return $dateStr;
             }
             $current->addDay();
@@ -132,7 +132,7 @@ class AvailabilityService
      */
     private function mapStatus(string $status): string
     {
-        return match($status) {
+        return match ($status) {
             'pending', 'tentative' => 'tentative',
             'confirmed', 'completed' => 'booked',
             default => 'available',

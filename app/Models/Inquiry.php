@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Concerns\BelongsToTenant;
 
 class Inquiry extends Model
 {
-    use HasFactory, BelongsToTenant;
+    use BelongsToTenant, HasFactory;
 
     protected $fillable = [
         'tenant_id',
@@ -84,6 +84,7 @@ class Inquiry extends Model
     {
         $year = date('Y');
         $count = static::whereYear('created_at', $year)->count() + 1;
+
         return sprintf('INQ%s%04d', $year, $count);
     }
 

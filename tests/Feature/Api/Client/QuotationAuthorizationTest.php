@@ -15,8 +15,11 @@ class QuotationAuthorizationTest extends TestCase
     use RefreshDatabase;
 
     private User $clientUserA;
+
     private User $clientUserB;
+
     private Client $clientA;
+
     private Quotation $quotationA;
 
     protected function setUp(): void
@@ -24,18 +27,18 @@ class QuotationAuthorizationTest extends TestCase
         parent::setUp();
 
         $tenant = Tenant::factory()->create();
-        $venue  = Venue::factory()->create(['tenant_id' => $tenant->id]);
+        $venue = Venue::factory()->create(['tenant_id' => $tenant->id]);
 
         $this->clientUserA = User::factory()->client()->create(['tenant_id' => $tenant->id]);
         $this->clientUserB = User::factory()->client()->create(['tenant_id' => $tenant->id]);
 
         $this->clientA = Client::factory()->create(['tenant_id' => $tenant->id, 'user_id' => $this->clientUserA->id]);
-        $clientB       = Client::factory()->create(['tenant_id' => $tenant->id, 'user_id' => $this->clientUserB->id]);
+        $clientB = Client::factory()->create(['tenant_id' => $tenant->id, 'user_id' => $this->clientUserB->id]);
 
         $this->quotationA = Quotation::factory()->sent()->create([
             'tenant_id' => $tenant->id,
             'client_id' => $this->clientA->id,
-            'venue_id'  => $venue->id,
+            'venue_id' => $venue->id,
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Tenant;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
 
@@ -19,7 +20,7 @@ class ThemeService
      */
     private function loadActiveTheme(): void
     {
-        $tenant = \App\Models\Tenant::current();
+        $tenant = Tenant::current();
         if ($tenant) {
             $this->activeTheme = $tenant->getSetting('theme.active', 'default');
         }
@@ -34,7 +35,7 @@ class ThemeService
         $themesPath = resource_path('themes');
         $themes = [];
 
-        if (!File::isDirectory($themesPath)) {
+        if (! File::isDirectory($themesPath)) {
             return $themes;
         }
 
@@ -63,7 +64,7 @@ class ThemeService
     {
         $theme = $theme ?? $this->activeTheme;
         $configPath = resource_path("themes/{$theme}/theme.json");
-        
+
         if (File::exists($configPath)) {
             return json_decode(File::get($configPath), true);
         }
@@ -77,8 +78,8 @@ class ThemeService
     public function setActiveTheme(string $theme): bool
     {
         $themePath = resource_path("themes/{$theme}");
-        
-        if (!File::isDirectory($themePath)) {
+
+        if (! File::isDirectory($themePath)) {
             return false;
         }
 
@@ -86,7 +87,7 @@ class ThemeService
         $this->registerThemeViews();
 
         // Save to tenant settings if tenant exists
-        $tenant = \App\Models\Tenant::current();
+        $tenant = Tenant::current();
         if ($tenant) {
             $tenant->setSetting('theme.active', $theme);
         }
@@ -119,6 +120,7 @@ class ThemeService
     public function hasView(string $view): bool
     {
         $themePath = resource_path("themes/{$this->activeTheme}/views/{$view}.blade.php");
+
         return File::exists($themePath);
     }
 }

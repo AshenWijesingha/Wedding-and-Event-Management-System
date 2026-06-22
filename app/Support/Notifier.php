@@ -28,9 +28,9 @@ class Notifier
         try {
             Mail::to($to)->send($mailable);
         } catch (\Throwable $e) {
-            logger()->error('Notifier mail dispatch failed: '.$e->getMessage(), [
+            logger()->error('Notifier mail dispatch failed: ' . $e->getMessage(), [
                 'mailable' => $mailable::class,
-                'to'       => $to,
+                'to' => $to,
             ]);
         }
     }
@@ -50,9 +50,9 @@ class Notifier
                 NotificationFacade::send($staff, $notification);
             }
         } catch (\Throwable $e) {
-            logger()->error('Notifier staff notification failed: '.$e->getMessage(), [
+            logger()->error('Notifier staff notification failed: ' . $e->getMessage(), [
                 'notification' => $notification::class,
-                'tenant_id'    => $tenant->id,
+                'tenant_id' => $tenant->id,
             ]);
         }
     }

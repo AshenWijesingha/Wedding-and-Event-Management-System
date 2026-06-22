@@ -13,6 +13,7 @@ class UserManagementTest extends TestCase
     use RefreshDatabase;
 
     private Tenant $tenant;
+
     private User $superAdmin;
 
     protected function setUp(): void
@@ -75,12 +76,12 @@ class UserManagementTest extends TestCase
     public function test_super_admin_can_create_user(): void
     {
         $response = $this->actingAs($this->superAdmin)->post('/admin/users', [
-            'name'                  => 'New Manager',
-            'email'                 => 'manager@example.com',
-            'role'                  => 'manager',
-            'tenant_id'             => $this->tenant->id,
-            'is_active'             => true,
-            'password'              => 'secret-pass-123',
+            'name' => 'New Manager',
+            'email' => 'manager@example.com',
+            'role' => 'manager',
+            'tenant_id' => $this->tenant->id,
+            'is_active' => true,
+            'password' => 'secret-pass-123',
             'password_confirmation' => 'secret-pass-123',
         ]);
 
@@ -94,12 +95,12 @@ class UserManagementTest extends TestCase
     public function test_super_admin_can_create_super_admin(): void
     {
         $this->actingAs($this->superAdmin)->post('/admin/users', [
-            'name'                  => 'Root',
-            'email'                 => 'root@example.com',
-            'role'                  => 'super_admin',
-            'tenant_id'             => $this->tenant->id,
-            'is_active'             => true,
-            'password'              => 'secret-pass-123',
+            'name' => 'Root',
+            'email' => 'root@example.com',
+            'role' => 'super_admin',
+            'tenant_id' => $this->tenant->id,
+            'is_active' => true,
+            'password' => 'secret-pass-123',
             'password_confirmation' => 'secret-pass-123',
         ])->assertSessionHasNoErrors();
 
@@ -111,17 +112,17 @@ class UserManagementTest extends TestCase
         $admin = User::factory()->admin()->create(['tenant_id' => $this->tenant->id]);
 
         $this->actingAs($admin)->post('/admin/users', [
-            'name'                  => 'Tenant Staff',
-            'email'                 => 'staff@example.com',
-            'role'                  => 'staff',
-            'is_active'             => true,
-            'password'              => 'secret-pass-123',
+            'name' => 'Tenant Staff',
+            'email' => 'staff@example.com',
+            'role' => 'staff',
+            'is_active' => true,
+            'password' => 'secret-pass-123',
             'password_confirmation' => 'secret-pass-123',
         ])->assertSessionHasNoErrors()->assertRedirect('/admin/users');
 
         $this->assertDatabaseHas('users', [
-            'email'     => 'staff@example.com',
-            'role'      => 'staff',
+            'email' => 'staff@example.com',
+            'role' => 'staff',
             'tenant_id' => $this->tenant->id,
         ]);
     }
@@ -131,11 +132,11 @@ class UserManagementTest extends TestCase
         $admin = User::factory()->admin()->create(['tenant_id' => $this->tenant->id]);
 
         $this->actingAs($admin)->post('/admin/users', [
-            'name'                  => 'Escalated',
-            'email'                 => 'escalate@example.com',
-            'role'                  => 'super_admin',
-            'is_active'             => true,
-            'password'              => 'secret-pass-123',
+            'name' => 'Escalated',
+            'email' => 'escalate@example.com',
+            'role' => 'super_admin',
+            'is_active' => true,
+            'password' => 'secret-pass-123',
             'password_confirmation' => 'secret-pass-123',
         ])->assertSessionHasErrors('role');
 
@@ -148,12 +149,12 @@ class UserManagementTest extends TestCase
         $other = Tenant::factory()->create();
 
         $this->actingAs($admin)->post('/admin/users', [
-            'name'                  => 'Pinned',
-            'email'                 => 'pinned@example.com',
-            'role'                  => 'staff',
-            'tenant_id'             => $other->id, // foreign tenant should be ignored
-            'is_active'             => true,
-            'password'              => 'secret-pass-123',
+            'name' => 'Pinned',
+            'email' => 'pinned@example.com',
+            'role' => 'staff',
+            'tenant_id' => $other->id, // foreign tenant should be ignored
+            'is_active' => true,
+            'password' => 'secret-pass-123',
             'password_confirmation' => 'secret-pass-123',
         ])->assertSessionHasNoErrors();
 
@@ -193,12 +194,12 @@ class UserManagementTest extends TestCase
     public function test_admin_cannot_promote_existing_user_to_super_admin(): void
     {
         $admin = User::factory()->admin()->create(['tenant_id' => $this->tenant->id]);
-        $user  = User::factory()->state(['role' => 'staff'])->create(['tenant_id' => $this->tenant->id]);
+        $user = User::factory()->state(['role' => 'staff'])->create(['tenant_id' => $this->tenant->id]);
 
         $this->actingAs($admin)->put("/admin/users/{$user->id}", [
-            'name'      => $user->name,
-            'email'     => $user->email,
-            'role'      => 'super_admin',
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => 'super_admin',
             'is_active' => true,
         ])->assertSessionHasErrors('role');
 
@@ -210,9 +211,9 @@ class UserManagementTest extends TestCase
         $user = User::factory()->state(['role' => 'staff'])->create(['tenant_id' => $this->tenant->id]);
 
         $this->actingAs($this->superAdmin)->put("/admin/users/{$user->id}", [
-            'name'      => 'Promoted',
-            'email'     => $user->email,
-            'role'      => 'manager',
+            'name' => 'Promoted',
+            'email' => $user->email,
+            'role' => 'manager',
             'tenant_id' => $this->tenant->id,
             'is_active' => true,
         ])->assertSessionHasNoErrors();
@@ -228,9 +229,9 @@ class UserManagementTest extends TestCase
         $admin = User::factory()->admin()->create(['tenant_id' => $this->tenant->id]);
 
         $this->actingAs($admin)->put("/admin/users/{$admin->id}", [
-            'name'      => $admin->name,
-            'email'     => $admin->email,
-            'role'      => 'staff',
+            'name' => $admin->name,
+            'email' => $admin->email,
+            'role' => 'staff',
             'is_active' => true,
         ])->assertSessionHas('error');
 
@@ -242,7 +243,7 @@ class UserManagementTest extends TestCase
         $user = User::factory()->create(['tenant_id' => $this->tenant->id]);
 
         $this->actingAs($this->superAdmin)->put("/admin/users/{$user->id}/reset-password", [
-            'password'              => 'brand-new-pass-9',
+            'password' => 'brand-new-pass-9',
             'password_confirmation' => 'brand-new-pass-9',
         ])->assertSessionHasNoErrors();
 

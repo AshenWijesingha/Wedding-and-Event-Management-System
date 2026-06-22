@@ -15,7 +15,7 @@ class UserAgentParser
             return 'Unknown device';
         }
 
-        return self::browser($userAgent).' on '.self::platform($userAgent);
+        return self::browser($userAgent) . ' on ' . self::platform($userAgent);
     }
 
     private static function browser(string $ua): string

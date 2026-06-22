@@ -36,15 +36,15 @@ class ProfileTest extends TestCase
     public function test_user_can_update_profile(): void
     {
         $response = $this->actingAs($this->user)->post('/admin/profile', [
-            'name'  => 'Updated Name',
+            'name' => 'Updated Name',
             'email' => 'updated@example.com',
             'phone' => '+1 555-9999',
         ]);
 
         $response->assertSessionHasNoErrors();
         $this->assertDatabaseHas('users', [
-            'id'    => $this->user->id,
-            'name'  => 'Updated Name',
+            'id' => $this->user->id,
+            'name' => 'Updated Name',
             'email' => 'updated@example.com',
             'phone' => '+1 555-9999',
         ]);
@@ -55,8 +55,8 @@ class ProfileTest extends TestCase
         Storage::fake('public');
 
         $response = $this->actingAs($this->user)->post('/admin/profile', [
-            'name'   => $this->user->name,
-            'email'  => $this->user->email,
+            'name' => $this->user->name,
+            'email' => $this->user->email,
             'avatar' => UploadedFile::fake()->create('me.jpg', 80, 'image/jpeg'),
         ]);
 
@@ -73,8 +73,8 @@ class ProfileTest extends TestCase
         $this->user->update(['avatar' => $path]);
 
         $this->actingAs($this->user)->post('/admin/profile', [
-            'name'          => $this->user->name,
-            'email'         => $this->user->email,
+            'name' => $this->user->name,
+            'email' => $this->user->email,
             'remove_avatar' => true,
         ])->assertSessionHasNoErrors();
 
@@ -87,7 +87,7 @@ class ProfileTest extends TestCase
         $this->assertNotNull($this->user->email_verified_at);
 
         $this->actingAs($this->user)->post('/admin/profile', [
-            'name'  => $this->user->name,
+            'name' => $this->user->name,
             'email' => 'changed@example.com',
         ])->assertSessionHasNoErrors();
 
@@ -111,8 +111,8 @@ class ProfileTest extends TestCase
     public function test_user_can_change_password(): void
     {
         $response = $this->actingAs($this->user)->put('/admin/profile/password', [
-            'current_password'      => 'password',
-            'password'              => 'new-secret-pass-123',
+            'current_password' => 'password',
+            'password' => 'new-secret-pass-123',
             'password_confirmation' => 'new-secret-pass-123',
         ]);
 
@@ -123,8 +123,8 @@ class ProfileTest extends TestCase
     public function test_wrong_current_password_is_rejected(): void
     {
         $this->actingAs($this->user)->put('/admin/profile/password', [
-            'current_password'      => 'wrong-password',
-            'password'              => 'new-secret-pass-123',
+            'current_password' => 'wrong-password',
+            'password' => 'new-secret-pass-123',
             'password_confirmation' => 'new-secret-pass-123',
         ])->assertSessionHasErrors('current_password');
 

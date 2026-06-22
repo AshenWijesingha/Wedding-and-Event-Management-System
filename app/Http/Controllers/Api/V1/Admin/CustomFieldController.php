@@ -12,8 +12,7 @@ class CustomFieldController extends Controller
     public function index(Request $request): JsonResponse
     {
         $customFields = CustomField::query()
-            ->when($request->entity_type, fn ($query, $type) => 
-                $query->where('entity_type', $type)
+            ->when($request->entity_type, fn ($query, $type) => $query->where('entity_type', $type)
             )
             ->paginate($request->per_page ?? 15);
 
@@ -32,6 +31,7 @@ class CustomFieldController extends Controller
         ]);
 
         $customField = CustomField::create($validated);
+
         return response()->json($customField, 201);
     }
 
@@ -50,12 +50,14 @@ class CustomFieldController extends Controller
         ]);
 
         $customField->update($validated);
+
         return response()->json($customField);
     }
 
     public function destroy(CustomField $customField): JsonResponse
     {
         $customField->delete();
+
         return response()->json(null, 204);
     }
 }

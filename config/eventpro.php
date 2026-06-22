@@ -125,9 +125,9 @@ return [
     */
 
     'demo' => [
-        'enabled'          => env('DEMO_MODE', false),
+        'enabled' => env('DEMO_MODE', false),
         'lifetime_minutes' => (int) env('DEMO_LIFETIME', 60),
-        'max_live'         => (int) env('DEMO_MAX_LIVE', 50),
-        'throttle'         => (int) env('DEMO_THROTTLE', 5), // new demos per IP per hour
+        'max_live' => (int) env('DEMO_MAX_LIVE', 50),
+        'throttle' => (int) env('DEMO_THROTTLE', 5), // new demos per IP per hour
     ],
 ];

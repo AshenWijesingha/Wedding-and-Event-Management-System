@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\UserInvitedMail;
 use App\Models\Package;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Models\Venue;
 use App\Services\OnboardingService;
+use App\Support\Notifier;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -22,9 +24,7 @@ use Inertia\Response;
  */
 class OnboardingController extends Controller
 {
-    public function __construct(private OnboardingService $onboarding)
-    {
-    }
+    public function __construct(private OnboardingService $onboarding) {}
 
     public function show(): Response
     {
@@ -33,10 +33,10 @@ class OnboardingController extends Controller
 
         return Inertia::render('Onboarding/Wizard', [
             'progress' => $this->onboarding->progress($tenant),
-            'tenant'   => [
-                'name'          => $tenant->name,
-                'email'         => $tenant->email,
-                'phone'         => $tenant->phone,
+            'tenant' => [
+                'name' => $tenant->name,
+                'email' => $tenant->email,
+                'phone' => $tenant->phone,
                 'primary_color' => $tenant->primary_color ?? '#6366f1',
             ],
         ]);
@@ -45,24 +45,24 @@ class OnboardingController extends Controller
     public function storeBranding(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'name'          => 'required|string|max:255',
-            'company_name'  => 'nullable|string|max:255',
-            'tagline'       => 'nullable|string|max:500',
+            'name' => 'required|string|max:255',
+            'company_name' => 'nullable|string|max:255',
+            'tagline' => 'nullable|string|max:500',
             'primary_color' => 'nullable|string|max:20',
-            'logo_url'      => 'nullable|url|max:500',
+            'logo_url' => 'nullable|url|max:500',
         ]);
 
         $tenant = $this->tenant();
         $tenant->update([
-            'name'          => $data['name'],
+            'name' => $data['name'],
             'primary_color' => $data['primary_color'] ?? $tenant->primary_color,
-            'logo'          => $data['logo_url'] ?? $tenant->logo,
+            'logo' => $data['logo_url'] ?? $tenant->logo,
         ]);
         $tenant->setSetting('branding', [
-            'company_name'  => $data['company_name'] ?? $data['name'],
-            'tagline'       => $data['tagline'] ?? null,
+            'company_name' => $data['company_name'] ?? $data['name'],
+            'tagline' => $data['tagline'] ?? null,
             'primary_color' => $data['primary_color'] ?? null,
-            'logo_url'      => $data['logo_url'] ?? null,
+            'logo_url' => $data['logo_url'] ?? null,
         ]);
 
         return redirect()->route('admin.onboarding.show')->with('success', 'Branding saved.');
@@ -71,17 +71,17 @@ class OnboardingController extends Controller
     public function storeVenue(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'name'         => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'capacity_min' => 'required|integer|min:1',
             'capacity_max' => 'required|integer|min:1|gte:capacity_min',
-            'base_price'   => 'required|numeric|min:0',
-            'description'  => 'nullable|string',
+            'base_price' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
         ]);
 
         Venue::create($data + [
             'tenant_id' => $this->tenant()->id,
-            'slug'      => Str::slug($data['name']).'-'.Str::lower(Str::random(5)),
-            'status'    => 'active',
+            'slug' => Str::slug($data['name']) . '-' . Str::lower(Str::random(5)),
+            'status' => 'active',
         ]);
 
         return redirect()->route('admin.onboarding.show')->with('success', 'Venue added.');
@@ -90,22 +90,22 @@ class OnboardingController extends Controller
     public function storePackage(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'name'        => 'required|string|max:255',
-            'base_price'  => 'required|numeric|min:0',
+            'name' => 'required|string|max:255',
+            'base_price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
-            'min_guests'  => 'nullable|integer|min:1',
-            'max_guests'  => 'nullable|integer|min:1',
+            'min_guests' => 'nullable|integer|min:1',
+            'max_guests' => 'nullable|integer|min:1',
         ]);
 
         Package::create([
-            'tenant_id'   => $this->tenant()->id,
-            'name'        => $data['name'],
-            'base_price'  => $data['base_price'],
+            'tenant_id' => $this->tenant()->id,
+            'name' => $data['name'],
+            'base_price' => $data['base_price'],
             'description' => $data['description'] ?? null,
-            'min_guests'  => $data['min_guests'] ?? 1,
-            'max_guests'  => $data['max_guests'] ?? 1000,
-            'slug'        => Str::slug($data['name']).'-'.Str::lower(Str::random(5)),
-            'status'      => 'active',
+            'min_guests' => $data['min_guests'] ?? 1,
+            'max_guests' => $data['max_guests'] ?? 1000,
+            'slug' => Str::slug($data['name']) . '-' . Str::lower(Str::random(5)),
+            'status' => 'active',
         ]);
 
         return redirect()->route('admin.onboarding.show')->with('success', 'Package added.');
@@ -114,29 +114,29 @@ class OnboardingController extends Controller
     public function invite(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'name'  => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
-            'role'  => 'required|in:admin,manager,staff',
+            'role' => 'required|in:admin,manager,staff',
         ]);
 
         $password = Str::password(12);
 
         $user = User::create([
             'tenant_id' => $this->tenant()->id,
-            'name'      => $data['name'],
-            'email'     => $data['email'],
-            'password'  => Hash::make($password),
-            'role'      => $data['role'],
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($password),
+            'role' => $data['role'],
             'is_active' => true,
         ]);
         $user->assignRole($data['role']);
 
-        \App\Support\Notifier::mail($user->email, new \App\Mail\UserInvitedMail($user, $password));
+        Notifier::mail($user->email, new UserInvitedMail($user, $password));
 
         // The plaintext password is flashed once for the owner to hand over.
         // It is never stored or logged.
         return redirect()->route('admin.onboarding.show')->with([
-            'invited_email'    => $user->email,
+            'invited_email' => $user->email,
             'invited_password' => $password,
         ]);
     }
