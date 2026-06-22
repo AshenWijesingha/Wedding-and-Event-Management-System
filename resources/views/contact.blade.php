@@ -5,8 +5,8 @@
     <div aria-hidden="true" class="au-noise pointer-events-none absolute inset-0 opacity-[0.04]"></div>
     <div aria-hidden="true" class="pointer-events-none absolute -top-24 right-0 h-72 w-[34rem] rounded-full blur-3xl" style="background: radial-gradient(closest-side, rgba(200,169,106,0.18), transparent);"></div>
 
-    <div class="relative mx-auto max-w-7xl px-6 py-24 sm:py-28 lg:px-8">
-        <div class="mx-auto max-w-2xl">
+    <div class="relative mx-auto max-w-6xl px-6 py-24 sm:py-28 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center lg:mx-0 lg:max-w-2xl lg:text-left">
             <p class="text-[0.72rem] font-medium uppercase tracking-[0.3em] text-[#c8a96a]">Get in touch</p>
             <h2 class="font-display mt-4 text-4xl font-light leading-tight text-[#1a1512] sm:text-5xl">
                 Let&rsquo;s plan something <span class="italic">unforgettable</span>
@@ -14,7 +14,48 @@
             <p class="mt-5 text-lg leading-relaxed text-[#5c5246]">
                 Tell us about your event &mdash; our team will be in touch within one business day.
             </p>
+        </div>
 
+        <div class="mt-14 grid gap-12 lg:grid-cols-5">
+            <!-- Contact details -->
+            <aside class="lg:col-span-2">
+                <h3 class="text-[0.7rem] font-semibold uppercase tracking-[0.25em] text-[#c8a96a]">Reach us</h3>
+                <ul class="mt-6 space-y-5 text-[15px] text-[#5c5246]">
+                    @if(($branding['contact']['email'] ?? null))
+                        <li>
+                            <span class="block text-xs font-medium uppercase tracking-wider text-[#9a8f80]">Email</span>
+                            <a href="mailto:{{ $branding['contact']['email'] }}" class="mt-1 inline-block font-medium text-[#1a1512] hover:text-[#9a7b3f]">{{ $branding['contact']['email'] }}</a>
+                        </li>
+                    @endif
+                    @if(($branding['contact']['phone'] ?? null))
+                        <li>
+                            <span class="block text-xs font-medium uppercase tracking-wider text-[#9a8f80]">Phone</span>
+                            <a href="tel:{{ preg_replace('/[^0-9+]/', '', $branding['contact']['phone']) }}" class="mt-1 inline-block font-medium text-[#1a1512] hover:text-[#9a7b3f]">{{ $branding['contact']['phone'] }}</a>
+                        </li>
+                    @endif
+                    @if(($branding['contact']['address'] ?? null))
+                        <li>
+                            <span class="block text-xs font-medium uppercase tracking-wider text-[#9a8f80]">Office</span>
+                            <span class="mt-1 block leading-relaxed">
+                                {{ $branding['contact']['address'] }}@if(($branding['contact']['city'] ?? null)), {{ $branding['contact']['city'] }}@endif
+                                @if(($branding['contact']['country'] ?? null))<br>{{ $branding['contact']['country'] }}@endif
+                            </span>
+                        </li>
+                    @endif
+                </ul>
+
+                <div class="mt-8 border-t border-[#2b211b]/10 pt-6">
+                    <span class="block text-xs font-medium uppercase tracking-wider text-[#9a8f80]">Cities we serve</span>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        @foreach(['Colombo', 'Kandy', 'Galle', 'Dambulla'] as $city)
+                            <span class="rounded-full border border-[#2b211b]/12 bg-white/60 px-3 py-1 text-xs font-medium text-[#5c5246]">{{ $city }}</span>
+                        @endforeach
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Inquiry form -->
+            <div class="lg:col-span-3">
             <form
                 x-data="{
                     submitting: false,
@@ -144,6 +185,7 @@
                 </div>
                 @endif
             </form>
+            </div>
         </div>
     </div>
 </div>

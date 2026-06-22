@@ -63,7 +63,7 @@ const maxTotal = computed(() => Math.max(...props.months.map(m => m.total), 1));
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <!-- Monthly bar chart -->
                 <div class="lg:col-span-2 bg-surface rounded-lg shadow-sm p-5">
-                    <h3 class="text-sm font-semibold text-ink mb-4">Bookings â€” {{ period }}</h3>
+                    <h3 class="text-sm font-semibold text-ink mb-4">Bookings — {{ period }}</h3>
                     <div class="flex items-end gap-2 h-48">
                         <div v-for="m in months" :key="m.label" class="flex-1 flex flex-col items-center gap-1">
                             <span class="text-xs text-ink-subtle">{{ m.total > 0 ? m.total : '' }}</span>
