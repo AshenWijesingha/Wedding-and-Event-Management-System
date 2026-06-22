@@ -61,5 +61,8 @@ setup.log
 start.bat
 stop.bat
 
+# Compiled demo launcher binary (build it with launcher/build.cmd)
+/Start-EventPro.exe
+
 # Brainstorm visual-companion scratch
 .superpowers/
