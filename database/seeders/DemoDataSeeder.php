@@ -15,6 +15,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Models\Venue;
+use Database\Seeders\Data\SriLankaHotels;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -39,103 +40,27 @@ class DemoDataSeeder extends Seeder
         );
         $admin->assignRole('admin');
 
-        // Venues
-        $venues = [
-            [
-                'name' => 'Mahaweli Grand Ballroom',
-                'slug' => 'mahaweli-grand-ballroom',
-                'description' => 'Our flagship venue featuring crystal chandeliers and a capacity for up to 500 guests.',
-                'capacity_min' => 100,
-                'capacity_max' => 500,
-                'base_price' => 1500000,
-                'weekend_surcharge' => 350000,
-                'amenities' => ['parking', 'valet', 'catering', 'av_equipment', 'dance_floor', 'stage'],
-                'images' => [
-                    'https://picsum.photos/seed/mahaweli-ballroom-1/1200/800',
-                    'https://picsum.photos/seed/mahaweli-ballroom-2/1200/800',
-                    'https://picsum.photos/seed/mahaweli-ballroom-3/1200/800',
-                ],
-                'status' => 'active',
-            ],
-            [
-                'name' => 'Pol Watta Garden Terrace',
-                'slug' => 'pol-watta-garden-terrace',
-                'description' => 'An intimate outdoor space surrounded by manicured gardens. Perfect for smaller celebrations.',
-                'capacity_min' => 20,
-                'capacity_max' => 150,
-                'base_price' => 650000,
-                'weekend_surcharge' => 150000,
-                'amenities' => ['parking', 'wifi', 'catering'],
-                'images' => [
-                    'https://picsum.photos/seed/pol-watta-1/1200/800',
-                    'https://picsum.photos/seed/pol-watta-2/1200/800',
-                    'https://picsum.photos/seed/pol-watta-3/1200/800',
-                ],
-                'status' => 'active',
-            ],
-            [
-                'name' => 'Galle Face Rooftop Pavilion',
-                'slug' => 'galle-face-rooftop-pavilion',
-                'description' => 'Stunning panoramic city views from our rooftop venue. Ideal for cocktail receptions.',
-                'capacity_min' => 50,
-                'capacity_max' => 200,
-                'base_price' => 1000000,
-                'weekend_surcharge' => 200000,
-                'amenities' => ['parking', 'bar', 'av_equipment'],
-                'images' => [
-                    'https://picsum.photos/seed/galle-face-1/1200/800',
-                    'https://picsum.photos/seed/galle-face-2/1200/800',
-                    'https://picsum.photos/seed/galle-face-3/1200/800',
-                ],
-                'status' => 'active',
-            ],
-        ];
+        // Venues — real leading Sri Lankan hotels and their reception halls.
+        // Prune the legacy placeholder venues so the replacement is clean on
+        // re-seed (bookings cascade, inquiries/quotations null out by FK rules).
+        Venue::whereIn('slug', [
+            'mahaweli-grand-ballroom', 'pol-watta-garden-terrace', 'galle-face-rooftop-pavilion',
+        ])->delete();
 
         $createdVenues = [];
-        foreach ($venues as $venueData) {
+        foreach (SriLankaHotels::halls() as $venueData) {
             $createdVenues[] = Venue::updateOrCreate(['slug' => $venueData['slug']], $venueData);
         }
 
-        // Packages
-        $packages = [
-            [
-                'name' => 'Poruwa Classic Wedding',
-                'slug' => 'poruwa-classic-wedding',
-                'description' => 'Our most popular wedding package with everything you need for a perfect day.',
-                'base_price' => 950000,
-                'min_guests' => 50,
-                'max_guests' => 300,
-                'guest_pricing' => [['from' => 50, 'to' => 300, 'price_per_guest' => 6500]],
-                'included_services' => ['Floral arrangements', 'DJ & sound system', 'Wedding coordinator', 'Catering setup'],
-                'status' => 'active',
-            ],
-            [
-                'name' => 'Corporate Sangamaya',
-                'slug' => 'corporate-sangamaya',
-                'description' => 'Elevate your corporate events with our premium gala package.',
-                'base_price' => 600000,
-                'min_guests' => 30,
-                'max_guests' => 500,
-                'guest_pricing' => [['from' => 30, 'to' => 500, 'price_per_guest' => 4500]],
-                'included_services' => ['AV equipment', 'Stage setup', 'Catering', 'Registration desk'],
-                'status' => 'active',
-            ],
-            [
-                'name' => 'Punchi Sumaruma',
-                'slug' => 'punchi-sumaruma',
-                'description' => 'Perfect for milestone birthdays, anniversaries, and small gatherings.',
-                'base_price' => 300000,
-                'min_guests' => 10,
-                'max_guests' => 80,
-                'guest_pricing' => [['from' => 10, 'to' => 80, 'price_per_guest' => 3000]],
-                'included_services' => ['Basic decor', 'Sound system', 'Event coordinator'],
-                'status' => 'active',
-            ],
-        ];
-
+        // Packages — real Sri Lankan reception service packages.
         $createdPackages = [];
-        foreach ($packages as $packageData) {
+        foreach (SriLankaHotels::packages() as $packageData) {
             $createdPackages[] = Package::updateOrCreate(['slug' => $packageData['slug']], $packageData);
+        }
+
+        // Make every package available at every hall (venue_packages pivot).
+        foreach ($createdPackages as $package) {
+            $package->venues()->sync(collect($createdVenues)->pluck('id')->all());
         }
 
         // Clients
