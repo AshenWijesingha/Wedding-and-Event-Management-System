@@ -14,6 +14,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Models\Venue;
+use Database\Seeders\Data\EventVendors;
 use Database\Seeders\Data\SriLankaHotels;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -153,22 +154,9 @@ class ShowcaseSeeder extends Seeder
 
     private function seedVendors(int $tid)
     {
-        $named = [
-            ['name' => 'Lumière Photography',     'category' => 'photographer', 'status' => 'active'],
-            ['name' => 'Royal Feast Catering',    'category' => 'caterer',      'status' => 'active'],
-            ['name' => 'Petal & Stem Florals',    'category' => 'florist',      'status' => 'active'],
-            ['name' => 'Beatbox Entertainment',   'category' => 'music',        'status' => 'active'],
-            ['name' => 'Grand Decor Studio',      'category' => 'decor',        'status' => 'active'],
-            ['name' => 'Elite Limousine Service', 'category' => 'transport',    'status' => 'active'],
-            ['name' => 'Cinematic Films Lanka',   'category' => 'videographer', 'status' => 'active'],
-            ['name' => 'Sweet Tier Cakes',        'category' => 'caterer',      'status' => 'active'],
-            ['name' => 'Aurora Lighting Co.',     'category' => 'decor',        'status' => 'active'],
-            ['name' => 'Heritage Band',           'category' => 'music',        'status' => 'inactive'],
-            ['name' => 'Snapshot Booths',         'category' => 'photographer', 'status' => 'active'],
-            ['name' => 'Bloom Box Rentals',       'category' => 'decor',        'status' => 'inactive'],
-        ];
-
-        return collect($named)->map(fn ($v) => Vendor::factory()->create($v + [
+        // Real-style Sri Lankan event vendors (shared dataset). Factory fills any
+        // columns the dataset omits; slug is made unique per showcase tenant.
+        return collect(EventVendors::all())->map(fn ($v) => Vendor::factory()->create($v + [
             'tenant_id' => $tid,
             'slug'      => Str::slug($v['name']).'-'.Str::lower(Str::random(4)),
         ]));

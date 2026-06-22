@@ -102,7 +102,7 @@ const categories = ['photographer', 'caterer', 'florist', 'music', 'decor', 'tra
                 </table>
 
                 <div v-if="vendors.meta?.last_page > 1" class="px-6 py-4 border-t border-border flex items-center justify-between text-sm text-ink-muted">
-                    <span>Showing {{ vendors.meta.from }}â€“{{ vendors.meta.to }} of {{ vendors.meta.total }}</span>
+                    <span>Showing {{ vendors.meta.from }}–{{ vendors.meta.to }} of {{ vendors.meta.total }}</span>
                     <div class="flex gap-2">
                         <Link v-if="vendors.links?.prev" :href="vendors.links.prev" class="px-3 py-1 border border-border rounded hover:bg-surface-muted">Previous</Link>
                         <Link v-if="vendors.links?.next" :href="vendors.links.next" class="px-3 py-1 border border-border rounded hover:bg-surface-muted">Next</Link>

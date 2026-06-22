@@ -37,7 +37,7 @@
                 </h1>
 
                 <p class="ft-rise mt-7 max-w-xl text-lg leading-relaxed text-[#5c5246]" style="animation-delay:.2s">
-                    {{ $branding['tagline'] ?? 'Refined event management for weddings, corporate gatherings, and the celebrations that matter most.' }}
+                    Partnering with Sri Lanka&rsquo;s leading hotels across Colombo, Kandy, Galle &amp; Dambulla &mdash; refined event management for weddings, corporate gatherings, and the celebrations that matter most.
                 </p>
 
                 <div class="ft-rise mt-10 flex flex-wrap items-center gap-5" style="animation-delay:.28s">
@@ -55,8 +55,15 @@
             </div>
 
             <!-- stats -->
+            @php
+                $stats = [
+                    [($hotelCount ?? 8).'', 'Partner hotels'],
+                    [($hallCount ?? 24).'', 'Reception halls'],
+                    ['4.9', 'Average couple rating'],
+                ];
+            @endphp
             <dl class="ft-rise mt-20 grid max-w-3xl grid-cols-1 divide-y divide-[#2b211b]/10 border-t border-[#2b211b]/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0" style="animation-delay:.36s">
-                @foreach([['10+','Years crafting events'],['500+','Celebrations hosted'],['4.9','Average couple rating']] as [$num,$label])
+                @foreach($stats as [$num,$label])
                     <div class="px-0 py-6 sm:px-8 sm:py-4 sm:first:pl-0">
                         <dt class="font-display text-4xl font-light text-[#1a1512]">{{ $num }}</dt>
                         <dd class="mt-1 text-sm text-[#7a6f61]">{{ $label }}</dd>
@@ -89,7 +96,7 @@
                      'M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z'],
                 ];
             @endphp
-            @foreach($features as [$n,$title,$body,$path])
+            @foreach($features as [$n,$heading,$body,$path])
                 <article class="lp-card group relative overflow-hidden rounded-2xl border border-[#2b211b]/10 bg-[#fffdf9] p-8">
                     <span aria-hidden="true" class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-[#c8a96a] to-transparent"></span>
                     <div class="flex items-center justify-between">
@@ -98,12 +105,60 @@
                         </span>
                         <span class="font-display text-2xl font-light text-[#d8cdb9]">{{ $n }}</span>
                     </div>
-                    <h3 class="font-display mt-7 text-2xl font-normal text-[#1a1512]">{{ $title }}</h3>
+                    <h3 class="font-display mt-7 text-2xl font-normal text-[#1a1512]">{{ $heading }}</h3>
                     <p class="mt-3 text-[15px] leading-relaxed text-[#5c5246]">{{ $body }}</p>
                 </article>
             @endforeach
         </div>
     </section>
+
+    <!-- ===== FEATURED VENUES ===== -->
+    @if(!empty($featuredVenues) && count($featuredVenues))
+    <section class="relative bg-[#fffdf9]">
+        <div class="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
+            <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+                <div class="max-w-2xl">
+                    <p class="text-[0.72rem] font-medium uppercase tracking-[0.3em] text-[#c8a96a]">Sri Lanka&rsquo;s leading hotels</p>
+                    <h2 class="font-display mt-4 text-4xl font-light leading-tight text-[#1a1512] sm:text-5xl">
+                        Featured <span class="italic">venues</span>
+                    </h2>
+                    <p class="mt-5 text-lg leading-relaxed text-[#5c5246]">
+                        Iconic ballrooms and reception halls from the hotels we partner with island-wide.
+                    </p>
+                </div>
+                <a href="{{ route('venues.index') }}" class="group inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-[#9a7b3f]">
+                    View all venues
+                    <span class="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
+                </a>
+            </div>
+
+            <div class="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                @foreach($featuredVenues as $venue)
+                    <a href="{{ route('venues.show', $venue) }}"
+                       class="lp-card group flex flex-col overflow-hidden rounded-2xl border border-[#2b211b]/10 bg-white">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-[#f3ece0]">
+                            @if($venue->images && count($venue->images))
+                                <img src="{{ $venue->images[0] }}" alt="{{ $venue->name }}"
+                                     class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            @endif
+                        </div>
+                        <div class="flex flex-1 flex-col p-5">
+                            <h3 class="font-display text-lg font-normal leading-snug text-[#1a1512]">{{ $venue->name }}</h3>
+                            <div class="mt-3 flex items-center justify-between text-sm">
+                                <span class="text-[#7a6f61]">
+                                    @if($venue->capacity_max)Up to {{ number_format($venue->capacity_max) }} guests @endif
+                                </span>
+                            </div>
+                            @if($venue->base_price)
+                                <p class="mt-1 text-sm font-semibold text-[#1a1512]">From Rs {{ number_format($venue->base_price) }}</p>
+                            @endif
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
 
     <!-- ===== QUOTE BAND (bridges into footer) ===== -->
     <section class="relative isolate overflow-hidden bg-[#1a1512] text-[#cdbfae]">

@@ -101,7 +101,7 @@ const statusColors = {
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <!-- Revenue bar chart -->
                 <div class="lg:col-span-2 bg-surface rounded-lg shadow-sm p-5">
-                    <h3 class="text-sm font-semibold text-ink mb-4">Revenue â€” {{ period }}</h3>
+                    <h3 class="text-sm font-semibold text-ink mb-4">Revenue — {{ period }}</h3>
                     <div class="flex items-end gap-2 h-48">
                         <div
                             v-for="(data, m) in months"
@@ -136,7 +136,7 @@ const statusColors = {
 
             <!-- Top venues -->
             <div class="bg-surface rounded-lg shadow-sm p-5">
-                <h3 class="text-sm font-semibold text-ink mb-3">Top Venues â€” {{ period }}</h3>
+                <h3 class="text-sm font-semibold text-ink mb-3">Top Venues — {{ period }}</h3>
                 <table class="min-w-full text-sm" v-if="topVenues.length">
                     <thead>
                         <tr class="text-left text-xs text-ink-subtle uppercase">
