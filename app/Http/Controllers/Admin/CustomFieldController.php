@@ -31,7 +31,7 @@ class CustomFieldController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
+        abort_unless($request->user()->hasAnyRole(['super_admin', 'tenant_owner', 'admin', 'manager']), 403);
         $data = $request->validate([
             'entity_type' => 'required|in:booking,client,venue,inquiry,quotation',
             'name' => 'required|string|max:255',
@@ -55,7 +55,7 @@ class CustomFieldController extends Controller
 
     public function update(Request $request, CustomField $customField): RedirectResponse
     {
-        abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
+        abort_unless($request->user()->hasAnyRole(['super_admin', 'tenant_owner', 'admin', 'manager']), 403);
         $data = $request->validate([
             'name' => 'sometimes|string|max:255',
             'type' => 'sometimes|in:text,textarea,number,date,email,select,multiselect,checkbox,radio',
@@ -76,7 +76,7 @@ class CustomFieldController extends Controller
 
     public function destroy(CustomField $customField): RedirectResponse
     {
-        abort_unless(request()->user()->hasAnyRole(['admin', 'manager']), 403);
+        abort_unless(request()->user()->hasAnyRole(['super_admin', 'tenant_owner', 'admin', 'manager']), 403);
         $this->service->deleteField($customField);
 
         return back()->with('success', 'Custom field deleted.');

@@ -44,7 +44,7 @@ class PackageController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
+        abort_unless($request->user()->hasAnyRole(['super_admin', 'tenant_owner', 'admin', 'manager']), 403);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:packages',
@@ -85,7 +85,7 @@ class PackageController extends Controller
 
     public function update(Request $request, Package $package): RedirectResponse
     {
-        abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
+        abort_unless($request->user()->hasAnyRole(['super_admin', 'tenant_owner', 'admin', 'manager']), 403);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:packages,slug,' . $package->id,
@@ -105,7 +105,7 @@ class PackageController extends Controller
 
     public function destroy(Package $package): RedirectResponse
     {
-        abort_unless(request()->user()->hasAnyRole(['admin', 'manager']), 403);
+        abort_unless(request()->user()->hasAnyRole(['super_admin', 'tenant_owner', 'admin', 'manager']), 403);
         if ($package->bookings()->whereNotIn('status', ['cancelled'])->exists()) {
             return back()->with('error', 'Cannot delete package with active bookings.');
         }

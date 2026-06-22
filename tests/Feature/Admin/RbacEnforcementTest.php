@@ -2,8 +2,11 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Models\Booking;
+use App\Models\Client;
 use App\Models\Tenant;
 use App\Models\User;
+use App\Models\Venue;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -108,5 +111,31 @@ class RbacEnforcementTest extends TestCase
 
         $this->post('/login', ['email' => $staff->email, 'password' => 'secret123'])
             ->assertRedirect(route('admin.dashboard'));
+    }
+
+    /**
+     * Booking mutations are gated by the bookings.* permission middleware, which
+     * super_admin and tenant_owner both hold — they must not be blocked by a
+     * narrower in-controller role check.
+     */
+    public function test_privileged_roles_can_confirm_a_tentative_booking(): void
+    {
+        $venue = Venue::factory()->create(['tenant_id' => $this->tenant->id]);
+        $client = Client::factory()->create(['tenant_id' => $this->tenant->id]);
+
+        foreach (['super_admin', 'tenant_owner', 'admin', 'manager'] as $role) {
+            $booking = Booking::factory()->create([
+                'tenant_id' => $this->tenant->id,
+                'venue_id' => $venue->id,
+                'client_id' => $client->id,
+                'status' => 'tentative',
+            ]);
+
+            $this->actingAs($this->user($role))
+                ->post("/admin/bookings/{$booking->id}/confirm")
+                ->assertRedirect();
+
+            $this->assertSame('confirmed', $booking->fresh()->status, "{$role} should be able to confirm a booking");
+        }
     }
 }
