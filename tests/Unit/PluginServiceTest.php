@@ -34,7 +34,7 @@ class PluginServiceTest extends TestCase
     public function test_load_plugin_returns_true_for_existing(): void
     {
         $pluginPath = base_path('plugins/sms-gateway');
-        if (!File::isDirectory($pluginPath)) {
+        if (! File::isDirectory($pluginPath)) {
             $this->markTestSkipped('sms-gateway plugin not present on disk.');
         }
 
@@ -63,7 +63,7 @@ class PluginServiceTest extends TestCase
     public function test_available_plugins_contain_expected_keys(): void
     {
         $pluginPath = base_path('plugins/sms-gateway');
-        if (!File::isDirectory($pluginPath)) {
+        if (! File::isDirectory($pluginPath)) {
             $this->markTestSkipped('sms-gateway plugin not present on disk.');
         }
 
@@ -80,6 +80,7 @@ class PluginServiceTest extends TestCase
     private function makeService(): PluginService
     {
         app()->bind('currentTenant', fn () => null);
-        return new PluginService();
+
+        return new PluginService;
     }
 }

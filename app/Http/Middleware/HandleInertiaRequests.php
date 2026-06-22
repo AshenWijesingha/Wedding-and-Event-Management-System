@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Tenant;
+use App\Services\OnboardingService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -44,7 +46,7 @@ class HandleInertiaRequests extends Middleware
                     : [],
             ],
             'impersonating' => fn () => $request->session()->has('impersonator_id')
-                ? ['tenant' => optional(\App\Models\Tenant::current())->name ?? 'tenant']
+                ? ['tenant' => optional(Tenant::current())->name ?? 'tenant']
                 : null,
             'flash' => [
                 'message' => fn () => $request->session()->get('message'),
@@ -79,11 +81,11 @@ class HandleInertiaRequests extends Middleware
 
         return [
             'items' => $user->notifications()->latest()->limit(10)->get()->map(fn ($n) => [
-                'id'         => $n->id,
-                'event'      => $n->data['event'] ?? null,
-                'message'    => $n->data['message'] ?? '',
-                'url'        => $n->data['url'] ?? null,
-                'read_at'    => optional($n->read_at)->toIso8601String(),
+                'id' => $n->id,
+                'event' => $n->data['event'] ?? null,
+                'message' => $n->data['message'] ?? '',
+                'url' => $n->data['url'] ?? null,
+                'read_at' => optional($n->read_at)->toIso8601String(),
                 'created_at' => optional($n->created_at)->diffForHumans(),
             ])->all(),
             'unread_count' => $user->unreadNotifications()->count(),
@@ -95,13 +97,13 @@ class HandleInertiaRequests extends Middleware
      */
     private function demoState(): ?array
     {
-        $tenant = \App\Models\Tenant::current();
+        $tenant = Tenant::current();
         if (! $tenant || ! $tenant->is_demo) {
             return null;
         }
 
         return [
-            'is_demo'    => true,
+            'is_demo' => true,
             'expires_at' => optional($tenant->demo_expires_at)->toIso8601String(),
         ];
     }
@@ -116,11 +118,11 @@ class HandleInertiaRequests extends Middleware
             return null;
         }
 
-        $tenant = \App\Models\Tenant::current();
+        $tenant = Tenant::current();
         if (! $tenant) {
             return null;
         }
 
-        return app(\App\Services\OnboardingService::class)->state($tenant);
+        return app(OnboardingService::class)->state($tenant);
     }
 }

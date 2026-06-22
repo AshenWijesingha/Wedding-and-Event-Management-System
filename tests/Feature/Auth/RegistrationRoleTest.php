@@ -21,9 +21,9 @@ class RegistrationRoleTest extends TestCase
     public function test_new_registration_receives_client_role_not_admin(): void
     {
         $response = $this->post('/register', [
-            'name'                  => 'New User',
-            'email'                 => 'newuser@example.com',
-            'password'              => 'Password123!',
+            'name' => 'New User',
+            'email' => 'newuser@example.com',
+            'password' => 'Password123!',
             'password_confirmation' => 'Password123!',
         ]);
 
@@ -38,9 +38,9 @@ class RegistrationRoleTest extends TestCase
     public function test_registered_user_is_redirected_and_logged_in(): void
     {
         $response = $this->post('/register', [
-            'name'                  => 'Another User',
-            'email'                 => 'another@example.com',
-            'password'              => 'Password123!',
+            'name' => 'Another User',
+            'email' => 'another@example.com',
+            'password' => 'Password123!',
             'password_confirmation' => 'Password123!',
         ]);
 

@@ -36,13 +36,13 @@ class ShowcaseSeeder extends Seeder
         $tenant = Tenant::updateOrCreate(
             ['slug' => 'showcase'],
             [
-                'name'          => 'Showcase Events Co.',
-                'email'         => 'hello@showcase.eventpro.test',
-                'phone'         => '+94 11 234 5678',
+                'name' => 'Showcase Events Co.',
+                'email' => 'hello@showcase.eventpro.test',
+                'phone' => '+94 11 234 5678',
                 'primary_color' => '#7c3aed',
-                'status'        => 'active',
+                'status' => 'active',
                 // Skip the first-run wizard; the app should look established.
-                'settings'      => ['onboarding' => ['seen' => true, 'dismissed' => true]],
+                'settings' => ['onboarding' => ['seen' => true, 'dismissed' => true]],
             ]
         );
 
@@ -57,15 +57,15 @@ class ShowcaseSeeder extends Seeder
             return;
         }
 
-        $venues   = $this->seedVenues($tid);
+        $venues = $this->seedVenues($tid);
         $packages = $this->seedPackages($tid);
-        $clients  = $this->seedClients($tid);
-        $vendors  = $this->seedVendors($tid);
-        $staff    = $this->seedStaff($tid);
+        $clients = $this->seedClients($tid);
+        $vendors = $this->seedVendors($tid);
+        $staff = $this->seedStaff($tid);
 
-        $inquiries  = $this->seedInquiries($tid, $clients, $venues, $packages);
+        $inquiries = $this->seedInquiries($tid, $clients, $venues, $packages);
         $quotations = $this->seedQuotations($tid, $clients, $venues, $packages, $inquiries);
-        $bookings   = $this->seedBookings($tid, $clients, $venues, $packages);
+        $bookings = $this->seedBookings($tid, $clients, $venues, $packages);
         $this->seedPayments($tid, $bookings);
         $this->seedTasks($tid, $staff, $bookings);
     }
@@ -83,11 +83,11 @@ class ShowcaseSeeder extends Seeder
             $user = User::updateOrCreate(
                 ['email' => $u['email']],
                 [
-                    'tenant_id'         => $tid,
-                    'name'              => $u['name'],
-                    'password'          => Hash::make('password'),
-                    'role'              => $u['role'],
-                    'is_active'         => true,
+                    'tenant_id' => $tid,
+                    'name' => $u['name'],
+                    'password' => Hash::make('password'),
+                    'role' => $u['role'],
+                    'is_active' => true,
                     'email_verified_at' => now(),
                 ]
             );
@@ -115,14 +115,14 @@ class ShowcaseSeeder extends Seeder
             ['name' => 'Corporate Premium',   'base_price' => 680000,  'min_guests' => 80,  'max_guests' => 400],
             ['name' => 'Intimate Soirée',     'base_price' => 250000,  'min_guests' => 20,  'max_guests' => 80],
             ['name' => 'Birthday Bliss',      'base_price' => 180000,  'min_guests' => 20,  'max_guests' => 100],
-            ['name' => 'Anniversary Elegance','base_price' => 420000,  'min_guests' => 40,  'max_guests' => 150],
+            ['name' => 'Anniversary Elegance', 'base_price' => 420000,  'min_guests' => 40,  'max_guests' => 150],
             ['name' => 'Gala Grandeur',       'base_price' => 1900000, 'min_guests' => 150, 'max_guests' => 500],
             ['name' => 'Bespoke Atelier',     'base_price' => 3000000, 'min_guests' => 50,  'max_guests' => 600],
         ];
 
         return collect($named)->map(fn ($p) => Package::factory()->create($p + [
             'tenant_id' => $tid,
-            'slug'      => Str::slug($p['name']).'-'.Str::lower(Str::random(4)),
+            'slug' => Str::slug($p['name']) . '-' . Str::lower(Str::random(4)),
         ]));
     }
 
@@ -148,7 +148,7 @@ class ShowcaseSeeder extends Seeder
 
         return collect($named)->map(fn ($c, $i) => Client::factory()->create($c + [
             'tenant_id' => $tid,
-            'email'     => Str::lower($c['first_name'].'.'.$c['last_name']).$i.'@example.lk',
+            'email' => Str::lower($c['first_name'] . '.' . $c['last_name']) . $i . '@example.lk',
         ]));
     }
 
@@ -158,7 +158,7 @@ class ShowcaseSeeder extends Seeder
         // columns the dataset omits; slug is made unique per showcase tenant.
         return collect(EventVendors::all())->map(fn ($v) => Vendor::factory()->create($v + [
             'tenant_id' => $tid,
-            'slug'      => Str::slug($v['name']).'-'.Str::lower(Str::random(4)),
+            'slug' => Str::slug($v['name']) . '-' . Str::lower(Str::random(4)),
         ]));
     }
 
@@ -179,23 +179,23 @@ class ShowcaseSeeder extends Seeder
 
         return collect($named)->map(fn ($s, $i) => Staff::factory()->create($s + [
             'tenant_id' => $tid,
-            'email'     => Str::lower($s['first_name'].'.'.$s['last_name']).$i.'@showcase.eventpro.test',
+            'email' => Str::lower($s['first_name'] . '.' . $s['last_name']) . $i . '@showcase.eventpro.test',
         ]));
     }
 
     private function seedInquiries(int $tid, $clients, $venues, $packages)
     {
         $statuses = ['pending', 'pending', 'contacted', 'contacted', 'qualified', 'qualified', 'proposal_sent', 'proposal_sent', 'converted', 'converted', 'closed', 'closed'];
-        $types    = ['wedding', 'corporate', 'birthday', 'anniversary', 'gala', 'conference'];
+        $types = ['wedding', 'corporate', 'birthday', 'anniversary', 'gala', 'conference'];
 
         return collect($statuses)->map(function ($status, $i) use ($tid, $clients, $venues, $packages, $types) {
             return Inquiry::factory()->create([
-                'tenant_id'  => $tid,
-                'client_id'  => $clients[$i % $clients->count()]->id,
-                'venue_id'   => $venues[$i % $venues->count()]->id,
+                'tenant_id' => $tid,
+                'client_id' => $clients[$i % $clients->count()]->id,
+                'venue_id' => $venues[$i % $venues->count()]->id,
                 'package_id' => $packages[$i % $packages->count()]->id,
                 'event_type' => $types[$i % count($types)],
-                'status'     => $status,
+                'status' => $status,
             ]);
         });
     }
@@ -226,9 +226,9 @@ class ShowcaseSeeder extends Seeder
             }
 
             $attrs = [
-                'tenant_id'  => $tid,
-                'client_id'  => $clients[$i % $clients->count()]->id,
-                'venue_id'   => $venues[$i % $venues->count()]->id,
+                'tenant_id' => $tid,
+                'client_id' => $clients[$i % $clients->count()]->id,
+                'venue_id' => $venues[$i % $venues->count()]->id,
                 'package_id' => $packages[$i % $packages->count()]->id,
                 'inquiry_id' => $i < $inquiries->count() ? $inquiries[$i]->id : null,
             ];
@@ -256,30 +256,30 @@ class ShowcaseSeeder extends Seeder
 
         $rows = [];
         foreach ($plan as $i => [$status, $offset]) {
-            $venue   = $venues[$i % $venues->count()];
+            $venue = $venues[$i % $venues->count()];
             $package = $packages[$i % $packages->count()];
-            $client  = $clients[$i % $clients->count()];
+            $client = $clients[$i % $clients->count()];
 
             $total = (float) $package->base_price + (float) $venue->base_price;
-            $paid  = match ($status) {
+            $paid = match ($status) {
                 'completed' => $total,
                 'confirmed' => round($total * 0.4),
                 'tentative' => round($total * 0.15),
-                default     => 0,
+                default => 0,
             };
 
             $rows[] = Booking::factory()->create([
-                'tenant_id'      => $tid,
-                'venue_id'       => $venue->id,
-                'client_id'      => $client->id,
-                'package_id'     => $package->id,
-                'event_type'     => $types[$i % count($types)],
-                'event_date'     => now()->addDays($offset)->toDateString(),
-                'guest_count'    => 80 + ($i * 15),
-                'total_amount'   => $total,
-                'paid_amount'    => $paid,
+                'tenant_id' => $tid,
+                'venue_id' => $venue->id,
+                'client_id' => $client->id,
+                'package_id' => $package->id,
+                'event_type' => $types[$i % count($types)],
+                'event_date' => now()->addDays($offset)->toDateString(),
+                'guest_count' => 80 + ($i * 15),
+                'total_amount' => $total,
+                'paid_amount' => $paid,
                 'balance_amount' => $total - $paid,
-                'status'         => $status,
+                'status' => $status,
             ]);
         }
 
@@ -304,22 +304,22 @@ class ShowcaseSeeder extends Seeder
 
             $deposit = round((float) $booking->paid_amount * 0.6);
             Payment::factory()->completed()->deposit()->create([
-                'tenant_id'    => $tid,
-                'booking_id'   => $booking->id,
-                'client_id'    => $booking->client_id,
-                'amount'       => $deposit,
+                'tenant_id' => $tid,
+                'booking_id' => $booking->id,
+                'client_id' => $booking->client_id,
+                'amount' => $deposit,
                 'payment_date' => now()->subDays(30)->toDateString(),
             ]);
             $count++;
 
             if ($count < $target) {
                 Payment::factory()->completed()->create([
-                    'tenant_id'        => $tid,
-                    'booking_id'       => $booking->id,
-                    'client_id'        => $booking->client_id,
+                    'tenant_id' => $tid,
+                    'booking_id' => $booking->id,
+                    'client_id' => $booking->client_id,
                     'installment_name' => 'Second Installment',
-                    'amount'           => (float) $booking->paid_amount - $deposit,
-                    'payment_date'     => now()->subDays(10)->toDateString(),
+                    'amount' => (float) $booking->paid_amount - $deposit,
+                    'payment_date' => now()->subDays(10)->toDateString(),
                 ]);
                 $count++;
             }
@@ -331,11 +331,11 @@ class ShowcaseSeeder extends Seeder
                 break;
             }
             Payment::factory()->pending()->create([
-                'tenant_id'        => $tid,
-                'booking_id'       => $booking->id,
-                'client_id'        => $booking->client_id,
+                'tenant_id' => $tid,
+                'booking_id' => $booking->id,
+                'client_id' => $booking->client_id,
                 'installment_name' => 'Balance',
-                'amount'           => round((float) $booking->balance_amount * 0.5) ?: 50000,
+                'amount' => round((float) $booking->balance_amount * 0.5) ?: 50000,
             ]);
             $count++;
         }
@@ -363,10 +363,10 @@ class ShowcaseSeeder extends Seeder
         foreach ($titles as $i => [$title, $priority, $state]) {
             $factory = Task::factory();
             $attrs = [
-                'tenant_id'   => $tid,
+                'tenant_id' => $tid,
                 'assigned_to' => $staff[$i % $staff->count()]->id,
-                'title'       => $title,
-                'priority'    => $priority,
+                'title' => $title,
+                'priority' => $priority,
             ];
 
             if ($state === 'overdue') {

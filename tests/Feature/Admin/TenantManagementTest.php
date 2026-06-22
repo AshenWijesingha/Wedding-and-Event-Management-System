@@ -43,12 +43,12 @@ class TenantManagementTest extends TestCase
     public function test_super_admin_creates_tenant_and_provisions_owner(): void
     {
         $this->actingAs($this->superAdmin)->post('/admin/tenants', [
-            'name'                        => 'Grand Hotel',
-            'slug'                        => 'grand-hotel',
-            'status'                      => 'active',
-            'owner_name'                  => 'Olivia Owner',
-            'owner_email'                 => 'olivia@grandhotel.test',
-            'owner_password'              => 'secret-pass-123',
+            'name' => 'Grand Hotel',
+            'slug' => 'grand-hotel',
+            'status' => 'active',
+            'owner_name' => 'Olivia Owner',
+            'owner_email' => 'olivia@grandhotel.test',
+            'owner_password' => 'secret-pass-123',
             'owner_password_confirmation' => 'secret-pass-123',
         ])->assertSessionHasNoErrors()->assertRedirect('/admin/tenants');
 
@@ -65,8 +65,8 @@ class TenantManagementTest extends TestCase
     public function test_tenant_creation_requires_owner(): void
     {
         $this->actingAs($this->superAdmin)->post('/admin/tenants', [
-            'name'   => 'No Owner Co',
-            'slug'   => 'no-owner',
+            'name' => 'No Owner Co',
+            'slug' => 'no-owner',
             'status' => 'active',
         ])->assertSessionHasErrors(['owner_name', 'owner_email', 'owner_password']);
 
@@ -78,8 +78,8 @@ class TenantManagementTest extends TestCase
         $tenant = Tenant::factory()->create(['status' => 'trial']);
 
         $this->actingAs($this->superAdmin)->put("/admin/tenants/{$tenant->id}", [
-            'name'   => 'Renamed',
-            'slug'   => $tenant->slug,
+            'name' => 'Renamed',
+            'slug' => $tenant->slug,
             'status' => 'active',
         ])->assertSessionHasNoErrors();
 

@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\DB;
 class ReapDemoTenants extends Command
 {
     protected $signature = 'demo:reap';
+
     protected $description = 'Delete expired public demo tenants and all their data.';
 
     /** Child-before-parent delete order to satisfy foreign keys. */

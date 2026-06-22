@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Concerns\BelongsToTenant;
 
 class Task extends Model
 {
-    use HasFactory, BelongsToTenant;
+    use BelongsToTenant, HasFactory;
 
     protected $fillable = [
         'tenant_id',
@@ -23,7 +23,7 @@ class Task extends Model
     ];
 
     protected $casts = [
-        'due_date'     => 'date',
+        'due_date' => 'date',
         'completed_at' => 'datetime',
     ];
 
@@ -50,6 +50,6 @@ class Task extends Model
     public function scopeOverdue($query)
     {
         return $query->where('status', '!=', 'completed')
-                     ->where('due_date', '<', now()->toDateString());
+            ->where('due_date', '<', now()->toDateString());
     }
 }

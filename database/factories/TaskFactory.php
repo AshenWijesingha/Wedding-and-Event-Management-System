@@ -11,13 +11,13 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'tenant_id'   => Tenant::factory(),
+            'tenant_id' => Tenant::factory(),
             'assigned_to' => Staff::factory(),
-            'title'       => $this->faker->sentence(5),
+            'title' => $this->faker->sentence(5),
             'description' => $this->faker->paragraph(),
-            'priority'    => $this->faker->randomElement(['low', 'medium', 'high', 'urgent']),
-            'status'      => $this->faker->randomElement(['pending', 'in_progress', 'completed']),
-            'due_date'    => $this->faker->dateTimeBetween('now', '+30 days')->format('Y-m-d'),
+            'priority' => $this->faker->randomElement(['low', 'medium', 'high', 'urgent']),
+            'status' => $this->faker->randomElement(['pending', 'in_progress', 'completed']),
+            'due_date' => $this->faker->dateTimeBetween('now', '+30 days')->format('Y-m-d'),
         ];
     }
 
@@ -29,7 +29,7 @@ class TaskFactory extends Factory
     public function overdue(): static
     {
         return $this->state([
-            'status'   => 'pending',
+            'status' => 'pending',
             'due_date' => $this->faker->dateTimeBetween('-30 days', '-1 day')->format('Y-m-d'),
         ]);
     }

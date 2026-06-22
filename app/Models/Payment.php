@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Concerns\BelongsToTenant;
 
 class Payment extends Model
 {
-    use HasFactory, BelongsToTenant;
+    use BelongsToTenant, HasFactory;
 
     protected $fillable = [
         'tenant_id',
@@ -33,12 +33,12 @@ class Payment extends Model
     ];
 
     protected $casts = [
-        'amount'              => 'decimal:2',
-        'payment_date'        => 'date',
-        'due_date'            => 'date',
-        'reminder_sent_at'    => 'datetime',
+        'amount' => 'decimal:2',
+        'payment_date' => 'date',
+        'due_date' => 'date',
+        'reminder_sent_at' => 'datetime',
         'gateway_status_code' => 'integer',
-        'gateway_response'    => 'array',
+        'gateway_response' => 'array',
     ];
 
     /**
@@ -72,6 +72,7 @@ class Payment extends Model
     {
         $year = date('Y');
         $count = static::whereYear('created_at', $year)->count() + 1;
+
         return sprintf('PAY%s%04d', $year, $count);
     }
 

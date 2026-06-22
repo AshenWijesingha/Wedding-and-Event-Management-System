@@ -24,7 +24,7 @@ class CustomFieldController extends Controller
             ->get();
 
         return Inertia::render('CustomFields/Index', [
-            'fields'  => $fields,
+            'fields' => $fields,
             'filters' => $request->only(['entity_type']),
         ]);
     }
@@ -33,15 +33,15 @@ class CustomFieldController extends Controller
     {
         abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
         $data = $request->validate([
-            'entity_type'  => 'required|in:booking,client,venue,inquiry,quotation',
-            'name'         => 'required|string|max:255',
-            'type'         => 'required|in:text,textarea,number,date,email,select,multiselect,checkbox,radio',
-            'options'      => 'nullable|array',
-            'options.*'    => 'string|max:100',
-            'placeholder'  => 'nullable|string|max:255',
-            'help_text'    => 'nullable|string|max:500',
-            'is_required'  => 'boolean',
-            'is_active'    => 'boolean',
+            'entity_type' => 'required|in:booking,client,venue,inquiry,quotation',
+            'name' => 'required|string|max:255',
+            'type' => 'required|in:text,textarea,number,date,email,select,multiselect,checkbox,radio',
+            'options' => 'nullable|array',
+            'options.*' => 'string|max:100',
+            'placeholder' => 'nullable|string|max:255',
+            'help_text' => 'nullable|string|max:500',
+            'is_required' => 'boolean',
+            'is_active' => 'boolean',
             'show_on_list' => 'boolean',
         ]);
 
@@ -57,16 +57,16 @@ class CustomFieldController extends Controller
     {
         abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
         $data = $request->validate([
-            'name'         => 'sometimes|string|max:255',
-            'type'         => 'sometimes|in:text,textarea,number,date,email,select,multiselect,checkbox,radio',
-            'options'      => 'nullable|array',
-            'options.*'    => 'string|max:100',
-            'placeholder'  => 'nullable|string|max:255',
-            'help_text'    => 'nullable|string|max:500',
-            'is_required'  => 'boolean',
-            'is_active'    => 'boolean',
+            'name' => 'sometimes|string|max:255',
+            'type' => 'sometimes|in:text,textarea,number,date,email,select,multiselect,checkbox,radio',
+            'options' => 'nullable|array',
+            'options.*' => 'string|max:100',
+            'placeholder' => 'nullable|string|max:255',
+            'help_text' => 'nullable|string|max:500',
+            'is_required' => 'boolean',
+            'is_active' => 'boolean',
             'show_on_list' => 'boolean',
-            'sort_order'   => 'nullable|integer',
+            'sort_order' => 'nullable|integer',
         ]);
 
         $this->service->updateField($customField, $data);
@@ -78,6 +78,7 @@ class CustomFieldController extends Controller
     {
         abort_unless(request()->user()->hasAnyRole(['admin', 'manager']), 403);
         $this->service->deleteField($customField);
+
         return back()->with('success', 'Custom field deleted.');
     }
 }

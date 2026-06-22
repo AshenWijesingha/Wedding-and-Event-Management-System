@@ -15,13 +15,14 @@ class AdminPagesSmokeTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Tenant $tenant;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->tenant = Tenant::factory()->create();
-        $this->admin  = User::factory()->admin()->create(['tenant_id' => $this->tenant->id]);
+        $this->admin = User::factory()->admin()->create(['tenant_id' => $this->tenant->id]);
     }
 
     public function test_clients_index_renders(): void
@@ -64,23 +65,23 @@ class AdminPagesSmokeTest extends TestCase
 
     public function test_admin_can_store_booking(): void
     {
-        $venue  = Venue::factory()->create(['tenant_id' => $this->tenant->id]);
+        $venue = Venue::factory()->create(['tenant_id' => $this->tenant->id]);
         $client = Client::factory()->create(['tenant_id' => $this->tenant->id]);
 
         $response = $this->actingAs($this->admin)->post('/admin/bookings', [
-            'client_id'    => $client->id,
-            'venue_id'     => $venue->id,
-            'event_type'   => 'wedding',
-            'event_date'   => now()->addMonth()->toDateString(),
-            'guest_count'  => 120,
+            'client_id' => $client->id,
+            'venue_id' => $venue->id,
+            'event_type' => 'wedding',
+            'event_date' => now()->addMonth()->toDateString(),
+            'guest_count' => 120,
             'total_amount' => 15000,
-            'paid_amount'  => 5000,
-            'status'       => 'tentative',
+            'paid_amount' => 5000,
+            'status' => 'tentative',
         ]);
 
         $response->assertRedirect('/admin/bookings');
         $this->assertDatabaseHas('bookings', [
-            'client_id'      => $client->id,
+            'client_id' => $client->id,
             'balance_amount' => 10000,
         ]);
     }
@@ -91,20 +92,20 @@ class AdminPagesSmokeTest extends TestCase
 
         $response = $this->actingAs($this->admin)->post('/admin/quotations', [
             'client_id' => $client->id,
-            'items'     => [
+            'items' => [
                 ['name' => 'Venue Hire', 'quantity' => 1, 'unit_price' => 6000],
                 ['name' => 'Catering', 'quantity' => 100, 'unit_price' => 75],
             ],
             'discount_amount' => 500,
-            'tax_rate'        => 10,
+            'tax_rate' => 10,
         ]);
 
         $response->assertRedirect('/admin/quotations');
         // subtotal 13500, -500 discount = 13000, +10% tax = 14300
         $this->assertDatabaseHas('quotations', [
-            'client_id'    => $client->id,
+            'client_id' => $client->id,
             'total_amount' => 14300,
-            'status'       => 'draft',
+            'status' => 'draft',
         ]);
     }
 }

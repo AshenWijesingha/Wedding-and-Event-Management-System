@@ -24,8 +24,8 @@ class OnboardingServiceTest extends TestCase
     {
         return Tenant::factory()->create([
             'primary_color' => '#6366f1',
-            'logo'          => null,
-            'settings'      => [],
+            'logo' => null,
+            'settings' => [],
         ]);
     }
 

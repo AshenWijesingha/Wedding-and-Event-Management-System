@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Concerns\BelongsToTenant;
 
 class Booking extends Model
 {
-    use HasFactory, BelongsToTenant;
+    use BelongsToTenant, HasFactory;
 
     protected $fillable = [
         'tenant_id',
@@ -123,7 +123,7 @@ class Booking extends Model
      */
     public function canBeCancelled(): bool
     {
-        return !in_array($this->status, ['completed', 'cancelled']);
+        return ! in_array($this->status, ['completed', 'cancelled']);
     }
 
     /**
@@ -133,6 +133,7 @@ class Booking extends Model
     {
         $year = date('Y');
         $count = static::whereYear('created_at', $year)->count() + 1;
+
         return sprintf('BK%s%04d', $year, $count);
     }
 

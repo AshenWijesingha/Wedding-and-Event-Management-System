@@ -16,7 +16,7 @@ class ThemeController extends Controller
     public function index(): Response
     {
         return Inertia::render('Themes/Index', [
-            'themes'      => $this->themeService->getAvailableThemes(),
+            'themes' => $this->themeService->getAvailableThemes(),
             'activeTheme' => $this->themeService->getActiveTheme(),
         ]);
     }
@@ -30,7 +30,7 @@ class ThemeController extends Controller
 
         return back()->with(
             $success ? 'success' : 'error',
-            $success ? "Theme \"{$request->theme}\" activated." : "Theme not found."
+            $success ? "Theme \"{$request->theme}\" activated." : 'Theme not found.'
         );
     }
 }

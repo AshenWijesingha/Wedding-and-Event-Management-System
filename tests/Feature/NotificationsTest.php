@@ -10,7 +10,6 @@ use App\Mail\UserInvitedMail;
 use App\Models\Booking;
 use App\Models\Client;
 use App\Models\Quotation;
-use App\Models\Tenant;
 use App\Models\User;
 use App\Models\Venue;
 use App\Notifications\StaffNotification;
@@ -37,7 +36,7 @@ class NotificationsTest extends TestCase
     {
         return Client::factory()->create([
             'tenant_id' => $this->admin->tenant_id,
-            'email'     => 'client@example.test',
+            'email' => 'client@example.test',
         ]);
     }
 
@@ -46,10 +45,10 @@ class NotificationsTest extends TestCase
         $tid = $this->admin->tenant_id;
 
         return Booking::factory()->create(array_merge([
-            'tenant_id'  => $tid,
-            'venue_id'   => Venue::factory()->create(['tenant_id' => $tid])->id,
-            'client_id'  => $this->client()->id,
-            'status'     => 'tentative',
+            'tenant_id' => $tid,
+            'venue_id' => Venue::factory()->create(['tenant_id' => $tid])->id,
+            'client_id' => $this->client()->id,
+            'status' => 'tentative',
         ], $attrs));
     }
 
@@ -59,7 +58,7 @@ class NotificationsTest extends TestCase
         $quotation = Quotation::factory()->create([
             'tenant_id' => $this->admin->tenant_id,
             'client_id' => $this->client()->id,
-            'status'    => 'draft',
+            'status' => 'draft',
         ]);
 
         $this->actingAs($this->admin)
@@ -89,7 +88,7 @@ class NotificationsTest extends TestCase
         $booking = $this->booking(['status' => 'confirmed', 'total_amount' => 1000, 'balance_amount' => 1000]);
 
         app(PaymentService::class)->recordManual($booking, [
-            'amount'         => 500,
+            'amount' => 500,
             'payment_method' => 'cash',
         ], $this->admin);
 
@@ -102,10 +101,10 @@ class NotificationsTest extends TestCase
 
         $this->actingAs($this->admin)
             ->post('/admin/users', [
-                'name'                  => 'New Hire',
-                'email'                 => 'hire@example.test',
-                'role'                  => 'staff',
-                'password'              => 'password123',
+                'name' => 'New Hire',
+                'email' => 'hire@example.test',
+                'role' => 'staff',
+                'password' => 'password123',
                 'password_confirmation' => 'password123',
             ])
             ->assertRedirect();
@@ -120,8 +119,8 @@ class NotificationsTest extends TestCase
         $this->admin->tenant->makeCurrent();
 
         $this->post('/inquiry', [
-            'name'    => 'Jane Public',
-            'email'   => 'jane@example.test',
+            'name' => 'Jane Public',
+            'email' => 'jane@example.test',
             'message' => 'I would like a quote for a wedding.',
         ])->assertRedirect();
 
@@ -136,8 +135,8 @@ class NotificationsTest extends TestCase
         $this->admin->tenant->makeCurrent();
 
         $this->post('/inquiry', [
-            'name'    => 'Jane Public',
-            'email'   => 'jane@example.test',
+            'name' => 'Jane Public',
+            'email' => 'jane@example.test',
             'message' => 'A message long enough to pass validation.',
         ])->assertRedirect();
     }

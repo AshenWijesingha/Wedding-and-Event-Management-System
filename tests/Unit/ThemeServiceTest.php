@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use App\Services\ThemeService;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\View;
 use Tests\TestCase;
 
 class ThemeServiceTest extends TestCase
@@ -42,7 +41,7 @@ class ThemeServiceTest extends TestCase
 
     public function test_get_theme_config_returns_array_for_default(): void
     {
-        if (!File::isDirectory($this->themesPath . '/default')) {
+        if (! File::isDirectory($this->themesPath . '/default')) {
             $this->markTestSkipped('Default theme not present on disk.');
         }
 
@@ -63,7 +62,7 @@ class ThemeServiceTest extends TestCase
 
     public function test_set_active_theme_returns_true_for_existing(): void
     {
-        if (!File::isDirectory($this->themesPath . '/default')) {
+        if (! File::isDirectory($this->themesPath . '/default')) {
             $this->markTestSkipped('Default theme not present on disk.');
         }
 
@@ -86,6 +85,6 @@ class ThemeServiceTest extends TestCase
         // Bind a null currentTenant so ThemeService doesn't throw
         app()->bind('currentTenant', fn () => null);
 
-        return new ThemeService();
+        return new ThemeService;
     }
 }

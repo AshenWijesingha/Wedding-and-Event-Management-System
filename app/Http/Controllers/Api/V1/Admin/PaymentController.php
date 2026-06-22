@@ -7,6 +7,7 @@ use App\Http\Resources\PaymentResource;
 use App\Http\Traits\ApiResponse;
 use App\Models\Booking;
 use App\Models\Payment;
+use App\Support\TenantRule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,23 +19,17 @@ class PaymentController extends Controller
     public function index(Request $request): JsonResponse
     {
         $payments = Payment::query()
-            ->when($request->booking_id, fn ($q, $bookingId) =>
-                $q->where('booking_id', $bookingId)
+            ->when($request->booking_id, fn ($q, $bookingId) => $q->where('booking_id', $bookingId)
             )
-            ->when($request->client_id, fn ($q, $clientId) =>
-                $q->where('client_id', $clientId)
+            ->when($request->client_id, fn ($q, $clientId) => $q->where('client_id', $clientId)
             )
-            ->when($request->status, fn ($q, $status) =>
-                $q->where('status', $status)
+            ->when($request->status, fn ($q, $status) => $q->where('status', $status)
             )
-            ->when($request->method, fn ($q, $method) =>
-                $q->where('payment_method', $method)
+            ->when($request->method, fn ($q, $method) => $q->where('payment_method', $method)
             )
-            ->when($request->date_from, fn ($q, $date) =>
-                $q->where('payment_date', '>=', $date)
+            ->when($request->date_from, fn ($q, $date) => $q->where('payment_date', '>=', $date)
             )
-            ->when($request->date_to, fn ($q, $date) =>
-                $q->where('payment_date', '<=', $date)
+            ->when($request->date_to, fn ($q, $date) => $q->where('payment_date', '<=', $date)
             )
             ->orderBy($request->sort_by ?? 'payment_date', $request->sort_dir ?? 'desc')
             ->paginate($request->per_page ?? 15);
@@ -45,7 +40,7 @@ class PaymentController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'booking_id' => ['required', \App\Support\TenantRule::exists('bookings')],
+            'booking_id' => ['required', TenantRule::exists('bookings')],
             'installment_name' => 'required|string|max:100',
             'amount' => 'required|numeric|min:0.01',
             'payment_method' => 'required|in:cash,bank_transfer,credit_card,cheque,online',
@@ -65,6 +60,7 @@ class PaymentController extends Controller
             $booking->paid_amount = $booking->payments()->where('status', 'completed')->sum('amount');
             $booking->balance_amount = $booking->total_amount - $booking->paid_amount;
             $booking->save();
+
             return $payment;
         });
 

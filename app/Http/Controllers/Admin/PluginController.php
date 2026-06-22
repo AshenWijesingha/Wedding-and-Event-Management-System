@@ -16,7 +16,7 @@ class PluginController extends Controller
     public function index(): Response
     {
         return Inertia::render('Plugins/Index', [
-            'plugins'       => $this->pluginService->getAvailablePlugins(),
+            'plugins' => $this->pluginService->getAvailablePlugins(),
             'loadedPlugins' => array_keys($this->pluginService->getLoadedPlugins()),
         ]);
     }
@@ -26,7 +26,8 @@ class PluginController extends Controller
         abort_unless($request->user()->hasRole('admin'), 403);
         $request->validate(['plugin' => 'required|string|max:100']);
         $success = $this->pluginService->enablePlugin($request->plugin);
-        return back()->with($success ? 'success' : 'error', $success ? "Plugin enabled." : "Plugin not found.");
+
+        return back()->with($success ? 'success' : 'error', $success ? 'Plugin enabled.' : 'Plugin not found.');
     }
 
     public function disable(Request $request): RedirectResponse
@@ -34,6 +35,7 @@ class PluginController extends Controller
         abort_unless($request->user()->hasRole('admin'), 403);
         $request->validate(['plugin' => 'required|string|max:100']);
         $this->pluginService->disablePlugin($request->plugin);
+
         return back()->with('success', 'Plugin disabled.');
     }
 }

@@ -23,15 +23,15 @@ class AuditLogController extends Controller
             ->paginate(25)
             ->withQueryString()
             ->through(fn (Activity $a) => [
-                'id'           => $a->id,
-                'description'  => $a->description,
-                'event'        => $a->event,
-                'log_name'     => $a->log_name,
+                'id' => $a->id,
+                'description' => $a->description,
+                'event' => $a->event,
+                'log_name' => $a->log_name,
                 'subject_type' => class_basename($a->subject_type ?? ''),
-                'subject_id'   => $a->subject_id,
-                'causer'       => $a->causer?->name ?? 'System',
-                'changes'      => $a->changes()->toArray(),
-                'created_at'   => $a->created_at?->toDateTimeString(),
+                'subject_id' => $a->subject_id,
+                'causer' => $a->causer?->name ?? 'System',
+                'changes' => $a->changes()->toArray(),
+                'created_at' => $a->created_at?->toDateTimeString(),
             ]);
 
         $subjectTypes = Activity::query()
@@ -42,9 +42,9 @@ class AuditLogController extends Controller
             ->values();
 
         return Inertia::render('Platform/AuditLog', [
-            'activities'   => $activities,
+            'activities' => $activities,
             'subjectTypes' => $subjectTypes,
-            'filters'      => $request->only(['subject_type', 'event']),
+            'filters' => $request->only(['subject_type', 'event']),
         ]);
     }
 }
