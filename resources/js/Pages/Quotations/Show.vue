@@ -68,18 +68,18 @@ const money = (n) => 'LKR ' + Number(n ?? 0).toLocaleString(undefined, { minimum
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-surface rounded-lg shadow-sm p-4">
                     <p class="text-xs font-medium text-ink-subtle uppercase">Client</p>
-                    <p class="text-sm font-medium text-ink mt-1">{{ quotation.client?.full_name ?? 'â€”' }}</p>
+                    <p class="text-sm font-medium text-ink mt-1">{{ quotation.client?.full_name ?? '—' }}</p>
                     <p class="text-xs text-ink-subtle">{{ quotation.client?.email }}</p>
                 </div>
                 <div class="bg-surface rounded-lg shadow-sm p-4">
                     <p class="text-xs font-medium text-ink-subtle uppercase">Venue</p>
-                    <p class="text-sm font-medium text-ink mt-1">{{ quotation.venue?.name ?? 'â€”' }}</p>
+                    <p class="text-sm font-medium text-ink mt-1">{{ quotation.venue?.name ?? '—' }}</p>
                     <p class="text-xs text-ink-subtle">{{ quotation.guest_count ? quotation.guest_count + ' guests' : '' }}</p>
                 </div>
                 <div class="bg-surface rounded-lg shadow-sm p-4">
                     <p class="text-xs font-medium text-ink-subtle uppercase">Dates</p>
-                    <p class="text-sm font-medium text-ink mt-1">Event: {{ quotation.event_date ?? 'â€”' }}</p>
-                    <p class="text-xs text-ink-subtle">Valid until: {{ quotation.valid_until ?? 'â€”' }}</p>
+                    <p class="text-sm font-medium text-ink mt-1">Event: {{ quotation.event_date ?? '—' }}</p>
+                    <p class="text-xs text-ink-subtle">Valid until: {{ quotation.valid_until ?? '—' }}</p>
                 </div>
             </div>
 

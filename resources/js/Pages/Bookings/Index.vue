@@ -83,7 +83,7 @@ const statusColors = {
                                 <div class="text-sm text-ink capitalize">{{ booking.event?.type }}</div>
                                 <div class="text-xs text-ink-subtle">{{ booking.event?.date }} Â· {{ booking.event?.guest_count }} guests</div>
                             </td>
-                            <td class="px-6 py-4 text-sm text-ink-muted">{{ booking.venue?.name ?? 'â€”' }}</td>
+                            <td class="px-6 py-4 text-sm text-ink-muted">{{ booking.venue?.name ?? '—' }}</td>
                             <td class="px-6 py-4">
                                 <div class="text-sm font-medium text-ink">LKR {{ booking.financial?.total?.toLocaleString() }}</div>
                                 <div class="text-xs text-ink-subtle">Balance: LKR {{ booking.financial?.balance?.toLocaleString() }}</div>
@@ -104,7 +104,7 @@ const statusColors = {
                 </table>
 
                 <div v-if="bookings.meta?.last_page > 1" class="px-6 py-4 border-t border-border flex items-center justify-between text-sm text-ink-muted">
-                    <span>Showing {{ bookings.meta.from }}â€“{{ bookings.meta.to }} of {{ bookings.meta.total }}</span>
+                    <span>Showing {{ bookings.meta.from }}–{{ bookings.meta.to }} of {{ bookings.meta.total }}</span>
                     <div class="flex gap-2">
                         <Link v-if="bookings.links?.prev" :href="bookings.links.prev" class="px-3 py-1 border border-border rounded hover:bg-surface-muted">Previous</Link>
                         <Link v-if="bookings.links?.next" :href="bookings.links.next" class="px-3 py-1 border border-border rounded hover:bg-surface-muted">Next</Link>

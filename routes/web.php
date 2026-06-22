@@ -9,7 +9,13 @@ use Illuminate\Support\Facades\Route;
 
 // Public website routes
 Route::get('/', function () {
-    return view('welcome');
+    $featuredVenues = \App\Models\Venue::active()->orderByDesc('capacity_max')->take(4)->get();
+    $hallCount = \App\Models\Venue::active()->count();
+    $hotelCount = \App\Models\Venue::active()->get()
+        ->map(fn ($v) => \Illuminate\Support\Str::before($v->name, ' — '))
+        ->unique()->count();
+
+    return view('welcome', compact('featuredVenues', 'hallCount', 'hotelCount'));
 })->name('home');
 
 Route::get('/venues', [\App\Http\Controllers\VenueController::class, 'index'])->name('venues.index');

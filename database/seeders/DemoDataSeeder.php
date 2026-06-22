@@ -15,6 +15,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Models\Venue;
+use Database\Seeders\Data\EventVendors;
 use Database\Seeders\Data\SriLankaHotels;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -109,16 +110,9 @@ class DemoDataSeeder extends Seeder
             );
         }
 
-        // Vendors
-        $vendorsData = [
-            ['name' => 'Kandurata Mal Sewaya', 'category' => 'florist', 'contact_name' => 'Kumari Silva', 'email' => 'kumari@kanduratamal.demo', 'status' => 'active'],
-            ['name' => 'Studio Chaya Photography', 'category' => 'photographer', 'contact_name' => 'Chaminda Pradeep', 'email' => 'chaminda@studiochaya.demo', 'status' => 'active'],
-            ['name' => 'DJ Saman Sounds', 'category' => 'entertainment', 'contact_name' => 'Saman Kumara', 'email' => 'saman@djsamansounds.demo', 'status' => 'active'],
-            ['name' => 'Ammige Kibula Catering', 'category' => 'catering', 'contact_name' => 'Chef Lakshman', 'email' => 'lakshman@ammigekibula.demo', 'status' => 'active'],
-        ];
-
+        // Vendors — real-style Sri Lankan event vendors (shared dataset).
         $createdVendors = [];
-        foreach ($vendorsData as $vendorData) {
+        foreach (EventVendors::all() as $vendorData) {
             $createdVendors[] = Vendor::updateOrCreate(
                 ['email' => $vendorData['email']],
                 array_merge($vendorData, ['slug' => Str::slug($vendorData['name'])])

@@ -31,7 +31,7 @@ const calendarOptions = ref({
     },
     events: (props.events ?? []).map(e => ({
         id: e.id,
-        title: `${e.booking_number} â€” ${e.client_name}`,
+        title: `${e.booking_number} — ${e.client_name}`,
         start: e.event_date,
         allDay: true,
         backgroundColor: statusColors[e.status]?.bg ?? '#F3F4F6',
@@ -75,7 +75,7 @@ const statusLabels = {
 </script>
 
 <template>
-    <AppLayout :title="`${venue.name} â€” Availability`">
+    <AppLayout :title="`${venue.name} — Availability`">
         <div class="space-y-4">
             <!-- Header -->
             <div class="flex items-center justify-between">
@@ -164,11 +164,11 @@ const statusLabels = {
                         <dl class="space-y-2 text-sm">
                             <div class="flex justify-between">
                                 <dt class="text-ink-subtle">Capacity</dt>
-                                <dd class="text-ink">{{ venue.capacity?.min ?? 'â€”' }}â€“{{ venue.capacity?.max ?? 'â€”' }}</dd>
+                                <dd class="text-ink">{{ venue.capacity?.min ?? '—' }}–{{ venue.capacity?.max ?? '—' }}</dd>
                             </div>
                             <div class="flex justify-between">
                                 <dt class="text-ink-subtle">Base Price</dt>
-                                <dd class="text-ink">LKR {{ venue.pricing?.base_price?.toLocaleString() ?? 'â€”' }}</dd>
+                                <dd class="text-ink">LKR {{ venue.pricing?.base_price?.toLocaleString() ?? '—' }}</dd>
                             </div>
                             <div class="flex justify-between">
                                 <dt class="text-ink-subtle">Status</dt>

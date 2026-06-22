@@ -30,26 +30,26 @@ const props = defineProps({ vendor: Object });
                     <dl class="grid grid-cols-2 gap-3 text-sm">
                         <div>
                             <dt class="text-ink-subtle">Contact</dt>
-                            <dd class="font-medium">{{ vendor.contact_name ?? 'â€”' }}</dd>
+                            <dd class="font-medium">{{ vendor.contact_name ?? '—' }}</dd>
                         </div>
                         <div>
                             <dt class="text-ink-subtle">Email</dt>
-                            <dd>{{ vendor.email ?? 'â€”' }}</dd>
+                            <dd>{{ vendor.email ?? '—' }}</dd>
                         </div>
                         <div>
                             <dt class="text-ink-subtle">Phone</dt>
-                            <dd>{{ vendor.phone ?? 'â€”' }}</dd>
+                            <dd>{{ vendor.phone ?? '—' }}</dd>
                         </div>
                         <div>
                             <dt class="text-ink-subtle">Website</dt>
                             <dd>
                                 <a v-if="vendor.website" :href="vendor.website" target="_blank" class="text-primary hover:underline text-xs">{{ vendor.website }}</a>
-                                <span v-else>â€”</span>
+                                <span v-else>—</span>
                             </dd>
                         </div>
                         <div>
                             <dt class="text-ink-subtle">Base Rate</dt>
-                            <dd>LKR {{ vendor.base_rate?.toLocaleString() ?? 'â€”' }} <span class="text-xs text-ink-subtle capitalize">{{ vendor.rate_type?.replace('_', ' ') }}</span></dd>
+                            <dd>LKR {{ vendor.base_rate?.toLocaleString() ?? '—' }} <span class="text-xs text-ink-subtle capitalize">{{ vendor.rate_type?.replace('_', ' ') }}</span></dd>
                         </div>
                         <div>
                             <dt class="text-ink-subtle">Status</dt>

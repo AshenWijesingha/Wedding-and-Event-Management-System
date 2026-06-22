@@ -95,11 +95,11 @@ const statusColors = {
                             </div>
                             <div>
                                 <dt class="text-ink-subtle">Start Time</dt>
-                                <dd>{{ booking.event?.start_time ?? 'â€”' }}</dd>
+                                <dd>{{ booking.event?.start_time ?? '—' }}</dd>
                             </div>
                             <div>
                                 <dt class="text-ink-subtle">End Time</dt>
-                                <dd>{{ booking.event?.end_time ?? 'â€”' }}</dd>
+                                <dd>{{ booking.event?.end_time ?? '—' }}</dd>
                             </div>
                             <div>
                                 <dt class="text-ink-subtle">Guest Count</dt>
@@ -107,7 +107,7 @@ const statusColors = {
                             </div>
                             <div>
                                 <dt class="text-ink-subtle">Setup Time</dt>
-                                <dd>{{ booking.event?.setup_time ?? 'â€”' }}</dd>
+                                <dd>{{ booking.event?.setup_time ?? '—' }}</dd>
                             </div>
                         </dl>
                     </div>
@@ -122,7 +122,7 @@ const statusColors = {
                         </div>
                         <div>
                             <h3 class="text-sm font-semibold text-ink mb-2">Venue</h3>
-                            <p class="text-sm font-medium text-ink">{{ booking.venue?.name ?? 'â€”' }}</p>
+                            <p class="text-sm font-medium text-ink">{{ booking.venue?.name ?? '—' }}</p>
                             <p class="text-sm text-ink-subtle" v-if="booking.package">{{ booking.package?.name }}</p>
                         </div>
                     </div>
