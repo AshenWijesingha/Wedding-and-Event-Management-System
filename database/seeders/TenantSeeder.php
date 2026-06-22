@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Plan;
 use App\Models\Tenant;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class TenantSeeder extends Seeder
 {

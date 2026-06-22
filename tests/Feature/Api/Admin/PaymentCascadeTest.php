@@ -16,6 +16,7 @@ class PaymentCascadeTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Booking $booking;
 
     protected function setUp(): void
@@ -23,20 +24,20 @@ class PaymentCascadeTest extends TestCase
         parent::setUp();
 
         $tenant = Tenant::factory()->create();
-        $venue  = Venue::factory()->create(['tenant_id' => $tenant->id]);
+        $venue = Venue::factory()->create(['tenant_id' => $tenant->id]);
         $client = Client::factory()->create(['tenant_id' => $tenant->id]);
 
         $this->admin = User::factory()->admin()->create(['tenant_id' => $tenant->id]);
         $this->admin->assignRole('admin');
 
         $this->booking = Booking::factory()->create([
-            'tenant_id'      => $tenant->id,
-            'client_id'      => $client->id,
-            'venue_id'       => $venue->id,
-            'total_amount'   => 10000,
-            'paid_amount'    => 2000,
+            'tenant_id' => $tenant->id,
+            'client_id' => $client->id,
+            'venue_id' => $venue->id,
+            'total_amount' => 10000,
+            'paid_amount' => 2000,
             'balance_amount' => 8000,
-            'status'         => 'tentative',
+            'status' => 'tentative',
         ]);
     }
 
@@ -54,9 +55,9 @@ class PaymentCascadeTest extends TestCase
     {
         Payment::factory()->create([
             'booking_id' => $this->booking->id,
-            'client_id'  => $this->booking->client_id,
-            'amount'     => 2000,
-            'status'     => 'completed',
+            'client_id' => $this->booking->client_id,
+            'amount' => 2000,
+            'status' => 'completed',
         ]);
 
         $paymentCount = Payment::where('booking_id', $this->booking->id)->count();
@@ -85,11 +86,11 @@ class PaymentCascadeTest extends TestCase
 
         $this->actingAs($this->admin, 'sanctum')
             ->postJson('/api/v1/admin/payments', [
-                'booking_id'       => $this->booking->id,
+                'booking_id' => $this->booking->id,
                 'installment_name' => 'Deposit',
-                'amount'           => 2500,
-                'payment_method'   => 'cash',
-                'payment_date'     => now()->toDateString(),
+                'amount' => 2500,
+                'payment_method' => 'cash',
+                'payment_date' => now()->toDateString(),
             ]);
 
         $this->booking->refresh();

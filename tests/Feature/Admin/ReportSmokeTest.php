@@ -24,19 +24,19 @@ class ReportSmokeTest extends TestCase
         $this->admin = User::factory()->admin()->create(['tenant_id' => $tenant->id]);
 
         // Seed a booking + payment so monthly aggregation has data to group.
-        $venue   = Venue::factory()->create(['tenant_id' => $tenant->id]);
-        $client  = Client::factory()->create(['tenant_id' => $tenant->id]);
+        $venue = Venue::factory()->create(['tenant_id' => $tenant->id]);
+        $client = Client::factory()->create(['tenant_id' => $tenant->id]);
         $booking = Booking::factory()->create([
-            'tenant_id'  => $tenant->id,
-            'venue_id'   => $venue->id,
-            'client_id'  => $client->id,
+            'tenant_id' => $tenant->id,
+            'venue_id' => $venue->id,
+            'client_id' => $client->id,
             'event_date' => now()->toDateString(),
-            'status'     => 'confirmed',
+            'status' => 'confirmed',
         ]);
         Payment::factory()->create([
-            'tenant_id'    => $tenant->id,
-            'booking_id'   => $booking->id,
-            'status'       => 'completed',
+            'tenant_id' => $tenant->id,
+            'booking_id' => $booking->id,
+            'status' => 'completed',
             'payment_date' => now()->toDateString(),
         ]);
     }
@@ -60,7 +60,7 @@ class ReportSmokeTest extends TestCase
     public function test_reports_accept_custom_date_range(): void
     {
         $from = now()->startOfMonth()->toDateString();
-        $to   = now()->endOfMonth()->toDateString();
+        $to = now()->endOfMonth()->toDateString();
 
         foreach (['/admin/reports', '/admin/reports/revenue', '/admin/reports/bookings', '/admin/reports/occupancy'] as $url) {
             $this->actingAs($this->admin)->get("{$url}?from={$from}&to={$to}")->assertStatus(200);

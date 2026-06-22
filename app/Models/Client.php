@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Payment;
+use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Concerns\BelongsToTenant;
 
 class Client extends Model
 {
-    use HasFactory, BelongsToTenant, Notifiable;
+    use BelongsToTenant, HasFactory, Notifiable;
 
     protected $fillable = [
         'tenant_id',
@@ -106,9 +105,9 @@ class Client extends Model
     {
         return $query->where(function ($q) use ($search) {
             $q->where('first_name', 'like', "%{$search}%")
-              ->orWhere('last_name', 'like', "%{$search}%")
-              ->orWhere('email', 'like', "%{$search}%")
-              ->orWhere('phone', 'like', "%{$search}%");
+                ->orWhere('last_name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
+                ->orWhere('phone', 'like', "%{$search}%");
         });
     }
 }

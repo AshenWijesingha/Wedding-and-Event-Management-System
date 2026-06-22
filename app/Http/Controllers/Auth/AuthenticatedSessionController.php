@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,7 +55,7 @@ class AuthenticatedSessionController extends Controller
      * portal; everyone else (staff and above) lands in the admin area, whose own
      * controller further branches super admins to the platform dashboard.
      */
-    private function homeFor(\App\Models\User $user): string
+    private function homeFor(User $user): string
     {
         if ($user->hasRole('client')) {
             return route('portal.dashboard');

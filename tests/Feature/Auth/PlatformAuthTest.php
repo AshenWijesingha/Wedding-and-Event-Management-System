@@ -43,7 +43,7 @@ class PlatformAuthTest extends TestCase
         $superAdmin = $this->platformSuperAdminWithTenantCurrent(['password' => Hash::make('Admin@123')]);
 
         $this->post('/login', [
-            'email'    => $superAdmin->email,
+            'email' => $superAdmin->email,
             'password' => 'Admin@123',
         ])->assertRedirect(route('admin.dashboard'));
 

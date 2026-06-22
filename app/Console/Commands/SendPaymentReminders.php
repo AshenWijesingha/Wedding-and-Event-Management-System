@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 class SendPaymentReminders extends Command
 {
     protected $signature = 'payments:send-reminders {--days=3 : Send reminders for payments due within this many days}';
+
     protected $description = 'Send payment reminders for upcoming and overdue pending payments';
 
     public function handle(): int
@@ -21,14 +22,14 @@ class SendPaymentReminders extends Command
             ->where('due_date', '<=', now()->addDays($days)->toDateString())
             ->where(function ($q) {
                 $q->whereNull('reminder_sent_at')
-                  ->orWhere('reminder_sent_at', '<=', now()->subDays(3));
+                    ->orWhere('reminder_sent_at', '<=', now()->subDays(3));
             })
             ->get();
 
         $count = 0;
         foreach ($payments as $payment) {
             $client = $payment->client;
-            if (!$client) {
+            if (! $client) {
                 $this->warn("Payment #{$payment->id} has no associated client — skipping. Data integrity issue.");
                 logger()->warning('SendPaymentReminders: payment has no client', ['payment_id' => $payment->id, 'booking_id' => $payment->booking_id]);
                 continue;
@@ -40,6 +41,7 @@ class SendPaymentReminders extends Command
         }
 
         $this->info("Sent {$count} payment reminder(s).");
+
         return self::SUCCESS;
     }
 }

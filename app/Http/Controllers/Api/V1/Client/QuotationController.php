@@ -54,7 +54,7 @@ class QuotationController extends Controller
             abort(403, 'You are not authorized to accept this quotation.');
         }
 
-        if (!$quotation->canBeAccepted()) {
+        if (! $quotation->canBeAccepted()) {
             return response()->json([
                 'message' => 'This quotation cannot be accepted. It may have expired or already been actioned.',
             ], 422);

@@ -28,9 +28,9 @@ class StaffNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'event'   => $this->event,
+            'event' => $this->event,
             'message' => $this->message,
-            'url'     => $this->url,
+            'url' => $this->url,
             ...$this->data,
         ];
     }

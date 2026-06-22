@@ -4,12 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BookingResource;
+use App\Mail\BookingConfirmedMail;
 use App\Models\Booking;
 use App\Models\Client;
 use App\Models\Package;
+use App\Models\Tenant;
 use App\Models\Vendor;
 use App\Models\Venue;
+use App\Notifications\StaffNotification;
 use App\Services\AvailabilityService;
+use App\Support\Notifier;
+use App\Support\TenantRule;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,15 +26,12 @@ class BookingController extends Controller
     public function index(Request $request): Response
     {
         $bookings = Booking::with(['client', 'venue', 'package'])
-            ->when($request->search, fn ($q, $search) =>
-                $q->where('booking_number', 'like', "%{$search}%")
-                  ->orWhereHas('client', fn ($cq) =>
-                      $cq->where('first_name', 'like', "%{$search}%")
-                         ->orWhere('last_name', 'like', "%{$search}%")
-                  )
+            ->when($request->search, fn ($q, $search) => $q->where('booking_number', 'like', "%{$search}%")
+                ->orWhereHas('client', fn ($cq) => $cq->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                )
             )
-            ->when($request->status, fn ($q, $status) =>
-                $q->where('status', $status)
+            ->when($request->status, fn ($q, $status) => $q->where('status', $status)
             )
             ->orderBy('event_date', 'desc')
             ->paginate(min((int) ($request->per_page ?? 15), 100))
@@ -44,10 +46,10 @@ class BookingController extends Controller
     public function create(): Response
     {
         return Inertia::render('Bookings/Create', [
-            'venues'   => Venue::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
+            'venues' => Venue::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
             'packages' => Package::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
-            'clients'  => Client::orderBy('first_name')->get()->map(fn ($c) => [
-                'id'   => $c->id,
+            'clients' => Client::orderBy('first_name')->get()->map(fn ($c) => [
+                'id' => $c->id,
                 'name' => trim("{$c->first_name} {$c->last_name}"),
             ]),
         ]);
@@ -58,19 +60,19 @@ class BookingController extends Controller
         abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
 
         $validated = $request->validate([
-            'client_id'        => ['required', \App\Support\TenantRule::exists('clients')],
-            'venue_id'         => ['required', \App\Support\TenantRule::exists('venues')],
-            'package_id'       => ['nullable', \App\Support\TenantRule::exists('packages')],
-            'event_type'       => 'required|string|max:50',
-            'event_date'       => 'required|date|after_or_equal:today',
-            'setup_time'       => 'nullable|date_format:H:i',
+            'client_id' => ['required', TenantRule::exists('clients')],
+            'venue_id' => ['required', TenantRule::exists('venues')],
+            'package_id' => ['nullable', TenantRule::exists('packages')],
+            'event_type' => 'required|string|max:50',
+            'event_date' => 'required|date|after_or_equal:today',
+            'setup_time' => 'nullable|date_format:H:i',
             'event_start_time' => 'nullable|date_format:H:i',
-            'event_end_time'   => 'nullable|date_format:H:i',
-            'guest_count'      => 'required|integer|min:1',
-            'total_amount'     => 'required|numeric|min:0',
-            'paid_amount'      => 'nullable|numeric|min:0',
-            'status'           => 'nullable|in:pending,tentative,confirmed',
-            'notes'            => 'nullable|string',
+            'event_end_time' => 'nullable|date_format:H:i',
+            'guest_count' => 'required|integer|min:1',
+            'total_amount' => 'required|numeric|min:0',
+            'paid_amount' => 'nullable|numeric|min:0',
+            'status' => 'nullable|in:pending,tentative,confirmed',
+            'notes' => 'nullable|string',
         ]);
 
         if (! $availability->isVenueAvailable($validated['venue_id'], $validated['event_date'])) {
@@ -82,10 +84,10 @@ class BookingController extends Controller
         Booking::create([
             ...$validated,
             'booking_number' => Booking::generateBookingNumber(),
-            'paid_amount'    => $paid,
+            'paid_amount' => $paid,
             'balance_amount' => (float) $validated['total_amount'] - $paid,
-            'status'         => $validated['status'] ?? 'tentative',
-            'created_by'     => $request->user()->id,
+            'status' => $validated['status'] ?? 'tentative',
+            'created_by' => $request->user()->id,
         ]);
 
         return redirect()->route('admin.bookings.index')->with('success', 'Booking created successfully.');
@@ -94,11 +96,11 @@ class BookingController extends Controller
     public function edit(Booking $booking): Response
     {
         return Inertia::render('Bookings/Edit', [
-            'booking'  => new BookingResource($booking->load(['client', 'venue', 'package'])),
-            'venues'   => Venue::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
+            'booking' => new BookingResource($booking->load(['client', 'venue', 'package'])),
+            'venues' => Venue::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
             'packages' => Package::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
-            'clients'  => Client::orderBy('first_name')->get()->map(fn ($c) => [
-                'id'   => $c->id,
+            'clients' => Client::orderBy('first_name')->get()->map(fn ($c) => [
+                'id' => $c->id,
                 'name' => trim("{$c->first_name} {$c->last_name}"),
             ]),
         ]);
@@ -113,19 +115,19 @@ class BookingController extends Controller
         }
 
         $validated = $request->validate([
-            'client_id'        => ['required', \App\Support\TenantRule::exists('clients')],
-            'venue_id'         => ['required', \App\Support\TenantRule::exists('venues')],
-            'package_id'       => ['nullable', \App\Support\TenantRule::exists('packages')],
-            'event_type'       => 'required|string|max:50',
-            'event_date'       => 'required|date|after_or_equal:today',
-            'setup_time'       => 'nullable|date_format:H:i',
+            'client_id' => ['required', TenantRule::exists('clients')],
+            'venue_id' => ['required', TenantRule::exists('venues')],
+            'package_id' => ['nullable', TenantRule::exists('packages')],
+            'event_type' => 'required|string|max:50',
+            'event_date' => 'required|date|after_or_equal:today',
+            'setup_time' => 'nullable|date_format:H:i',
             'event_start_time' => 'nullable|date_format:H:i',
-            'event_end_time'   => 'nullable|date_format:H:i',
-            'guest_count'      => 'required|integer|min:1',
-            'total_amount'     => 'required|numeric|min:0',
-            'paid_amount'      => 'nullable|numeric|min:0',
-            'status'           => 'nullable|in:pending,tentative,confirmed',
-            'notes'            => 'nullable|string',
+            'event_end_time' => 'nullable|date_format:H:i',
+            'guest_count' => 'required|integer|min:1',
+            'total_amount' => 'required|numeric|min:0',
+            'paid_amount' => 'nullable|numeric|min:0',
+            'status' => 'nullable|in:pending,tentative,confirmed',
+            'notes' => 'nullable|string',
         ]);
 
         // Re-check availability but exclude THIS booking, so saving the same date
@@ -138,9 +140,9 @@ class BookingController extends Controller
 
         $booking->update([
             ...$validated,
-            'paid_amount'    => $paid,
+            'paid_amount' => $paid,
             'balance_amount' => (float) $validated['total_amount'] - $paid,
-            'status'         => $validated['status'] ?? $booking->status,
+            'status' => $validated['status'] ?? $booking->status,
         ]);
 
         return redirect()->route('admin.bookings.show', $booking)->with('success', 'Booking updated successfully.');
@@ -157,7 +159,7 @@ class BookingController extends Controller
     public function confirm(Booking $booking): RedirectResponse
     {
         abort_unless(request()->user()->hasAnyRole(['admin', 'manager']), 403);
-        if (!in_array($booking->status, ['pending', 'tentative'])) {
+        if (! in_array($booking->status, ['pending', 'tentative'])) {
             return back()->with('error', 'Only pending or tentative bookings can be confirmed.');
         }
 
@@ -165,13 +167,13 @@ class BookingController extends Controller
             $booking->update(['status' => 'confirmed']);
         });
 
-        \App\Support\Notifier::mail(
+        Notifier::mail(
             optional($booking->client)->email,
-            new \App\Mail\BookingConfirmedMail($booking),
+            new BookingConfirmedMail($booking),
         );
-        \App\Support\Notifier::staff(
-            \App\Models\Tenant::current(),
-            new \App\Notifications\StaffNotification(
+        Notifier::staff(
+            Tenant::current(),
+            new StaffNotification(
                 'booking_confirmed',
                 "Booking {$booking->booking_number} was confirmed.",
                 "/admin/bookings/{$booking->id}",
@@ -184,7 +186,7 @@ class BookingController extends Controller
     public function cancel(Request $request, Booking $booking): RedirectResponse
     {
         abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
-        if (!$booking->canBeCancelled()) {
+        if (! $booking->canBeCancelled()) {
             return back()->with('error', 'This booking cannot be cancelled.');
         }
 
@@ -196,7 +198,7 @@ class BookingController extends Controller
             'status' => 'cancelled',
             'notes' => $booking->notes
                 ? $booking->notes . "\n\nCancellation reason: " . ($request->cancellation_reason ?? 'Not specified')
-                : "Cancellation reason: " . ($request->cancellation_reason ?? 'Not specified'),
+                : 'Cancellation reason: ' . ($request->cancellation_reason ?? 'Not specified'),
         ]);
 
         return back()->with('success', 'Booking cancelled.');
@@ -206,18 +208,18 @@ class BookingController extends Controller
     {
         abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
         $data = $request->validate([
-            'vendor_id'           => ['required', \App\Support\TenantRule::exists('vendors')],
+            'vendor_id' => ['required', TenantRule::exists('vendors')],
             'service_description' => 'nullable|string|max:500',
-            'agreed_amount'       => 'nullable|numeric|min:0',
-            'notes'               => 'nullable|string|max:500',
+            'agreed_amount' => 'nullable|numeric|min:0',
+            'notes' => 'nullable|string|max:500',
         ]);
 
         $booking->vendors()->syncWithoutDetaching([
             $data['vendor_id'] => [
                 'service_description' => $data['service_description'] ?? null,
-                'agreed_amount'       => $data['agreed_amount'] ?? null,
-                'notes'               => $data['notes'] ?? null,
-                'status'              => 'confirmed',
+                'agreed_amount' => $data['agreed_amount'] ?? null,
+                'notes' => $data['notes'] ?? null,
+                'status' => 'confirmed',
             ],
         ]);
 

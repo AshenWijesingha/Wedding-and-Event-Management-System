@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -20,13 +21,13 @@ class ProfileController extends Controller
 
         return Inertia::render('Profile/Edit', [
             'profile' => [
-                'id'              => $user->id,
-                'name'            => $user->name,
-                'email'           => $user->email,
-                'phone'           => $user->phone,
-                'avatar'          => $user->avatar_url,
-                'role'            => $user->role,
-                'email_verified'  => ! is_null($user->email_verified_at),
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'avatar' => $user->avatar_url,
+                'role' => $user->role,
+                'email_verified' => ! is_null($user->email_verified_at),
             ],
             'status' => $request->session()->get('status'),
         ]);
@@ -37,14 +38,14 @@ class ProfileController extends Controller
         $user = $request->user();
 
         $validated = $request->validate([
-            'name'   => 'required|string|max:255',
-            'email'  => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'phone'  => 'nullable|string|max:50',
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'phone' => 'nullable|string|max:50',
             'avatar' => 'nullable|image|mimes:jpeg,jpg,png,webp,gif|max:2048',
             'remove_avatar' => 'nullable|boolean',
         ]);
 
-        $user->name  = $validated['name'];
+        $user->name = $validated['name'];
         $user->email = $validated['email'];
         $user->phone = $validated['phone'] ?? null;
 
@@ -71,7 +72,7 @@ class ProfileController extends Controller
     {
         $request->validate([
             'current_password' => ['required', 'current_password'],
-            'password'         => ['required', 'confirmed', Password::defaults()],
+            'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
         $request->user()->update([
@@ -84,7 +85,7 @@ class ProfileController extends Controller
         $endedSessions = 0;
         if (config('session.driver') === 'database') {
             $request->session()->regenerate();
-            $endedSessions = \Illuminate\Support\Facades\DB::table('sessions')
+            $endedSessions = DB::table('sessions')
                 ->where('user_id', $request->user()->id)
                 ->where('id', '!=', $request->session()->getId())
                 ->delete();

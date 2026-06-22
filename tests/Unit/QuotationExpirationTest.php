@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Quotation;
+use App\Models\Tenant;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -65,31 +66,31 @@ class QuotationExpirationTest extends TestCase
 
     public function test_scope_valid_includes_today(): void
     {
-        $tenant = \App\Models\Tenant::factory()->create();
+        $tenant = Tenant::factory()->create();
         $tenant->makeCurrent();
 
-        \App\Models\Quotation::factory()->create([
+        Quotation::factory()->create([
             'tenant_id' => $tenant->id,
             'status' => 'sent',
             'valid_until' => Carbon::today(),
         ]);
 
-        $valid = \App\Models\Quotation::valid()->count();
+        $valid = Quotation::valid()->count();
         $this->assertEquals(1, $valid, 'scopeValid should include quotations expiring today.');
     }
 
     public function test_scope_valid_excludes_yesterday(): void
     {
-        $tenant = \App\Models\Tenant::factory()->create();
+        $tenant = Tenant::factory()->create();
         $tenant->makeCurrent();
 
-        \App\Models\Quotation::factory()->create([
+        Quotation::factory()->create([
             'tenant_id' => $tenant->id,
             'status' => 'sent',
             'valid_until' => Carbon::yesterday(),
         ]);
 
-        $valid = \App\Models\Quotation::valid()->count();
+        $valid = Quotation::valid()->count();
         $this->assertEquals(0, $valid, 'scopeValid should exclude quotations expired yesterday.');
     }
 }

@@ -19,18 +19,14 @@ class InquiryController extends Controller
     public function index(Request $request): Response
     {
         $inquiries = Inquiry::with(['client', 'venue', 'package'])
-            ->when($request->search, fn ($q, $search) =>
-                $q->whereHas('client', fn ($cq) =>
-                    $cq->where('first_name', 'like', "%{$search}%")
-                       ->orWhere('last_name', 'like', "%{$search}%")
-                       ->orWhere('email', 'like', "%{$search}%")
-                )
+            ->when($request->search, fn ($q, $search) => $q->whereHas('client', fn ($cq) => $cq->where('first_name', 'like', "%{$search}%")
+                ->orWhere('last_name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
             )
-            ->when($request->status, fn ($q, $status) =>
-                $q->where('status', $status)
             )
-            ->when($request->event_type, fn ($q, $type) =>
-                $q->where('event_type', $type)
+            ->when($request->status, fn ($q, $status) => $q->where('status', $status)
+            )
+            ->when($request->event_type, fn ($q, $type) => $q->where('event_type', $type)
             )
             ->orderBy('created_at', 'desc')
             ->paginate(15)
@@ -73,7 +69,7 @@ class InquiryController extends Controller
             $inquiry->load(['client', 'venue', 'package']);
 
             $pdf = Pdf::loadView('pdf.inquiry', [
-                'inquiry'  => $inquiry,
+                'inquiry' => $inquiry,
                 'branding' => $brandingService->getBranding(),
             ])->setPaper('a4', 'portrait');
 
@@ -95,9 +91,9 @@ class InquiryController extends Controller
         $inquiry->load(['client', 'venue', 'package']);
 
         return response()->view('pdf.inquiry', [
-            'inquiry'  => $inquiry,
+            'inquiry' => $inquiry,
             'branding' => $brandingService->getBranding(),
-            'print'    => true,
+            'print' => true,
         ]);
     }
 }

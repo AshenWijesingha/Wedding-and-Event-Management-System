@@ -25,9 +25,9 @@ class TourController extends Controller
             'key' => ['required', 'string', Rule::in(self::KEYS)],
         ]);
 
-        $user  = $request->user();
+        $user = $request->user();
         $prefs = $user->preferences ?? [];
-        $done  = $prefs['completed_tours'] ?? [];
+        $done = $prefs['completed_tours'] ?? [];
 
         if (! in_array($data['key'], $done, true)) {
             $done[] = $data['key'];
