@@ -31,10 +31,10 @@
             </select>
             <select name="max_price" class="rounded-lg border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500">
                 <option value="">Any price</option>
-                <option value="5000"  @selected(request('max_price') == '5000')>Up to $5,000</option>
-                <option value="10000" @selected(request('max_price') == '10000')>Up to $10,000</option>
-                <option value="25000" @selected(request('max_price') == '25000')>Up to $25,000</option>
-                <option value="50000" @selected(request('max_price') == '50000')>Up to $50,000</option>
+                <option value="1200000" @selected(request('max_price') == '1200000')>Up to Rs 1,200,000</option>
+                <option value="1600000" @selected(request('max_price') == '1600000')>Up to Rs 1,600,000</option>
+                <option value="2000000" @selected(request('max_price') == '2000000')>Up to Rs 2,000,000</option>
+                <option value="2500000" @selected(request('max_price') == '2500000')>Up to Rs 2,500,000</option>
             </select>
             <button type="submit" class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700">
                 Search
@@ -96,7 +96,7 @@
                             </div>
                             @if($venue->base_price)
                                 <div class="font-semibold text-gray-900">
-                                    From ${{ number_format($venue->base_price) }}
+                                    From Rs {{ number_format($venue->base_price) }}
                                 </div>
                             @endif
                         </div>
