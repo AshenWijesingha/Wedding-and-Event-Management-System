@@ -38,7 +38,7 @@
                         @if($package->min_guests || $package->max_guests)
                             <p class="text-xs text-gray-500 mt-1">
                                 @if($package->min_guests && $package->max_guests)
-                                    {{ number_format($package->min_guests) }}–{{ number_format($package->max_guests) }} guests
+                                    {{ number_format($package->min_guests) }}&ndash;{{ number_format($package->max_guests) }} guests
                                 @elseif($package->max_guests)
                                     Up to {{ number_format($package->max_guests) }} guests
                                 @else

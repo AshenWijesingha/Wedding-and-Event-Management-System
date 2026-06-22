@@ -81,10 +81,10 @@ const statusColors = {
                                 <div class="text-sm text-ink-subtle">{{ pkg.slug }}</div>
                             </td>
                             <td class="px-6 py-4 text-sm text-ink-muted">
-                                {{ pkg.guests?.min ?? 'â€”' }}â€“{{ pkg.guests?.max ?? 'â€”' }}
+                                {{ pkg.guests?.min ?? '—' }}–{{ pkg.guests?.max ?? '—' }}
                             </td>
                             <td class="px-6 py-4 text-sm text-ink font-medium">
-                                LKR {{ pkg.base_price?.toLocaleString() ?? 'â€”' }}
+                                LKR {{ pkg.base_price?.toLocaleString() ?? '—' }}
                             </td>
                             <td class="px-6 py-4">
                                 <span :class="['inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize', statusColors[pkg.status] ?? 'bg-surface-sunken text-ink-muted']">
@@ -108,7 +108,7 @@ const statusColors = {
                 </table>
 
                 <div v-if="packages.meta?.last_page > 1" class="px-6 py-4 border-t border-border flex items-center justify-between text-sm text-ink-muted">
-                    <span>Showing {{ packages.meta.from }}â€“{{ packages.meta.to }} of {{ packages.meta.total }}</span>
+                    <span>Showing {{ packages.meta.from }}–{{ packages.meta.to }} of {{ packages.meta.total }}</span>
                     <div class="flex gap-2">
                         <Link v-if="packages.links?.prev" :href="packages.links.prev" class="px-3 py-1 border border-border rounded hover:bg-surface-muted">Previous</Link>
                         <Link v-if="packages.links?.next" :href="packages.links.next" class="px-3 py-1 border border-border rounded hover:bg-surface-muted">Next</Link>

@@ -105,7 +105,7 @@ const statusColors = {
                 </table>
 
                 <div v-if="payments.meta?.last_page > 1" class="px-6 py-4 border-t border-border flex items-center justify-between text-sm text-ink-muted">
-                    <span>Showing {{ payments.meta.from }}â€“{{ payments.meta.to }} of {{ payments.meta.total }}</span>
+                    <span>Showing {{ payments.meta.from }}–{{ payments.meta.to }} of {{ payments.meta.total }}</span>
                     <div class="flex gap-2">
                         <Link v-if="payments.links?.prev" :href="payments.links.prev" class="px-3 py-1 border border-border rounded hover:bg-surface-muted">Previous</Link>
                         <Link v-if="payments.links?.next" :href="payments.links.next" class="px-3 py-1 border border-border rounded hover:bg-surface-muted">Next</Link>

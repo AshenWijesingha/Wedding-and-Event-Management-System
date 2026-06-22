@@ -100,7 +100,7 @@ const statusColors = {
                 </table>
 
                 <div v-if="quotations.meta?.last_page > 1" class="px-6 py-4 border-t border-border flex items-center justify-between text-sm text-ink-muted">
-                    <span>Showing {{ quotations.meta.from }}â€“{{ quotations.meta.to }} of {{ quotations.meta.total }}</span>
+                    <span>Showing {{ quotations.meta.from }}–{{ quotations.meta.to }} of {{ quotations.meta.total }}</span>
                     <div class="flex gap-2">
                         <Link v-if="quotations.links?.prev" :href="quotations.links.prev" class="px-3 py-1 border border-border rounded hover:bg-surface-muted">Previous</Link>
                         <Link v-if="quotations.links?.next" :href="quotations.links.next" class="px-3 py-1 border border-border rounded hover:bg-surface-muted">Next</Link>

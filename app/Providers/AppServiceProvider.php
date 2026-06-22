@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -50,6 +51,13 @@ class AppServiceProvider extends ServiceProvider
 
         RateLimiter::for('inquiry', function (Request $request) {
             return Limit::perMinute(3)->by($request->ip());
+        });
+
+        // Public marketing pages reference $branding in their own section scope
+        // (the layout computes its own copy for the header/footer). Share it so
+        // these views can read brand/contact details directly.
+        View::composer(['welcome', 'contact', 'links'], function ($view) {
+            $view->with('branding', app(BrandingService::class)->getBranding());
         });
     }
 }

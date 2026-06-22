@@ -35,7 +35,7 @@
                 Everything, one place
             </p>
             <h1 class="ft-rise font-display mt-5 text-4xl font-light leading-[1.05] text-[#1a1512] sm:text-5xl" style="animation-delay:.12s">
-                Explore <span class="italic text-[#9a7b3f]">EventPro</span>
+                Explore <span class="italic text-[#9a7b3f]">{{ $branding['business_name'] }}</span>
             </h1>
             <p class="ft-rise mt-5 text-lg leading-relaxed text-[#5c5246]" style="animation-delay:.2s">
                 Every page you can visit, listed separately so you can jump straight to what you need.
@@ -65,7 +65,7 @@
                     <span aria-hidden="true" class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-[#c8a96a] to-transparent"></span>
                     <span class="text-[0.62rem] font-semibold uppercase tracking-[0.25em] text-[#c8a96a]">Try it</span>
                     <h2 class="font-display mt-3 text-2xl font-normal text-[#f5efe7]">Live Demo</h2>
-                    <p class="mt-2 flex-1 text-[15px] leading-relaxed text-[#a99e8f]">Explore a fully working workspace — no signup.</p>
+                    <p class="mt-2 flex-1 text-[15px] leading-relaxed text-[#a99e8f]">Explore a fully working workspace &mdash; no signup.</p>
                     <button type="submit" class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#c8a96a]">
                         Launch demo
                         <span class="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
