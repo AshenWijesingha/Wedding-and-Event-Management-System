@@ -207,12 +207,16 @@ class DemoDataSeeder extends Seeder
             ['status' => 'expired',  'booking' => null],
         ];
 
+        // Look up a representative vendor per category to link demo line items.
+        $vendorByCat = collect($createdVendors)->keyBy('category');
+        $vendorId = fn (string $cat) => optional($vendorByCat->get($cat))->id;
+
         foreach ($quotationStates as $idx => $qs) {
             $items = [
-                ['name' => 'Venue Hire',  'description' => 'Full-day exclusive venue access', 'quantity' => 1,   'unit_price' => 1200000, 'total' => 1200000],
-                ['name' => 'Catering',    'description' => 'Three-course plated dinner',      'quantity' => 150, 'unit_price' => 6500,    'total' => 975000],
-                ['name' => 'Decoration',  'description' => 'Floral and table styling',        'quantity' => 1,   'unit_price' => 350000,  'total' => 350000],
-                ['name' => 'Photography', 'description' => 'Full event coverage',             'quantity' => 1,   'unit_price' => 180000,  'total' => 180000],
+                ['name' => 'Venue Hire',          'description' => 'Full-day exclusive venue access', 'quantity' => 1,   'unit_price' => 1200000, 'total' => 1200000, 'type' => 'venue',  'vendor_id' => null],
+                ['name' => 'Catering',            'description' => 'Three-course plated dinner',      'quantity' => 150, 'unit_price' => 6500,    'total' => 975000,  'type' => 'vendor', 'vendor_id' => $vendorId('caterer')],
+                ['name' => 'Decoration',          'description' => 'Floral and table styling',        'quantity' => 1,   'unit_price' => 350000,  'total' => 350000,  'type' => 'vendor', 'vendor_id' => $vendorId('decor')],
+                ['name' => 'Surprise Dance Act',  'description' => 'Choreographed surprise performance', 'quantity' => 1, 'unit_price' => 120000, 'total' => 120000,  'type' => 'custom', 'vendor_id' => null],
             ];
             $subtotal = array_sum(array_column($items, 'total'));
             $discount = (int) ($subtotal * 0.05);

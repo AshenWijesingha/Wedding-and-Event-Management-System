@@ -10,6 +10,7 @@ use App\Models\Inquiry;
 use App\Models\Package;
 use App\Models\Quotation;
 use App\Models\Tenant;
+use App\Models\Vendor;
 use App\Models\Venue;
 use App\Notifications\StaffNotification;
 use App\Services\BrandingService;
@@ -70,8 +71,13 @@ class QuotationController extends Controller
         }
 
         return Inertia::render('Quotations/Create', [
-            'venues' => Venue::where('status', 'active')->orderBy('name')->get(['id', 'name']),
+            // base_price/weekend_surcharge let the form auto-allocate the venue cost.
+            'venues' => Venue::where('status', 'active')->orderBy('name')
+                ->get(['id', 'name', 'base_price', 'weekend_surcharge']),
             'packages' => Package::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
+            // Active vendors offered as selectable line items, grouped by category.
+            'vendors' => Vendor::where('status', 'active')->orderBy('category')->orderBy('name')
+                ->get(['id', 'name', 'category', 'base_rate', 'rate_type']),
             'clients' => Client::orderBy('first_name')->get()->map(fn ($c) => [
                 'id' => $c->id,
                 'name' => trim("{$c->first_name} {$c->last_name}"),
@@ -96,6 +102,8 @@ class QuotationController extends Controller
             'items.*.description' => 'nullable|string|max:1000',
             'items.*.quantity' => 'required|numeric|min:0',
             'items.*.unit_price' => 'required|numeric|min:0',
+            'items.*.type' => ['nullable', 'in:venue,package,vendor,custom'],
+            'items.*.vendor_id' => ['nullable', TenantRule::exists('vendors')],
             'discount_amount' => 'nullable|numeric|min:0',
             'tax_rate' => 'nullable|numeric|min:0|max:100',
             'valid_until' => 'nullable|date|after_or_equal:today',
@@ -110,6 +118,8 @@ class QuotationController extends Controller
                 'quantity' => (float) $item['quantity'],
                 'unit_price' => (float) $item['unit_price'],
                 'total' => round((float) $item['quantity'] * (float) $item['unit_price'], 2),
+                'type' => $item['type'] ?? 'custom',
+                'vendor_id' => $item['vendor_id'] ?? null,
             ];
         }, $validated['items']);
 
