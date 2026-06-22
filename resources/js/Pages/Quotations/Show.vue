@@ -97,7 +97,16 @@ const money = (n) => 'LKR ' + Number(n ?? 0).toLocaleString(undefined, { minimum
                     <tbody class="divide-y divide-border">
                         <tr v-for="(item, i) in quotation.items" :key="i">
                             <td class="px-6 py-4">
-                                <p class="text-sm font-medium text-ink">{{ item.name }}</p>
+                                <p class="text-sm font-medium text-ink">
+                                    <span v-if="item.type && item.type !== 'custom'"
+                                        class="mr-1.5 inline-flex px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide align-middle"
+                                        :class="{
+                                            'bg-primary/10 text-primary': item.type === 'venue',
+                                            'bg-amber-100 text-amber-700': item.type === 'package',
+                                            'bg-emerald-100 text-emerald-700': item.type === 'vendor',
+                                        }">{{ item.type }}</span>
+                                    {{ item.name }}
+                                </p>
                                 <p v-if="item.description" class="text-xs text-ink-subtle">{{ item.description }}</p>
                             </td>
                             <td class="px-6 py-4 text-right text-sm text-ink-muted">{{ item.quantity }}</td>
