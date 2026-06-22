@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewInquiryMail;
 use App\Models\Client;
 use App\Models\Inquiry;
 use App\Models\Tenant;
+use App\Notifications\StaffNotification;
+use App\Support\Notifier;
 use Illuminate\Http\Request;
 
 class InquiryController extends Controller
@@ -56,10 +59,10 @@ class InquiryController extends Controller
         $inquiry->setRelation('client', $client);
 
         $inbox = $tenant->getSetting('notification_email') ?: $tenant->email;
-        \App\Support\Notifier::mail($inbox, new \App\Mail\NewInquiryMail($inquiry));
-        \App\Support\Notifier::staff(
+        Notifier::mail($inbox, new NewInquiryMail($inquiry));
+        Notifier::staff(
             $tenant,
-            new \App\Notifications\StaffNotification(
+            new StaffNotification(
                 'new_inquiry',
                 "New inquiry from {$client->full_name}.",
                 "/admin/inquiries/{$inquiry->id}",

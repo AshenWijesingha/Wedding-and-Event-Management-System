@@ -21,10 +21,10 @@ class PayHereServiceTest extends TestCase
     {
         $tenant = Tenant::factory()->create();
         $tenant->setSetting('payhere', [
-            'merchant_id'     => '1211149',
+            'merchant_id' => '1211149',
             'merchant_secret' => $secret,
-            'sandbox'         => true,
-            'currency'        => 'LKR',
+            'sandbox' => true,
+            'currency' => 'LKR',
         ]);
 
         return $tenant->fresh();
@@ -44,10 +44,10 @@ class PayHereServiceTest extends TestCase
     public function test_credentials_fall_back_to_config(): void
     {
         config([
-            'services.payhere.merchant_id'     => 'CFG123',
+            'services.payhere.merchant_id' => 'CFG123',
             'services.payhere.merchant_secret' => 'cfg_secret',
-            'services.payhere.sandbox'         => true,
-            'services.payhere.currency'        => 'LKR',
+            'services.payhere.sandbox' => true,
+            'services.payhere.currency' => 'LKR',
         ]);
 
         $creds = $this->service()->credentialsFor(Tenant::factory()->create());
@@ -58,7 +58,7 @@ class PayHereServiceTest extends TestCase
 
     public function test_encrypted_secret_round_trips_and_ciphertext_differs(): void
     {
-        $svc    = $this->service();
+        $svc = $this->service();
         $cipher = $svc->encryptSecret('top_secret');
 
         $this->assertNotSame('top_secret', $cipher);
@@ -66,7 +66,7 @@ class PayHereServiceTest extends TestCase
 
         $tenant = Tenant::factory()->create();
         $tenant->setSetting('payhere', [
-            'merchant_id'     => 'M1',
+            'merchant_id' => 'M1',
             'merchant_secret' => $cipher,
         ]);
 
@@ -76,12 +76,12 @@ class PayHereServiceTest extends TestCase
     public function test_verify_notification_accepts_valid_and_rejects_tampered(): void
     {
         $tenant = $this->tenantWithCreds('sample_secret');
-        $svc    = $this->service();
+        $svc = $this->service();
 
         $merchantId = '1211149';
-        $orderId    = '42';
-        $amount     = '1000.00';
-        $currency   = 'LKR';
+        $orderId = '42';
+        $amount = '1000.00';
+        $currency = 'LKR';
         $statusCode = '2';
 
         $md5sig = strtoupper(md5(
@@ -89,12 +89,12 @@ class PayHereServiceTest extends TestCase
         ));
 
         $valid = [
-            'merchant_id'      => $merchantId,
-            'order_id'         => $orderId,
-            'payhere_amount'   => $amount,
+            'merchant_id' => $merchantId,
+            'order_id' => $orderId,
+            'payhere_amount' => $amount,
             'payhere_currency' => $currency,
-            'status_code'      => $statusCode,
-            'md5sig'           => $md5sig,
+            'status_code' => $statusCode,
+            'md5sig' => $md5sig,
         ];
 
         $this->assertTrue($svc->verifyNotification($valid, $tenant));

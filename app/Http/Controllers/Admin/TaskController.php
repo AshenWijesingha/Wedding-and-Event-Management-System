@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskResource;
 use App\Models\Staff;
 use App\Models\Task;
+use App\Support\TenantRule;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -27,8 +28,8 @@ class TaskController extends Controller
         $allStaff = Staff::active()->orderBy('first_name')->get(['id', 'first_name', 'last_name']);
 
         return Inertia::render('Tasks/Index', [
-            'tasks'    => TaskResource::collection($tasks),
-            'filters'  => $request->only(['status', 'priority', 'assigned_to']),
+            'tasks' => TaskResource::collection($tasks),
+            'filters' => $request->only(['status', 'priority', 'assigned_to']),
             'allStaff' => $allStaff->map(fn ($s) => ['id' => $s->id, 'name' => $s->full_name]),
         ]);
     }
@@ -36,12 +37,12 @@ class TaskController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'title'       => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'priority'    => 'nullable|in:low,medium,high,urgent',
-            'due_date'    => 'nullable|date',
-            'booking_id'  => ['nullable', \App\Support\TenantRule::exists('bookings')],
-            'assigned_to' => ['nullable', \App\Support\TenantRule::exists('staff')],
+            'priority' => 'nullable|in:low,medium,high,urgent',
+            'due_date' => 'nullable|date',
+            'booking_id' => ['nullable', TenantRule::exists('bookings')],
+            'assigned_to' => ['nullable', TenantRule::exists('staff')],
         ]);
 
         Task::create($data);
@@ -52,11 +53,11 @@ class TaskController extends Controller
     public function update(Request $request, Task $task): RedirectResponse
     {
         $data = $request->validate([
-            'title'       => 'sometimes|string|max:255',
+            'title' => 'sometimes|string|max:255',
             'description' => 'nullable|string',
-            'priority'    => 'nullable|in:low,medium,high,urgent',
-            'status'      => 'nullable|in:pending,in_progress,completed,cancelled',
-            'due_date'    => 'nullable|date',
+            'priority' => 'nullable|in:low,medium,high,urgent',
+            'status' => 'nullable|in:pending,in_progress,completed,cancelled',
+            'due_date' => 'nullable|date',
             'assigned_to' => 'nullable|exists:staff,id',
         ]);
 
@@ -72,6 +73,7 @@ class TaskController extends Controller
     public function destroy(Task $task): RedirectResponse
     {
         $task->delete();
+
         return back()->with('success', 'Task deleted.');
     }
 }

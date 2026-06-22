@@ -10,15 +10,12 @@ class VenueController extends Controller
     public function index(Request $request)
     {
         $venues = Venue::active()
-            ->when($request->search, fn ($q, $search) =>
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
+            ->when($request->search, fn ($q, $search) => $q->where('name', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%")
             )
-            ->when($request->capacity, fn ($q, $cap) =>
-                $q->where('capacity_max', '>=', $cap)
+            ->when($request->capacity, fn ($q, $cap) => $q->where('capacity_max', '>=', $cap)
             )
-            ->when($request->max_price, fn ($q, $price) =>
-                $q->where('base_price', '<=', $price)
+            ->when($request->max_price, fn ($q, $price) => $q->where('base_price', '<=', $price)
             )
             ->orderBy('name')
             ->paginate(9);

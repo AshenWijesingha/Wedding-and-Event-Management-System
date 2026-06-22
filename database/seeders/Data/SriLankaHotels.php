@@ -2,6 +2,8 @@
 
 namespace Database\Seeders\Data;
 
+use Illuminate\Support\Str;
+
 /**
  * Real leading Sri Lankan hotels and their reception halls, used as the single
  * source of truth for venue + package seeding (see DemoDataSeeder /
@@ -25,22 +27,22 @@ class SriLankaHotels
         $halls = [];
 
         foreach (self::hotels() as $hotel) {
-            $banner = '/images/venues/'.$hotel['slug'].'.svg';
+            $banner = '/images/venues/' . $hotel['slug'] . '.svg';
 
             foreach ($hotel['halls'] as $hall) {
-                $name = $hotel['name'].' — '.$hall['hall'];
+                $name = $hotel['name'] . ' — ' . $hall['hall'];
 
                 $halls[] = [
-                    'name'              => $name,
-                    'slug'              => $hotel['slug'].'-'.\Illuminate\Support\Str::slug($hall['hall']),
-                    'description'       => $hall['description'].' Located at '.$hotel['name'].', '.$hotel['city'].'.',
-                    'capacity_min'      => $hall['capacity_min'],
-                    'capacity_max'      => $hall['capacity_max'],
-                    'base_price'        => $hall['base_price'],
+                    'name' => $name,
+                    'slug' => $hotel['slug'] . '-' . Str::slug($hall['hall']),
+                    'description' => $hall['description'] . ' Located at ' . $hotel['name'] . ', ' . $hotel['city'] . '.',
+                    'capacity_min' => $hall['capacity_min'],
+                    'capacity_max' => $hall['capacity_max'],
+                    'base_price' => $hall['base_price'],
                     'weekend_surcharge' => $hall['weekend_surcharge'],
-                    'amenities'         => array_values(array_unique(array_merge($hotel['services'], $hall['services'] ?? []))),
-                    'images'            => [$banner],
-                    'status'            => 'active',
+                    'amenities' => array_values(array_unique(array_merge($hotel['services'], $hall['services'] ?? []))),
+                    'images' => [$banner],
+                    'status' => 'active',
                 ];
             }
         }
@@ -57,70 +59,70 @@ class SriLankaHotels
     {
         return [
             [
-                'name'              => 'Poruwa Wedding — Silver',
-                'slug'             => 'poruwa-wedding-silver',
-                'description'      => 'Traditional Sri Lankan Poruwa ceremony with essential reception services for an elegant celebration.',
-                'base_price'       => 850000,
-                'min_guests'       => 100,
-                'max_guests'       => 300,
-                'guest_pricing'    => [['from' => 100, 'to' => 300, 'price_per_guest' => 6500]],
+                'name' => 'Poruwa Wedding — Silver',
+                'slug' => 'poruwa-wedding-silver',
+                'description' => 'Traditional Sri Lankan Poruwa ceremony with essential reception services for an elegant celebration.',
+                'base_price' => 850000,
+                'min_guests' => 100,
+                'max_guests' => 300,
+                'guest_pricing' => [['from' => 100, 'to' => 300, 'price_per_guest' => 6500]],
                 'included_services' => ['Decorated Poruwa', 'Welcome drinks', 'Buffet dinner', 'Wedding cake', 'Sound system', 'Wedding coordinator'],
-                'status'           => 'active',
+                'status' => 'active',
             ],
             [
-                'name'              => 'Poruwa Wedding — Gold',
-                'slug'             => 'poruwa-wedding-gold',
-                'description'      => 'A grander Poruwa celebration with premium menus, floral styling and live entertainment.',
-                'base_price'       => 1450000,
-                'min_guests'       => 150,
-                'max_guests'       => 500,
-                'guest_pricing'    => [['from' => 150, 'to' => 500, 'price_per_guest' => 8500]],
+                'name' => 'Poruwa Wedding — Gold',
+                'slug' => 'poruwa-wedding-gold',
+                'description' => 'A grander Poruwa celebration with premium menus, floral styling and live entertainment.',
+                'base_price' => 1450000,
+                'min_guests' => 150,
+                'max_guests' => 500,
+                'guest_pricing' => [['from' => 150, 'to' => 500, 'price_per_guest' => 8500]],
                 'included_services' => ['Decorated Poruwa & stage', 'Welcome cocktails', 'Premium buffet & live stations', 'Tiered wedding cake', 'Floral arrangements', 'Live band & DJ', 'Bridal suite', 'Wedding coordinator'],
-                'status'           => 'active',
+                'status' => 'active',
             ],
             [
-                'name'              => 'Poruwa Wedding — Platinum',
-                'slug'             => 'poruwa-wedding-platinum',
-                'description'      => 'The flagship luxury wedding experience with bespoke styling, fine dining and full event production.',
-                'base_price'       => 2750000,
-                'min_guests'       => 250,
-                'max_guests'       => 1000,
-                'guest_pricing'    => [['from' => 250, 'to' => 1000, 'price_per_guest' => 12500]],
+                'name' => 'Poruwa Wedding — Platinum',
+                'slug' => 'poruwa-wedding-platinum',
+                'description' => 'The flagship luxury wedding experience with bespoke styling, fine dining and full event production.',
+                'base_price' => 2750000,
+                'min_guests' => 250,
+                'max_guests' => 1000,
+                'guest_pricing' => [['from' => 250, 'to' => 1000, 'price_per_guest' => 12500]],
                 'included_services' => ['Bespoke Poruwa & themed décor', 'Champagne reception', 'Fine-dining plated & buffet menus', 'Designer wedding cake', 'Premium floral & lighting design', 'Live band, DJ & dance floor', 'LED video walls', 'Honeymoon suite', 'Dedicated planning team', 'Valet parking'],
-                'status'           => 'active',
+                'status' => 'active',
             ],
             [
-                'name'              => 'Nikah Reception',
-                'slug'             => 'nikah-reception',
-                'description'      => 'An elegant Nikah ceremony and reception with halal fine-dining and tasteful styling.',
-                'base_price'       => 1250000,
-                'min_guests'       => 150,
-                'max_guests'       => 600,
-                'guest_pricing'    => [['from' => 150, 'to' => 600, 'price_per_guest' => 7500]],
+                'name' => 'Nikah Reception',
+                'slug' => 'nikah-reception',
+                'description' => 'An elegant Nikah ceremony and reception with halal fine-dining and tasteful styling.',
+                'base_price' => 1250000,
+                'min_guests' => 150,
+                'max_guests' => 600,
+                'guest_pricing' => [['from' => 150, 'to' => 600, 'price_per_guest' => 7500]],
                 'included_services' => ['Nikah seating & décor', 'Halal premium buffet', 'Welcome beverages', 'Floral styling', 'Sound system', 'Event coordinator'],
-                'status'           => 'active',
+                'status' => 'active',
             ],
             [
-                'name'              => 'Homecoming Reception',
-                'slug'             => 'homecoming-reception',
-                'description'      => 'A refined homecoming dinner to celebrate the newlyweds with family and friends.',
-                'base_price'       => 950000,
-                'min_guests'       => 100,
-                'max_guests'       => 400,
-                'guest_pricing'    => [['from' => 100, 'to' => 400, 'price_per_guest' => 7000]],
+                'name' => 'Homecoming Reception',
+                'slug' => 'homecoming-reception',
+                'description' => 'A refined homecoming dinner to celebrate the newlyweds with family and friends.',
+                'base_price' => 950000,
+                'min_guests' => 100,
+                'max_guests' => 400,
+                'guest_pricing' => [['from' => 100, 'to' => 400, 'price_per_guest' => 7000]],
                 'included_services' => ['Stage & backdrop décor', 'Buffet dinner', 'Wedding cake', 'DJ & sound', 'Floral arrangements', 'Coordinator'],
-                'status'           => 'active',
+                'status' => 'active',
             ],
             [
-                'name'              => 'Corporate Gala Dinner',
-                'slug'             => 'corporate-gala-dinner',
-                'description'      => 'A premium corporate gala package with full AV production for awards nights and conferences.',
-                'base_price'       => 1100000,
-                'min_guests'       => 50,
-                'max_guests'       => 800,
-                'guest_pricing'    => [['from' => 50, 'to' => 800, 'price_per_guest' => 6000]],
+                'name' => 'Corporate Gala Dinner',
+                'slug' => 'corporate-gala-dinner',
+                'description' => 'A premium corporate gala package with full AV production for awards nights and conferences.',
+                'base_price' => 1100000,
+                'min_guests' => 50,
+                'max_guests' => 800,
+                'guest_pricing' => [['from' => 50, 'to' => 800, 'price_per_guest' => 6000]],
                 'included_services' => ['Stage & podium', 'Full AV & LED screens', 'Buffet & beverage service', 'Registration desk', 'Branding & signage support', 'Event manager'],
-                'status'           => 'active',
+                'status' => 'active',
             ],
         ];
     }

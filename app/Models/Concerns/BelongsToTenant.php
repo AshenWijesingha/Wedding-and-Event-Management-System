@@ -25,7 +25,7 @@ trait BelongsToTenant
 
         static::creating(function (Model $model) {
             if ($tenant = Tenant::current()) {
-                if (!$model->tenant_id) {
+                if (! $model->tenant_id) {
                     $model->tenant_id = $tenant->id;
                 }
             }

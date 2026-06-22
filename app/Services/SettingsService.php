@@ -3,10 +3,12 @@
 namespace App\Services;
 
 use App\Models\Tenant;
+use Carbon\Carbon;
 
 class SettingsService
 {
     private array $defaults;
+
     private ?Tenant $tenant;
 
     public function __construct(?Tenant $tenant = null)
@@ -48,9 +50,10 @@ class SettingsService
     public function getCategory(string $category): array
     {
         $defaults = data_get($this->defaults, $category, []);
-        
+
         if ($this->tenant) {
             $tenantSettings = $this->tenant->getSetting($category, []);
+
             return array_merge($defaults, $tenantSettings);
         }
 
@@ -63,7 +66,7 @@ class SettingsService
     public function getSchema(?string $category = null): array
     {
         $schema = config('eventpro.settings-schema', []);
-        
+
         if ($category) {
             return $schema[$category] ?? [];
         }
@@ -82,8 +85,8 @@ class SettingsService
 
         $formatted = number_format($amount, $decimals);
 
-        return $position === 'before' 
-            ? "{$symbol}{$formatted}" 
+        return $position === 'before'
+            ? "{$symbol}{$formatted}"
             : "{$formatted}{$symbol}";
     }
 
@@ -92,15 +95,16 @@ class SettingsService
      */
     public function formatDate($date): string
     {
-        if (!$date) {
+        if (! $date) {
             return '';
         }
 
         if (is_string($date)) {
-            $date = \Carbon\Carbon::parse($date);
+            $date = Carbon::parse($date);
         }
 
         $format = $this->get('general.date_format', 'd M Y');
+
         return $date->format($format);
     }
 
@@ -109,15 +113,16 @@ class SettingsService
      */
     public function formatTime($time): string
     {
-        if (!$time) {
+        if (! $time) {
             return '';
         }
 
         if (is_string($time)) {
-            $time = \Carbon\Carbon::parse($time);
+            $time = Carbon::parse($time);
         }
 
         $format = $this->get('general.time_format', 'h:i A');
+
         return $time->format($format);
     }
 

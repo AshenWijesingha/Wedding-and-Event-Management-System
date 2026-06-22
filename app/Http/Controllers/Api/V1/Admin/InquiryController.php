@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\InquiryResource;
 use App\Http\Traits\ApiResponse;
 use App\Models\Inquiry;
+use App\Support\TenantRule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -16,21 +17,16 @@ class InquiryController extends Controller
     public function index(Request $request): JsonResponse
     {
         $inquiries = Inquiry::with(['client', 'venue', 'package'])
-            ->when($request->status, fn ($q, $status) =>
-                $q->where('status', $status)
+            ->when($request->status, fn ($q, $status) => $q->where('status', $status)
             )
-            ->when($request->event_type, fn ($q, $type) =>
-                $q->where('event_type', $type)
+            ->when($request->event_type, fn ($q, $type) => $q->where('event_type', $type)
             )
-            ->when($request->search, fn ($q, $search) =>
-                $q->whereHas('client', fn ($cq) =>
-                    $cq->where('first_name', 'like', "%{$search}%")
-                       ->orWhere('last_name', 'like', "%{$search}%")
-                       ->orWhere('email', 'like', "%{$search}%")
-                )
+            ->when($request->search, fn ($q, $search) => $q->whereHas('client', fn ($cq) => $cq->where('first_name', 'like', "%{$search}%")
+                ->orWhere('last_name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
             )
-            ->when($request->assigned_to, fn ($q, $userId) =>
-                $q->where('assigned_to', $userId)
+            )
+            ->when($request->assigned_to, fn ($q, $userId) => $q->where('assigned_to', $userId)
             )
             ->orderBy($request->sort_by ?? 'created_at', $request->sort_dir ?? 'desc')
             ->paginate($request->per_page ?? 15);
@@ -41,9 +37,9 @@ class InquiryController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'client_id' => ['required', \App\Support\TenantRule::exists('clients')],
-            'venue_id' => ['nullable', \App\Support\TenantRule::exists('venues')],
-            'package_id' => ['nullable', \App\Support\TenantRule::exists('packages')],
+            'client_id' => ['required', TenantRule::exists('clients')],
+            'venue_id' => ['nullable', TenantRule::exists('venues')],
+            'package_id' => ['nullable', TenantRule::exists('packages')],
             'event_type' => 'required|string|max:100',
             'preferred_date' => 'required|date|after_or_equal:today',
             'alternate_date' => 'nullable|date|after_or_equal:today',
@@ -52,7 +48,7 @@ class InquiryController extends Controller
             'budget_range_max' => 'nullable|numeric|min:0|gte:budget_range_min',
             'message' => 'nullable|string',
             'source' => 'nullable|string|max:100',
-            'assigned_to' => ['nullable', \App\Support\TenantRule::exists('users')],
+            'assigned_to' => ['nullable', TenantRule::exists('users')],
             'notes' => 'nullable|string',
         ]);
 
@@ -72,8 +68,8 @@ class InquiryController extends Controller
     public function update(Request $request, Inquiry $inquiry): JsonResponse
     {
         $validated = $request->validate([
-            'venue_id' => ['nullable', \App\Support\TenantRule::exists('venues')],
-            'package_id' => ['nullable', \App\Support\TenantRule::exists('packages')],
+            'venue_id' => ['nullable', TenantRule::exists('venues')],
+            'package_id' => ['nullable', TenantRule::exists('packages')],
             'event_type' => 'sometimes|string|max:100',
             'preferred_date' => 'sometimes|date',
             'alternate_date' => 'nullable|date',

@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Multitenancy\Models\Tenant as BaseTenant;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Tenant extends BaseTenant
 {
@@ -80,7 +80,7 @@ class Tenant extends BaseTenant
     public function hasFeature(string $feature): bool
     {
         $plan = $this->plan;
-        if (!$plan) {
+        if (! $plan) {
             return false;
         }
 

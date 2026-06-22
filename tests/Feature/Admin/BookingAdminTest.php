@@ -3,9 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\Booking;
-use App\Models\Client;
 use App\Models\User;
-use App\Models\Venue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

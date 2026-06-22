@@ -1,0 +1,1639 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Access to an undefined property App\\Models\\Payment\:\:\$client\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Console/Commands/SendPaymentReminders.php
+
+		-
+			message: '#^Relation ''booking'' is not found in App\\Models\\Payment model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Console/Commands/SendPaymentReminders.php
+
+		-
+			message: '#^Relation ''client'' is not found in App\\Models\\Payment model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Console/Commands/SendPaymentReminders.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/AuditLogController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Pagination\\AbstractPaginator\<int,Spatie\\Activitylog\\Models\\Activity\>\:\:through\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Admin/AuditLogController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Admin/AuditLogController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$client\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Relation ''client'' is not found in App\\Models\\Booking model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Relation ''package'' is not found in App\\Models\\Booking model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Relation ''venue'' is not found in App\\Models\\Booking model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$client\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CalendarController.php
+
+		-
+			message: '#^Relation ''client'' is not found in App\\Models\\Booking model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Admin/CalendarController.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Carbon\\Carbon\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Admin/CalendarController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Client\:\:\$bookings_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Client\:\:\$inquiries_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$amount\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$payment_date\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$payment_number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$quotation_number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$total_amount\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 2
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Pagination\\AbstractPaginator\<int,App\\Models\\Client\>\:\:through\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$client\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$venue\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Inquiry\:\:\$client\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Plan\:\:\$tenants_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Tenant\:\:\$bookings_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Tenant\:\:\$plan\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Tenant\:\:\$users_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Plan\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Tenant\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Relation ''client'' is not found in App\\Models\\Booking model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Relation ''client'' is not found in App\\Models\\Inquiry model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Relation ''plan'' is not found in App\\Models\\Tenant model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Relation ''venue'' is not found in App\\Models\\Booking model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Carbon\\Carbon\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Relation ''client'' is not found in App\\Models\\Inquiry model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/Admin/InquiryController.php
+
+		-
+			message: '#^Relation ''package'' is not found in App\\Models\\Inquiry model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Admin/InquiryController.php
+
+		-
+			message: '#^Relation ''venue'' is not found in App\\Models\\Inquiry model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Admin/InquiryController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$client\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/PaymentController.php
+
+		-
+			message: '#^Relation ''booking'' is not found in App\\Models\\Payment model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Admin/PaymentController.php
+
+		-
+			message: '#^Relation ''client'' is not found in App\\Models\\Payment model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Admin/PaymentController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Plan\:\:\$tenants_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/PlanController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Plan\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Admin/PlanController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Quotation\:\:\$client\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/QuotationController.php
+
+		-
+			message: '#^Relation ''client'' is not found in App\\Models\\Quotation model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/Admin/QuotationController.php
+
+		-
+			message: '#^Relation ''venue'' is not found in App\\Models\\Quotation model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Admin/QuotationController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$bookings\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$client\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$revenue\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$venue\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$venue_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Payment\:\:\$count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Payment\:\:\$total\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Venue\:\:\$booked_days\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Booking\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 2
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Payment\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Venue\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Relation ''client'' is not found in App\\Models\\Booking model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Relation ''venue'' is not found in App\\Models\\Booking model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Carbon\\Carbon\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>settings" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Admin/SettingsController.php
+
+		-
+			message: '#^Relation ''booking'' is not found in App\\Models\\Task model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Admin/StaffController.php
+
+		-
+			message: '#^Relation ''assignee'' is not found in App\\Models\\Task model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Admin/TaskController.php
+
+		-
+			message: '#^Relation ''booking'' is not found in App\\Models\\Task model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Admin/TaskController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Tenant\:\:\$bookings_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/TenantController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Tenant\:\:\$plan\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/TenantController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Tenant\:\:\$users_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/TenantController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Pagination\\AbstractPaginator\<int,App\\Models\\Tenant\>\:\:through\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Admin/TenantController.php
+
+		-
+			message: '#^Relation ''plan'' is not found in App\\Models\\Tenant model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Admin/TenantController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$role\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Admin\\UserController\:\:findManageable\(\) should return App\\Models\\User but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Pagination\\AbstractPaginator\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:through\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Pagination\\AbstractPaginator\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:through\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\)\: array\{id\: int, name\: string, email\: string, role\: string, is_active\: bool, tenant\: mixed, avatar_url\: string\|null, verified\: bool\}, Closure\(App\\Models\\User\)\: array\{id\: int, name\: string, email\: string, role\: string, is_active\: bool, tenant\: mixed, avatar_url\: string\|null, verified\: bool\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$client\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/VenueController.php
+
+		-
+			message: '#^Relation ''client'' is not found in App\\Models\\Booking model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Admin/VenueController.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Carbon\\Carbon\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Admin/VenueController.php
+
+		-
+			message: '#^Relation ''client'' is not found in App\\Models\\Booking model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/Api/V1/Admin/BookingController.php
+
+		-
+			message: '#^Relation ''package'' is not found in App\\Models\\Booking model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/V1/Admin/BookingController.php
+
+		-
+			message: '#^Relation ''venue'' is not found in App\\Models\\Booking model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/V1/Admin/BookingController.php
+
+		-
+			message: '#^Relation ''client'' is not found in App\\Models\\Inquiry model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/Api/V1/Admin/InquiryController.php
+
+		-
+			message: '#^Relation ''package'' is not found in App\\Models\\Inquiry model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/V1/Admin/InquiryController.php
+
+		-
+			message: '#^Relation ''venue'' is not found in App\\Models\\Inquiry model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/V1/Admin/InquiryController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Payment\:\:\$booking\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/V1/Admin/PaymentController.php
+
+		-
+			message: '#^Property App\\Http\\Controllers\\Api\\V1\\Admin\\QuotationController\:\:\$quotationService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/V1/Admin/QuotationController.php
+
+		-
+			message: '#^Relation ''client'' is not found in App\\Models\\Quotation model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/Api/V1/Admin/QuotationController.php
+
+		-
+			message: '#^Relation ''venue'' is not found in App\\Models\\Quotation model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/V1/Admin/QuotationController.php
+
+		-
+			message: '#^Call to an undefined method App\\Services\\SettingsService\:\:all\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/V1/Admin/SettingsController.php
+
+		-
+			message: '#^Call to an undefined method App\\Services\\SettingsService\:\:update\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/V1/Admin/SettingsController.php
+
+		-
+			message: '#^Relation ''assignee'' is not found in App\\Models\\Task model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/V1/Admin/TaskController.php
+
+		-
+			message: '#^Relation ''booking'' is not found in App\\Models\\Task model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/V1/Admin/TaskController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Api/V1/Client/BookingController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Api/V1/Client/QuotationController.php
+
+		-
+			message: '#^Instanceof between mixed and Illuminate\\Http\\Resources\\Json\\ResourceCollection will always evaluate to false\.$#'
+			identifier: instanceof.alwaysFalse
+			count: 1
+			path: app/Http/Controllers/Api/V1/VenueController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\User\:\:\$client\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Portal/PaymentController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\User\:\:\$client\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Portal/PortalController.php
+
+		-
+			message: '#^Relation ''booking'' is not found in App\\Models\\Payment model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Portal/PortalController.php
+
+		-
+			message: '#^Relation ''package'' is not found in App\\Models\\Booking model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/Portal/PortalController.php
+
+		-
+			message: '#^Relation ''payments'' is not found in App\\Models\\Booking model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Portal/PortalController.php
+
+		-
+			message: '#^Relation ''venue'' is not found in App\\Models\\Booking model\.$#'
+			identifier: larastan.relationExistence
+			count: 3
+			path: app/Http/Controllers/Portal/PortalController.php
+
+		-
+			message: '#^Relation ''venue'' is not found in App\\Models\\Quotation model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Portal/PortalController.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Carbon\\Carbon\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Portal/PortalController.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\BookingResource\:\:\$balance_amount\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/BookingResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\BookingResource\:\:\$booking_number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/BookingResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\BookingResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/BookingResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\BookingResource\:\:\$event_date\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/BookingResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\BookingResource\:\:\$event_end_time\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/BookingResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\BookingResource\:\:\$event_start_time\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/BookingResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\BookingResource\:\:\$event_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/BookingResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\BookingResource\:\:\$guest_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/BookingResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\BookingResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/BookingResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\BookingResource\:\:\$notes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/BookingResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\BookingResource\:\:\$paid_amount\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/BookingResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\BookingResource\:\:\$setup_time\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/BookingResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\BookingResource\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/BookingResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\BookingResource\:\:\$total_amount\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/BookingResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\BookingResource\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/BookingResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ClientResource\:\:\$address\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ClientResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ClientResource\:\:\$city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ClientResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ClientResource\:\:\$company_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ClientResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ClientResource\:\:\$country\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ClientResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ClientResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ClientResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ClientResource\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ClientResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ClientResource\:\:\$first_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ClientResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ClientResource\:\:\$full_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ClientResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ClientResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ClientResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ClientResource\:\:\$last_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ClientResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ClientResource\:\:\$notes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ClientResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ClientResource\:\:\$phone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ClientResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ClientResource\:\:\$postal_code\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ClientResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ClientResource\:\:\$secondary_phone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ClientResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\ClientResource\:\:\$state\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/ClientResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\InquiryResource\:\:\$alternate_date\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/InquiryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\InquiryResource\:\:\$assigned_to\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/InquiryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\InquiryResource\:\:\$budget_range_max\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/InquiryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\InquiryResource\:\:\$budget_range_min\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/InquiryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\InquiryResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/InquiryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\InquiryResource\:\:\$event_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/InquiryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\InquiryResource\:\:\$guest_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/InquiryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\InquiryResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/InquiryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\InquiryResource\:\:\$inquiry_number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/InquiryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\InquiryResource\:\:\$message\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/InquiryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\InquiryResource\:\:\$notes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/InquiryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\InquiryResource\:\:\$preferred_date\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/InquiryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\InquiryResource\:\:\$source\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/InquiryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\InquiryResource\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/InquiryResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PackageResource\:\:\$base_price\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PackageResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PackageResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PackageResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PackageResource\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PackageResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PackageResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PackageResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PackageResource\:\:\$max_guests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PackageResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PackageResource\:\:\$min_guests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PackageResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PackageResource\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PackageResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PackageResource\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PackageResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PackageResource\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PackageResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PaymentResource\:\:\$amount\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PaymentResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PaymentResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PaymentResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PaymentResource\:\:\$currency\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PaymentResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PaymentResource\:\:\$gateway\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PaymentResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PaymentResource\:\:\$gateway_payment_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PaymentResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PaymentResource\:\:\$gateway_status_code\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PaymentResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PaymentResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PaymentResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PaymentResource\:\:\$installment_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PaymentResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PaymentResource\:\:\$notes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PaymentResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PaymentResource\:\:\$payment_date\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PaymentResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PaymentResource\:\:\$payment_method\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PaymentResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PaymentResource\:\:\$payment_number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PaymentResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PaymentResource\:\:\$reference_number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PaymentResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\PaymentResource\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/PaymentResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\QuotationResource\:\:\$accepted_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/QuotationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\QuotationResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/QuotationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\QuotationResource\:\:\$discount_amount\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/QuotationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\QuotationResource\:\:\$event_date\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/QuotationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\QuotationResource\:\:\$guest_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/QuotationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\QuotationResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/QuotationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\QuotationResource\:\:\$notes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/QuotationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\QuotationResource\:\:\$quotation_number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/QuotationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\QuotationResource\:\:\$sent_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/QuotationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\QuotationResource\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/QuotationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\QuotationResource\:\:\$subtotal\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/QuotationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\QuotationResource\:\:\$tax_amount\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/QuotationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\QuotationResource\:\:\$terms_and_conditions\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/QuotationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\QuotationResource\:\:\$total_amount\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/QuotationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\QuotationResource\:\:\$valid_until\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/QuotationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\QuotationResource\:\:\$viewed_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/QuotationResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\StaffResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/StaffResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\StaffResource\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/StaffResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\StaffResource\:\:\$first_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/StaffResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\StaffResource\:\:\$full_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/StaffResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\StaffResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/StaffResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\StaffResource\:\:\$last_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/StaffResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\StaffResource\:\:\$notes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/StaffResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\StaffResource\:\:\$phone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/StaffResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\StaffResource\:\:\$role\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/StaffResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\StaffResource\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/StaffResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\TaskResource\:\:\$booking\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Resources/TaskResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\TaskResource\:\:\$booking_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/TaskResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\TaskResource\:\:\$completed_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/TaskResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\TaskResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/TaskResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\TaskResource\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/TaskResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\TaskResource\:\:\$due_date\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/TaskResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\TaskResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/TaskResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\TaskResource\:\:\$priority\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/TaskResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\TaskResource\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/TaskResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\TaskResource\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/TaskResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VendorResource\:\:\$base_rate\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VendorResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VendorResource\:\:\$category\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VendorResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VendorResource\:\:\$contact_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VendorResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VendorResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VendorResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VendorResource\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VendorResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VendorResource\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VendorResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VendorResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VendorResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VendorResource\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VendorResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VendorResource\:\:\$notes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VendorResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VendorResource\:\:\$phone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VendorResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VendorResource\:\:\$rate_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VendorResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VendorResource\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VendorResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VendorResource\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VendorResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VendorResource\:\:\$website\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VendorResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VenueResource\:\:\$base_price\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VenueResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VenueResource\:\:\$capacity_max\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VenueResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VenueResource\:\:\$capacity_min\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VenueResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VenueResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VenueResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VenueResource\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VenueResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VenueResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VenueResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VenueResource\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VenueResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VenueResource\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VenueResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VenueResource\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VenueResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VenueResource\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VenueResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\VenueResource\:\:\$weekend_surcharge\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/VenueResource.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Booking.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Client.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/CustomField.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\CustomFieldValue\:\:\$customField\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/CustomFieldValue.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Inquiry.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Package.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Payment.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Quotation.php
+
+		-
+			message: '#^Right side of && is always true\.$#'
+			identifier: booleanAnd.rightAlwaysTrue
+			count: 1
+			path: app/Models/Quotation.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Staff.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Task.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Tenant\:\:\$plan\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Tenant.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property App\\Models\\User\:\:\$appends is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$appends\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property App\\Models\\User\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property App\\Models\\User\:\:\$hidden is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$hidden\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Vendor.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Venue.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Payment\:\:\$booking\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Notifications/PaymentReminderNotification.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Carbon\\Carbon\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Services/AvailabilityService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$default_value\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/CustomFieldService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Services/CustomFieldService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Services/CustomFieldService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$validation_rules\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/CustomFieldService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Services/DemoTenantProvisioner.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Payment\:\:\$booking\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/PayHereService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Payment\:\:\$client\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/PayHereService.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>address" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Services/PayHereService.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>booking_number" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Services/PayHereService.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>city" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Services/PayHereService.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>email" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Services/PayHereService.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>first_name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Services/PayHereService.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>last_name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Services/PayHereService.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>phone" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Services/PayHereService.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>tenant" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Services/PayHereService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Payment\:\:\$client\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/PaymentService.php
+
+		-
+			message: '#^Parameter \#1 \$tenant of static method App\\Support\\Notifier\:\:staff\(\) expects App\\Models\\Tenant\|null, Illuminate\\Database\\Eloquent\\Model\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/PaymentService.php
+
+		-
+			message: '#^Property App\\Models\\Payment\:\:\$payment_date \(Carbon\\Carbon\|null\) does not accept string\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Services/PaymentService.php

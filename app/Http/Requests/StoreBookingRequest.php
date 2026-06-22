@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use App\Models\Booking;
 use App\Models\Venue;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class StoreBookingRequest extends FormRequest
 {
@@ -17,17 +16,17 @@ class StoreBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'client_id'        => ['required', 'exists:clients,id'],
-            'venue_id'         => ['required', 'exists:venues,id'],
-            'package_id'       => ['nullable', 'exists:packages,id'],
-            'event_type'       => ['required', 'string', 'max:100'],
-            'event_date'       => ['required', 'date', 'after:today'],
-            'setup_time'       => ['nullable', 'date_format:H:i'],
+            'client_id' => ['required', 'exists:clients,id'],
+            'venue_id' => ['required', 'exists:venues,id'],
+            'package_id' => ['nullable', 'exists:packages,id'],
+            'event_type' => ['required', 'string', 'max:100'],
+            'event_date' => ['required', 'date', 'after:today'],
+            'setup_time' => ['nullable', 'date_format:H:i'],
             'event_start_time' => ['nullable', 'date_format:H:i'],
-            'event_end_time'   => ['nullable', 'date_format:H:i', 'after:event_start_time'],
-            'guest_count'      => ['required', 'integer', 'min:1'],
-            'total_amount'     => ['required', 'numeric', 'min:0'],
-            'notes'            => ['nullable', 'string', 'max:2000'],
+            'event_end_time' => ['nullable', 'date_format:H:i', 'after:event_start_time'],
+            'guest_count' => ['required', 'integer', 'min:1'],
+            'total_amount' => ['required', 'numeric', 'min:0'],
+            'notes' => ['nullable', 'string', 'max:2000'],
         ];
     }
 
@@ -41,15 +40,14 @@ class StoreBookingRequest extends FormRequest
 
     private function checkVenueAvailability($validator): void
     {
-        if (!$this->filled(['venue_id', 'event_date'])) {
+        if (! $this->filled(['venue_id', 'event_date'])) {
             return;
         }
 
         $conflict = Booking::where('venue_id', $this->venue_id)
             ->where('event_date', $this->event_date)
             ->whereNotIn('status', ['cancelled'])
-            ->when($this->route('booking'), fn ($q) =>
-                $q->where('id', '!=', $this->route('booking')->id)
+            ->when($this->route('booking'), fn ($q) => $q->where('id', '!=', $this->route('booking')->id)
             )
             ->exists();
 
@@ -63,12 +61,12 @@ class StoreBookingRequest extends FormRequest
 
     private function checkGuestCapacity($validator): void
     {
-        if (!$this->filled(['venue_id', 'guest_count'])) {
+        if (! $this->filled(['venue_id', 'guest_count'])) {
             return;
         }
 
         $venue = Venue::find($this->venue_id);
-        if (!$venue) {
+        if (! $venue) {
             return;
         }
 

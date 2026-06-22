@@ -32,19 +32,19 @@ class PricingService
         ];
 
         // Venue pricing
-        if (!empty($params['venue_id'])) {
+        if (! empty($params['venue_id'])) {
             $venue = Venue::findOrFail($params['venue_id']);
             $breakdown['venue'] = $this->calculateVenuePrice($venue, $params);
         }
 
         // Package pricing
-        if (!empty($params['package_id'])) {
+        if (! empty($params['package_id'])) {
             $package = Package::findOrFail($params['package_id']);
             $breakdown['package'] = $this->calculatePackagePrice($package, $params['guest_count'] ?? 0);
         }
 
         // Services
-        if (!empty($params['services'])) {
+        if (! empty($params['services'])) {
             foreach ($params['services'] as $service) {
                 $breakdown['services'][] = $this->calculateServicePrice($service, $params['guest_count'] ?? 0);
             }
@@ -56,14 +56,14 @@ class PricingService
         // Calculate subtotal
         $servicesTotal = array_sum(array_column($breakdown['services'], 'total'));
         $surchargesTotal = array_sum(array_column($breakdown['surcharges'], 'amount'));
-        
-        $breakdown['subtotal'] = $breakdown['venue'] 
-            + $breakdown['package'] 
+
+        $breakdown['subtotal'] = $breakdown['venue']
+            + $breakdown['package']
             + $servicesTotal
             + $surchargesTotal;
 
         // Apply discount
-        if (!empty($params['discount'])) {
+        if (! empty($params['discount'])) {
             $breakdown['discount'] = $this->calculateDiscount($breakdown['subtotal'], $params['discount']);
         }
 
@@ -84,8 +84,8 @@ class PricingService
     private function calculateVenuePrice(Venue $venue, array $params): float
     {
         $price = (float) $venue->base_price;
-        
-        if (!empty($params['event_date'])) {
+
+        if (! empty($params['event_date'])) {
             $eventDate = Carbon::parse($params['event_date']);
 
             // Weekend surcharge
@@ -135,14 +135,14 @@ class PricingService
     {
         $surcharges = [];
 
-        if (!empty($params['event_date'])) {
+        if (! empty($params['event_date'])) {
             $eventDate = Carbon::parse($params['event_date']);
 
             // Peak season surcharge
             if ($this->isPeakSeason($eventDate)) {
                 $rate = $this->settings->get('pricing.peak_season_surcharge', 15);
                 $baseAmount = $breakdown['venue'] + $breakdown['package'];
-                
+
                 if ($baseAmount > 0 && $rate > 0) {
                     $surcharges[] = [
                         'name' => 'Peak Season Surcharge',
@@ -162,6 +162,7 @@ class PricingService
     private function isPeakSeason(Carbon $date): bool
     {
         $peakMonths = $this->settings->get('pricing.peak_months', [12, 1, 2]);
+
         return in_array($date->month, $peakMonths);
     }
 
@@ -173,7 +174,7 @@ class PricingService
         if ($discount['type'] === 'percentage') {
             return round($subtotal * ($discount['value'] / 100), 2);
         }
-        
+
         return min((float) $discount['value'], $subtotal);
     }
 
@@ -183,6 +184,7 @@ class PricingService
     public function calculateDeposit(float $totalAmount): float
     {
         $percentage = $this->settings->get('booking.deposit_percentage', 25);
+
         return round($totalAmount * ($percentage / 100), 2);
     }
 
@@ -197,9 +199,9 @@ class PricingService
 
         foreach ($schedule as $index => $installment) {
             $amount = round($totalAmount * ($installment['percentage'] / 100), 2);
-            
+
             // Calculate due date (rough estimate based on installment position)
-            $dueDate = match($index) {
+            $dueDate = match ($index) {
                 0 => now()->addDays(7), // First payment due soon
                 count($schedule) - 1 => $eventDate->copy()->subDays(7), // Final payment before event
                 default => $eventDate->copy()->subDays(30 * (count($schedule) - $index)), // Middle payments

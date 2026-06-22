@@ -18,9 +18,9 @@ class InquiryApiTest extends TestCase
         $this->assertDatabaseCount('inquiries', 0);
 
         $response = $this->postJson('/api/v1/inquiries', [
-            'name'    => 'Jane Smith',
-            'email'   => 'jane@example.com',
-            'phone'   => '0771234567',
+            'name' => 'Jane Smith',
+            'email' => 'jane@example.com',
+            'phone' => '0771234567',
             'message' => 'I would like to book a venue for my wedding.',
         ]);
 
@@ -29,7 +29,7 @@ class InquiryApiTest extends TestCase
         // Inquiries are normalized: name/email live on the related client record.
         $this->assertDatabaseHas('clients', [
             'first_name' => 'Jane',
-            'email'      => 'jane@example.com',
+            'email' => 'jane@example.com',
         ]);
     }
 
@@ -38,8 +38,8 @@ class InquiryApiTest extends TestCase
         Tenant::factory()->create();
 
         $response = $this->postJson('/api/v1/inquiries', [
-            'name'    => 'John Doe',
-            'email'   => 'john@example.com',
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
             'message' => 'Interested in the grand ballroom.',
         ]);
 
@@ -53,13 +53,13 @@ class InquiryApiTest extends TestCase
     public function test_inquiry_with_venue_is_stored(): void
     {
         $tenant = Tenant::factory()->create();
-        $venue  = Venue::factory()->create(['tenant_id' => $tenant->id]);
+        $venue = Venue::factory()->create(['tenant_id' => $tenant->id]);
 
         $response = $this->postJson('/api/v1/inquiries', [
-            'name'       => 'Alice',
-            'email'      => 'alice@example.com',
-            'message'    => 'Venue inquiry.',
-            'venue_id'   => $venue->id,
+            'name' => 'Alice',
+            'email' => 'alice@example.com',
+            'message' => 'Venue inquiry.',
+            'venue_id' => $venue->id,
             'event_date' => now()->addMonths(3)->toDateString(),
         ]);
 

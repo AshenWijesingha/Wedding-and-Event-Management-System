@@ -19,10 +19,10 @@ class PaymentFlowTest extends TestCase
     {
         $tenant = Tenant::factory()->create();
         $tenant->setSetting('payhere', [
-            'merchant_id'     => $merchantId,
+            'merchant_id' => $merchantId,
             'merchant_secret' => $secret,
-            'sandbox'         => true,
-            'currency'        => 'LKR',
+            'sandbox' => true,
+            'currency' => 'LKR',
         ]);
 
         return $tenant->fresh();
@@ -31,14 +31,14 @@ class PaymentFlowTest extends TestCase
     private function bookingFor(Tenant $tenant, array $attrs = []): Booking
     {
         $client = Client::factory()->create(['tenant_id' => $tenant->id]);
-        $venue  = Venue::factory()->create(['tenant_id' => $tenant->id]);
+        $venue = Venue::factory()->create(['tenant_id' => $tenant->id]);
 
         return Booking::factory()->create(array_merge([
-            'tenant_id'      => $tenant->id,
-            'client_id'      => $client->id,
-            'venue_id'       => $venue->id,
-            'total_amount'   => 10000,
-            'paid_amount'    => 0,
+            'tenant_id' => $tenant->id,
+            'client_id' => $client->id,
+            'venue_id' => $venue->id,
+            'total_amount' => 10000,
+            'paid_amount' => 0,
             'balance_amount' => 10000,
         ], $attrs));
     }
@@ -46,12 +46,12 @@ class PaymentFlowTest extends TestCase
     private function signedPayload(string $secret, array $over = []): array
     {
         $base = array_merge([
-            'merchant_id'      => '1211149',
-            'order_id'         => '1',
-            'payhere_amount'   => '5000.00',
+            'merchant_id' => '1211149',
+            'order_id' => '1',
+            'payhere_amount' => '5000.00',
             'payhere_currency' => 'LKR',
-            'status_code'      => '2',
-            'payment_id'       => 'PH-TEST-001',
+            'status_code' => '2',
+            'payment_id' => 'PH-TEST-001',
         ], $over);
 
         $base['md5sig'] = strtoupper(md5(
@@ -70,15 +70,15 @@ class PaymentFlowTest extends TestCase
 
     public function test_webhook_success_completes_payment_and_updates_booking(): void
     {
-        $tenant  = $this->tenantWithPayHere();
+        $tenant = $this->tenantWithPayHere();
         $booking = $this->bookingFor($tenant);
         $payment = Payment::factory()->pending()->create([
-            'tenant_id'  => $tenant->id,
+            'tenant_id' => $tenant->id,
             'booking_id' => $booking->id,
-            'client_id'  => $booking->client_id,
-            'gateway'    => 'payhere',
-            'amount'     => 5000,
-            'currency'   => 'LKR',
+            'client_id' => $booking->client_id,
+            'gateway' => 'payhere',
+            'amount' => 5000,
+            'currency' => 'LKR',
         ]);
 
         $payload = $this->signedPayload('sample_secret', ['order_id' => (string) $payment->id]);
@@ -93,14 +93,14 @@ class PaymentFlowTest extends TestCase
 
     public function test_webhook_bad_signature_rejected_no_state_change(): void
     {
-        $tenant  = $this->tenantWithPayHere();
+        $tenant = $this->tenantWithPayHere();
         $booking = $this->bookingFor($tenant);
         $payment = Payment::factory()->pending()->create([
-            'tenant_id'  => $tenant->id,
+            'tenant_id' => $tenant->id,
             'booking_id' => $booking->id,
-            'client_id'  => $booking->client_id,
-            'amount'     => 5000,
-            'currency'   => 'LKR',
+            'client_id' => $booking->client_id,
+            'amount' => 5000,
+            'currency' => 'LKR',
         ]);
 
         $payload = $this->signedPayload('sample_secret', ['order_id' => (string) $payment->id]);
@@ -114,19 +114,19 @@ class PaymentFlowTest extends TestCase
 
     public function test_webhook_amount_mismatch_rejected(): void
     {
-        $tenant  = $this->tenantWithPayHere();
+        $tenant = $this->tenantWithPayHere();
         $booking = $this->bookingFor($tenant);
         $payment = Payment::factory()->pending()->create([
-            'tenant_id'  => $tenant->id,
+            'tenant_id' => $tenant->id,
             'booking_id' => $booking->id,
-            'client_id'  => $booking->client_id,
-            'amount'     => 5000,
-            'currency'   => 'LKR',
+            'client_id' => $booking->client_id,
+            'amount' => 5000,
+            'currency' => 'LKR',
         ]);
 
         // Sign a payload whose amount differs from the stored payment amount.
         $payload = $this->signedPayload('sample_secret', [
-            'order_id'       => (string) $payment->id,
+            'order_id' => (string) $payment->id,
             'payhere_amount' => '9999.00',
         ]);
 
@@ -141,16 +141,16 @@ class PaymentFlowTest extends TestCase
 
         $booking = $this->bookingFor($tenantA);
         $payment = Payment::factory()->pending()->create([
-            'tenant_id'  => $tenantA->id,
+            'tenant_id' => $tenantA->id,
             'booking_id' => $booking->id,
-            'client_id'  => $booking->client_id,
-            'amount'     => 5000,
-            'currency'   => 'LKR',
+            'client_id' => $booking->client_id,
+            'amount' => 5000,
+            'currency' => 'LKR',
         ]);
 
         // Signed with tenant B's secret/merchant for a tenant A payment.
         $payload = $this->signedPayload('secret_b', [
-            'order_id'    => (string) $payment->id,
+            'order_id' => (string) $payment->id,
             'merchant_id' => 'MERCH_B',
         ]);
 
@@ -160,14 +160,14 @@ class PaymentFlowTest extends TestCase
 
     public function test_webhook_replay_is_idempotent(): void
     {
-        $tenant  = $this->tenantWithPayHere();
+        $tenant = $this->tenantWithPayHere();
         $booking = $this->bookingFor($tenant);
         $payment = Payment::factory()->pending()->create([
-            'tenant_id'  => $tenant->id,
+            'tenant_id' => $tenant->id,
             'booking_id' => $booking->id,
-            'client_id'  => $booking->client_id,
-            'amount'     => 5000,
-            'currency'   => 'LKR',
+            'client_id' => $booking->client_id,
+            'amount' => 5000,
+            'currency' => 'LKR',
         ]);
 
         $payload = $this->signedPayload('sample_secret', ['order_id' => (string) $payment->id]);
@@ -181,18 +181,18 @@ class PaymentFlowTest extends TestCase
 
     public function test_webhook_canceled_marks_failed_booking_untouched(): void
     {
-        $tenant  = $this->tenantWithPayHere();
+        $tenant = $this->tenantWithPayHere();
         $booking = $this->bookingFor($tenant);
         $payment = Payment::factory()->pending()->create([
-            'tenant_id'  => $tenant->id,
+            'tenant_id' => $tenant->id,
             'booking_id' => $booking->id,
-            'client_id'  => $booking->client_id,
-            'amount'     => 5000,
-            'currency'   => 'LKR',
+            'client_id' => $booking->client_id,
+            'amount' => 5000,
+            'currency' => 'LKR',
         ]);
 
         $payload = $this->signedPayload('sample_secret', [
-            'order_id'    => (string) $payment->id,
+            'order_id' => (string) $payment->id,
             'status_code' => '-1',
         ]);
 
@@ -211,12 +211,12 @@ class PaymentFlowTest extends TestCase
 
     public function test_admin_records_manual_payment_and_updates_booking(): void
     {
-        $admin   = User::factory()->admin()->create();
+        $admin = User::factory()->admin()->create();
         $booking = $this->bookingFor(Tenant::find($admin->tenant_id));
 
         $this->actingAs($admin)
             ->post("/admin/bookings/{$booking->id}/payments", [
-                'amount'         => 4000,
+                'amount' => 4000,
                 'payment_method' => 'cash',
             ])
             ->assertRedirect();
@@ -224,20 +224,20 @@ class PaymentFlowTest extends TestCase
         $this->assertEquals(4000, $booking->fresh()->paid_amount);
         $this->assertEquals(6000, $booking->fresh()->balance_amount);
         $this->assertDatabaseHas('payments', [
-            'booking_id'  => $booking->id,
-            'status'      => 'completed',
+            'booking_id' => $booking->id,
+            'status' => 'completed',
             'received_by' => $admin->id,
         ]);
     }
 
     public function test_manual_overpay_blocked_without_override(): void
     {
-        $admin   = User::factory()->admin()->create();
+        $admin = User::factory()->admin()->create();
         $booking = $this->bookingFor(Tenant::find($admin->tenant_id));
 
         $this->actingAs($admin)
             ->post("/admin/bookings/{$booking->id}/payments", [
-                'amount'         => 99999,
+                'amount' => 99999,
                 'payment_method' => 'cash',
             ])
             ->assertSessionHasErrors('amount');
@@ -247,12 +247,12 @@ class PaymentFlowTest extends TestCase
 
     public function test_admin_receipt_renders_pdf(): void
     {
-        $admin   = User::factory()->admin()->create();
+        $admin = User::factory()->admin()->create();
         $booking = $this->bookingFor(Tenant::find($admin->tenant_id));
         $payment = Payment::factory()->completed()->create([
-            'tenant_id'  => $admin->tenant_id,
+            'tenant_id' => $admin->tenant_id,
             'booking_id' => $booking->id,
-            'client_id'  => $booking->client_id,
+            'client_id' => $booking->client_id,
         ]);
 
         $response = $this->actingAs($admin)->get("/admin/payments/{$payment->id}/receipt");
@@ -266,7 +266,7 @@ class PaymentFlowTest extends TestCase
     public function test_client_initiate_creates_pending_payment_for_own_booking(): void
     {
         $tenant = $this->tenantWithPayHere();
-        $user   = User::factory()->client()->create(['tenant_id' => $tenant->id]);
+        $user = User::factory()->client()->create(['tenant_id' => $tenant->id]);
         $client = Client::factory()->create(['tenant_id' => $tenant->id, 'user_id' => $user->id]);
         $booking = $this->bookingFor($tenant, ['client_id' => $client->id]);
 
@@ -276,16 +276,16 @@ class PaymentFlowTest extends TestCase
 
         $this->assertDatabaseHas('payments', [
             'booking_id' => $booking->id,
-            'gateway'    => 'payhere',
-            'status'     => 'pending',
-            'amount'     => 3000,
+            'gateway' => 'payhere',
+            'status' => 'pending',
+            'amount' => 3000,
         ]);
     }
 
     public function test_client_cannot_pay_someone_elses_booking(): void
     {
         $tenant = $this->tenantWithPayHere();
-        $user   = User::factory()->client()->create(['tenant_id' => $tenant->id]);
+        $user = User::factory()->client()->create(['tenant_id' => $tenant->id]);
         Client::factory()->create(['tenant_id' => $tenant->id, 'user_id' => $user->id]);
         $otherBooking = $this->bookingFor($tenant); // belongs to a different client
 
@@ -296,8 +296,8 @@ class PaymentFlowTest extends TestCase
 
     public function test_client_cannot_access_admin_payment_routes(): void
     {
-        $tenant  = $this->tenantWithPayHere();
-        $user    = User::factory()->client()->create(['tenant_id' => $tenant->id]);
+        $tenant = $this->tenantWithPayHere();
+        $user = User::factory()->client()->create(['tenant_id' => $tenant->id]);
         $booking = $this->bookingFor($tenant);
 
         $this->actingAs($user)

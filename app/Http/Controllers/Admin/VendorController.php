@@ -14,15 +14,14 @@ class VendorController extends Controller
 {
     public function __construct()
     {
-        $this->authorizeResource(\App\Models\Vendor::class, 'vendor');
+        $this->authorizeResource(Vendor::class, 'vendor');
     }
 
     public function index(Request $request): Response
     {
         $vendors = Vendor::query()
-            ->when($request->search, fn ($q, $s) =>
-                $q->where('name', 'like', "%{$s}%")
-                  ->orWhere('contact_name', 'like', "%{$s}%")
+            ->when($request->search, fn ($q, $s) => $q->where('name', 'like', "%{$s}%")
+                ->orWhere('contact_name', 'like', "%{$s}%")
             )
             ->when($request->category, fn ($q, $cat) => $q->where('category', $cat))
             ->when($request->status, fn ($q, $status) => $q->where('status', $status))
@@ -46,19 +45,19 @@ class VendorController extends Controller
     {
         abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
         $data = $request->validate([
-            'name'         => 'required|string|max:255',
-            'category'     => 'required|string|max:50',
+            'name' => 'required|string|max:255',
+            'category' => 'required|string|max:50',
             'contact_name' => 'nullable|string|max:255',
-            'email'        => 'nullable|email|max:255',
-            'phone'        => 'nullable|string|max:50',
-            'website'      => 'nullable|url|max:255',
-            'description'  => 'nullable|string',
-            'base_rate'    => 'nullable|numeric|min:0',
-            'rate_type'    => 'nullable|in:fixed,hourly,per_event',
-            'services'     => 'nullable|array',
-            'services.*'   => 'string|max:100',
-            'status'       => 'nullable|in:active,inactive',
-            'notes'        => 'nullable|string',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:50',
+            'website' => 'nullable|url|max:255',
+            'description' => 'nullable|string',
+            'base_rate' => 'nullable|numeric|min:0',
+            'rate_type' => 'nullable|in:fixed,hourly,per_event',
+            'services' => 'nullable|array',
+            'services.*' => 'string|max:100',
+            'status' => 'nullable|in:active,inactive',
+            'notes' => 'nullable|string',
         ]);
 
         Vendor::create($data);
@@ -84,19 +83,19 @@ class VendorController extends Controller
     {
         abort_unless($request->user()->hasAnyRole(['admin', 'manager']), 403);
         $data = $request->validate([
-            'name'         => 'required|string|max:255',
-            'category'     => 'required|string|max:50',
+            'name' => 'required|string|max:255',
+            'category' => 'required|string|max:50',
             'contact_name' => 'nullable|string|max:255',
-            'email'        => 'nullable|email|max:255',
-            'phone'        => 'nullable|string|max:50',
-            'website'      => 'nullable|url|max:255',
-            'description'  => 'nullable|string',
-            'base_rate'    => 'nullable|numeric|min:0',
-            'rate_type'    => 'nullable|in:fixed,hourly,per_event',
-            'services'     => 'nullable|array',
-            'services.*'   => 'string|max:100',
-            'status'       => 'nullable|in:active,inactive',
-            'notes'        => 'nullable|string',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:50',
+            'website' => 'nullable|url|max:255',
+            'description' => 'nullable|string',
+            'base_rate' => 'nullable|numeric|min:0',
+            'rate_type' => 'nullable|in:fixed,hourly,per_event',
+            'services' => 'nullable|array',
+            'services.*' => 'string|max:100',
+            'status' => 'nullable|in:active,inactive',
+            'notes' => 'nullable|string',
         ]);
 
         $vendor->update($data);

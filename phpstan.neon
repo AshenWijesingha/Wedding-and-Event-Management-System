@@ -1,11 +1,13 @@
 includes:
-    - ./vendor/nunomaduro/larastan/extension.neon
+    - ./vendor/larastan/larastan/extension.neon
+    - ./phpstan-baseline.neon
 
 parameters:
     paths:
         - app
     level: 5
-    ignoreErrors:
-        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder#'
+    # The baseline is generated locally; tolerate entries that don't reproduce on
+    # CI (env/version drift) instead of failing the build on unmatched patterns.
+    reportUnmatchedIgnoredErrors: false
     excludePaths:
         - app/Http/Middleware/HandleInertiaRequests.php

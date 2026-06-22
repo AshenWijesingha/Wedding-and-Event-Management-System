@@ -4,12 +4,14 @@ namespace Tests\Unit;
 
 use App\Services\PricingService;
 use App\Services\SettingsService;
+use Carbon\Carbon;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 
 class PricingServiceTest extends TestCase
 {
     private SettingsService $settings;
+
     private PricingService $pricing;
 
     protected function setUp(): void
@@ -124,8 +126,8 @@ class PricingServiceTest extends TestCase
         $method = $reflection->getMethod('isPeakSeason');
         $method->setAccessible(true);
 
-        $december = \Carbon\Carbon::create(2024, 12, 15);
-        $april = \Carbon\Carbon::create(2024, 4, 10);
+        $december = Carbon::create(2024, 12, 15);
+        $april = Carbon::create(2024, 4, 10);
 
         $this->assertTrue($method->invoke($this->pricing, $december));
         $this->assertFalse($method->invoke($this->pricing, $april));

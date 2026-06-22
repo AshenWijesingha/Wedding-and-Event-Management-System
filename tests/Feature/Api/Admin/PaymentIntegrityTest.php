@@ -16,6 +16,7 @@ class PaymentIntegrityTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Booking $booking;
 
     protected function setUp(): void
@@ -23,18 +24,18 @@ class PaymentIntegrityTest extends TestCase
         parent::setUp();
 
         $tenant = Tenant::factory()->create();
-        $venue  = Venue::factory()->create(['tenant_id' => $tenant->id]);
+        $venue = Venue::factory()->create(['tenant_id' => $tenant->id]);
         $client = Client::factory()->create(['tenant_id' => $tenant->id]);
 
         $this->admin = User::factory()->admin()->create(['tenant_id' => $tenant->id]);
         $this->admin->assignRole('admin');
 
         $this->booking = Booking::factory()->create([
-            'tenant_id'      => $tenant->id,
-            'client_id'      => $client->id,
-            'venue_id'       => $venue->id,
-            'total_amount'   => 10000,
-            'paid_amount'    => 0,
+            'tenant_id' => $tenant->id,
+            'client_id' => $client->id,
+            'venue_id' => $venue->id,
+            'total_amount' => 10000,
+            'paid_amount' => 0,
             'balance_amount' => 10000,
         ]);
     }
@@ -43,11 +44,11 @@ class PaymentIntegrityTest extends TestCase
     {
         $response = $this->actingAs($this->admin, 'sanctum')
             ->postJson('/api/v1/admin/payments', [
-                'booking_id'      => $this->booking->id,
+                'booking_id' => $this->booking->id,
                 'installment_name' => 'Deposit',
-                'amount'          => 3000,
-                'payment_method'  => 'bank_transfer',
-                'payment_date'    => now()->toDateString(),
+                'amount' => 3000,
+                'payment_method' => 'bank_transfer',
+                'payment_date' => now()->toDateString(),
             ]);
 
         $response->assertCreated();
@@ -61,18 +62,18 @@ class PaymentIntegrityTest extends TestCase
     {
         $payment = Payment::factory()->create([
             'booking_id' => $this->booking->id,
-            'client_id'  => $this->booking->client_id,
-            'amount'     => 2000,
-            'status'     => 'pending',
+            'client_id' => $this->booking->client_id,
+            'amount' => 2000,
+            'status' => 'pending',
         ]);
 
         $this->booking->update(['paid_amount' => 0, 'balance_amount' => 10000]);
 
         $response = $this->actingAs($this->admin, 'sanctum')
             ->putJson("/api/v1/admin/payments/{$payment->id}", [
-                'amount'         => 4000,
+                'amount' => 4000,
                 'payment_method' => 'cash',
-                'status'         => 'completed',
+                'status' => 'completed',
             ]);
 
         $response->assertOk();
@@ -86,9 +87,9 @@ class PaymentIntegrityTest extends TestCase
     {
         $payment = Payment::factory()->create([
             'booking_id' => $this->booking->id,
-            'client_id'  => $this->booking->client_id,
-            'amount'     => 1000,
-            'status'     => 'pending',
+            'client_id' => $this->booking->client_id,
+            'amount' => 1000,
+            'status' => 'pending',
         ]);
 
         $originalPaid = $this->booking->paid_amount;
