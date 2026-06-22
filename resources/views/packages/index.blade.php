@@ -32,7 +32,7 @@
                     <!-- Price -->
                     <div class="px-6 py-5 bg-indigo-50">
                         <div class="flex items-baseline gap-1">
-                            <span class="text-3xl font-bold" style="color: var(--color-primary);">${{ number_format($package->base_price) }}</span>
+                            <span class="text-3xl font-bold" style="color: var(--color-primary);">Rs {{ number_format($package->base_price) }}</span>
                             <span class="text-gray-500 text-sm">starting price</span>
                         </div>
                         @if($package->min_guests || $package->max_guests)
