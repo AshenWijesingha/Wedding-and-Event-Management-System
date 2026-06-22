@@ -4,7 +4,6 @@ namespace App\Http\Traits;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 
 trait ApiResponse
 {
@@ -12,7 +11,8 @@ trait ApiResponse
     {
         $payload = ['success' => true, 'message' => $message];
 
-        if ($data instanceof JsonResource || $data instanceof ResourceCollection) {
+        // ResourceCollection extends JsonResource, so this covers both.
+        if ($data instanceof JsonResource) {
             return $data->additional(['success' => true, 'message' => $message])->response()->setStatusCode($status);
         }
 
