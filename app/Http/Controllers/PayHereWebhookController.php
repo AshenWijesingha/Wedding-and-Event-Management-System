@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use App\Models\Tenant;
-use App\Services\PaymentService;
 use App\Services\PayHereService;
+use App\Services\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -20,8 +20,7 @@ class PayHereWebhookController extends Controller
     public function __construct(
         private PayHereService $payhere,
         private PaymentService $payments,
-    ) {
-    }
+    ) {}
 
     public function notify(Request $request): Response
     {
@@ -48,8 +47,8 @@ class PayHereWebhookController extends Controller
 
         // 4. Cross-check merchant_id, amount, currency against the Payment.
         $expectedMerchant = $this->payhere->credentialsFor($tenant)['merchant_id'] ?? null;
-        $amountMatches    = number_format((float) $payment->amount, 2, '.', '') === (string) ($payload['payhere_amount'] ?? '');
-        $currencyMatches  = (string) $payment->currency === (string) ($payload['payhere_currency'] ?? '');
+        $amountMatches = number_format((float) $payment->amount, 2, '.', '') === (string) ($payload['payhere_amount'] ?? '');
+        $currencyMatches = (string) $payment->currency === (string) ($payload['payhere_currency'] ?? '');
 
         if ((string) ($payload['merchant_id'] ?? '') !== (string) $expectedMerchant || ! $amountMatches || ! $currencyMatches) {
             logger()->warning('PayHere webhook field mismatch', ['payment_id' => $payment->id]);

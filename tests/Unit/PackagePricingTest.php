@@ -9,10 +9,11 @@ class PackagePricingTest extends TestCase
 {
     private function makePackage(float $basePrice, ?array $guestPricing = null, int $minGuests = 0): Package
     {
-        $pkg = new Package();
+        $pkg = new Package;
         $pkg->base_price = $basePrice;
         $pkg->min_guests = $minGuests;
         $pkg->guest_pricing = $guestPricing;
+
         return $pkg;
     }
 

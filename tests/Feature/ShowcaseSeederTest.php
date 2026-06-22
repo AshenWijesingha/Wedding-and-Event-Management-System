@@ -9,6 +9,7 @@ use App\Models\Package;
 use App\Models\Payment;
 use App\Models\Quotation;
 use App\Models\Staff;
+use App\Models\Task;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Models\Vendor;
@@ -40,7 +41,7 @@ class ShowcaseSeederTest extends TestCase
         }
 
         // Tasks are tenant-scoped too (>= 10).
-        $taskCount = \App\Models\Task::withoutGlobalScopes()->where('tenant_id', $tid)->count();
+        $taskCount = Task::withoutGlobalScopes()->where('tenant_id', $tid)->count();
         $this->assertGreaterThanOrEqual(10, $taskCount, "Task should have >= 10 showcase rows, got $taskCount");
     }
 
@@ -51,10 +52,10 @@ class ShowcaseSeederTest extends TestCase
         $tenant = Tenant::where('slug', 'showcase')->firstOrFail();
 
         $expected = [
-            'owner@showcase.eventpro.test'   => 'tenant_owner',
-            'admin@showcase.eventpro.test'   => 'admin',
+            'owner@showcase.eventpro.test' => 'tenant_owner',
+            'admin@showcase.eventpro.test' => 'admin',
             'manager@showcase.eventpro.test' => 'manager',
-            'staff@showcase.eventpro.test'   => 'staff',
+            'staff@showcase.eventpro.test' => 'staff',
         ];
 
         foreach ($expected as $email => $role) {

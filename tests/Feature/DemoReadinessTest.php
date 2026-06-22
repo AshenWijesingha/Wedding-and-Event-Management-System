@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,7 +18,7 @@ class DemoReadinessTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed(\Database\Seeders\DatabaseSeeder::class);
+        $this->seed(DatabaseSeeder::class);
     }
 
     private function login(string $email): User
@@ -44,8 +45,8 @@ class DemoReadinessTest extends TestCase
     public function test_public_inquiry_can_be_submitted(): void
     {
         $this->post('/inquiry', [
-            'name'    => 'Prospective Client',
-            'email'   => 'prospect@example.test',
+            'name' => 'Prospective Client',
+            'email' => 'prospect@example.test',
             'message' => 'I would like to inquire about a wedding package for next year.',
         ])->assertRedirect();
 
@@ -57,9 +58,9 @@ class DemoReadinessTest extends TestCase
         $this->get('/register')->assertSuccessful();
 
         $this->post('/register', [
-            'name'                  => 'New Demo Client',
-            'email'                 => 'new.client@example.test',
-            'password'              => 'password123',
+            'name' => 'New Demo Client',
+            'email' => 'new.client@example.test',
+            'password' => 'password123',
             'password_confirmation' => 'password123',
         ])->assertRedirect(route('portal.dashboard'));
 

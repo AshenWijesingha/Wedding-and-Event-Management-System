@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Models\Tenant;
 use Illuminate\Support\Facades\File;
 
 class PluginService
 {
     private array $loadedPlugins = [];
+
     private array $hooks = [];
 
     /**
@@ -14,7 +16,7 @@ class PluginService
      */
     public function loadPlugins(): void
     {
-        $tenant = \App\Models\Tenant::current();
+        $tenant = Tenant::current();
         $enabledPlugins = $tenant?->getSetting('plugins.enabled', []) ?? [];
 
         foreach ($enabledPlugins as $pluginSlug) {
@@ -27,13 +29,14 @@ class PluginService
      */
     public function loadPlugin(string $slug): bool
     {
-        if (!preg_match('/^[a-z0-9\-_]+$/', $slug)) {
+        if (! preg_match('/^[a-z0-9\-_]+$/', $slug)) {
             logger()->warning("PluginService: rejected invalid plugin slug '{$slug}'.");
+
             return false;
         }
 
         $configPath = base_path("plugins/{$slug}/plugin.json");
-        if (!File::exists($configPath)) {
+        if (! File::exists($configPath)) {
             return false;
         }
 
@@ -52,6 +55,7 @@ class PluginService
         }
 
         $this->loadedPlugins[$slug] = $config;
+
         return true;
     }
 
@@ -61,16 +65,16 @@ class PluginService
     public function executeHook(string $hook, array $data = []): array
     {
         $results = [];
-        
+
         foreach ($this->hooks[$hook] ?? [] as $handler) {
             $plugin = $this->loadedPlugins[$handler['plugin']] ?? null;
-            if (!$plugin) {
+            if (! $plugin) {
                 continue;
             }
 
             // Get the service class for the plugin
             $serviceClass = "Plugins\\{$this->studly($handler['plugin'])}\\Services\\{$this->studly($handler['plugin'])}Service";
-            
+
             if (class_exists($serviceClass)) {
                 $service = app($serviceClass);
                 if (method_exists($service, $handler['handler'])) {
@@ -90,7 +94,7 @@ class PluginService
         $plugins = [];
         $pluginsPath = base_path('plugins');
 
-        if (!File::isDirectory($pluginsPath)) {
+        if (! File::isDirectory($pluginsPath)) {
             return $plugins;
         }
 
@@ -128,13 +132,13 @@ class PluginService
      */
     public function enablePlugin(string $slug): bool
     {
-        $tenant = \App\Models\Tenant::current();
-        if (!$tenant) {
+        $tenant = Tenant::current();
+        if (! $tenant) {
             return false;
         }
 
         $enabled = $tenant->getSetting('plugins.enabled', []);
-        if (!in_array($slug, $enabled)) {
+        if (! in_array($slug, $enabled)) {
             $enabled[] = $slug;
             $tenant->setSetting('plugins.enabled', $enabled);
         }
@@ -147,8 +151,8 @@ class PluginService
      */
     public function disablePlugin(string $slug): bool
     {
-        $tenant = \App\Models\Tenant::current();
-        if (!$tenant) {
+        $tenant = Tenant::current();
+        if (! $tenant) {
             return false;
         }
 
@@ -157,6 +161,7 @@ class PluginService
         $tenant->setSetting('plugins.enabled', array_values($enabled));
 
         unset($this->loadedPlugins[$slug]);
+
         return true;
     }
 

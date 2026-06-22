@@ -13,11 +13,14 @@ class BrandingCssSanitizationTest extends TestCase
 
     public function test_malicious_color_settings_cannot_inject_markup(): void
     {
-        $tenant = Tenant::factory()->create([
-            'primary_color' => '</style><script>alert(1)</script>',
-        ]);
+        $tenant = Tenant::factory()->create();
+        // Settings colours are stored in the JSON settings column (unbounded), the
+        // realistic stored-XSS vector. The persisted primary_color column is only
+        // varchar(7) so an over-long payload can't reach the DB — set it in memory
+        // to exercise BrandingService's sanitisation/fallback without persisting.
         $tenant->setSetting('branding.secondary_color', '</style><script>document.location="//evil"</script>');
         $tenant->setSetting('branding.accent_color', 'red;}body{display:none');
+        $tenant->primary_color = '</style><script>alert(1)</script>';
 
         $css = (new BrandingService($tenant))->getCssVariables();
 

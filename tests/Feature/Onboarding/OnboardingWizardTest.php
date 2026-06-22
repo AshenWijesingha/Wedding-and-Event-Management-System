@@ -19,8 +19,8 @@ class OnboardingWizardTest extends TestCase
     {
         $tenant = Tenant::factory()->create([
             'primary_color' => '#6366f1',
-            'logo'          => null,
-            'settings'      => [],
+            'logo' => null,
+            'settings' => [],
         ]);
         $owner = User::factory()->tenantOwner()->create(['tenant_id' => $tenant->id]);
 
@@ -46,10 +46,10 @@ class OnboardingWizardTest extends TestCase
         [$tenant, $owner] = $this->freshTenantOwner();
 
         $this->actingAs($owner)->post('/admin/onboarding/venue', [
-            'name'         => 'Grand Hall',
+            'name' => 'Grand Hall',
             'capacity_min' => 10,
             'capacity_max' => 200,
-            'base_price'   => 50000,
+            'base_price' => 50000,
         ])->assertRedirect('/admin/onboarding');
 
         $this->assertDatabaseHas('venues', ['tenant_id' => $tenant->id, 'name' => 'Grand Hall']);
@@ -60,7 +60,7 @@ class OnboardingWizardTest extends TestCase
         [$tenant, $owner] = $this->freshTenantOwner();
 
         $this->actingAs($owner)->post('/admin/onboarding/package', [
-            'name'       => 'Gold Wedding',
+            'name' => 'Gold Wedding',
             'base_price' => 250000,
         ])->assertRedirect('/admin/onboarding');
 
@@ -72,8 +72,8 @@ class OnboardingWizardTest extends TestCase
         [$tenant, $owner] = $this->freshTenantOwner();
 
         $this->actingAs($owner)->post('/admin/onboarding/branding', [
-            'name'          => 'Acme Events',
-            'company_name'  => 'Acme Events Co',
+            'name' => 'Acme Events',
+            'company_name' => 'Acme Events Co',
             'primary_color' => '#ff0066',
         ])->assertRedirect('/admin/onboarding');
 
@@ -87,9 +87,9 @@ class OnboardingWizardTest extends TestCase
         [$tenant, $owner] = $this->freshTenantOwner();
 
         $response = $this->actingAs($owner)->post('/admin/onboarding/invite', [
-            'name'  => 'New Manager',
+            'name' => 'New Manager',
             'email' => 'manager@acme.test',
-            'role'  => 'manager',
+            'role' => 'manager',
         ])->assertRedirect('/admin/onboarding');
 
         $response->assertSessionHas('invited_password');

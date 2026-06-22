@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Concerns\BelongsToTenant;
 
 class Venue extends Model
 {
-    use HasFactory, BelongsToTenant;
+    use BelongsToTenant, HasFactory;
 
     protected $fillable = [
         'tenant_id',
@@ -54,7 +54,7 @@ class Venue extends Model
      */
     public function isAvailableOn(string $date): bool
     {
-        return !$this->bookings()
+        return ! $this->bookings()
             ->where('event_date', $date)
             ->whereNotIn('status', ['cancelled'])
             ->exists();

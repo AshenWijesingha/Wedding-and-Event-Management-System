@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+
 return [
     'driver' => env('AUTH_DRIVER', 'session'),
 
@@ -23,7 +25,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent-tenantless',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => env('AUTH_MODEL', User::class),
         ],
     ],
 

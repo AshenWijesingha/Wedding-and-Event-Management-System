@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Support\Str;
 
 class Vendor extends Model
 {
-    use HasFactory, BelongsToTenant;
+    use BelongsToTenant, HasFactory;
 
     protected $fillable = [
         'tenant_id',
@@ -30,7 +30,7 @@ class Vendor extends Model
 
     protected $casts = [
         'base_rate' => 'decimal:2',
-        'services'  => 'array',
+        'services' => 'array',
     ];
 
     protected static function booted(): void

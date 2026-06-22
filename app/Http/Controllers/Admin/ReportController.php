@@ -38,16 +38,16 @@ class ReportController extends Controller
             ->limit(5)
             ->get()
             ->map(fn ($row) => [
-                'venue'    => $row->venue_name,
+                'venue' => $row->venue_name,
                 'bookings' => (int) $row->bookings,
-                'revenue'  => (float) $row->revenue,
+                'revenue' => (float) $row->revenue,
             ]);
 
         $totals = [
-            'revenue'            => (float) Payment::completed()->whereBetween('payment_date', [$start, $end])->sum('amount'),
-            'bookings'           => Booking::whereBetween('event_date', [$start, $end])->count(),
+            'revenue' => (float) Payment::completed()->whereBetween('payment_date', [$start, $end])->sum('amount'),
+            'bookings' => Booking::whereBetween('event_date', [$start, $end])->count(),
             'confirmed_bookings' => Booking::whereBetween('event_date', [$start, $end])->whereIn('status', ['confirmed', 'completed'])->count(),
-            'outstanding'        => (float) Booking::whereNotIn('status', ['cancelled', 'completed'])->sum('balance_amount'),
+            'outstanding' => (float) Booking::whereNotIn('status', ['cancelled', 'completed'])->sum('balance_amount'),
         ];
 
         $recentBookings = Booking::with(['client', 'venue'])
@@ -56,11 +56,11 @@ class ReportController extends Controller
             ->get()
             ->map(fn ($b) => [
                 'booking_number' => $b->booking_number,
-                'client'         => $b->client?->full_name,
-                'venue'          => $b->venue?->name,
-                'event_date'     => $b->event_date?->toDateString(),
-                'total_amount'   => (float) $b->total_amount,
-                'status'         => $b->status,
+                'client' => $b->client?->full_name,
+                'venue' => $b->venue?->name,
+                'event_date' => $b->event_date?->toDateString(),
+                'total_amount' => (float) $b->total_amount,
+                'status' => $b->status,
             ]);
 
         $upcomingBookings = Booking::with(['client', 'venue'])
@@ -70,21 +70,21 @@ class ReportController extends Controller
             ->get()
             ->map(fn ($b) => [
                 'booking_number' => $b->booking_number,
-                'client'         => $b->client?->full_name,
-                'venue'          => $b->venue?->name,
-                'event_date'     => $b->event_date?->toDateString(),
-                'status'         => $b->status,
+                'client' => $b->client?->full_name,
+                'venue' => $b->venue?->name,
+                'event_date' => $b->event_date?->toDateString(),
+                'status' => $b->status,
             ]);
 
         return Inertia::render('Reports/Index', [
-            'months'           => $months,
+            'months' => $months,
             'bookingsByStatus' => $bookingsByStatus,
-            'topVenues'        => $topVenues,
-            'totals'           => $totals,
-            'recentBookings'   => $recentBookings,
+            'topVenues' => $topVenues,
+            'totals' => $totals,
+            'recentBookings' => $recentBookings,
             'upcomingBookings' => $upcomingBookings,
-            'filters'          => $meta,
-            'years'            => range(now()->year - 3, now()->year + 1),
+            'filters' => $meta,
+            'years' => range(now()->year - 3, now()->year + 1),
         ]);
     }
 
@@ -94,11 +94,11 @@ class ReportController extends Controller
         $data = $this->revenueData($start, $end);
 
         return Inertia::render('Reports/Revenue', [
-            'months'   => $data['months'],
+            'months' => $data['months'],
             'byMethod' => $data['byMethod'],
-            'totals'   => $data['totals'],
-            'filters'  => $meta,
-            'years'    => range(now()->year - 3, now()->year + 1),
+            'totals' => $data['totals'],
+            'filters' => $meta,
+            'years' => range(now()->year - 3, now()->year + 1),
         ]);
     }
 
@@ -108,11 +108,11 @@ class ReportController extends Controller
         $data = $this->bookingsData($start, $end);
 
         return Inertia::render('Reports/Bookings', [
-            'months'      => $data['months'],
+            'months' => $data['months'],
             'byEventType' => $data['byEventType'],
-            'totals'      => $data['totals'],
-            'filters'     => $meta,
-            'years'       => range(now()->year - 3, now()->year + 1),
+            'totals' => $data['totals'],
+            'filters' => $meta,
+            'years' => range(now()->year - 3, now()->year + 1),
         ]);
     }
 
@@ -122,10 +122,10 @@ class ReportController extends Controller
         $data = $this->occupancyData($start, $end);
 
         return Inertia::render('Reports/Occupancy', [
-            'venueOccupancy'   => $data['venueOccupancy'],
+            'venueOccupancy' => $data['venueOccupancy'],
             'monthlyOccupancy' => $data['monthlyOccupancy'],
-            'filters'          => $meta,
-            'years'            => range(now()->year - 3, now()->year + 1),
+            'filters' => $meta,
+            'years' => range(now()->year - 3, now()->year + 1),
         ]);
     }
 
@@ -172,10 +172,10 @@ class ReportController extends Controller
         $data = $this->revenueData($start, $end);
 
         return Pdf::loadView('pdf.reports.revenue', [
-            'period'  => $meta['label'],
-            'months'  => $data['months'],
+            'period' => $meta['label'],
+            'months' => $data['months'],
             'byMethod' => $data['byMethod'],
-            'totals'  => $data['totals'],
+            'totals' => $data['totals'],
         ])->download("revenue-{$meta['slug']}.pdf");
     }
 
@@ -185,10 +185,10 @@ class ReportController extends Controller
         $data = $this->bookingsData($start, $end);
 
         return Pdf::loadView('pdf.reports.bookings', [
-            'period'      => $meta['label'],
-            'months'      => $data['months'],
+            'period' => $meta['label'],
+            'months' => $data['months'],
             'byEventType' => $data['byEventType'],
-            'totals'      => $data['totals'],
+            'totals' => $data['totals'],
         ])->download("bookings-{$meta['slug']}.pdf");
     }
 
@@ -198,7 +198,7 @@ class ReportController extends Controller
         $data = $this->occupancyData($start, $end);
 
         return Pdf::loadView('pdf.reports.occupancy', [
-            'period'         => $meta['label'],
+            'period' => $meta['label'],
             'venueOccupancy' => $data['venueOccupancy'],
         ])->download("occupancy-{$meta['slug']}.pdf");
     }
@@ -215,21 +215,21 @@ class ReportController extends Controller
     {
         $year = $request->integer('year', now()->year);
         $from = $request->date('from');
-        $to   = $request->date('to');
+        $to = $request->date('to');
 
         if ($from && $to) {
             if ($from->greaterThan($to)) {
                 [$from, $to] = [$to, $from];
             }
             $start = $from->copy()->startOfDay();
-            $end   = $to->copy()->endOfDay();
+            $end = $to->copy()->endOfDay();
             $label = $start->format('M j, Y') . ' – ' . $end->format('M j, Y');
-            $slug  = $start->format('Y-m-d') . '_' . $end->format('Y-m-d');
-            $meta  = ['from' => $start->toDateString(), 'to' => $end->toDateString(), 'year' => $year, 'label' => $label, 'slug' => $slug];
+            $slug = $start->format('Y-m-d') . '_' . $end->format('Y-m-d');
+            $meta = ['from' => $start->toDateString(), 'to' => $end->toDateString(), 'year' => $year, 'label' => $label, 'slug' => $slug];
         } else {
             $start = Carbon::create($year, 1, 1)->startOfDay();
-            $end   = Carbon::create($year, 12, 31)->endOfDay();
-            $meta  = ['from' => null, 'to' => null, 'year' => $year, 'label' => (string) $year, 'slug' => (string) $year];
+            $end = Carbon::create($year, 12, 31)->endOfDay();
+            $meta = ['from' => null, 'to' => null, 'year' => $year, 'label' => (string) $year, 'slug' => (string) $year];
         }
 
         return [$start, $end, $meta];
@@ -243,14 +243,14 @@ class ReportController extends Controller
     private function monthBuckets(Carbon $start, Carbon $end): Collection
     {
         $buckets = collect();
-        $cursor  = $start->copy()->startOfMonth();
-        $last    = $end->copy()->startOfMonth();
+        $cursor = $start->copy()->startOfMonth();
+        $last = $end->copy()->startOfMonth();
 
         while ($cursor->lessThanOrEqualTo($last) && $buckets->count() < 36) {
             $buckets->push([
-                'key'   => $cursor->format('Y-m'),
+                'key' => $cursor->format('Y-m'),
                 'label' => $cursor->format('M y'),
-                'year'  => (int) $cursor->format('Y'),
+                'year' => (int) $cursor->format('Y'),
                 'month' => (int) $cursor->format('n'),
             ]);
             $cursor->addMonth();
@@ -269,9 +269,9 @@ class ReportController extends Controller
             ->groupBy(fn ($p) => $p->payment_date->format('Y-m'));
 
         return $this->monthBuckets($start, $end)->map(fn ($b) => [
-            'label'   => $b['label'],
+            'label' => $b['label'],
             'revenue' => (float) ($byMonth->get($b['key'])?->sum('amount') ?? 0),
-            'count'   => (int) ($byMonth->get($b['key'])?->count() ?? 0),
+            'count' => (int) ($byMonth->get($b['key'])?->count() ?? 0),
         ]);
     }
 
@@ -287,9 +287,9 @@ class ReportController extends Controller
             ->map(fn ($r) => ['method' => $r->payment_method, 'total' => (float) $r->total, 'count' => $r->count]);
 
         $totals = [
-            'collected'   => (float) Payment::completed()->whereBetween('payment_date', [$start, $end])->sum('amount'),
+            'collected' => (float) Payment::completed()->whereBetween('payment_date', [$start, $end])->sum('amount'),
             'outstanding' => (float) Booking::whereNotIn('status', ['cancelled', 'completed'])->sum('balance_amount'),
-            'refunded'    => (float) Payment::where('status', 'refunded')->whereBetween('payment_date', [$start, $end])->sum('amount'),
+            'refunded' => (float) Payment::where('status', 'refunded')->whereBetween('payment_date', [$start, $end])->sum('amount'),
         ];
 
         return compact('months', 'byMethod', 'totals');
@@ -303,9 +303,10 @@ class ReportController extends Controller
 
         $months = $this->monthBuckets($start, $end)->map(function ($b) use ($byMonth) {
             $rows = $byMonth->get($b['key']) ?? collect();
+
             return [
-                'label'     => $b['label'],
-                'total'     => $rows->count(),
+                'label' => $b['label'],
+                'total' => $rows->count(),
                 'confirmed' => $rows->where('status', 'confirmed')->count(),
                 'completed' => $rows->where('status', 'completed')->count(),
                 'cancelled' => $rows->where('status', 'cancelled')->count(),
@@ -321,10 +322,10 @@ class ReportController extends Controller
             ->map(fn ($r) => ['type' => $r->event_type, 'count' => $r->count, 'revenue' => (float) $r->revenue]);
 
         $totals = [
-            'total'     => Booking::whereBetween('event_date', [$start, $end])->count(),
+            'total' => Booking::whereBetween('event_date', [$start, $end])->count(),
             'confirmed' => Booking::whereBetween('event_date', [$start, $end])->whereIn('status', ['confirmed', 'completed'])->count(),
             'cancelled' => Booking::whereBetween('event_date', [$start, $end])->where('status', 'cancelled')->count(),
-            'revenue'   => (float) Booking::whereBetween('event_date', [$start, $end])->whereNotIn('status', ['cancelled'])->sum('total_amount'),
+            'revenue' => (float) Booking::whereBetween('event_date', [$start, $end])->whereNotIn('status', ['cancelled'])->sum('total_amount'),
         ];
 
         return compact('months', 'byEventType', 'totals');
@@ -333,32 +334,31 @@ class ReportController extends Controller
     private function occupancyData(Carbon $start, Carbon $end): array
     {
         $venues = Venue::withCount([
-            'bookings as booked_days' => fn ($q) =>
-                $q->whereBetween('event_date', [$start, $end])->whereNotIn('status', ['cancelled']),
+            'bookings as booked_days' => fn ($q) => $q->whereBetween('event_date', [$start, $end])->whereNotIn('status', ['cancelled']),
         ])->orderByDesc('booked_days')->get(['id', 'name']);
 
         $totalDays = max(1, $start->diffInDays($end) + 1);
 
         $venueOccupancy = $venues->map(fn ($v) => [
-            'venue'         => $v->name,
-            'booked_days'   => $v->booked_days,
+            'venue' => $v->name,
+            'booked_days' => $v->booked_days,
             'occupancy_pct' => round(($v->booked_days / $totalDays) * 100, 1),
         ]);
 
         $monthlyOccupancy = $this->monthBuckets($start, $end)->map(function ($b) use ($start, $end) {
             $monthStart = Carbon::create($b['year'], $b['month'], 1)->startOfMonth();
-            $monthEnd   = $monthStart->copy()->endOfMonth();
+            $monthEnd = $monthStart->copy()->endOfMonth();
             $rangeStart = $monthStart->lessThan($start) ? $start : $monthStart;
-            $rangeEnd   = $monthEnd->greaterThan($end) ? $end : $monthEnd;
-            $days       = max(1, $rangeStart->diffInDays($rangeEnd) + 1);
+            $rangeEnd = $monthEnd->greaterThan($end) ? $end : $monthEnd;
+            $days = max(1, $rangeStart->diffInDays($rangeEnd) + 1);
 
             $bookings = Booking::whereBetween('event_date', [$rangeStart, $rangeEnd])
                 ->whereNotIn('status', ['cancelled'])
                 ->count();
 
             return [
-                'label'         => $b['label'],
-                'bookings'      => $bookings,
+                'label' => $b['label'],
+                'bookings' => $bookings,
                 'occupancy_pct' => round(($bookings / $days) * 100, 1),
             ];
         });

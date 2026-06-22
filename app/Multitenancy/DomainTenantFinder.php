@@ -36,6 +36,7 @@ class DomainTenantFinder extends TenantFinder
                     'count' => $activeTenants->count(),
                 ]);
             }
+
             return $activeTenants->first();
         }
 

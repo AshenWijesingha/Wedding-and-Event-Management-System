@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\UserInvitedMail;
 use App\Models\Tenant;
 use App\Models\User;
+use App\Support\Notifier;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,8 +26,7 @@ class UserController extends Controller
 
         $users = $this->userQuery($actor)
             ->with('tenant:id,name')
-            ->when($request->search, fn ($q, $s) =>
-                $q->where(fn ($w) => $w->where('name', 'like', "%{$s}%")->orWhere('email', 'like', "%{$s}%"))
+            ->when($request->search, fn ($q, $s) => $q->where(fn ($w) => $w->where('name', 'like', "%{$s}%")->orWhere('email', 'like', "%{$s}%"))
             )
             ->when($request->role, fn ($q, $role) => $q->where('role', $role))
             ->when($request->status === 'active', fn ($q) => $q->where('is_active', true))
@@ -34,26 +35,26 @@ class UserController extends Controller
             ->paginate(15)
             ->withQueryString()
             ->through(fn (User $u) => [
-                'id'         => $u->id,
-                'name'       => $u->name,
-                'email'      => $u->email,
-                'role'       => $u->role,
-                'is_active'  => $u->is_active,
-                'tenant'     => $u->tenant?->name,
+                'id' => $u->id,
+                'name' => $u->name,
+                'email' => $u->email,
+                'role' => $u->role,
+                'is_active' => $u->is_active,
+                'tenant' => $u->tenant?->name,
                 'avatar_url' => $u->avatar_url,
-                'verified'   => ! is_null($u->email_verified_at),
+                'verified' => ! is_null($u->email_verified_at),
             ]);
 
         return Inertia::render('Users/Index', [
-            'users'      => $users,
-            'filters'    => $request->only(['search', 'role', 'status']),
-            'roles'      => $this->assignableRoles($actor),
+            'users' => $users,
+            'filters' => $request->only(['search', 'role', 'status']),
+            'roles' => $this->assignableRoles($actor),
             'systemWide' => $actor->isSuperAdmin(),
-            'stats'      => [
-                'total'    => $this->userQuery($actor)->count(),
-                'active'   => $this->userQuery($actor)->where('is_active', true)->count(),
+            'stats' => [
+                'total' => $this->userQuery($actor)->count(),
+                'active' => $this->userQuery($actor)->where('is_active', true)->count(),
                 'inactive' => $this->userQuery($actor)->where('is_active', false)->count(),
-                'byRole'   => $this->userQuery($actor)->selectRaw('role, COUNT(*) as count')->groupBy('role')->pluck('count', 'role'),
+                'byRole' => $this->userQuery($actor)->selectRaw('role, COUNT(*) as count')->groupBy('role')->pluck('count', 'role'),
             ],
         ]);
     }
@@ -63,7 +64,7 @@ class UserController extends Controller
         $actor = $request->user();
 
         return Inertia::render('Users/Create', [
-            'roles'   => $this->assignableRoles($actor),
+            'roles' => $this->assignableRoles($actor),
             'tenants' => $this->tenantsFor($actor),
         ]);
     }
@@ -73,12 +74,12 @@ class UserController extends Controller
         $actor = $request->user();
 
         $rules = [
-            'name'      => 'required|string|max:255',
-            'email'     => ['required', 'email', 'max:255', Rule::unique('users', 'email')],
-            'role'      => ['required', Rule::in($this->assignableRoles($actor))],
-            'phone'     => 'nullable|string|max:50',
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')],
+            'role' => ['required', Rule::in($this->assignableRoles($actor))],
+            'phone' => 'nullable|string|max:50',
             'is_active' => 'boolean',
-            'password'  => ['required', 'confirmed', Password::defaults()],
+            'password' => ['required', 'confirmed', Password::defaults()],
         ];
 
         // Only a super admin chooses the tenant; an admin is pinned to their own.
@@ -90,20 +91,20 @@ class UserController extends Controller
 
         $tenantId = $actor->isSuperAdmin() ? $validated['tenant_id'] : $actor->tenant_id;
 
-        $user = new User();
+        $user = new User;
         $user->forceFill([
-            'name'      => $validated['name'],
-            'email'     => $validated['email'],
-            'role'      => $validated['role'],
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'role' => $validated['role'],
             'tenant_id' => $tenantId,
-            'phone'     => $validated['phone'] ?? null,
+            'phone' => $validated['phone'] ?? null,
             'is_active' => $request->boolean('is_active', true),
-            'password'  => $validated['password'],
+            'password' => $validated['password'],
         ])->save();
 
         $user->syncRoles([$validated['role']]);
 
-        \App\Support\Notifier::mail($user->email, new \App\Mail\UserInvitedMail($user));
+        Notifier::mail($user->email, new UserInvitedMail($user));
 
         return redirect('/admin/users')->with('success', 'User created.');
     }
@@ -111,19 +112,19 @@ class UserController extends Controller
     public function edit(Request $request, int $id): Response
     {
         $actor = $request->user();
-        $user  = $this->findManageable($actor, $id);
+        $user = $this->findManageable($actor, $id);
 
         return Inertia::render('Users/Edit', [
             'user' => [
-                'id'        => $user->id,
-                'name'      => $user->name,
-                'email'     => $user->email,
-                'role'      => $user->role,
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
                 'tenant_id' => $user->tenant_id,
-                'phone'     => $user->phone,
+                'phone' => $user->phone,
                 'is_active' => $user->is_active,
             ],
-            'roles'   => $this->assignableRoles($actor),
+            'roles' => $this->assignableRoles($actor),
             'tenants' => $this->tenantsFor($actor),
         ]);
     }
@@ -131,13 +132,13 @@ class UserController extends Controller
     public function update(Request $request, int $id): RedirectResponse
     {
         $actor = $request->user();
-        $user  = $this->findManageable($actor, $id);
+        $user = $this->findManageable($actor, $id);
 
         $rules = [
-            'name'      => 'required|string|max:255',
-            'email'     => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
-            'role'      => ['required', Rule::in($this->assignableRoles($actor))],
-            'phone'     => 'nullable|string|max:50',
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'role' => ['required', Rule::in($this->assignableRoles($actor))],
+            'phone' => 'nullable|string|max:50',
             'is_active' => 'boolean',
         ];
 
@@ -158,11 +159,11 @@ class UserController extends Controller
         }
 
         $user->forceFill([
-            'name'      => $validated['name'],
-            'email'     => $validated['email'],
-            'role'      => $validated['role'],
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'role' => $validated['role'],
             'tenant_id' => $actor->isSuperAdmin() ? $validated['tenant_id'] : $user->tenant_id,
-            'phone'     => $validated['phone'] ?? null,
+            'phone' => $validated['phone'] ?? null,
             'is_active' => $request->boolean('is_active'),
         ])->save();
 
@@ -174,7 +175,7 @@ class UserController extends Controller
     public function resetPassword(Request $request, int $id): RedirectResponse
     {
         $actor = $request->user();
-        $user  = $this->findManageable($actor, $id);
+        $user = $this->findManageable($actor, $id);
 
         $request->validate([
             'password' => ['required', 'confirmed', Password::defaults()],
@@ -188,7 +189,7 @@ class UserController extends Controller
     public function destroy(Request $request, int $id): RedirectResponse
     {
         $actor = $request->user();
-        $user  = $this->findManageable($actor, $id);
+        $user = $this->findManageable($actor, $id);
 
         if ($user->id === $actor->id) {
             return back()->with('error', 'You cannot delete your own account.');

@@ -7,7 +7,10 @@ use App\Http\Resources\BookingResource;
 use App\Http\Resources\PaymentResource;
 use App\Http\Resources\QuotationResource;
 use App\Models\Booking;
-use App\Models\Notification as NotificationModel;
+use App\Models\Payment;
+use App\Models\Quotation;
+use App\Models\Tenant;
+use App\Services\PayHereService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +30,7 @@ class PortalController extends Controller
         if ($client === null) {
             $parts = preg_split('/\s+/', trim($user->name ?? ''), 2);
             $client = $user->client()->create([
-                'tenant_id' => $user->tenant_id ?? optional(\App\Models\Tenant::current())->id,
+                'tenant_id' => $user->tenant_id ?? optional(Tenant::current())->id,
                 'first_name' => $parts[0] ?? ($user->name ?? 'Guest'),
                 'last_name' => $parts[1] ?? '',
                 'email' => $user->email,
@@ -55,19 +58,19 @@ class PortalController extends Controller
             ->get();
 
         $financialSummary = [
-            'total_booked'   => (float) Booking::where('client_id', $clientId)->sum('total_amount'),
-            'total_paid'     => (float) Booking::where('client_id', $clientId)->sum('paid_amount'),
-            'total_balance'  => (float) Booking::where('client_id', $clientId)->sum('balance_amount'),
+            'total_booked' => (float) Booking::where('client_id', $clientId)->sum('total_amount'),
+            'total_paid' => (float) Booking::where('client_id', $clientId)->sum('paid_amount'),
+            'total_balance' => (float) Booking::where('client_id', $clientId)->sum('balance_amount'),
         ];
 
         $unreadNotifications = Auth::user()->unreadNotifications()->limit(5)->get();
 
         return Inertia::render('Portal/Dashboard', [
-            'recentBookings'      => BookingResource::collection($recentBookings),
-            'upcomingEvents'      => BookingResource::collection($upcomingEvents),
-            'financialSummary'    => $financialSummary,
+            'recentBookings' => BookingResource::collection($recentBookings),
+            'upcomingEvents' => BookingResource::collection($upcomingEvents),
+            'financialSummary' => $financialSummary,
             'unreadNotifications' => $unreadNotifications->map(fn ($n) => [
-                'id'   => $n->id,
+                'id' => $n->id,
                 'data' => $n->data,
                 'read_at' => $n->read_at,
                 'created_at' => $n->created_at?->toDateTimeString(),
@@ -88,7 +91,7 @@ class PortalController extends Controller
 
         return Inertia::render('Portal/Bookings', [
             'bookings' => BookingResource::collection($bookings),
-            'filters'  => $request->only(['status']),
+            'filters' => $request->only(['status']),
         ]);
     }
 
@@ -106,7 +109,7 @@ class PortalController extends Controller
     {
         $clientId = $this->getClientId();
 
-        $quotations = \App\Models\Quotation::with(['venue'])
+        $quotations = Quotation::with(['venue'])
             ->where('client_id', $clientId)
             ->orderByDesc('created_at')
             ->paginate(10);
@@ -120,45 +123,46 @@ class PortalController extends Controller
     {
         $clientId = $this->getClientId();
 
-        $payments = \App\Models\Payment::with(['booking'])
+        $payments = Payment::with(['booking'])
             ->where('client_id', $clientId)
             ->orderByDesc('payment_date')
             ->paginate(10);
 
         $summary = [
-            'total_paid'    => (float) \App\Models\Payment::where('client_id', $clientId)->completed()->sum('amount'),
-            'total_pending' => (float) \App\Models\Payment::where('client_id', $clientId)->where('status', 'pending')->sum('amount'),
+            'total_paid' => (float) Payment::where('client_id', $clientId)->completed()->sum('amount'),
+            'total_pending' => (float) Payment::where('client_id', $clientId)->where('status', 'pending')->sum('amount'),
         ];
 
         // Bookings still owing money — the "Pay now" targets. Hidden entirely when
         // the tenant has no PayHere credentials configured.
-        $tenant         = \App\Models\Tenant::current();
-        $payhereEnabled = $tenant ? app(\App\Services\PayHereService::class)->isConfigured($tenant) : false;
+        $tenant = Tenant::current();
+        $payhereEnabled = $tenant ? app(PayHereService::class)->isConfigured($tenant) : false;
 
-        $payable = \App\Models\Booking::where('client_id', $clientId)
+        $payable = Booking::where('client_id', $clientId)
             ->where('balance_amount', '>', 0)
             ->orderByDesc('event_date')
             ->get(['id', 'booking_number', 'event_date', 'total_amount', 'paid_amount', 'balance_amount'])
             ->map(fn ($b) => [
-                'id'             => $b->id,
+                'id' => $b->id,
                 'booking_number' => $b->booking_number,
-                'event_date'     => $b->event_date?->toDateString(),
-                'total_amount'   => (float) $b->total_amount,
-                'paid_amount'    => (float) $b->paid_amount,
+                'event_date' => $b->event_date?->toDateString(),
+                'total_amount' => (float) $b->total_amount,
+                'paid_amount' => (float) $b->paid_amount,
                 'balance_amount' => (float) $b->balance_amount,
             ]);
 
         return Inertia::render('Portal/Payments', [
-            'payments'        => PaymentResource::collection($payments),
-            'summary'         => $summary,
+            'payments' => PaymentResource::collection($payments),
+            'summary' => $summary,
             'payableBookings' => $payable,
-            'payhereEnabled'  => $payhereEnabled,
+            'payhereEnabled' => $payhereEnabled,
         ]);
     }
 
     public function markNotificationRead(Request $request): RedirectResponse
     {
         Auth::user()->notifications()->where('id', $request->id)->update(['read_at' => now()]);
+
         return back();
     }
 }

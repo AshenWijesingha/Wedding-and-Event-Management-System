@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Mail\PaymentReceivedMail;
 use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\User;
+use App\Notifications\StaffNotification;
+use App\Support\Notifier;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -14,9 +17,7 @@ use Illuminate\Support\Facades\DB;
  */
 class PaymentService
 {
-    public function __construct(private PayHereService $payhere)
-    {
-    }
+    public function __construct(private PayHereService $payhere) {}
 
     /**
      * Record an offline/manual payment (cash, bank transfer, cheque, card) as
@@ -26,19 +27,19 @@ class PaymentService
     {
         $payment = DB::transaction(function () use ($booking, $data, $receivedBy) {
             $payment = Payment::create([
-                'tenant_id'        => $booking->tenant_id,
-                'payment_number'   => $this->generatePaymentNumber($booking->tenant_id),
-                'booking_id'       => $booking->id,
-                'client_id'        => $booking->client_id,
+                'tenant_id' => $booking->tenant_id,
+                'payment_number' => $this->generatePaymentNumber($booking->tenant_id),
+                'booking_id' => $booking->id,
+                'client_id' => $booking->client_id,
                 'installment_name' => $data['installment_name'] ?? null,
-                'amount'           => $data['amount'],
-                'currency'         => $data['currency'] ?? 'LKR',
-                'payment_method'   => $data['payment_method'],
-                'payment_date'     => $data['payment_date'] ?? now()->toDateString(),
+                'amount' => $data['amount'],
+                'currency' => $data['currency'] ?? 'LKR',
+                'payment_method' => $data['payment_method'],
+                'payment_date' => $data['payment_date'] ?? now()->toDateString(),
                 'reference_number' => $data['reference_number'] ?? null,
-                'status'           => 'completed',
-                'notes'            => $data['notes'] ?? null,
-                'received_by'      => $receivedBy->id,
+                'status' => 'completed',
+                'notes' => $data['notes'] ?? null,
+                'received_by' => $receivedBy->id,
             ]);
 
             $this->recalculateBooking($booking);
@@ -61,13 +62,13 @@ class PaymentService
             return;
         }
 
-        \App\Support\Notifier::mail(
+        Notifier::mail(
             optional($payment->client)->email,
-            new \App\Mail\PaymentReceivedMail($payment),
+            new PaymentReceivedMail($payment),
         );
-        \App\Support\Notifier::staff(
+        Notifier::staff(
             $payment->tenant,
-            new \App\Notifications\StaffNotification(
+            new StaffNotification(
                 'payment_received',
                 "Payment {$payment->payment_number} was received.",
                 "/admin/payments/{$payment->id}",
@@ -83,13 +84,13 @@ class PaymentService
     public function applyGatewayResult(Payment $payment, array $payload): void
     {
         DB::transaction(function () use ($payment, $payload) {
-            $code   = (int) ($payload['status_code'] ?? -2);
+            $code = (int) ($payload['status_code'] ?? -2);
             $status = $this->payhere->mapStatusCode($code);
 
-            $payment->status              = $status;
+            $payment->status = $status;
             $payment->gateway_status_code = $code;
-            $payment->gateway_payment_id  = $payload['payment_id'] ?? $payment->gateway_payment_id;
-            $payment->gateway_response    = $payload;
+            $payment->gateway_payment_id = $payload['payment_id'] ?? $payment->gateway_payment_id;
+            $payment->gateway_response = $payload;
 
             if ($status === 'completed' && empty($payment->payment_date)) {
                 $payment->payment_date = now()->toDateString();
@@ -120,7 +121,7 @@ class PaymentService
             ->where('status', 'completed')
             ->sum('amount');
 
-        $booking->paid_amount    = $paid;
+        $booking->paid_amount = $paid;
         $booking->balance_amount = max(0, (float) $booking->total_amount - $paid);
         $booking->save();
     }

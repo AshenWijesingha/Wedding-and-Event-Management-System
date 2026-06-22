@@ -27,11 +27,11 @@ class CalendarTest extends TestCase
         $tid = $this->admin->tenant_id;
 
         return Booking::factory()->create(array_merge([
-            'tenant_id'  => $tid,
-            'venue_id'   => Venue::factory()->create(['tenant_id' => $tid])->id,
-            'client_id'  => Client::factory()->create(['tenant_id' => $tid])->id,
+            'tenant_id' => $tid,
+            'venue_id' => Venue::factory()->create(['tenant_id' => $tid])->id,
+            'client_id' => Client::factory()->create(['tenant_id' => $tid])->id,
             'event_date' => now()->addDays(10)->toDateString(),
-            'status'     => 'confirmed',
+            'status' => 'confirmed',
         ], $attrs));
     }
 

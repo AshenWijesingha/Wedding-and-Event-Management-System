@@ -28,7 +28,7 @@ class SecurityHeaders
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
 
-        if (!app()->isLocal()) {
+        if (! app()->isLocal()) {
             $response->headers->set(
                 'Strict-Transport-Security',
                 'max-age=31536000; includeSubDomains; preload'
@@ -46,8 +46,8 @@ class SecurityHeaders
         $viteWs = '';
         if (app()->isLocal()) {
             $hosts = ['localhost:5173', '127.0.0.1:5173', '[::1]:5173'];
-            $vite = ' '.implode(' ', array_map(fn ($h) => "http://{$h}", $hosts));
-            $viteWs = ' '.implode(' ', array_map(fn ($h) => "ws://{$h}", $hosts));
+            $vite = ' ' . implode(' ', array_map(fn ($h) => "http://{$h}", $hosts));
+            $viteWs = ' ' . implode(' ', array_map(fn ($h) => "ws://{$h}", $hosts));
         }
 
         $csp = implode('; ', [

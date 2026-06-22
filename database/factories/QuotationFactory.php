@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Client;
-use App\Models\Inquiry;
 use App\Models\Tenant;
 use App\Models\Venue;
 use Illuminate\Database\Eloquent\Factories\Factory;

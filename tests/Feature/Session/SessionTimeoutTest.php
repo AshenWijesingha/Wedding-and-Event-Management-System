@@ -4,6 +4,7 @@ namespace Tests\Feature\Session;
 
 use App\Models\Tenant;
 use App\Models\User;
+use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -12,12 +13,13 @@ class SessionTimeoutTest extends TestCase
     use RefreshDatabase;
 
     private Tenant $tenant;
+
     private User $admin;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed(\Database\Seeders\RolePermissionSeeder::class);
+        $this->seed(RolePermissionSeeder::class);
         $this->tenant = Tenant::factory()->create();
         // Skip the first-run wizard so /admin renders the dashboard for these tests.
         $this->tenant->setSetting('onboarding', ['seen' => true, 'dismissed' => true]);

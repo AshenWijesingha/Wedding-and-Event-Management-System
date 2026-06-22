@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Auth\TenantlessUserProvider;
+use App\Models\Tenant;
 use App\Services\BrandingService;
 use App\Services\SettingsService;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -18,11 +19,11 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(SettingsService::class, function () {
-            return new SettingsService(\App\Models\Tenant::current());
+            return new SettingsService(Tenant::current());
         });
 
         $this->app->singleton(BrandingService::class, function () {
-            return new BrandingService(\App\Models\Tenant::current());
+            return new BrandingService(Tenant::current());
         });
     }
 

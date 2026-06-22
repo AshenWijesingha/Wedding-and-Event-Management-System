@@ -16,14 +16,11 @@ class VenueController extends Controller
     public function index(Request $request): JsonResponse
     {
         $venues = Venue::active()
-            ->when($request->search, fn ($q, $search) =>
-                $q->where('name', 'like', "%{$search}%")
+            ->when($request->search, fn ($q, $search) => $q->where('name', 'like', "%{$search}%")
             )
-            ->when($request->capacity_min, fn ($q, $min) =>
-                $q->where('capacity_max', '>=', $min)
+            ->when($request->capacity_min, fn ($q, $min) => $q->where('capacity_max', '>=', $min)
             )
-            ->when($request->capacity_max, fn ($q, $max) =>
-                $q->where('capacity_min', '<=', $max)
+            ->when($request->capacity_max, fn ($q, $max) => $q->where('capacity_min', '<=', $max)
             )
             ->orderBy('name')
             ->paginate($request->per_page ?? 12);
