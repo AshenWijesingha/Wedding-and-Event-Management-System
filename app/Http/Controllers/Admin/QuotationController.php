@@ -4,12 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\QuotationResource;
+use App\Mail\QuotationSentMail;
 use App\Models\Client;
 use App\Models\Inquiry;
 use App\Models\Package;
 use App\Models\Quotation;
+use App\Models\Tenant;
+use App\Models\Vendor;
 use App\Models\Venue;
+use App\Notifications\StaffNotification;
 use App\Services\BrandingService;
+use App\Support\Notifier;
+use App\Support\TenantRule;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,15 +30,12 @@ class QuotationController extends Controller
     public function index(Request $request): Response
     {
         $quotations = Quotation::with(['client', 'venue'])
-            ->when($request->search, fn ($q, $search) =>
-                $q->where('quotation_number', 'like', "%{$search}%")
-                  ->orWhereHas('client', fn ($cq) =>
-                      $cq->where('first_name', 'like', "%{$search}%")
-                         ->orWhere('last_name', 'like', "%{$search}%")
-                  )
+            ->when($request->search, fn ($q, $search) => $q->where('quotation_number', 'like', "%{$search}%")
+                ->orWhereHas('client', fn ($cq) => $cq->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                )
             )
-            ->when($request->status, fn ($q, $status) =>
-                $q->where('status', $status)
+            ->when($request->status, fn ($q, $status) => $q->where('status', $status)
             )
             ->orderBy('created_at', 'desc')
             ->paginate(15)
@@ -57,24 +60,29 @@ class QuotationController extends Controller
             $inquiry = Inquiry::find($request->integer('inquiry_id'));
             if ($inquiry) {
                 $prefill = [
-                    'inquiry_id'  => $inquiry->id,
-                    'client_id'   => $inquiry->client_id,
-                    'venue_id'    => $inquiry->venue_id,
-                    'package_id'  => $inquiry->package_id,
-                    'event_date'  => optional($inquiry->preferred_date)->toDateString(),
+                    'inquiry_id' => $inquiry->id,
+                    'client_id' => $inquiry->client_id,
+                    'venue_id' => $inquiry->venue_id,
+                    'package_id' => $inquiry->package_id,
+                    'event_date' => optional($inquiry->preferred_date)->toDateString(),
                     'guest_count' => $inquiry->guest_count,
                 ];
             }
         }
 
         return Inertia::render('Quotations/Create', [
-            'venues'   => Venue::where('status', 'active')->orderBy('name')->get(['id', 'name']),
+            // base_price/weekend_surcharge let the form auto-allocate the venue cost.
+            'venues' => Venue::where('status', 'active')->orderBy('name')
+                ->get(['id', 'name', 'base_price', 'weekend_surcharge']),
             'packages' => Package::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
-            'clients'  => Client::orderBy('first_name')->get()->map(fn ($c) => [
-                'id'   => $c->id,
+            // Active vendors offered as selectable line items, grouped by category.
+            'vendors' => Vendor::where('status', 'active')->orderBy('category')->orderBy('name')
+                ->get(['id', 'name', 'category', 'base_rate', 'rate_type']),
+            'clients' => Client::orderBy('first_name')->get()->map(fn ($c) => [
+                'id' => $c->id,
                 'name' => trim("{$c->first_name} {$c->last_name}"),
             ]),
-            'prefill'  => $prefill,
+            'prefill' => $prefill,
         ]);
     }
 
@@ -83,57 +91,61 @@ class QuotationController extends Controller
         abort_unless($request->user()->hasAnyRole(self::MANAGE_ROLES), 403);
 
         $validated = $request->validate([
-            'client_id'            => ['required', \App\Support\TenantRule::exists('clients')],
-            'inquiry_id'           => ['nullable', \App\Support\TenantRule::exists('inquiries')],
-            'venue_id'             => ['nullable', \App\Support\TenantRule::exists('venues')],
-            'package_id'           => ['nullable', \App\Support\TenantRule::exists('packages')],
-            'event_date'           => 'nullable|date',
-            'guest_count'          => 'nullable|integer|min:1',
-            'items'                => 'required|array|min:1',
-            'items.*.name'         => 'required|string|max:255',
-            'items.*.description'  => 'nullable|string|max:1000',
-            'items.*.quantity'     => 'required|numeric|min:0',
-            'items.*.unit_price'   => 'required|numeric|min:0',
-            'discount_amount'      => 'nullable|numeric|min:0',
-            'tax_rate'             => 'nullable|numeric|min:0|max:100',
-            'valid_until'          => 'nullable|date|after_or_equal:today',
-            'notes'                => 'nullable|string',
+            'client_id' => ['required', TenantRule::exists('clients')],
+            'inquiry_id' => ['nullable', TenantRule::exists('inquiries')],
+            'venue_id' => ['nullable', TenantRule::exists('venues')],
+            'package_id' => ['nullable', TenantRule::exists('packages')],
+            'event_date' => 'nullable|date',
+            'guest_count' => 'nullable|integer|min:1',
+            'items' => 'required|array|min:1',
+            'items.*.name' => 'required|string|max:255',
+            'items.*.description' => 'nullable|string|max:1000',
+            'items.*.quantity' => 'required|numeric|min:0',
+            'items.*.unit_price' => 'required|numeric|min:0',
+            'items.*.type' => ['nullable', 'in:venue,package,vendor,custom'],
+            'items.*.vendor_id' => ['nullable', TenantRule::exists('vendors')],
+            'discount_amount' => 'nullable|numeric|min:0',
+            'tax_rate' => 'nullable|numeric|min:0|max:100',
+            'valid_until' => 'nullable|date|after_or_equal:today',
+            'notes' => 'nullable|string',
             'terms_and_conditions' => 'nullable|string',
         ]);
 
         $items = array_map(function ($item) {
             return [
-                'name'        => $item['name'],
+                'name' => $item['name'],
                 'description' => $item['description'] ?? null,
-                'quantity'    => (float) $item['quantity'],
-                'unit_price'  => (float) $item['unit_price'],
-                'total'       => round((float) $item['quantity'] * (float) $item['unit_price'], 2),
+                'quantity' => (float) $item['quantity'],
+                'unit_price' => (float) $item['unit_price'],
+                'total' => round((float) $item['quantity'] * (float) $item['unit_price'], 2),
+                'type' => $item['type'] ?? 'custom',
+                'vendor_id' => $item['vendor_id'] ?? null,
             ];
         }, $validated['items']);
 
         $subtotal = array_sum(array_column($items, 'total'));
         $discount = (float) ($validated['discount_amount'] ?? 0);
-        $tax      = round(($subtotal - $discount) * ((float) ($validated['tax_rate'] ?? 0) / 100), 2);
-        $total    = $subtotal - $discount + $tax;
+        $tax = round(($subtotal - $discount) * ((float) ($validated['tax_rate'] ?? 0) / 100), 2);
+        $total = $subtotal - $discount + $tax;
 
         Quotation::create([
-            'quotation_number'     => Quotation::generateQuotationNumber(),
-            'inquiry_id'           => $validated['inquiry_id'] ?? null,
-            'client_id'            => $validated['client_id'],
-            'venue_id'             => $validated['venue_id'] ?? null,
-            'package_id'           => $validated['package_id'] ?? null,
-            'event_date'           => $validated['event_date'] ?? null,
-            'guest_count'          => $validated['guest_count'] ?? null,
-            'items'                => $items,
-            'subtotal'             => $subtotal,
-            'discount_amount'      => $discount,
-            'tax_amount'           => $tax,
-            'total_amount'         => $total,
-            'valid_until'          => $validated['valid_until'] ?? now()->addDays(21)->toDateString(),
-            'status'               => 'draft',
-            'notes'                => $validated['notes'] ?? null,
+            'quotation_number' => Quotation::generateQuotationNumber(),
+            'inquiry_id' => $validated['inquiry_id'] ?? null,
+            'client_id' => $validated['client_id'],
+            'venue_id' => $validated['venue_id'] ?? null,
+            'package_id' => $validated['package_id'] ?? null,
+            'event_date' => $validated['event_date'] ?? null,
+            'guest_count' => $validated['guest_count'] ?? null,
+            'items' => $items,
+            'subtotal' => $subtotal,
+            'discount_amount' => $discount,
+            'tax_amount' => $tax,
+            'total_amount' => $total,
+            'valid_until' => $validated['valid_until'] ?? now()->addDays(21)->toDateString(),
+            'status' => 'draft',
+            'notes' => $validated['notes'] ?? null,
             'terms_and_conditions' => $validated['terms_and_conditions'] ?? null,
-            'prepared_by'          => $request->user()->id,
+            'prepared_by' => $request->user()->id,
         ]);
 
         return redirect()->route('admin.quotations.index')->with('success', 'Quotation created successfully.');
@@ -143,7 +155,7 @@ class QuotationController extends Controller
      * Legal status transitions for a quotation.
      */
     private const TRANSITIONS = [
-        'send'   => ['from' => ['draft'],           'to' => 'sent',     'stamp' => 'sent_at'],
+        'send' => ['from' => ['draft'],           'to' => 'sent',     'stamp' => 'sent_at'],
         'accept' => ['from' => ['sent', 'viewed'],  'to' => 'accepted', 'stamp' => 'accepted_at'],
         'reject' => ['from' => ['sent', 'viewed'],  'to' => 'rejected', 'stamp' => null],
         'expire' => ['from' => ['draft', 'sent', 'viewed'], 'to' => 'expired', 'stamp' => null],
@@ -186,14 +198,14 @@ class QuotationController extends Controller
         $quotation->update($attrs);
 
         if ($action === 'send') {
-            \App\Support\Notifier::mail(
+            Notifier::mail(
                 optional($quotation->client)->email,
-                new \App\Mail\QuotationSentMail($quotation),
+                new QuotationSentMail($quotation),
             );
         } elseif (in_array($action, ['accept', 'reject'], true)) {
-            \App\Support\Notifier::staff(
-                \App\Models\Tenant::current(),
-                new \App\Notifications\StaffNotification(
+            Notifier::staff(
+                Tenant::current(),
+                new StaffNotification(
                     "quotation_{$rule['to']}",
                     "Quotation {$quotation->quotation_number} was {$rule['to']}.",
                     "/admin/quotations/{$quotation->id}",
@@ -218,13 +230,15 @@ class QuotationController extends Controller
 
             $pdf = Pdf::loadView('pdf.quotation', [
                 'quotation' => $quotation,
-                'branding'  => $this->brandingService->getBranding(),
+                'branding' => $this->brandingService->getBranding(),
             ])->setPaper('a4', 'portrait');
 
             $safeNumber = preg_replace('/[^a-zA-Z0-9_\-]/', '', $quotation->quotation_number);
+
             return $pdf->download("quotation_{$safeNumber}.pdf");
         } catch (\Throwable $e) {
             logger()->error('Quotation PDF generation failed', ['quotation_id' => $quotation->id, 'exception' => $e]);
+
             return back()->with('error', 'PDF generation failed. Please try again.');
         }
     }
@@ -238,8 +252,8 @@ class QuotationController extends Controller
 
         return response()->view('pdf.quotation', [
             'quotation' => $quotation,
-            'branding'  => $this->brandingService->getBranding(),
-            'print'     => true,
+            'branding' => $this->brandingService->getBranding(),
+            'print' => true,
         ]);
     }
 }
