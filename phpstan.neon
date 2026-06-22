@@ -6,5 +6,8 @@ parameters:
     paths:
         - app
     level: 5
+    # The baseline is generated locally; tolerate entries that don't reproduce on
+    # CI (env/version drift) instead of failing the build on unmatched patterns.
+    reportUnmatchedIgnoredErrors: false
     excludePaths:
         - app/Http/Middleware/HandleInertiaRequests.php
