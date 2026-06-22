@@ -91,7 +91,7 @@ function dismissNotification(id) {
                 <Link href="/portal/bookings" class="bg-surface border border-border rounded-lg p-4 text-center hover:shadow-md transition-shadow text-primary font-medium text-sm">My Bookings</Link>
                 <Link href="/portal/quotations" class="bg-surface border border-border rounded-lg p-4 text-center hover:shadow-md transition-shadow text-primary font-medium text-sm">Quotations</Link>
                 <Link href="/portal/payments" class="bg-surface border border-border rounded-lg p-4 text-center hover:shadow-md transition-shadow text-primary font-medium text-sm">Payments</Link>
-                <Link href="/venues" class="bg-surface border border-border rounded-lg p-4 text-center hover:shadow-md transition-shadow text-primary font-medium text-sm">Browse Venues</Link>
+                <a href="/venues" class="bg-surface border border-border rounded-lg p-4 text-center hover:shadow-md transition-shadow text-primary font-medium text-sm">Browse Venues</a>
             </div>
         </div>
     </PortalLayout>

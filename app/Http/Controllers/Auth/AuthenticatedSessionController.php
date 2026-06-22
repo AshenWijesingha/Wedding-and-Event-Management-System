@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -62,12 +63,16 @@ class AuthenticatedSessionController extends Controller
         return route('admin.dashboard');
     }
 
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request): HttpResponse
     {
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        // Logout is fired from the Inertia SPA, but '/' is a plain Blade page.
+        // Inertia::location() makes the client perform a real full-page visit
+        // (409 + X-Inertia-Location) instead of choking on the HTML response and
+        // rendering it inside its error modal. Plain requests get a normal 302.
+        return Inertia::location('/');
     }
 }

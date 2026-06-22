@@ -7,10 +7,10 @@
         <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c8a96a]/45 to-transparent"></div>
 
         <!-- Wordmark -->
-        <Link href="/" class="au-rise relative mb-8 inline-flex flex-col items-center gap-1" style="animation-delay:.05s">
+        <a href="/" class="au-rise relative mb-8 inline-flex flex-col items-center gap-1" style="animation-delay:.05s">
             <span class="font-display text-3xl font-light tracking-tight text-[#f5efe7]">EventPro</span>
             <span class="text-[0.62rem] uppercase tracking-[0.4em] text-[#c8a96a]">Events &amp; Celebrations</span>
-        </Link>
+        </a>
 
         <!-- Card -->
         <div class="au-rise relative w-full max-w-md rounded-2xl border border-black/5 bg-[#faf7f1] p-8 text-[#2b211b] shadow-2xl shadow-black/40 sm:p-10" style="animation-delay:.14s">
@@ -19,12 +19,8 @@
         </div>
 
         <!-- Back link -->
-        <Link href="/" class="au-rise relative mt-8 inline-flex items-center gap-2 text-xs text-[#80766a] transition-colors hover:text-[#cdbfae]" style="animation-delay:.22s">
+        <a href="/" class="au-rise relative mt-8 inline-flex items-center gap-2 text-xs text-[#80766a] transition-colors hover:text-[#cdbfae]" style="animation-delay:.22s">
             <span aria-hidden="true">&larr;</span> Back to site
-        </Link>
+        </a>
     </div>
 </template>
-
-<script setup>
-import { Link } from '@inertiajs/vue3';
-</script>
