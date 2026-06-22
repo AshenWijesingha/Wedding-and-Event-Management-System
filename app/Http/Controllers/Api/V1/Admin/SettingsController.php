@@ -16,6 +16,7 @@ class SettingsController extends Controller
     public function index(): JsonResponse
     {
         $settings = $this->settingsService->all();
+
         return response()->json($settings);
     }
 
@@ -26,7 +27,7 @@ class SettingsController extends Controller
         ]);
 
         $this->settingsService->update($validated['settings']);
-        
+
         return response()->json([
             'message' => 'Settings updated successfully',
             'settings' => $this->settingsService->all(),

@@ -16,15 +16,14 @@ class StaffController extends Controller
 {
     public function __construct()
     {
-        $this->authorizeResource(\App\Models\Staff::class, 'staff');
+        $this->authorizeResource(Staff::class, 'staff');
     }
 
     public function index(Request $request): Response
     {
         $staff = Staff::withCount('tasks')
-            ->when($request->search, fn ($q, $s) =>
-                $q->where('first_name', 'like', "%{$s}%")
-                  ->orWhere('last_name', 'like', "%{$s}%")
+            ->when($request->search, fn ($q, $s) => $q->where('first_name', 'like', "%{$s}%")
+                ->orWhere('last_name', 'like', "%{$s}%")
             )
             ->when($request->status, fn ($q, $status) => $q->where('status', $status))
             ->orderBy('first_name')
@@ -32,7 +31,7 @@ class StaffController extends Controller
             ->withQueryString();
 
         return Inertia::render('Staff/Index', [
-            'staff'   => StaffResource::collection($staff),
+            'staff' => StaffResource::collection($staff),
             'filters' => $request->only(['search', 'status']),
         ]);
     }
@@ -46,12 +45,12 @@ class StaffController extends Controller
     {
         $data = $request->validate([
             'first_name' => 'required|string|max:255',
-            'last_name'  => 'required|string|max:255',
-            'email'      => 'nullable|email|max:255',
-            'phone'      => 'nullable|string|max:50',
-            'role'       => 'nullable|string|max:50',
-            'status'     => 'nullable|in:active,inactive',
-            'notes'      => 'nullable|string',
+            'last_name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:50',
+            'role' => 'nullable|string|max:50',
+            'status' => 'nullable|in:active,inactive',
+            'notes' => 'nullable|string',
         ]);
 
         Staff::create($data);
@@ -83,12 +82,12 @@ class StaffController extends Controller
     {
         $data = $request->validate([
             'first_name' => 'required|string|max:255',
-            'last_name'  => 'required|string|max:255',
-            'email'      => 'nullable|email|max:255',
-            'phone'      => 'nullable|string|max:50',
-            'role'       => 'nullable|string|max:50',
-            'status'     => 'nullable|in:active,inactive',
-            'notes'      => 'nullable|string',
+            'last_name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:50',
+            'role' => 'nullable|string|max:50',
+            'status' => 'nullable|in:active,inactive',
+            'notes' => 'nullable|string',
         ]);
 
         $staff->update($data);
@@ -99,6 +98,7 @@ class StaffController extends Controller
     public function destroy(Staff $staff): RedirectResponse
     {
         $staff->delete();
+
         return redirect('/admin/staff')->with('success', 'Staff member deleted.');
     }
 }

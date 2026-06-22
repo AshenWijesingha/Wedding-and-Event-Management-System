@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,8 +39,8 @@ class CustomFieldValue extends Model
     public function getTypedValueAttribute()
     {
         $field = $this->customField;
-        
-        if (!$field) {
+
+        if (! $field) {
             return $this->value;
         }
 
@@ -49,7 +50,7 @@ class CustomFieldValue extends Model
             case 'boolean':
                 return (bool) $this->value;
             case 'date':
-                return $this->value ? \Carbon\Carbon::parse($this->value) : null;
+                return $this->value ? Carbon::parse($this->value) : null;
             case 'multiselect':
             case 'checkbox':
                 return json_decode($this->value, true) ?? [];

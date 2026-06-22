@@ -10,11 +10,13 @@ use Illuminate\Support\Facades\Storage;
 class QuotationService
 {
     private PricingService $pricingService;
+
     private BrandingService $brandingService;
+
     private SettingsService $settingsService;
 
     public function __construct(
-        PricingService $pricingService, 
+        PricingService $pricingService,
         BrandingService $brandingService,
         SettingsService $settingsService
     ) {
@@ -144,7 +146,7 @@ class QuotationService
      */
     public function markAsViewed(Quotation $quotation): Quotation
     {
-        if (!$quotation->viewed_at) {
+        if (! $quotation->viewed_at) {
             $quotation->update([
                 'status' => 'viewed',
                 'viewed_at' => now(),
@@ -159,7 +161,7 @@ class QuotationService
      */
     public function accept(Quotation $quotation): Quotation
     {
-        if (!$quotation->canBeAccepted()) {
+        if (! $quotation->canBeAccepted()) {
             throw new \InvalidArgumentException('Quotation cannot be accepted: status is ' . $quotation->status . ' or it has expired.');
         }
 

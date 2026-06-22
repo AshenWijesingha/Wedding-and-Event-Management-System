@@ -18,8 +18,7 @@ class ClientController extends Controller
     {
         $clients = Client::query()
             ->when($request->search, fn ($q, $search) => $q->search($search))
-            ->when($request->tag, fn ($q, $tag) =>
-                $q->whereJsonContains('tags', $tag)
+            ->when($request->tag, fn ($q, $tag) => $q->whereJsonContains('tags', $tag)
             )
             ->withCount('bookings')
             ->orderBy($request->sort_by ?? 'first_name', $request->sort_dir ?? 'asc')

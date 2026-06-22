@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\VenueResource;
 use App\Models\Booking;
 use App\Models\Venue;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -22,12 +23,10 @@ class VenueController extends Controller
     public function index(Request $request): Response
     {
         $venues = Venue::query()
-            ->when($request->search, fn ($q, $search) =>
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
+            ->when($request->search, fn ($q, $search) => $q->where('name', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%")
             )
-            ->when($request->status, fn ($q, $status) =>
-                $q->where('status', $status)
+            ->when($request->status, fn ($q, $status) => $q->where('status', $status)
             )
             ->orderBy('name')
             ->paginate(15)
@@ -71,7 +70,7 @@ class VenueController extends Controller
 
         try {
             Venue::create($validated);
-        } catch (\Illuminate\Database\UniqueConstraintViolationException $e) {
+        } catch (UniqueConstraintViolationException $e) {
             return back()->withErrors(['slug' => 'A venue with this slug already exists.'])->withInput();
         }
 

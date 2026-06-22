@@ -20,8 +20,7 @@ class PaymentController extends Controller
     public function __construct(
         private PaymentService $payments,
         private BrandingService $branding,
-    ) {
-    }
+    ) {}
 
     public function index(Request $request): Response
     {
@@ -33,15 +32,15 @@ class PaymentController extends Controller
             ->withQueryString();
 
         $summary = [
-            'total'      => Payment::completed()->sum('amount'),
+            'total' => Payment::completed()->sum('amount'),
             'this_month' => Payment::completed()->whereMonth('payment_date', now()->month)->whereYear('payment_date', now()->year)->sum('amount'),
-            'pending'    => Payment::where('status', 'pending')->sum('amount'),
+            'pending' => Payment::where('status', 'pending')->sum('amount'),
         ];
 
         return Inertia::render('Payments/Index', [
             'payments' => PaymentResource::collection($payments),
-            'filters'  => $request->only(['status', 'method']),
-            'summary'  => $summary,
+            'filters' => $request->only(['status', 'method']),
+            'summary' => $summary,
         ]);
     }
 
@@ -54,11 +53,11 @@ class PaymentController extends Controller
 
         return Inertia::render('Payments/Create', [
             'booking' => [
-                'id'             => $booking->id,
+                'id' => $booking->id,
                 'booking_number' => $booking->booking_number,
-                'client_name'    => $booking->client?->full_name,
-                'total_amount'   => (float) $booking->total_amount,
-                'paid_amount'    => (float) $booking->paid_amount,
+                'client_name' => $booking->client?->full_name,
+                'total_amount' => (float) $booking->total_amount,
+                'paid_amount' => (float) $booking->paid_amount,
                 'balance_amount' => (float) $booking->balance_amount,
             ],
         ]);
@@ -70,13 +69,13 @@ class PaymentController extends Controller
     public function store(Request $request, Booking $booking): RedirectResponse
     {
         $data = $request->validate([
-            'amount'           => 'required|numeric|min:0.01',
-            'payment_method'   => 'required|string|in:cash,bank_transfer,cheque,card',
-            'payment_date'     => 'nullable|date',
+            'amount' => 'required|numeric|min:0.01',
+            'payment_method' => 'required|string|in:cash,bank_transfer,cheque,card',
+            'payment_date' => 'nullable|date',
             'installment_name' => 'nullable|string|max:100',
             'reference_number' => 'nullable|string|max:100',
-            'notes'            => 'nullable|string|max:1000',
-            'allow_overpay'    => 'sometimes|boolean',
+            'notes' => 'nullable|string|max:1000',
+            'allow_overpay' => 'sometimes|boolean',
         ]);
 
         $balance = (float) $booking->balance_amount;
@@ -111,7 +110,7 @@ class PaymentController extends Controller
             $payment->load(['booking', 'client']);
 
             $pdf = Pdf::loadView('pdf.receipt', [
-                'payment'  => $payment,
+                'payment' => $payment,
                 'branding' => $this->branding->getBranding(),
             ])->setPaper('a4', 'portrait');
 

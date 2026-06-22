@@ -27,24 +27,24 @@ class BookingEditTest extends TestCase
 
         return Booking::factory()->create(array_merge([
             'tenant_id' => $tid,
-            'venue_id'  => Venue::factory()->create(['tenant_id' => $tid])->id,
+            'venue_id' => Venue::factory()->create(['tenant_id' => $tid])->id,
             'client_id' => Client::factory()->create(['tenant_id' => $tid])->id,
             'event_date' => now()->addDays(30)->toDateString(),
-            'status'    => 'tentative',
+            'status' => 'tentative',
         ], $attrs));
     }
 
     private function payload(Booking $b, array $overrides = []): array
     {
         return array_merge([
-            'client_id'    => $b->client_id,
-            'venue_id'     => $b->venue_id,
-            'event_type'   => 'wedding',
-            'event_date'   => $b->event_date->toDateString(),
-            'guest_count'  => 150,
+            'client_id' => $b->client_id,
+            'venue_id' => $b->venue_id,
+            'event_type' => 'wedding',
+            'event_date' => $b->event_date->toDateString(),
+            'guest_count' => 150,
             'total_amount' => 500000,
-            'paid_amount'  => 100000,
-            'status'       => 'confirmed',
+            'paid_amount' => 100000,
+            'status' => 'confirmed',
         ], $overrides);
     }
 
@@ -67,12 +67,12 @@ class BookingEditTest extends TestCase
             ->assertRedirect();
 
         $this->assertDatabaseHas('bookings', [
-            'id'             => $booking->id,
-            'guest_count'    => 150,
-            'total_amount'   => 500000,
-            'paid_amount'    => 100000,
+            'id' => $booking->id,
+            'guest_count' => 150,
+            'total_amount' => 500000,
+            'paid_amount' => 100000,
             'balance_amount' => 400000,
-            'status'         => 'confirmed',
+            'status' => 'confirmed',
         ]);
     }
 
@@ -91,10 +91,10 @@ class BookingEditTest extends TestCase
         // A different booking on the same venue + a new target date.
         $targetDate = now()->addDays(60)->toDateString();
         Booking::factory()->create([
-            'tenant_id'  => $this->admin->tenant_id,
-            'venue_id'   => $booking->venue_id,
+            'tenant_id' => $this->admin->tenant_id,
+            'venue_id' => $booking->venue_id,
             'event_date' => $targetDate,
-            'status'     => 'confirmed',
+            'status' => 'confirmed',
         ]);
 
         $this->actingAs($this->admin)

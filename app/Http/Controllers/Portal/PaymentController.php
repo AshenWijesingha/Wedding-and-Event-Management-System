@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Portal;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\PayHereWebhookController;
 use App\Models\Booking;
 use App\Models\Client;
 use App\Models\Payment;
 use App\Models\Tenant;
 use App\Services\BrandingService;
 use App\Services\PayHereService;
+use App\Services\PaymentService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,13 +21,11 @@ use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 /**
  * Client-portal PayHere checkout. Creates the pending Payment and hands the
  * browser to PayHere's hosted checkout. Never marks a payment paid — the
- * webhook ({@see \App\Http\Controllers\PayHereWebhookController}) is authoritative.
+ * webhook ({@see PayHereWebhookController}) is authoritative.
  */
 class PaymentController extends Controller
 {
-    public function __construct(private PayHereService $payhere)
-    {
-    }
+    public function __construct(private PayHereService $payhere) {}
 
     /**
      * Validate ownership + amount, create a pending Payment, and render the
@@ -35,7 +35,7 @@ class PaymentController extends Controller
     {
         $data = $request->validate([
             'booking_id' => 'required|integer',
-            'amount'     => 'required|numeric|min:0.01',
+            'amount' => 'required|numeric|min:0.01',
         ]);
 
         $clientId = $this->clientId();
@@ -56,16 +56,16 @@ class PaymentController extends Controller
         $currency = $this->payhere->credentialsFor($tenant)['currency'] ?? 'LKR';
 
         $payment = Payment::create([
-            'tenant_id'        => $booking->tenant_id,
-            'payment_number'   => app(\App\Services\PaymentService::class)->generatePaymentNumber($booking->tenant_id),
-            'booking_id'       => $booking->id,
-            'client_id'        => $clientId,
+            'tenant_id' => $booking->tenant_id,
+            'payment_number' => app(PaymentService::class)->generatePaymentNumber($booking->tenant_id),
+            'booking_id' => $booking->id,
+            'client_id' => $clientId,
             'installment_name' => 'Online Payment',
-            'amount'           => $data['amount'],
-            'currency'         => $currency,
-            'payment_method'   => 'payhere',
-            'gateway'          => 'payhere',
-            'status'           => 'pending',
+            'amount' => $data['amount'],
+            'currency' => $currency,
+            'payment_method' => 'payhere',
+            'gateway' => 'payhere',
+            'status' => 'pending',
         ]);
 
         $payment->setRelation('booking', $booking);
@@ -113,7 +113,7 @@ class PaymentController extends Controller
         $payment->load(['booking', 'client']);
 
         $pdf = Pdf::loadView('pdf.receipt', [
-            'payment'  => $payment,
+            'payment' => $payment,
             'branding' => $branding->getBranding(),
         ])->setPaper('a4', 'portrait');
 
@@ -131,12 +131,12 @@ class PaymentController extends Controller
 
         $client = $user->client;
         if ($client === null) {
-            $parts  = preg_split('/\s+/', trim($user->name ?? ''), 2);
+            $parts = preg_split('/\s+/', trim($user->name ?? ''), 2);
             $client = $user->client()->create([
-                'tenant_id'  => $user->tenant_id ?? optional(Tenant::current())->id,
+                'tenant_id' => $user->tenant_id ?? optional(Tenant::current())->id,
                 'first_name' => $parts[0] ?? ($user->name ?? 'Guest'),
-                'last_name'  => $parts[1] ?? '',
-                'email'      => $user->email,
+                'last_name' => $parts[1] ?? '',
+                'email' => $user->email,
             ]);
         }
 

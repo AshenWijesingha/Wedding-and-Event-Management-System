@@ -38,14 +38,14 @@ class ClientCrudTest extends TestCase
     {
         $response = $this->actingAs($this->admin)->post('/admin/clients', [
             'first_name' => 'Nora',
-            'last_name'  => 'Perera',
-            'email'      => 'nora@example.lk',
-            'phone'      => '0771234567',
+            'last_name' => 'Perera',
+            'email' => 'nora@example.lk',
+            'phone' => '0771234567',
         ]);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('clients', [
-            'email'     => 'nora@example.lk',
+            'email' => 'nora@example.lk',
             'tenant_id' => $this->tid(),
         ]);
     }
@@ -91,8 +91,8 @@ class ClientCrudTest extends TestCase
         $this->actingAs($this->admin)
             ->put("/admin/clients/{$client->id}", [
                 'first_name' => 'New',
-                'last_name'  => $client->last_name,
-                'email'      => $client->email,
+                'last_name' => $client->last_name,
+                'email' => $client->email,
             ])
             ->assertRedirect();
 
@@ -106,8 +106,8 @@ class ClientCrudTest extends TestCase
         $this->actingAs($this->admin)
             ->put("/admin/clients/{$client->id}", [
                 'first_name' => $client->first_name,
-                'last_name'  => $client->last_name,
-                'email'      => 'keep@example.lk',
+                'last_name' => $client->last_name,
+                'email' => 'keep@example.lk',
             ])
             ->assertSessionHasNoErrors();
     }

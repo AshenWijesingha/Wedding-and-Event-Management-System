@@ -17,10 +17,9 @@ class StaffController extends Controller
     public function index(Request $request): JsonResponse
     {
         $staff = Staff::query()
-            ->when($request->search, fn ($q, $s) =>
-                $q->where('first_name', 'like', "%{$s}%")
-                  ->orWhere('last_name', 'like', "%{$s}%")
-                  ->orWhere('email', 'like', "%{$s}%")
+            ->when($request->search, fn ($q, $s) => $q->where('first_name', 'like', "%{$s}%")
+                ->orWhere('last_name', 'like', "%{$s}%")
+                ->orWhere('email', 'like', "%{$s}%")
             )
             ->when($request->role, fn ($q, $role) => $q->where('role', $role))
             ->when($request->status, fn ($q, $status) => $q->where('status', $status))
@@ -35,12 +34,12 @@ class StaffController extends Controller
     {
         $data = $request->validate([
             'first_name' => 'required|string|max:255',
-            'last_name'  => 'required|string|max:255',
-            'email'      => 'nullable|email|max:255',
-            'phone'      => 'nullable|string|max:50',
-            'role'       => 'nullable|string|max:50',
-            'status'     => 'nullable|in:active,inactive',
-            'notes'      => 'nullable|string',
+            'last_name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:50',
+            'role' => 'nullable|string|max:50',
+            'status' => 'nullable|in:active,inactive',
+            'notes' => 'nullable|string',
         ]);
 
         $staff = Staff::create($data);
@@ -57,12 +56,12 @@ class StaffController extends Controller
     {
         $data = $request->validate([
             'first_name' => 'sometimes|string|max:255',
-            'last_name'  => 'sometimes|string|max:255',
-            'email'      => 'nullable|email|max:255',
-            'phone'      => 'nullable|string|max:50',
-            'role'       => 'nullable|string|max:50',
-            'status'     => 'nullable|in:active,inactive',
-            'notes'      => 'nullable|string',
+            'last_name' => 'sometimes|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:50',
+            'role' => 'nullable|string|max:50',
+            'status' => 'nullable|in:active,inactive',
+            'notes' => 'nullable|string',
         ]);
 
         $staff->update($data);
@@ -73,6 +72,7 @@ class StaffController extends Controller
     public function destroy(Staff $staff): JsonResponse
     {
         $staff->delete();
+
         return $this->success(null, 'Staff member deleted.');
     }
 

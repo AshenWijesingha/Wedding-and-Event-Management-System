@@ -7,9 +7,11 @@ use App\Http\Resources\QuotationResource;
 use App\Http\Traits\ApiResponse;
 use App\Models\Quotation;
 use App\Services\QuotationService;
+use App\Support\TenantRule;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class QuotationController extends Controller
 {
@@ -20,18 +22,14 @@ class QuotationController extends Controller
     public function index(Request $request): JsonResponse
     {
         $quotations = Quotation::with(['client', 'venue'])
-            ->when($request->status, fn ($q, $status) =>
-                $q->where('status', $status)
+            ->when($request->status, fn ($q, $status) => $q->where('status', $status)
             )
-            ->when($request->client_id, fn ($q, $clientId) =>
-                $q->where('client_id', $clientId)
+            ->when($request->client_id, fn ($q, $clientId) => $q->where('client_id', $clientId)
             )
-            ->when($request->search, fn ($q, $search) =>
-                $q->where('quotation_number', 'like', "%{$search}%")
-                  ->orWhereHas('client', fn ($cq) =>
-                      $cq->where('first_name', 'like', "%{$search}%")
-                         ->orWhere('last_name', 'like', "%{$search}%")
-                  )
+            ->when($request->search, fn ($q, $search) => $q->where('quotation_number', 'like', "%{$search}%")
+                ->orWhereHas('client', fn ($cq) => $cq->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                )
             )
             ->orderBy($request->sort_by ?? 'created_at', $request->sort_dir ?? 'desc')
             ->paginate($request->per_page ?? 15);
@@ -42,9 +40,9 @@ class QuotationController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'client_id' => ['required', \App\Support\TenantRule::exists('clients')],
-            'venue_id' => ['required', \App\Support\TenantRule::exists('venues')],
-            'inquiry_id' => ['nullable', \App\Support\TenantRule::exists('inquiries')],
+            'client_id' => ['required', TenantRule::exists('clients')],
+            'venue_id' => ['required', TenantRule::exists('venues')],
+            'inquiry_id' => ['nullable', TenantRule::exists('inquiries')],
             'event_date' => 'required|date',
             'guest_count' => 'required|integer|min:1',
             'items' => 'required|array|min:1',
@@ -79,7 +77,7 @@ class QuotationController extends Controller
     public function update(Request $request, Quotation $quotation): JsonResponse
     {
         $validated = $request->validate([
-            'venue_id' => ['sometimes', \App\Support\TenantRule::exists('venues')],
+            'venue_id' => ['sometimes', TenantRule::exists('venues')],
             'event_date' => 'sometimes|date',
             'guest_count' => 'sometimes|integer|min:1',
             'items' => 'sometimes|array|min:1',
@@ -114,7 +112,7 @@ class QuotationController extends Controller
 
     public function send(Quotation $quotation): JsonResponse
     {
-        if (!in_array($quotation->status, ['draft', 'sent'])) {
+        if (! in_array($quotation->status, ['draft', 'sent'])) {
             return $this->error('Only draft quotations can be sent.', 422);
         }
 
@@ -126,7 +124,7 @@ class QuotationController extends Controller
         return $this->success(new QuotationResource($quotation->fresh()));
     }
 
-    public function pdf(Quotation $quotation): \Illuminate\Http\Response
+    public function pdf(Quotation $quotation): Response
     {
         $quotation->load(['client', 'venue', 'preparedBy']);
 

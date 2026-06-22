@@ -18,7 +18,7 @@ class QuotationSentMail extends Mailable implements ShouldQueue
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'Your quotation '.$this->quotation->quotation_number);
+        return new Envelope(subject: 'Your quotation ' . $this->quotation->quotation_number);
     }
 
     public function content(): Content

@@ -17,12 +17,10 @@ class PackageController extends Controller
     public function index(Request $request): JsonResponse
     {
         $packages = Package::query()
-            ->when($request->search, fn ($q, $search) =>
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
+            ->when($request->search, fn ($q, $search) => $q->where('name', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%")
             )
-            ->when($request->status, fn ($q, $status) =>
-                $q->where('status', $status)
+            ->when($request->status, fn ($q, $status) => $q->where('status', $status)
             )
             ->orderBy($request->sort_by ?? 'name', $request->sort_dir ?? 'asc')
             ->paginate($request->per_page ?? 15);

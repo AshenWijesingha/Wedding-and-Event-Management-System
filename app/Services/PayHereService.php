@@ -27,10 +27,10 @@ class PayHereService
 
         if (is_array($settings) && ! empty($settings['merchant_id']) && ! empty($settings['merchant_secret'])) {
             return [
-                'merchant_id'     => (string) $settings['merchant_id'],
+                'merchant_id' => (string) $settings['merchant_id'],
                 'merchant_secret' => $this->decryptSecret($settings['merchant_secret']),
-                'sandbox'         => (bool) ($settings['sandbox'] ?? true),
-                'currency'        => $settings['currency'] ?? 'LKR',
+                'sandbox' => (bool) ($settings['sandbox'] ?? true),
+                'currency' => $settings['currency'] ?? 'LKR',
             ];
         }
 
@@ -38,10 +38,10 @@ class PayHereService
 
         if (! empty($config['merchant_id']) && ! empty($config['merchant_secret'])) {
             return [
-                'merchant_id'     => (string) $config['merchant_id'],
+                'merchant_id' => (string) $config['merchant_id'],
                 'merchant_secret' => (string) $config['merchant_secret'],
-                'sandbox'         => (bool) ($config['sandbox'] ?? true),
-                'currency'        => $config['currency'] ?? 'LKR',
+                'sandbox' => (bool) ($config['sandbox'] ?? true),
+                'currency' => $config['currency'] ?? 'LKR',
             ];
         }
 
@@ -74,15 +74,15 @@ class PayHereService
     public function buildCheckout(Payment $payment): array
     {
         $tenant = $payment->booking?->tenant ?? Tenant::find($payment->tenant_id);
-        $creds  = $tenant ? $this->credentialsFor($tenant) : null;
+        $creds = $tenant ? $this->credentialsFor($tenant) : null;
 
         if ($creds === null) {
             throw new \RuntimeException('PayHere is not configured for this tenant.');
         }
 
-        $orderId   = (string) $payment->id;
+        $orderId = (string) $payment->id;
         $amount2dp = number_format((float) $payment->amount, 2, '.', '');
-        $currency  = $payment->currency ?: $creds['currency'];
+        $currency = $payment->currency ?: $creds['currency'];
 
         $hash = strtoupper(md5(
             $creds['merchant_id']
@@ -92,26 +92,26 @@ class PayHereService
             . strtoupper(md5($creds['merchant_secret']))
         ));
 
-        $client  = $payment->client;
+        $client = $payment->client;
         $booking = $payment->booking;
 
         $fields = [
             'merchant_id' => $creds['merchant_id'],
-            'return_url'  => route('portal.payments.return'),
-            'cancel_url'  => route('portal.payments.cancel', ['payment' => $payment->id]),
-            'notify_url'  => route('payhere.notify'),
-            'order_id'    => $orderId,
-            'items'       => $payment->installment_name ?: ('Booking ' . ($booking?->booking_number ?? $orderId)),
-            'currency'    => $currency,
-            'amount'      => $amount2dp,
-            'first_name'  => (string) ($client?->first_name ?? ''),
-            'last_name'   => (string) ($client?->last_name ?? ''),
-            'email'       => (string) ($client?->email ?? ''),
-            'phone'       => (string) ($client?->phone ?? ''),
-            'address'     => (string) ($client?->address ?? ''),
-            'city'        => (string) ($client?->city ?? ''),
-            'country'     => 'Sri Lanka',
-            'hash'        => $hash,
+            'return_url' => route('portal.payments.return'),
+            'cancel_url' => route('portal.payments.cancel', ['payment' => $payment->id]),
+            'notify_url' => route('payhere.notify'),
+            'order_id' => $orderId,
+            'items' => $payment->installment_name ?: ('Booking ' . ($booking?->booking_number ?? $orderId)),
+            'currency' => $currency,
+            'amount' => $amount2dp,
+            'first_name' => (string) ($client?->first_name ?? ''),
+            'last_name' => (string) ($client?->last_name ?? ''),
+            'email' => (string) ($client?->email ?? ''),
+            'phone' => (string) ($client?->phone ?? ''),
+            'address' => (string) ($client?->address ?? ''),
+            'city' => (string) ($client?->city ?? ''),
+            'country' => 'Sri Lanka',
+            'hash' => $hash,
         ];
 
         return [
@@ -150,9 +150,9 @@ class PayHereService
     public function mapStatusCode(int $code): string
     {
         return match ($code) {
-            2       => 'completed',
-            0       => 'pending',
-            -3      => 'refunded',
+            2 => 'completed',
+            0 => 'pending',
+            -3 => 'refunded',
             default => 'failed', // -1 canceled, -2 failed
         };
     }

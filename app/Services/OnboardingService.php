@@ -15,6 +15,7 @@ use App\Models\Venue;
 class OnboardingService
 {
     private const DEFAULT_PRIMARY = '#6366f1';
+
     private const REDIRECT_ROLES = ['super_admin', 'tenant_owner', 'admin'];
 
     /**
@@ -26,9 +27,9 @@ class OnboardingService
     {
         $steps = [
             'branding' => $this->brandingDone($tenant),
-            'venue'    => Venue::withoutGlobalScopes()->where('tenant_id', $tenant->id)->exists(),
-            'package'  => Package::withoutGlobalScopes()->where('tenant_id', $tenant->id)->exists(),
-            'team'     => User::withoutGlobalScopes()->where('tenant_id', $tenant->id)
+            'venue' => Venue::withoutGlobalScopes()->where('tenant_id', $tenant->id)->exists(),
+            'package' => Package::withoutGlobalScopes()->where('tenant_id', $tenant->id)->exists(),
+            'team' => User::withoutGlobalScopes()->where('tenant_id', $tenant->id)
                 ->whereIn('role', ['admin', 'manager', 'staff'])->exists(),
         ];
 
@@ -40,13 +41,13 @@ class OnboardingService
      */
     public function state(Tenant $tenant): array
     {
-        $progress  = $this->progress($tenant);
-        $meta      = $tenant->getSetting('onboarding', []) ?? [];
+        $progress = $this->progress($tenant);
+        $meta = $tenant->getSetting('onboarding', []) ?? [];
         $dismissed = (bool) ($meta['dismissed'] ?? false);
 
         return $progress + [
-            'seen'           => (bool) ($meta['seen'] ?? false),
-            'dismissed'      => $dismissed,
+            'seen' => (bool) ($meta['seen'] ?? false),
+            'dismissed' => $dismissed,
             'show_checklist' => ! $progress['completed'] && ! $dismissed,
         ];
     }

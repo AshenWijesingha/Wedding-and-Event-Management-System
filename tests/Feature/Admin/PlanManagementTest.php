@@ -41,14 +41,14 @@ class PlanManagementTest extends TestCase
     public function test_super_admin_can_create_plan_with_features_and_limits(): void
     {
         $this->actingAs($this->superAdmin)->post('/admin/plans', [
-            'name'          => 'Professional',
-            'slug'          => 'professional',
+            'name' => 'Professional',
+            'slug' => 'professional',
             'price_monthly' => 49,
-            'price_yearly'  => 490,
-            'features'      => ['Unlimited reports', '', 'Custom branding'],
-            'limits'        => ['users' => 10, 'venues' => '', 'bookings' => 500],
-            'is_active'     => true,
-            'sort_order'    => 1,
+            'price_yearly' => 490,
+            'features' => ['Unlimited reports', '', 'Custom branding'],
+            'limits' => ['users' => 10, 'venues' => '', 'bookings' => 500],
+            'is_active' => true,
+            'sort_order' => 1,
         ])->assertSessionHasNoErrors()->assertRedirect('/admin/plans');
 
         $plan = Plan::where('slug', 'professional')->first();
@@ -64,14 +64,14 @@ class PlanManagementTest extends TestCase
         $plan = Plan::factory()->create(['name' => 'Old', 'price_monthly' => 10]);
 
         $this->actingAs($this->superAdmin)->put("/admin/plans/{$plan->id}", [
-            'name'          => 'New',
-            'slug'          => $plan->slug,
+            'name' => 'New',
+            'slug' => $plan->slug,
             'price_monthly' => 20,
-            'price_yearly'  => 200,
-            'features'      => ['A'],
-            'limits'        => ['users' => 5],
-            'is_active'     => true,
-            'sort_order'    => 0,
+            'price_yearly' => 200,
+            'features' => ['A'],
+            'limits' => ['users' => 5],
+            'is_active' => true,
+            'sort_order' => 0,
         ])->assertSessionHasNoErrors();
 
         $plan->refresh();

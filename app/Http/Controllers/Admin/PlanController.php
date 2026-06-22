@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Plan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -27,16 +26,16 @@ class PlanController extends Controller
             ->orderBy('name')
             ->get()
             ->map(fn (Plan $p) => [
-                'id'            => $p->id,
-                'name'          => $p->name,
-                'slug'          => $p->slug,
-                'description'   => $p->description,
+                'id' => $p->id,
+                'name' => $p->name,
+                'slug' => $p->slug,
+                'description' => $p->description,
                 'price_monthly' => (float) $p->price_monthly,
-                'price_yearly'  => (float) $p->price_yearly,
-                'features'      => $p->features ?? [],
-                'limits'        => $p->limits ?? [],
-                'is_active'     => $p->is_active,
-                'sort_order'    => $p->sort_order,
+                'price_yearly' => (float) $p->price_yearly,
+                'features' => $p->features ?? [],
+                'limits' => $p->limits ?? [],
+                'is_active' => $p->is_active,
+                'sort_order' => $p->sort_order,
                 'tenants_count' => $p->tenants_count,
             ]);
 
@@ -61,16 +60,16 @@ class PlanController extends Controller
     {
         return Inertia::render('Plans/Edit', [
             'plan' => [
-                'id'            => $plan->id,
-                'name'          => $plan->name,
-                'slug'          => $plan->slug,
-                'description'   => $plan->description,
+                'id' => $plan->id,
+                'name' => $plan->name,
+                'slug' => $plan->slug,
+                'description' => $plan->description,
                 'price_monthly' => (float) $plan->price_monthly,
-                'price_yearly'  => (float) $plan->price_yearly,
-                'features'      => $plan->features ?? [],
-                'limits'        => $plan->limits ?? [],
-                'is_active'     => $plan->is_active,
-                'sort_order'    => $plan->sort_order,
+                'price_yearly' => (float) $plan->price_yearly,
+                'features' => $plan->features ?? [],
+                'limits' => $plan->limits ?? [],
+                'is_active' => $plan->is_active,
+                'sort_order' => $plan->sort_order,
             ],
             'limitKeys' => self::LIMIT_KEYS,
         ]);
@@ -111,17 +110,17 @@ class PlanController extends Controller
         ]);
 
         $validated = $request->validate([
-            'name'          => 'required|string|max:255',
-            'slug'          => ['required', 'string', 'max:255', 'alpha_dash', Rule::unique('plans', 'slug')->ignore($plan?->id)],
-            'description'   => 'nullable|string|max:1000',
+            'name' => 'required|string|max:255',
+            'slug' => ['required', 'string', 'max:255', 'alpha_dash', Rule::unique('plans', 'slug')->ignore($plan?->id)],
+            'description' => 'nullable|string|max:1000',
             'price_monthly' => 'required|numeric|min:0',
-            'price_yearly'  => 'required|numeric|min:0',
-            'features'      => 'array',
-            'features.*'    => 'nullable|string|max:255',
-            'limits'        => 'array',
-            'limits.*'      => 'nullable|integer|min:0',
-            'is_active'     => 'boolean',
-            'sort_order'    => 'integer|min:0',
+            'price_yearly' => 'required|numeric|min:0',
+            'features' => 'array',
+            'features.*' => 'nullable|string|max:255',
+            'limits' => 'array',
+            'limits.*' => 'nullable|integer|min:0',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer|min:0',
         ]);
 
         // Keep only recognized limit keys with a real value.
@@ -132,15 +131,15 @@ class PlanController extends Controller
             ->all();
 
         return [
-            'name'          => $validated['name'],
-            'slug'          => $validated['slug'],
-            'description'   => $validated['description'] ?? null,
+            'name' => $validated['name'],
+            'slug' => $validated['slug'],
+            'description' => $validated['description'] ?? null,
             'price_monthly' => $validated['price_monthly'],
-            'price_yearly'  => $validated['price_yearly'],
-            'features'      => array_values(array_filter($validated['features'] ?? [], fn ($f) => filled($f))),
-            'limits'        => $limits,
-            'is_active'     => $request->boolean('is_active', true),
-            'sort_order'    => $validated['sort_order'] ?? 0,
+            'price_yearly' => $validated['price_yearly'],
+            'features' => array_values(array_filter($validated['features'] ?? [], fn ($f) => filled($f))),
+            'limits' => $limits,
+            'is_active' => $request->boolean('is_active', true),
+            'sort_order' => $validated['sort_order'] ?? 0,
         ];
     }
 }

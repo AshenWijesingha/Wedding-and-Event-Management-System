@@ -18,7 +18,7 @@ class BookingConfirmedMail extends Mailable implements ShouldQueue
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'Booking confirmed: '.$this->booking->booking_number);
+        return new Envelope(subject: 'Booking confirmed: ' . $this->booking->booking_number);
     }
 
     public function content(): Content

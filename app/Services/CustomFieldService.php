@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\CustomField;
 use App\Models\CustomFieldValue;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class CustomFieldService
@@ -11,7 +12,7 @@ class CustomFieldService
     /**
      * Get all custom fields for an entity type.
      */
-    public function getFieldsFor(string $entityType): \Illuminate\Database\Eloquent\Collection
+    public function getFieldsFor(string $entityType): Collection
     {
         return CustomField::where('entity_type', $entityType)
             ->where('is_active', true)
@@ -51,7 +52,7 @@ class CustomFieldService
     {
         foreach ($values as $fieldSlug => $value) {
             $field = CustomField::where('slug', $fieldSlug)->first();
-            if (!$field) {
+            if (! $field) {
                 continue;
             }
 
@@ -105,6 +106,7 @@ class CustomFieldService
     public function updateField(CustomField $field, array $data): CustomField
     {
         $field->update($data);
+
         return $field;
     }
 
@@ -115,7 +117,7 @@ class CustomFieldService
     {
         // Delete all values first
         $field->values()->delete();
-        
+
         return $field->delete();
     }
 
