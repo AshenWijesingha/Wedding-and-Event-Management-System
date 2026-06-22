@@ -14,6 +14,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Models\Venue;
+use Database\Seeders\Data\SriLankaHotels;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -95,24 +96,9 @@ class ShowcaseSeeder extends Seeder
 
     private function seedVenues(int $tid)
     {
-        $named = [
-            ['name' => 'The Grand Pavilion',        'capacity_min' => 150, 'capacity_max' => 600, 'base_price' => 1800000],
-            ['name' => 'Lakeside Crystal Hall',     'capacity_min' => 100, 'capacity_max' => 450, 'base_price' => 1400000],
-            ['name' => 'Emerald Garden Terrace',    'capacity_min' => 40,  'capacity_max' => 200, 'base_price' => 750000],
-            ['name' => 'Skyline Rooftop Lounge',    'capacity_min' => 50,  'capacity_max' => 180, 'base_price' => 950000],
-            ['name' => 'Colonial Courtyard',        'capacity_min' => 30,  'capacity_max' => 150, 'base_price' => 600000],
-            ['name' => 'Marina Bay Ballroom',       'capacity_min' => 120, 'capacity_max' => 500, 'base_price' => 1600000],
-            ['name' => 'Heritage Manor Lawns',      'capacity_min' => 80,  'capacity_max' => 350, 'base_price' => 1100000],
-            ['name' => 'Sapphire Banquet Suite',    'capacity_min' => 60,  'capacity_max' => 250, 'base_price' => 850000],
-            ['name' => 'Palm Grove Beachfront',     'capacity_min' => 40,  'capacity_max' => 220, 'base_price' => 1250000],
-            ['name' => 'Orchid Conference Center',  'capacity_min' => 100, 'capacity_max' => 400, 'base_price' => 700000],
-            ['name' => 'Velvet Rose Hall',          'capacity_min' => 50,  'capacity_max' => 200, 'base_price' => 680000],
-            ['name' => 'Highland Vista Retreat',    'capacity_min' => 30,  'capacity_max' => 120, 'base_price' => 900000],
-        ];
-
-        return collect($named)->map(fn ($v) => Venue::factory()->create($v + [
+        // Real leading Sri Lankan hotels and their reception halls (shared source).
+        return collect(SriLankaHotels::halls())->map(fn ($v) => Venue::factory()->create($v + [
             'tenant_id' => $tid,
-            'slug'      => Str::slug($v['name']).'-'.Str::lower(Str::random(4)),
         ]));
     }
 

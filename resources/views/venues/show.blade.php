@@ -64,12 +64,12 @@
                         @endif
                         @if($venue->base_price)
                             <div class="flex items-center gap-1 font-semibold text-gray-900">
-                                From ${{ number_format($venue->base_price) }}
+                                From Rs {{ number_format($venue->base_price) }}
                             </div>
                         @endif
                         @if($venue->weekend_surcharge)
                             <div class="flex items-center gap-1 text-amber-600">
-                                +${{ number_format($venue->weekend_surcharge) }} weekend surcharge
+                                + Rs {{ number_format($venue->weekend_surcharge) }} weekend surcharge
                             </div>
                         @endif
                     </div>
