@@ -7,6 +7,7 @@ use App\Http\Resources\BookingResource;
 use App\Mail\BookingConfirmedMail;
 use App\Models\Booking;
 use App\Models\Client;
+use App\Models\Inquiry;
 use App\Models\Package;
 use App\Models\Tenant;
 use App\Models\Vendor;
@@ -43,8 +44,32 @@ class BookingController extends Controller
         ]);
     }
 
-    public function create(): Response
+    public function create(Request $request): Response
     {
+        // Prefill from an inquiry when converting (inquiry -> booking): carry every
+        // known detail forward so staff only fill the gaps (times, deposit, etc.).
+        $prefill = [];
+        if ($request->filled('inquiry_id')) {
+            $inquiry = Inquiry::find($request->integer('inquiry_id'));
+            if ($inquiry) {
+                $venue = $inquiry->venue_id ? Venue::find($inquiry->venue_id) : null;
+                $package = $inquiry->package_id ? Package::find($inquiry->package_id) : null;
+                $total = (float) ($venue->base_price ?? 0) + (float) ($package->base_price ?? 0);
+
+                $prefill = [
+                    'inquiry_id' => $inquiry->id,
+                    'client_id' => $inquiry->client_id,
+                    'venue_id' => $inquiry->venue_id,
+                    'package_id' => $inquiry->package_id,
+                    'event_type' => $inquiry->event_type,
+                    'event_date' => optional($inquiry->preferred_date)->toDateString(),
+                    'guest_count' => $inquiry->guest_count,
+                    'notes' => $inquiry->message,
+                    'total_amount' => $total > 0 ? $total : null,
+                ];
+            }
+        }
+
         return Inertia::render('Bookings/Create', [
             'venues' => Venue::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
             'packages' => Package::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
@@ -52,6 +77,7 @@ class BookingController extends Controller
                 'id' => $c->id,
                 'name' => trim("{$c->first_name} {$c->last_name}"),
             ]),
+            'prefill' => $prefill,
         ]);
     }
 

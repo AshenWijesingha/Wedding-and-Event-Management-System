@@ -10,24 +10,26 @@ const props = defineProps({
     venues: Array,
     packages: Array,
     clients: Array,
+    prefill: { type: Object, default: () => ({}) },
 });
 
 const params = new URLSearchParams(window.location.search);
+const pre = props.prefill ?? {};
 
 const form = useForm({
-    client_id: '',
-    venue_id: params.get('venue') ? Number(params.get('venue')) : '',
-    package_id: '',
-    event_type: 'wedding',
-    event_date: params.get('date') ?? '',
+    client_id: pre.client_id ?? '',
+    venue_id: pre.venue_id ?? (params.get('venue') ? Number(params.get('venue')) : ''),
+    package_id: pre.package_id ?? '',
+    event_type: pre.event_type ?? 'wedding',
+    event_date: pre.event_date ?? (params.get('date') ?? ''),
     setup_time: '',
     event_start_time: '',
     event_end_time: '',
-    guest_count: '',
-    total_amount: '',
+    guest_count: pre.guest_count ?? '',
+    total_amount: pre.total_amount ?? '',
     paid_amount: '',
     status: 'tentative',
-    notes: '',
+    notes: pre.notes ?? '',
 });
 
 const eventTypes = ['wedding', 'corporate', 'birthday', 'anniversary', 'conference', 'other'];
@@ -127,12 +129,12 @@ function submit() {
                         <InputError :message="form.errors.guest_count" class="mt-1" />
                     </div>
                     <div>
-                        <InputLabel for="total_amount" value="Total ($) *" />
+                        <InputLabel for="total_amount" value="Total (Rs) *" />
                         <TextInput id="total_amount" v-model="form.total_amount" type="number" min="0" step="0.01" class="mt-1 block w-full" required />
                         <InputError :message="form.errors.total_amount" class="mt-1" />
                     </div>
                     <div>
-                        <InputLabel for="paid_amount" value="Paid ($)" />
+                        <InputLabel for="paid_amount" value="Paid (Rs)" />
                         <TextInput id="paid_amount" v-model="form.paid_amount" type="number" min="0" step="0.01" class="mt-1 block w-full" />
                         <InputError :message="form.errors.paid_amount" class="mt-1" />
                     </div>
