@@ -98,7 +98,10 @@ const statusColors = {
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-right">
-                                <Link :href="`/admin/inquiries/${inquiry.id}`" class="text-primary hover:text-primary-dark text-sm font-medium">View</Link>
+                                <div class="flex items-center justify-end gap-3">
+                                    <Link :href="`/admin/inquiries/${inquiry.id}`" class="text-primary hover:text-primary-dark text-sm font-medium">View</Link>
+                                    <Link :href="`/admin/bookings/create?inquiry_id=${inquiry.id}`" class="text-ink-muted hover:text-ink text-sm font-medium">Create Booking</Link>
+                                </div>
                             </td>
                         </tr>
                         <tr v-if="!inquiries.data?.length">
