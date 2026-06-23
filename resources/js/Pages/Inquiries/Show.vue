@@ -162,7 +162,7 @@ const statusColors = {
                         <Link :href="`/admin/quotations/create?inquiry_id=${inquiry.id}`" class="block w-full text-center py-2 border border-primary text-primary text-sm font-medium rounded-lg hover:bg-primary/5">
                             Create Quotation
                         </Link>
-                        <Link href="/admin/bookings/create" class="block w-full text-center py-2 border border-border text-ink-muted text-sm font-medium rounded-lg hover:bg-surface-muted">
+                        <Link :href="`/admin/bookings/create?inquiry_id=${inquiry.id}`" class="block w-full text-center py-2 border border-border text-ink-muted text-sm font-medium rounded-lg hover:bg-surface-muted">
                             Create Booking
                         </Link>
                     </div>
