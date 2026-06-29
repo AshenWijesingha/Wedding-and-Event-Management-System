@@ -1,35 +1,58 @@
 # EventPro demo recovery kit (`tools/demo/`)
 
-Four double-click Windows scripts that make the live evaluation safe. They are a
-**recovery + study aid**: they show you exactly what an evaluator changed or
-deleted so you can re-implement it yourself, with a one-click restore as the
-fallback. Full playbook: [`docs/EVALUATION_RECOVERY.md`](../../docs/EVALUATION_RECOVERY.md).
+A **git-free** way to make the live evaluation safe. It captures a known-good
+baseline (sha256 hashes + verbatim copies of every source file), then on demand
+tells you **exactly which files and lines changed or were deleted**, confirms every
+CRUD flow still works, and restores from the baseline — all **offline, without git**.
 
-| Script | What it does | When to run |
-| --- | --- | --- |
-| `doctor.cmd`  | Health check: critical files present, app boots, route table, and the 22-check demo-readiness smoke test. Prints `HEALTHY` or lists every `[FAIL]`. | **First**, whenever something might be broken. |
-| `diff.cmd`    | Shows `git status` + the full diff **versus the `demo-baseline` tag** — every changed/deleted line. | After `doctor` finds a problem, to see *what* was removed. |
-| `restore.cmd` | `restore.cmd path\to\File.php` recovers one file from `demo-baseline`; `restore.cmd` with no argument restores **all** tracked source. | To re-implement by hand (study the diff) or recover instantly (fallback). |
-| `backup.cmd`  | Zips the **entire** project — including the git-ignored `vendor\`, `node_modules\`, `public\build\`, `.env` — to `%USERPROFILE%\EventPro-Backup\`. (The seeded sqlite DB is tracked in git, so the baseline already covers it.) | **Once before the evaluation.** Copy the zip to a USB too. |
+Engine: `lib/Integrity.php` (plain PHP, no framework — runs even if the app is too
+broken to boot). Driven by the `dev:*` artisan commands and the root `dev.cmd`.
 
-## One-time setup (already done if you followed the plan)
+## The one command you need: `dev doctor`
+
+From the project root (or double-click `tools\demo\doctor.cmd`):
 
 ```cmd
-:: from the project root, on a known-good checkout
-git tag -a demo-baseline -m "known-good offline demo state"
-tools\demo\backup.cmd
+dev doctor          :: find changed/deleted code (with line numbers) + run all CRUD tests
+dev run doctor      :: identical ("run" is optional)
+dev doctor --no-tests   :: fast - integrity + offline checks only, skips the test suite
 ```
 
-`diff.cmd` and `restore.cmd` depend on the `demo-baseline` tag. `backup.cmd`
-covers the artifacts that git does not track.
+`dev doctor` reports three sections:
+
+1. **Source integrity vs baseline** — `DELETED`, `MODIFIED` (with the exact
+   `- line` / `+ line` changes), and `ADDED` files. This is the git-free "where did
+   the code change" detector, and it proves the rest of the code is byte-identical
+   to before.
+2. **Offline readiness** — no external font/CDN link crept back, assets built,
+   `.env` on offline drivers, no stale `public/hot`.
+3. **Functional suite** — runs the test suite so every CRUD flow is exercised.
+
+## Commands
+
+| Command | Double-click | Purpose |
+| --- | --- | --- |
+| `dev baseline` | `tools\demo\baseline.cmd` | Capture the current source as the known-good baseline. **Run once before the evaluation** on a healthy checkout. |
+| `dev doctor` | `tools\demo\doctor.cmd` | Full health check (integrity + offline + CRUD tests). |
+| `dev doctor --no-tests` | `tools\demo\diff.cmd` | Fast: just show what changed/was deleted. |
+| `dev restore <path>` | `tools\demo\restore.cmd <path>` | Restore one file from the baseline. |
+| `dev restore --all` | `tools\demo\restore.cmd --all` | Restore every changed/missing file. |
+| — | `tools\demo\backup.cmd` | Zip the whole project (incl. git-ignored `vendor/`, `node_modules/`, `public/build/`, `.env`) as an extra safety net. |
+
+The same actions are available as artisan commands: `php artisan dev:baseline`,
+`php artisan dev:doctor`, `php artisan dev:restore`. If the app is so broken it
+won't boot, `dev doctor` automatically falls back to the standalone checker
+(`php tools/demo/integrity.php --check`) so you can still see what was deleted.
 
 ## The live-evaluation loop
 
-1. Evaluator deletes/edits some code.
-2. `tools\demo\doctor.cmd` → see *that* something broke and roughly where.
-3. `tools\demo\diff.cmd` → see *exactly* which lines/files were removed.
-4. Re-implement the missing code yourself (use the diff as the answer key), **or**
-   `tools\demo\restore.cmd <file>` to recover it.
-5. `tools\demo\doctor.cmd` again → confirm `HEALTHY`.
+1. **Before** the evaluation (healthy code): `dev baseline`.
+2. Evaluator deletes/edits some code.
+3. `dev doctor` → see the exact files/lines that changed, and which CRUD flow broke.
+4. Fix it **by hand** using the listed line changes as the answer key, **or**
+   `dev restore <path>` to recover it.
+5. `dev doctor` again → `HEALTHY`.
 
-All scripts self-locate PHP (PATH, then Laravel Herd-lite) and need no internet.
+The baseline lives in `tools/demo/baseline/` (git-ignored; recreate any time with
+`dev baseline`). Full playbook + architecture map:
+[`docs/EVALUATION_RECOVERY.md`](../../docs/EVALUATION_RECOVERY.md).
