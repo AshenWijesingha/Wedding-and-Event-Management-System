@@ -63,9 +63,9 @@ class DevRestoreCommand extends Command
             return self::SUCCESS;
         }
 
-        $this->info('Restored '.count($done).' file(s):');
+        $this->info('Restored ' . count($done) . ' file(s):');
         foreach ($done as $f) {
-            $this->line('   '.$f);
+            $this->line('   ' . $f);
         }
         $this->line('');
         $this->line('Run `php artisan dev:doctor` to confirm HEALTHY.');

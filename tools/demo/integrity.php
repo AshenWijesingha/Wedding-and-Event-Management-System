@@ -13,8 +13,8 @@
  * engine for the richer (app-booted) experience.
  */
 
-require __DIR__.'/lib/Integrity.php';
-require __DIR__.'/lib/report.php';
+require __DIR__ . '/lib/Integrity.php';
+require __DIR__ . '/lib/report.php';
 
 $root = dirname(__DIR__, 2);
 $engine = new DemoIntegrity($root);
@@ -26,7 +26,7 @@ try {
         case '--snapshot':
             $meta = $engine->snapshot();
             echo "Baseline captured: {$meta['count']} files\n";
-            echo "  -> ".$engine->baselineDir."\n";
+            echo '  -> ' . $engine->baselineDir . "\n";
             exit(0);
 
         case '--check':
@@ -41,12 +41,12 @@ try {
                 exit(2);
             }
             $done = $engine->restore($path);
-            echo 'Restored: '.implode(', ', $done)."\n";
+            echo 'Restored: ' . implode(', ', $done) . "\n";
             exit(0);
 
         case '--restore-all':
             $done = $engine->restore(null);
-            echo $done ? ('Restored '.count($done)." file(s):\n  ".implode("\n  ", $done)."\n") : "Nothing to restore.\n";
+            echo $done ? ('Restored ' . count($done) . " file(s):\n  " . implode("\n  ", $done) . "\n") : "Nothing to restore.\n";
             exit(0);
 
         default:
@@ -55,6 +55,6 @@ try {
             exit(2);
     }
 } catch (Throwable $e) {
-    fwrite(STDERR, 'ERROR: '.$e->getMessage()."\n");
+    fwrite(STDERR, 'ERROR: ' . $e->getMessage() . "\n");
     exit(2);
 }

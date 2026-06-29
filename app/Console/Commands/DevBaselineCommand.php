@@ -36,8 +36,8 @@ class DevBaselineCommand extends Command
         $meta = $engine->snapshot();
 
         $this->info("Baseline captured: {$meta['count']} files.");
-        $this->line('  Location: '.$engine->baselineDir);
-        $this->line('  Generated: '.$meta['generated_at']);
+        $this->line('  Location: ' . $engine->baselineDir);
+        $this->line('  Generated: ' . $meta['generated_at']);
         $this->line('');
         $this->line('Now run `php artisan dev:doctor` any time to detect changes against this.');
 

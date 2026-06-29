@@ -22,7 +22,7 @@ function render_integrity_report(array $report): int
     }
 
     if ($missing) {
-        echo '  DELETED ('.count($missing)." file(s)) - re-create these:\n";
+        echo '  DELETED (' . count($missing) . " file(s)) - re-create these:\n";
         foreach ($missing as $m) {
             $lines = $m['lines'] ? " (~{$m['lines']} lines in baseline)" : '';
             echo "    - {$m['path']}{$lines}\n";
@@ -31,7 +31,7 @@ function render_integrity_report(array $report): int
     }
 
     if ($modified) {
-        echo '  MODIFIED ('.count($modified)." file(s)) - exact line changes:\n";
+        echo '  MODIFIED (' . count($modified) . " file(s)) - exact line changes:\n";
         foreach ($modified as $mod) {
             echo "    ~ {$mod['path']}\n";
             foreach ($mod['hunks'] as $h) {
@@ -43,7 +43,7 @@ function render_integrity_report(array $report): int
                 $no = str_pad((string) $h['line'], 5, ' ', STR_PAD_LEFT);
                 $text = rtrim($h['text']);
                 if (strlen($text) > 120) {
-                    $text = substr($text, 0, 117).'...';
+                    $text = substr($text, 0, 117) . '...';
                 }
                 echo "        {$h['op']} {$no}: {$text}\n";
             }
@@ -52,7 +52,7 @@ function render_integrity_report(array $report): int
     }
 
     if ($added) {
-        echo '  ADDED ('.count($added)." file(s)) - not in baseline (new or moved):\n";
+        echo '  ADDED (' . count($added) . " file(s)) - not in baseline (new or moved):\n";
         foreach ($added as $a) {
             echo "    + {$a}\n";
         }

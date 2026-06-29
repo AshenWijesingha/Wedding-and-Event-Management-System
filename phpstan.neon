@@ -6,6 +6,12 @@ parameters:
     paths:
         - app
     level: 5
+    # The git-free demo doctor engine lives outside the autoloader (it is require'd
+    # at runtime so it works even when the app cannot boot). Scan it for symbols so
+    # the dev:* commands type-check against the real class/function signatures.
+    scanFiles:
+        - tools/demo/lib/Integrity.php
+        - tools/demo/lib/report.php
     # The baseline is generated locally; tolerate entries that don't reproduce on
     # CI (env/version drift) instead of failing the build on unmatched patterns.
     reportUnmatchedIgnoredErrors: false

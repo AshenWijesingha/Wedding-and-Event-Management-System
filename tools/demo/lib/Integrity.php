@@ -48,6 +48,7 @@ class DemoIntegrity
     ];
 
     public string $root;
+
     public string $baselineDir;
 
     public function __construct(string $root, ?string $baselineDir = null)
@@ -55,7 +56,7 @@ class DemoIntegrity
         $this->root = rtrim(str_replace('\\', '/', $root), '/');
         $this->baselineDir = $baselineDir
             ? rtrim(str_replace('\\', '/', $baselineDir), '/')
-            : $this->root.'/tools/demo/baseline';
+            : $this->root . '/tools/demo/baseline';
     }
 
     // ---- collection -------------------------------------------------------
@@ -66,14 +67,14 @@ class DemoIntegrity
         $out = [];
 
         foreach ($this->includeFiles as $rel) {
-            $abs = $this->root.'/'.$rel;
+            $abs = $this->root . '/' . $rel;
             if (is_file($abs)) {
                 $out[$rel] = $abs;
             }
         }
 
         foreach ($this->includeDirs as $dir) {
-            $base = $this->root.'/'.$dir;
+            $base = $this->root . '/' . $dir;
             if (! is_dir($base)) {
                 continue;
             }
@@ -126,7 +127,7 @@ class DemoIntegrity
     public function snapshot(): array
     {
         $files = $this->collect();
-        $snapDir = $this->baselineDir.'/snapshot';
+        $snapDir = $this->baselineDir . '/snapshot';
 
         $this->rrmdir($snapDir);
         @mkdir($snapDir, 0777, true);
@@ -139,7 +140,7 @@ class DemoIntegrity
                 'bytes' => filesize($abs),
                 'lines' => $this->lineCount($abs),
             ];
-            $dest = $snapDir.'/'.$rel;
+            $dest = $snapDir . '/' . $rel;
             @mkdir(dirname($dest), 0777, true);
             copy($abs, $dest);
         }
@@ -152,7 +153,7 @@ class DemoIntegrity
         ];
         @mkdir($this->baselineDir, 0777, true);
         file_put_contents(
-            $this->baselineDir.'/manifest.json',
+            $this->baselineDir . '/manifest.json',
             json_encode($meta, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
         );
 
@@ -161,12 +162,12 @@ class DemoIntegrity
 
     public function baselineExists(): bool
     {
-        return is_file($this->baselineDir.'/manifest.json');
+        return is_file($this->baselineDir . '/manifest.json');
     }
 
     public function loadManifest(): ?array
     {
-        $path = $this->baselineDir.'/manifest.json';
+        $path = $this->baselineDir . '/manifest.json';
         if (! is_file($path)) {
             return null;
         }
@@ -196,7 +197,7 @@ class DemoIntegrity
         $ok = 0;
 
         foreach ($base as $rel => $info) {
-            $abs = $this->root.'/'.$rel;
+            $abs = $this->root . '/' . $rel;
             if (! is_file($abs)) {
                 $missing[] = ['path' => $rel, 'lines' => $info['lines'] ?? null];
 
@@ -234,8 +235,8 @@ class DemoIntegrity
     /** Per-file line diff: baseline copy vs current. Returns formatted change lines. */
     private function fileDiff(string $rel): array
     {
-        $baseFile = $this->baselineDir.'/snapshot/'.$rel;
-        $curFile = $this->root.'/'.$rel;
+        $baseFile = $this->baselineDir . '/snapshot/' . $rel;
+        $curFile = $this->root . '/' . $rel;
         if (! is_file($baseFile) || ! is_file($curFile)) {
             return [];
         }
@@ -245,7 +246,7 @@ class DemoIntegrity
 
         // Guard against pathological memory use on huge files.
         if (count($a) > 4000 || count($b) > 4000) {
-            return [['op' => 'note', 'text' => 'large file changed ('.count($a).' -> '.count($b).' lines); run a full diff manually']];
+            return [['op' => 'note', 'text' => 'large file changed (' . count($a) . ' -> ' . count($b) . ' lines); run a full diff manually']];
         }
 
         $ops = $this->lcsDiff($a, $b);
@@ -264,7 +265,7 @@ class DemoIntegrity
 
         if (count($changes) > 80) {
             $head = array_slice($changes, 0, 80);
-            $head[] = ['op' => 'note', 'text' => '... ('.(count($changes) - 80).' more changed lines)'];
+            $head[] = ['op' => 'note', 'text' => '... (' . (count($changes) - 80) . ' more changed lines)'];
 
             return $head;
         }
@@ -332,11 +333,11 @@ class DemoIntegrity
 
         if ($relPath !== null) {
             $rel = ltrim(str_replace('\\', '/', $relPath), '/');
-            $src = $this->baselineDir.'/snapshot/'.$rel;
+            $src = $this->baselineDir . '/snapshot/' . $rel;
             if (! is_file($src)) {
                 throw new RuntimeException("Not in baseline: {$rel}");
             }
-            $dest = $this->root.'/'.$rel;
+            $dest = $this->root . '/' . $rel;
             @mkdir(dirname($dest), 0777, true);
             copy($src, $dest);
             $restored[] = $rel;
@@ -349,11 +350,11 @@ class DemoIntegrity
             array_map(fn ($m) => $m['path'], $report['missing']),
             array_map(fn ($m) => $m['path'], $report['modified'])
         ) as $rel) {
-            $src = $this->baselineDir.'/snapshot/'.$rel;
+            $src = $this->baselineDir . '/snapshot/' . $rel;
             if (! is_file($src)) {
                 continue;
             }
-            $dest = $this->root.'/'.$rel;
+            $dest = $this->root . '/' . $rel;
             @mkdir(dirname($dest), 0777, true);
             copy($src, $dest);
             $restored[] = $rel;
