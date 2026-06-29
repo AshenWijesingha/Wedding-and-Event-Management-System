@@ -60,6 +60,15 @@ dev restore --all       :: restore every changed/missing file
 Artisan equivalents: `php artisan dev:baseline | dev:doctor | dev:restore`.
 Double-click wrappers: `tools\demo\{baseline,doctor,diff,restore}.cmd`.
 
+> **Shell note.** `dev doctor` works as-is in **cmd.exe**. In **PowerShell**, run it as
+> **`.\dev doctor`** (PowerShell won't run a program from the current folder without a path
+> prefix). The **`php artisan dev:doctor`** form works in *any* shell (PowerShell, cmd, bash)
+> and is the safest to use. To get a bare `dev` everywhere in PowerShell, add a function to
+> your `$PROFILE`:
+> ```powershell
+> function dev { & "C:\path\to\project\dev.cmd" @args }
+> ```
+
 ### The live-evaluation loop
 
 1. **Before** the evaluation, on healthy code: `dev baseline`.
