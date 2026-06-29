@@ -1,3 +1,6 @@
+/* Self-hosted Inter + Fraunces (offline). Must precede @tailwind. */
+@import './fonts.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -4,6 +4,11 @@ A step-by-step script for presenting **EventPro** (Wedding & Event Management Sy
 to the project supervisor. Every flow below is covered by an automated readiness
 test (`tests/Feature/DemoReadinessTest.php`) and verified working end-to-end.
 
+> **Demoing without internet?** See [`OFFLINE_DEMO.md`](OFFLINE_DEMO.md) — the app
+> runs fully offline (self-hosted fonts, sqlite, file/sync/log drivers).
+> **Worried about the "fix the deleted code" part of the evaluation?** See
+> [`EVALUATION_RECOVERY.md`](EVALUATION_RECOVERY.md) and the `tools/demo/` scripts.
+
 ---
 
 ## 1. What you are presenting
