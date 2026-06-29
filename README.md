@@ -6,6 +6,10 @@
 
 > 📋 **Presenting this project?** See the [Demonstration Guide](docs/DEMONSTRATION_GUIDE.md) —
 > setup, login credentials, a scene-by-scene script covering every feature, and a feature checklist.
+>
+> 🔌 **Demoing offline / preparing for evaluation?** See the [Offline Demo & Recovery README](DEMO-README.md) —
+> run with no internet, plus the git-free `dev doctor` tool that pinpoints any code an examiner
+> deletes/changes and restores it.
 
 ---
 
