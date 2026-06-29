@@ -1,1512 +1,340 @@
-# EventPro - Universal Event Management System
+# EventPro — Wedding & Event Management System
 
-**A White-Label, Multi-Tenant Event Management Platform**
+**A white-label, multi-tenant SaaS platform for managing weddings, corporate events,
+conferences, and social functions.** One deployment serves many event businesses (tenants);
+each gets its own branded admin area, staff, clients, and a customer self-service portal.
 
-*Customizable for Hotels, Resorts, Banquet Halls, and Event Venues*
+Built with **Laravel 12 · PHP 8.2+ · Vue 3 + Inertia.js · Tailwind CSS 3 · SQLite/MySQL**.
 
-> 📋 **Presenting this project?** See the [Demonstration Guide](docs/DEMONSTRATION_GUIDE.md) —
-> setup, login credentials, a scene-by-scene script covering every feature, and a feature checklist.
->
-> 🔌 **Demoing offline / preparing for evaluation?** See the [Offline Demo & Recovery README](DEMO-README.md) —
-> run with no internet, plus the git-free `dev doctor` tool that pinpoints any code an examiner
-> deletes/changes and restores it.
+> 📋 **Presenting this project?** See the [Demonstration Guide](docs/DEMONSTRATION_GUIDE.md).
+> 🔌 **Running offline / preparing for an evaluation?** See the [Offline Demo & Recovery README](DEMO-README.md).
 
 ---
 
 ## Table of Contents
 
-1. [Product Overview](#product-overview)
-2. [Key Features](#key-features)
-3. [Technology Stack](#technology-stack)
-4. [Multi-Tenancy Design](#multi-tenancy-design)
-5. [Customization Framework](#customization-framework)
-6. [Development Setup](#development-setup)
-7. [Database Design](#database-design)
-8. [Core Modules](#core-modules)
-9. [White-Label Configuration](#white-label-configuration)
-10. [Theme Engine](#theme-engine)
-11. [Plugin System](#plugin-system)
-12. [API Documentation](#api-documentation)
-13. [Development Timeline](#development-timeline)
-14. [Testing Strategy](#testing-strategy)
-15. [Deployment Guide](#deployment-guide)
+1. [What it does](#what-it-does)
+2. [Tech stack](#tech-stack)
+3. [Architecture](#architecture)
+4. [Quick start (local)](#quick-start-local)
+5. [Running the app](#running-the-app)
+6. [Login credentials](#login-credentials)
+7. [User flows](#user-flows)
+8. [Project structure](#project-structure)
+9. [Developer workflow](#developer-workflow)
+10. [Testing](#testing)
+11. [Offline demo & evaluation recovery](#offline-demo--evaluation-recovery)
+12. [Documentation](#documentation)
+13. [Deployment](#deployment)
 
 ---
 
-## Product Overview
+## What it does
 
-### Vision
+Three audiences, three entry points:
 
-**EventPro** is a comprehensive, white-label event management platform designed to serve any hospitality business that manages weddings, corporate events, conferences, and social functions. Built with customization at its core, each client can tailor the platform to their specific brand, workflow, and business requirements.
+| Audience | Area | Entry |
+| --- | --- | --- |
+| Platform operator | Super-admin console | `/admin` as super admin |
+| Event-company team | Tenant admin area | `/admin` as tenant owner/admin/manager/staff |
+| End customers | Client portal | `/portal` (self-registered at `/register`) |
 
-### Target Market
+### Core modules
 
-| Segment | Examples |
-|---------|----------|
-| Luxury Hotels | 5-star hotels with multiple event venues |
-| Boutique Hotels | Small to medium hotels with banquet facilities |
-| Resort Chains | Beach resorts, hill country resorts |
-| Convention Centers | Large-scale conference and exhibition centers |
-| Banquet Halls | Standalone event venues |
-| Restaurant Groups | Restaurants with private dining/event spaces |
-| Wedding Venues | Dedicated wedding destinations |
-| Country Clubs | Golf clubs, sports clubs with event facilities |
+| Module | What it covers |
+| --- | --- |
+| **Venues** | Multi-venue management, capacity, base pricing, availability |
+| **Packages** | Modular package builder with included services and guest-based pricing |
+| **Inquiries** | Public inquiry capture → normalized client + lead |
+| **Quotations** | Quote builder, status workflow (draft → sent → accepted/rejected/expired), PDF + print |
+| **Bookings** | Full booking lifecycle, availability checks, edit/confirm/cancel, unified calendar |
+| **Payments** | Manual (cash/bank/cheque/card) + online (PayHere) installments, receipts (PDF), reminders |
+| **Clients** | 360° client profiles and history |
+| **Vendors** | External vendor directory and per-booking assignment |
+| **Staff & Tasks** | Team management and event task assignment |
+| **Reports** | Revenue/booking analytics with date ranges and PDF export |
+| **Notifications** | In-app bell + best-effort email (mailables) |
+| **Settings** | Per-tenant branding, payment config, custom fields |
 
-### Product Editions
+### Platform (super-admin) features
 
-| Edition | Target | Features |
-|---------|--------|----------|
-| **Starter** | Small venues (1-2 halls) | Core booking, basic reporting |
-| **Professional** | Medium venues (3-5 halls) | Full features, 5 users |
-| **Business** | Large venues (5-10 halls) | Multi-user, API access |
-| **Enterprise** | Hotel chains, franchises | Multi-property, white-label, custom integrations |
+Tenant management, plans, **impersonation** ("login as"), suspend/activate, **audit log**
+(spatie/activitylog), platform settings, and cross-tenant user management.
 
-### Core Value Propositions
+### White-label & customization
 
-- **Rapid Deployment** - Go live in days, not months
-- **Complete Customization** - Adapt to any workflow
-- **Brand Consistency** - Full white-label capability
-- **Scalability** - From single venue to hotel chains
-- **Integration Ready** - Connect with existing systems
-- **Self-Service** - Clients manage their own configuration
-
----
-
-## Key Features
-
-### Platform Modules
-
-| Module | Description |
-|--------|-------------|
-| **Venue Management** | Multi-venue support with individual configurations |
-| **Package Builder** | Dynamic package creation with modular services |
-| **Booking Engine** | Complete booking lifecycle management |
-| **Payment Tracking** | Multi-installment payments with reminders |
-| **Quotation Generator** | Automated quotes with PDF generation |
-| **Vendor Coordination** | External vendor management and assignments |
-| **Menu Management** | Catering and menu customization |
-| **Staff Scheduler** | Event staffing and task management |
-| **Reporting Module** | Analytics and business intelligence |
-| **Client Portal** | Self-service portal for customers |
-| **Notification Center** | Email and SMS automation |
-
-### Customization Features
-
-| Feature | Description |
-|---------|-------------|
-| **Custom Event Types** | Define any event category |
-| **Dynamic Pricing** | Flexible rules for seasons, days, guest counts |
-| **Multi-Currency** | Support for any currency |
-| **Multi-Language** | Full i18n support |
-| **Custom Fields** | Add fields to any entity |
-| **Workflow Builder** | Configurable approval flows |
-| **Document Templates** | Customizable PDF templates |
-| **Role Builder** | Granular permission control |
-| **Theme Engine** | Visual customization |
-| **Plugin System** | Extend functionality |
+Per-tenant branding (logo, favicon, accent colour via `BrandingService`), custom fields on
+entities, theme engine, plugin scaffolding, multi-currency, and i18n support.
 
 ---
 
-## Technology Stack
+## Tech stack
 
-### Backend
-
-| Component | Technology |
-|-----------|------------|
-| Language | PHP 8.2+ |
-| Framework | Laravel 11 |
-| Database | MySQL 8.0 / MariaDB 10.6+ |
-| Cache | Redis |
-| Search | Laravel Scout + Meilisearch |
-| Queue | Redis / Database |
-
-### Frontend
-
-| Component | Technology |
-|-----------|------------|
-| Admin SPA | Vue.js 3 + Inertia.js |
-| Public Site | Blade + Alpine.js |
-| CSS | Tailwind CSS 3 |
-| Components | Headless UI |
+| Layer | Technology |
+| --- | --- |
+| Language / Framework | PHP 8.2+ · Laravel 12 |
+| Admin SPA | Vue 3 + Inertia.js |
+| Public site | Blade |
+| Styling | Tailwind CSS 3 (self-hosted Inter + Fraunces fonts — offline-safe) |
+| Build | Vite 6 |
 | Calendar | FullCalendar 6 |
-| Charts | Chart.js / ApexCharts |
+| Auth | Laravel Sanctum + Spatie Permission (roles/permissions) |
+| Multi-tenancy | spatie/laravel-multitenancy (single / column / database modes) |
+| Settings / Audit / Media | spatie/laravel-settings · activitylog · medialibrary |
+| PDF / Excel / Images | barryvdh/laravel-dompdf · maatwebsite/excel · intervention/image |
+| Database (demo) | SQLite — a single file, zero setup |
+| Database (prod) | MySQL 8 / MariaDB |
+| Payments | PayHere gateway (sandbox/live) |
 
-### Key Packages
-
-```json
-{
-    "require": {
-        "php": "^8.2",
-        "laravel/framework": "^11.0",
-        "laravel/sanctum": "^4.0",
-        "inertiajs/inertia-laravel": "^1.0",
-        "spatie/laravel-multitenancy": "^3.0",
-        "spatie/laravel-permission": "^6.0",
-        "spatie/laravel-settings": "^3.0",
-        "spatie/laravel-translatable": "^6.0",
-        "spatie/laravel-activitylog": "^4.7",
-        "spatie/laravel-medialibrary": "^11.0",
-        "barryvdh/laravel-dompdf": "^2.0",
-        "maatwebsite/excel": "^3.1",
-        "intervention/image": "^3.0"
-    }
-}
-```
+The exact dependency versions live in [`composer.json`](composer.json) and [`package.json`](package.json).
 
 ---
 
-## Multi-Tenancy Design
+## Architecture
 
-### Tenancy Modes
-
-EventPro supports three tenancy modes:
-
-#### Mode 1: Single Database (Column-Based)
-Best for SaaS deployments with many small tenants.
+### Request flow
 
 ```
-┌─────────────────────────────────────────┐
-│            SHARED DATABASE              │
-├─────────────────────────────────────────┤
-│  venues (tenant_id, ...)                │
-│  bookings (tenant_id, ...)              │
-│  packages (tenant_id, ...)              │
-└─────────────────────────────────────────┘
+HTTP → route (routes/web.php, api.php) → middleware (auth, SetCurrentTenant,
+       permission:*, EnsureTenantActive) → Controller → Service (business logic)
+       → Model (Eloquent, tenant-scoped) → Inertia::render(...) → Vue page
 ```
 
-#### Mode 2: Database Per Tenant
-Best for enterprise clients requiring data isolation.
+- **Controllers** are thin: validate, call a service, return an Inertia page or redirect.
+- **Services** (`app/Services/`) hold the logic: `AvailabilityService`, `PricingService`,
+  `PaymentService`, `PayHereService`, `QuotationService`, `BrandingService`, `SettingsService`, …
+- **Models** (`app/Models/`) — 15 entities (Venue, Package, Booking, Quotation, Payment,
+  Client, Inquiry, Vendor, Staff, Task, Tenant, User, Plan, CustomField, …). Most use the
+  `BelongsToTenant` trait, which adds a global scope so every query is automatically limited
+  to the current tenant, and stamps `tenant_id` on create.
 
-```
-┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-│   tenant_1   │  │   tenant_2   │  │   tenant_3   │
-│   database   │  │   database   │  │   database   │
-└──────────────┘  └──────────────┘  └──────────────┘
-```
+### Multi-tenancy
 
-#### Mode 3: Single-Tenant (Standalone)
-Best for on-premise installations.
+`TENANCY_MODE` (in `.env`) selects the strategy:
 
-### Tenant Model
+- **single** *(default for this build)* — one database, the current tenant is resolved from
+  the authenticated user by the `SetCurrentTenant` middleware.
+- **column** — one shared database, rows scoped by `tenant_id` (SaaS with many tenants).
+- **database** — a separate database per tenant (enterprise isolation).
 
-```php
-// app/Models/Tenant.php
-<?php
+The **super admin** has `tenant_id = NULL` and spans all tenants; it authenticates via a
+tenant-agnostic provider (`eloquent-tenantless`).
 
-namespace App\Models;
+### Roles
 
-use Spatie\Multitenancy\Models\Tenant as BaseTenant;
-
-class Tenant extends BaseTenant
-{
-    protected $fillable = [
-        'name',
-        'slug',
-        'domain',
-        'database',
-        'plan',
-        'status',
-        'trial_ends_at',
-        'settings',
-    ];
-
-    protected $casts = [
-        'settings' => 'array',
-        'trial_ends_at' => 'datetime',
-    ];
-
-    public function getSetting(string $key, $default = null)
-    {
-        return data_get($this->settings, $key, $default);
-    }
-
-    public function setSetting(string $key, $value): void
-    {
-        $settings = $this->settings ?? [];
-        data_set($settings, $key, $value);
-        $this->settings = $settings;
-        $this->save();
-    }
-
-    public function hasFeature(string $feature): bool
-    {
-        return $this->getPlan()->hasFeature($feature);
-    }
-}
-```
-
-### Tenant-Aware Trait
-
-```php
-// app/Models/Concerns/BelongsToTenant.php
-<?php
-
-namespace App\Models\Concerns;
-
-use App\Models\Tenant;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-
-trait BelongsToTenant
-{
-    protected static function bootBelongsToTenant(): void
-    {
-        // Auto-scope queries to current tenant
-        static::addGlobalScope('tenant', function (Builder $builder) {
-            if ($tenant = app('currentTenant')) {
-                $builder->where('tenant_id', $tenant->id);
-            }
-        });
-
-        // Auto-assign tenant on create
-        static::creating(function (Model $model) {
-            if ($tenant = app('currentTenant')) {
-                $model->tenant_id = $tenant->id;
-            }
-        });
-    }
-
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class);
-    }
-}
-```
+Six roles seeded by `RolePermissionSeeder`: `super_admin`, `tenant_owner`, `admin`,
+`manager`, `staff`, `client`. Access is enforced with `permission:*` / `role:*` middleware.
 
 ---
 
-## Customization Framework
+## Quick start (local)
 
-### Configuration Hierarchy
-
-```
-Level 4: User Preferences (per user overrides)
-    ↓
-Level 3: Tenant Settings (client-specific)
-    ↓
-Level 2: Environment Config (.env)
-    ↓
-Level 1: Application Defaults (config files)
-```
-
-### Settings Service
-
-```php
-// app/Services/SettingsService.php
-<?php
-
-namespace App\Services;
-
-use App\Models\Tenant;
-
-class SettingsService
-{
-    private array $defaults;
-    private ?Tenant $tenant;
-
-    public function __construct(?Tenant $tenant = null)
-    {
-        $this->tenant = $tenant ?? app('currentTenant');
-        $this->defaults = config('eventpro.defaults');
-    }
-
-    public function get(string $key, $default = null)
-    {
-        // Check tenant settings first
-        if ($this->tenant) {
-            $tenantValue = $this->tenant->getSetting($key);
-            if ($tenantValue !== null) {
-                return $tenantValue;
-            }
-        }
-
-        // Fall back to application defaults
-        return data_get($this->defaults, $key, $default);
-    }
-
-    public function set(string $key, $value): void
-    {
-        if ($this->tenant) {
-            $this->tenant->setSetting($key, $value);
-        }
-    }
-}
-```
-
-### Configurable Settings Categories
-
-```php
-// config/eventpro/settings-schema.php
-return [
-    'general' => [
-        'business_name' => ['type' => 'text', 'required' => true],
-        'tagline' => ['type' => 'text'],
-        'timezone' => ['type' => 'select', 'options' => 'timezones', 'default' => 'UTC'],
-        'date_format' => ['type' => 'select', 'default' => 'd M Y'],
-        'time_format' => ['type' => 'select', 'default' => 'h:i A'],
-    ],
-
-    'currency' => [
-        'code' => ['type' => 'select', 'default' => 'USD'],
-        'symbol' => ['type' => 'text', 'default' => '$'],
-        'position' => ['type' => 'select', 'default' => 'before'],
-        'decimal_places' => ['type' => 'number', 'default' => 2],
-    ],
-
-    'booking' => [
-        'min_advance_days' => ['type' => 'number', 'default' => 7],
-        'max_advance_days' => ['type' => 'number', 'default' => 365],
-        'tentative_hold_hours' => ['type' => 'number', 'default' => 48],
-        'require_deposit' => ['type' => 'boolean', 'default' => true],
-        'deposit_percentage' => ['type' => 'number', 'default' => 25],
-    ],
-
-    'quotation' => [
-        'validity_days' => ['type' => 'number', 'default' => 14],
-        'auto_followup_days' => ['type' => 'array', 'default' => [3, 7, 14]],
-        'number_prefix' => ['type' => 'text', 'default' => 'QT'],
-    ],
-
-    'payment' => [
-        'installment_schedule' => [
-            'type' => 'json',
-            'default' => [
-                ['name' => 'Advance', 'percentage' => 25],
-                ['name' => 'Second', 'percentage' => 35],
-                ['name' => 'Final', 'percentage' => 40],
-            ],
-        ],
-        'accepted_methods' => [
-            'type' => 'multiselect',
-            'default' => ['bank_transfer', 'credit_card', 'cash'],
-        ],
-    ],
-
-    'cancellation' => [
-        'policy' => [
-            'type' => 'json',
-            'default' => [
-                ['days_before' => 60, 'refund_percentage' => 50],
-                ['days_before' => 30, 'refund_percentage' => 25],
-                ['days_before' => 0, 'refund_percentage' => 0],
-            ],
-        ],
-    ],
-
-    'event_types' => [
-        'enabled_types' => [
-            'type' => 'multiselect',
-            'default' => ['wedding', 'corporate', 'conference', 'birthday', 'other'],
-        ],
-        'custom_types' => ['type' => 'array', 'default' => []],
-    ],
-];
-```
-
-### Custom Fields System
-
-```php
-// app/Services/CustomFieldService.php
-<?php
-
-namespace App\Services;
-
-use App\Models\CustomField;
-use App\Models\CustomFieldValue;
-use Illuminate\Database\Eloquent\Model;
-
-class CustomFieldService
-{
-    public function getFieldsFor(string $entityType)
-    {
-        return CustomField::where('entity_type', $entityType)
-            ->where('is_active', true)
-            ->orderBy('sort_order')
-            ->get();
-    }
-
-    public function getValues(Model $entity): array
-    {
-        $values = CustomFieldValue::where('entity_type', get_class($entity))
-            ->where('entity_id', $entity->id)
-            ->get()
-            ->keyBy('custom_field_id');
-
-        $fields = $this->getFieldsFor($entity->getTable());
-        $result = [];
-
-        foreach ($fields as $field) {
-            $value = $values->get($field->id);
-            $result[$field->slug] = [
-                'field' => $field,
-                'value' => $value ? $value->value : $field->default_value,
-            ];
-        }
-
-        return $result;
-    }
-
-    public function saveValues(Model $entity, array $values): void
-    {
-        foreach ($values as $fieldSlug => $value) {
-            $field = CustomField::where('slug', $fieldSlug)->first();
-            if (!$field) continue;
-
-            CustomFieldValue::updateOrCreate(
-                [
-                    'custom_field_id' => $field->id,
-                    'entity_type' => get_class($entity),
-                    'entity_id' => $entity->id,
-                ],
-                ['value' => $value]
-            );
-        }
-    }
-}
-```
-
----
-
-## Development Setup
-
-### Prerequisites
-
-- PHP 8.2+ with required extensions
-- Composer 2.5+
-- Node.js 18+
-- MySQL 8.0 or MariaDB 10.6+
-- Redis 6.0+
-- Git 2.40+
-
-### Docker Setup (Recommended)
-
-**For complete Docker documentation, see [DOCKER.md](DOCKER.md)**
-
-Quick start with Docker:
+**Prerequisites:** PHP 8.2+ (with `pdo_sqlite`, `mbstring`, `openssl`, `gd`, `zip`),
+Composer, and Node.js 18+. On Windows, [Laravel Herd](https://herd.laravel.com/) provides
+PHP + Composer in one install.
 
 ```bash
-# 1. Clone repository
-git clone https://github.com/[username]/eventpro.git
-cd eventpro
+# 1. Clone
+git clone https://github.com/AshenWijesingha/Wedding-and-Event-Management-System.git
+cd Wedding-and-Event-Management-System
 
-# 2. Start Docker containers
-./scripts/docker-start.sh
-
-# 3. Initial setup
-./scripts/docker-setup.sh
-
-# 4. Access application
-# App: http://localhost:8000
-# Mailhog: http://localhost:8025
-# Meilisearch: http://localhost:7700
-```
-
-**Available Services:**
-- PHP 8.2 with extensions (pdo_mysql, redis, gd, zip, bcmath)
-- MySQL 8.0
-- Redis 7 (caching and queues)
-- Mailhog (email testing)
-- Meilisearch (full-text search)
-
-**Development Scripts:**
-```bash
-./scripts/docker-start.sh    # Start containers
-./scripts/docker-stop.sh     # Stop containers
-./scripts/docker-setup.sh    # Initial setup
-./scripts/docker-restart.sh  # Restart containers
-./scripts/docker-logs.sh     # View logs
-./scripts/docker-shell.sh    # Container shell access
-```
-
-### Manual Installation
-
-```bash
-# 1. Clone and install
-git clone https://github.com/[username]/eventpro.git
-cd eventpro
+# 2. PHP + JS dependencies
 composer install
 npm install
 
-# 2. Configure environment
-cp .env.example .env
+# 3. Environment
+cp .env.example .env          # Windows: copy .env.example .env
 php artisan key:generate
-# Edit .env with your database credentials
 
-# 3. Database setup
-php artisan migrate
-php artisan db:seed
+#    Use the zero-setup SQLite database (recommended for local/demo).
+#    In .env set:  DB_CONNECTION=sqlite   and comment out the DB_HOST/PORT/DATABASE/... lines.
+#    Then create the file:
+#      bash:        touch database/database.sqlite
+#      powershell:  New-Item database/database.sqlite
 
-# 4. Build and serve
-npm run dev
-php artisan serve
+# 4. Migrate + seed demo data (venues, packages, bookings, users, two tenants)
+php artisan migrate --seed
+
+# 5. Build front-end assets
+npm run build
+
+# 6. Serve
+php artisan serve            # http://127.0.0.1:8000
+```
+
+Prefer MySQL or Docker? Keep the `DB_*` values from `.env.example` and see
+[`docs/installation.md`](docs/installation.md) and [`DOCKER.md`](DOCKER.md).
+
+> **Windows one-click:** double-click **`Start-EventPro.exe`** in the project root — it finds
+> PHP, skips install steps when dependencies already exist, seeds SQLite on first run, serves
+> the app, and opens the browser. (Build it from source with `launcher\build.cmd`.)
+> A `setup.bat` (winget-based, **needs internet**) can install PHP/Node/MariaDB from scratch.
+
+---
+
+## Running the app
+
+| Command | Purpose |
+| --- | --- |
+| `php artisan serve` | Run the app at `http://127.0.0.1:8000` |
+| `npm run dev` | Vite dev server with hot reload (for active front-end work) |
+| `npm run build` | Production asset build into `public/build/` |
+| `php artisan migrate:fresh --seed` | Reset the database to clean seeded demo data |
+| `php artisan test` | Run the test suite (isolated in-memory DB) |
+
+For day-to-day front-end work run `php artisan serve` **and** `npm run dev` together. For a
+demo or evaluation, run only `php artisan serve` against the production build (no dev server).
+
+---
+
+## Login credentials
+
+All seeded passwords are **`password`** (development/demo accounts only — rotate before production).
+
+| Role | Email | Notes |
+| --- | --- | --- |
+| Super admin | `admin@eventpro.io` | Platform scope. Password may have been reset to `Admin@123` — try that if `password` fails. |
+| Tenant admin | `nuwan@mangala.lk` | Tenant: *Mangala Events* |
+| Tenant admin | `admin@demo.eventpro.test` | Curated demo tenant |
+| Staff | `sanduni@mangala.lk` | Limited permissions |
+| Data-rich tenant | `owner@showcase.eventpro.test` | Tenant owner of the showcase tenant (lots of seeded entities) |
+| Client | — | Register a new account at `/register` (no seeded client login) |
+
+Reset to seeder defaults any time with `php artisan db:seed`. Full reference:
+[`docs/ADMIN-LOGINS.md`](docs/ADMIN-LOGINS.md).
+
+---
+
+## User flows
+
+### Public visitor → lead
+1. Browse the public site (`/`) — venues, packages, gallery, contact.
+2. Submit an **inquiry** → creates a normalized `Client` + `Inquiry` for the tenant.
+3. The tenant team is notified (in-app + best-effort email).
+
+### Sales pipeline (tenant admin)
+1. **Inquiry** lands in `/admin/inquiries`.
+2. Convert to a **Quotation** (prefilled from the inquiry) → send → client accepts.
+3. Accepted quote becomes a **Booking** (availability checked via `AvailabilityService`).
+4. Record **Payments** (manual installments or online via PayHere) → receipts (PDF),
+   automatic reminders, balance tracking.
+5. Assign **vendors**, **staff**, and **tasks**; track everything on the unified **calendar**.
+6. Booking moves through `confirmed` → `completed` (or `cancelled`).
+
+### Customer (client portal)
+1. Register at `/register` → auto-login to `/portal`.
+2. View bookings, quotations, and balances; **pay online** (PayHere) and download receipts.
+
+### Platform operator (super admin)
+Manage tenants and plans, **impersonate** a tenant ("login as"), suspend/activate accounts,
+review the **audit log**, and configure platform settings — all from `/admin`.
+
+---
+
+## Project structure
+
+```
+app/
+  Console/Commands/      Artisan commands (incl. dev:doctor / dev:baseline / dev:restore)
+  Http/Controllers/      Admin/  Portal/  (+ public) controllers
+  Http/Middleware/       SetCurrentTenant, EnsureTenantActive, SecurityHeaders, …
+  Models/                15 Eloquent models (BelongsToTenant trait)
+  Services/              Business logic (pricing, availability, payments, branding, …)
+config/                  Framework + eventpro config
+database/
+  migrations/  seeders/  factories/   database.sqlite (demo DB)
+resources/
+  js/Pages/              Vue 3 + Inertia pages (one folder per module)
+  js/Layouts/ Components/ AppLayout, PortalLayout, shared UI
+  views/                 Blade: app shell, public site, PDF + mail templates
+  css/  fonts/           Tailwind entry + self-hosted woff2 fonts (offline)
+routes/                  web.php · api.php · console.php
+tests/                   Feature + Unit (run against in-memory SQLite)
+tools/demo/              Git-free integrity doctor (see DEMO-README.md)
+docs/                    Guides (installation, demo, admin logins, recovery, API)
 ```
 
 ---
 
-## Database Design
-
-### Core Tables
-
-#### Tenants
-```sql
-CREATE TABLE tenants (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    uuid CHAR(36) UNIQUE NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    slug VARCHAR(100) UNIQUE NOT NULL,
-    domain VARCHAR(255) UNIQUE NULL,
-    plan_id BIGINT UNSIGNED NULL,
-    logo VARCHAR(255) NULL,
-    primary_color VARCHAR(7) DEFAULT '#3B82F6',
-    email VARCHAR(255) NOT NULL,
-    phone VARCHAR(50) NULL,
-    settings JSON NULL,
-    status ENUM('active', 'suspended', 'trial') DEFAULT 'trial',
-    trial_ends_at TIMESTAMP NULL,
-    created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL
-);
-```
-
-#### Venues
-```sql
-CREATE TABLE venues (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    tenant_id BIGINT UNSIGNED NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) NOT NULL,
-    description TEXT NULL,
-    capacity_min INT UNSIGNED NOT NULL,
-    capacity_max INT UNSIGNED NOT NULL,
-    base_price DECIMAL(14, 2) NOT NULL,
-    weekend_surcharge DECIMAL(12, 2) DEFAULT 0,
-    amenities JSON NULL,
-    images JSON NULL,
-    status ENUM('active', 'maintenance', 'inactive') DEFAULT 'active',
-    created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL,
-    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
-    UNIQUE INDEX (tenant_id, slug)
-);
-```
-
-#### Packages
-```sql
-CREATE TABLE packages (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    tenant_id BIGINT UNSIGNED NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) NOT NULL,
-    description TEXT NULL,
-    base_price DECIMAL(14, 2) NOT NULL,
-    min_guests INT UNSIGNED NOT NULL,
-    max_guests INT UNSIGNED NOT NULL,
-    guest_pricing JSON NULL,
-    included_services JSON NULL,
-    status ENUM('active', 'inactive') DEFAULT 'active',
-    created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL,
-    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
-);
-```
-
-#### Bookings
-```sql
-CREATE TABLE bookings (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    tenant_id BIGINT UNSIGNED NOT NULL,
-    booking_number VARCHAR(50) NOT NULL,
-    client_id BIGINT UNSIGNED NOT NULL,
-    venue_id BIGINT UNSIGNED NOT NULL,
-    package_id BIGINT UNSIGNED NULL,
-    event_type VARCHAR(50) NOT NULL,
-    event_date DATE NOT NULL,
-    setup_time TIME NOT NULL,
-    event_start_time TIME NOT NULL,
-    event_end_time TIME NOT NULL,
-    guest_count INT UNSIGNED NOT NULL,
-    total_amount DECIMAL(14, 2) NOT NULL,
-    paid_amount DECIMAL(14, 2) DEFAULT 0,
-    balance_amount DECIMAL(14, 2) NOT NULL,
-    status ENUM('pending', 'tentative', 'confirmed', 'completed', 'cancelled') DEFAULT 'pending',
-    custom_data JSON NULL,
-    created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL,
-    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
-    FOREIGN KEY (venue_id) REFERENCES venues(id),
-    UNIQUE INDEX (tenant_id, booking_number)
-);
-```
-
-#### Custom Fields
-```sql
-CREATE TABLE custom_fields (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    tenant_id BIGINT UNSIGNED NULL,
-    entity_type VARCHAR(100) NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) NOT NULL,
-    type VARCHAR(50) NOT NULL,
-    options JSON NULL,
-    validation_rules JSON NULL,
-    default_value VARCHAR(255) NULL,
-    is_required BOOLEAN DEFAULT FALSE,
-    is_active BOOLEAN DEFAULT TRUE,
-    sort_order INT DEFAULT 0,
-    created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL,
-    UNIQUE INDEX (tenant_id, slug)
-);
-
-CREATE TABLE custom_field_values (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    custom_field_id BIGINT UNSIGNED NOT NULL,
-    entity_type VARCHAR(255) NOT NULL,
-    entity_id BIGINT UNSIGNED NOT NULL,
-    value TEXT NULL,
-    created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL,
-    FOREIGN KEY (custom_field_id) REFERENCES custom_fields(id) ON DELETE CASCADE,
-    UNIQUE INDEX (custom_field_id, entity_type, entity_id)
-);
-```
-
----
-
-## Core Modules
-
-### Availability Service
-
-```php
-// app/Services/AvailabilityService.php
-<?php
-
-namespace App\Services;
-
-use App\Models\Venue;
-use App\Models\Booking;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-
-class AvailabilityService
-{
-    public function isVenueAvailable(int $venueId, string $date): bool
-    {
-        return !Booking::where('venue_id', $venueId)
-            ->where('event_date', $date)
-            ->whereNotIn('status', ['cancelled'])
-            ->exists();
-    }
-
-    public function getAvailabilityCalendar(int $venueId, string $startDate, string $endDate): array
-    {
-        $bookings = Booking::where('venue_id', $venueId)
-            ->whereBetween('event_date', [$startDate, $endDate])
-            ->whereNotIn('status', ['cancelled'])
-            ->get(['event_date', 'status']);
-
-        $calendar = [];
-        $current = Carbon::parse($startDate);
-        $end = Carbon::parse($endDate);
-
-        while ($current <= $end) {
-            $dateStr = $current->format('Y-m-d');
-            $booking = $bookings->firstWhere('event_date', $dateStr);
-            
-            $calendar[] = [
-                'date' => $dateStr,
-                'status' => $booking ? $this->mapStatus($booking->status) : 'available',
-            ];
-            
-            $current->addDay();
-        }
-
-        return $calendar;
-    }
-
-    public function reserveVenue(int $venueId, string $date): bool
-    {
-        return DB::transaction(function () use ($venueId, $date) {
-            $exists = Booking::where('venue_id', $venueId)
-                ->where('event_date', $date)
-                ->whereNotIn('status', ['cancelled'])
-                ->lockForUpdate()
-                ->exists();
-
-            return !$exists;
-        });
-    }
-
-    private function mapStatus(string $status): string
-    {
-        return match($status) {
-            'pending', 'tentative' => 'tentative',
-            'confirmed' => 'booked',
-            default => 'available',
-        };
-    }
-}
-```
-
-### Pricing Service
-
-```php
-// app/Services/PricingService.php
-<?php
-
-namespace App\Services;
-
-use App\Models\Package;
-use App\Models\Venue;
-use Carbon\Carbon;
-
-class PricingService
-{
-    private SettingsService $settings;
-
-    public function __construct(SettingsService $settings)
-    {
-        $this->settings = $settings;
-    }
-
-    public function calculateEventPrice(array $params): array
-    {
-        $breakdown = [
-            'venue' => 0,
-            'package' => 0,
-            'services' => [],
-            'surcharges' => [],
-            'subtotal' => 0,
-            'discount' => 0,
-            'tax' => 0,
-            'total' => 0,
-        ];
-
-        // Venue pricing
-        if (!empty($params['venue_id'])) {
-            $venue = Venue::findOrFail($params['venue_id']);
-            $breakdown['venue'] = $this->calculateVenuePrice($venue, $params);
-        }
-
-        // Package pricing
-        if (!empty($params['package_id'])) {
-            $package = Package::findOrFail($params['package_id']);
-            $breakdown['package'] = $this->calculatePackagePrice($package, $params['guest_count']);
-        }
-
-        // Services
-        if (!empty($params['services'])) {
-            foreach ($params['services'] as $service) {
-                $breakdown['services'][] = $this->calculateServicePrice($service, $params['guest_count']);
-            }
-        }
-
-        // Surcharges
-        $breakdown['surcharges'] = $this->calculateSurcharges($params, $breakdown);
-
-        // Calculate totals
-        $breakdown['subtotal'] = $breakdown['venue'] 
-            + $breakdown['package'] 
-            + array_sum(array_column($breakdown['services'], 'total'))
-            + array_sum(array_column($breakdown['surcharges'], 'amount'));
-
-        // Apply discount
-        if (!empty($params['discount'])) {
-            $breakdown['discount'] = $this->calculateDiscount($breakdown['subtotal'], $params['discount']);
-        }
-
-        // Tax
-        $taxRate = $this->settings->get('pricing.tax_rate', 0);
-        $taxableAmount = $breakdown['subtotal'] - $breakdown['discount'];
-        $breakdown['tax'] = $taxableAmount * ($taxRate / 100);
-
-        // Total
-        $breakdown['total'] = $taxableAmount + $breakdown['tax'];
-
-        return $breakdown;
-    }
-
-    private function calculateVenuePrice(Venue $venue, array $params): float
-    {
-        $price = $venue->base_price;
-        $eventDate = Carbon::parse($params['event_date']);
-
-        if ($eventDate->isWeekend()) {
-            $price += $venue->weekend_surcharge;
-        }
-
-        return $price;
-    }
-
-    private function calculatePackagePrice(Package $package, int $guestCount): float
-    {
-        $price = $package->base_price;
-
-        // Tiered pricing
-        if ($package->guest_pricing) {
-            foreach ($package->guest_pricing as $tier) {
-                if ($guestCount >= $tier['from'] && $guestCount <= $tier['to']) {
-                    $price += ($guestCount - $package->min_guests) * $tier['price_per_guest'];
-                    break;
-                }
-            }
-        }
-
-        return $price;
-    }
-
-    private function calculateSurcharges(array $params, array $breakdown): array
-    {
-        $surcharges = [];
-        $eventDate = Carbon::parse($params['event_date']);
-
-        // Peak season
-        if ($this->isPeakSeason($eventDate)) {
-            $rate = $this->settings->get('pricing.peak_season_surcharge', 15);
-            $surcharges[] = [
-                'name' => 'Peak Season Surcharge',
-                'rate' => $rate,
-                'amount' => ($breakdown['venue'] + $breakdown['package']) * ($rate / 100),
-            ];
-        }
-
-        return $surcharges;
-    }
-
-    private function isPeakSeason(Carbon $date): bool
-    {
-        $peakMonths = $this->settings->get('pricing.peak_months', [12, 1, 2]);
-        return in_array($date->month, $peakMonths);
-    }
-
-    private function calculateDiscount(float $subtotal, array $discount): float
-    {
-        if ($discount['type'] === 'percentage') {
-            return $subtotal * ($discount['value'] / 100);
-        }
-        return $discount['value'];
-    }
-}
-```
-
-### Quotation Service
-
-```php
-// app/Services/QuotationService.php
-<?php
-
-namespace App\Services;
-
-use App\Models\Inquiry;
-use App\Models\Quotation;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Storage;
-
-class QuotationService
-{
-    private PricingService $pricingService;
-    private BrandingService $brandingService;
-
-    public function __construct(PricingService $pricingService, BrandingService $brandingService)
-    {
-        $this->pricingService = $pricingService;
-        $this->brandingService = $brandingService;
-    }
-
-    public function generateFromInquiry(Inquiry $inquiry, array $services = []): Quotation
-    {
-        $pricing = $this->pricingService->calculateEventPrice([
-            'venue_id' => $inquiry->venue_id,
-            'package_id' => $inquiry->package_id,
-            'guest_count' => $inquiry->guest_count,
-            'event_date' => $inquiry->event_date,
-            'services' => $services,
-        ]);
-
-        $quotation = Quotation::create([
-            'quotation_number' => $this->generateNumber(),
-            'inquiry_id' => $inquiry->id,
-            'subtotal' => $pricing['subtotal'],
-            'tax_amount' => $pricing['tax'],
-            'total_amount' => $pricing['total'],
-            'valid_until' => now()->addDays(14),
-            'status' => 'draft',
-            'prepared_by' => auth()->id(),
-        ]);
-
-        return $quotation;
-    }
-
-    public function generatePdf(Quotation $quotation): string
-    {
-        $quotation->load(['inquiry.client', 'inquiry.venue', 'items']);
-
-        $pdf = Pdf::loadView('pdf.quotation', [
-            'quotation' => $quotation,
-            'branding' => $this->brandingService->getBranding(),
-        ]);
-
-        $filename = "quotation_{$quotation->quotation_number}.pdf";
-        $path = "quotations/{$filename}";
-
-        Storage::disk('public')->put($path, $pdf->output());
-
-        return $path;
-    }
-
-    private function generateNumber(): string
-    {
-        $prefix = app(SettingsService::class)->get('quotation.number_prefix', 'QT');
-        $year = date('Y');
-        $sequence = Quotation::whereYear('created_at', $year)->count() + 1;
-
-        return sprintf('%s%s%04d', $prefix, $year, $sequence);
-    }
-}
-```
-
----
-
-## White-Label Configuration
-
-### Branding Service
-
-```php
-// app/Services/BrandingService.php
-<?php
-
-namespace App\Services;
-
-use App\Models\Tenant;
-use Illuminate\Support\Facades\Storage;
-
-class BrandingService
-{
-    private ?Tenant $tenant;
-
-    public function __construct(?Tenant $tenant = null)
-    {
-        $this->tenant = $tenant ?? app('currentTenant');
-    }
-
-    public function getBranding(): array
-    {
-        if (!$this->tenant) {
-            return $this->getDefaultBranding();
-        }
-
-        return [
-            'business_name' => $this->tenant->name,
-            'tagline' => $this->tenant->getSetting('general.tagline'),
-            'logo' => $this->getLogoUrl(),
-            'favicon' => $this->getFaviconUrl(),
-            'colors' => [
-                'primary' => $this->tenant->primary_color ?? '#3B82F6',
-                'secondary' => $this->tenant->getSetting('branding.secondary_color', '#1E40AF'),
-            ],
-            'contact' => [
-                'email' => $this->tenant->email,
-                'phone' => $this->tenant->phone,
-                'address' => $this->tenant->getSetting('contact.address'),
-            ],
-            'social' => [
-                'facebook' => $this->tenant->getSetting('social.facebook'),
-                'instagram' => $this->tenant->getSetting('social.instagram'),
-            ],
-        ];
-    }
-
-    public function getCssVariables(): string
-    {
-        $branding = $this->getBranding();
-
-        return <<<CSS
-:root {
-    --color-primary: {$branding['colors']['primary']};
-    --color-secondary: {$branding['colors']['secondary']};
-}
-CSS;
-    }
-
-    private function getLogoUrl(): string
-    {
-        $logo = $this->tenant?->logo;
-        if ($logo && Storage::disk('public')->exists($logo)) {
-            return Storage::disk('public')->url($logo);
-        }
-        return asset('images/logo.png');
-    }
-
-    private function getFaviconUrl(): string
-    {
-        $favicon = $this->tenant?->favicon;
-        if ($favicon && Storage::disk('public')->exists($favicon)) {
-            return Storage::disk('public')->url($favicon);
-        }
-        return asset('favicon.ico');
-    }
-
-    private function getDefaultBranding(): array
-    {
-        return [
-            'business_name' => config('app.name'),
-            'logo' => asset('images/logo.png'),
-            'colors' => [
-                'primary' => '#3B82F6',
-                'secondary' => '#1E40AF',
-            ],
-        ];
-    }
-}
-```
-
----
-
-## Theme Engine
-
-### Theme Structure
-
-```
-themes/
-├── default/
-│   ├── theme.json
-│   ├── assets/
-│   │   ├── css/
-│   │   └── js/
-│   └── views/
-│       ├── layouts/
-│       └── pages/
-├── elegant/
-│   └── ...
-└── modern/
-    └── ...
-```
-
-### Theme Configuration
-
-```json
-// themes/elegant/theme.json
-{
-    "name": "Elegant",
-    "version": "1.0.0",
-    "description": "A sophisticated theme for luxury venues",
-    "colors": {
-        "primary": "#8B4513",
-        "secondary": "#D4AF37"
-    },
-    "fonts": {
-        "heading": "Playfair Display",
-        "body": "Lato"
-    },
-    "features": {
-        "hero_slider": true,
-        "parallax_sections": true
-    }
-}
-```
-
-### Theme Service
-
-```php
-// app/Services/ThemeService.php
-<?php
-
-namespace App\Services;
-
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\View;
-
-class ThemeService
-{
-    private string $activeTheme = 'default';
-
-    public function __construct()
-    {
-        $this->loadActiveTheme();
-    }
-
-    private function loadActiveTheme(): void
-    {
-        $tenant = app('currentTenant');
-        if ($tenant) {
-            $this->activeTheme = $tenant->getSetting('theme.active', 'default');
-        }
-        $this->registerThemeViews();
-    }
-
-    public function getAvailableThemes(): array
-    {
-        $themesPath = resource_path('themes');
-        $themes = [];
-
-        foreach (File::directories($themesPath) as $themePath) {
-            $configPath = "{$themePath}/theme.json";
-            if (File::exists($configPath)) {
-                $themes[basename($themePath)] = json_decode(File::get($configPath), true);
-            }
-        }
-
-        return $themes;
-    }
-
-    private function registerThemeViews(): void
-    {
-        $themePath = resource_path("themes/{$this->activeTheme}/views");
-        if (File::isDirectory($themePath)) {
-            View::prependLocation($themePath);
-        }
-    }
-
-    public function asset(string $path): string
-    {
-        return asset("themes/{$this->activeTheme}/assets/{$path}");
-    }
-}
-```
-
----
-
-## Plugin System
-
-### Plugin Structure
-
-```
-plugins/
-├── sms-gateway/
-│   ├── plugin.json
-│   ├── src/
-│   │   ├── SmsGatewayServiceProvider.php
-│   │   └── Services/
-│   └── routes/
-└── payment-gateway/
-    └── ...
-```
-
-### Plugin Configuration
-
-```json
-// plugins/sms-gateway/plugin.json
-{
-    "name": "SMS Gateway",
-    "slug": "sms-gateway",
-    "version": "1.0.0",
-    "description": "Send SMS notifications",
-    "providers": [
-        "Plugins\\SmsGateway\\SmsGatewayServiceProvider"
-    ],
-    "hooks": {
-        "booking.created": "sendBookingConfirmationSms",
-        "payment.received": "sendPaymentConfirmationSms"
-    },
-    "settings": {
-        "gateway_provider": {
-            "type": "select",
-            "options": ["twilio", "nexmo"]
-        },
-        "api_key": {
-            "type": "password"
-        }
-    }
-}
-```
-
-### Plugin Service
-
-```php
-// app/Services/PluginService.php
-<?php
-
-namespace App\Services;
-
-use Illuminate\Support\Facades\File;
-
-class PluginService
-{
-    private array $loadedPlugins = [];
-    private array $hooks = [];
-
-    public function loadPlugins(): void
-    {
-        $tenant = app('currentTenant');
-        $enabledPlugins = $tenant?->getSetting('plugins.enabled', []) ?? [];
-
-        foreach ($enabledPlugins as $pluginSlug) {
-            $this->loadPlugin($pluginSlug);
-        }
-    }
-
-    public function loadPlugin(string $slug): bool
-    {
-        $configPath = base_path("plugins/{$slug}/plugin.json");
-        if (!File::exists($configPath)) {
-            return false;
-        }
-
-        $config = json_decode(File::get($configPath), true);
-
-        // Register providers
-        foreach ($config['providers'] ?? [] as $provider) {
-            app()->register($provider);
-        }
-
-        // Register hooks
-        foreach ($config['hooks'] ?? [] as $hook => $handler) {
-            $this->hooks[$hook][] = ['plugin' => $slug, 'handler' => $handler];
-        }
-
-        $this->loadedPlugins[$slug] = $config;
-        return true;
-    }
-
-    public function executeHook(string $hook, array $data = []): array
-    {
-        $results = [];
-        foreach ($this->hooks[$hook] ?? [] as $handler) {
-            // Execute handler
-        }
-        return $results;
-    }
-
-    public function getAvailablePlugins(): array
-    {
-        $plugins = [];
-        foreach (File::directories(base_path('plugins')) as $pluginPath) {
-            $configPath = "{$pluginPath}/plugin.json";
-            if (File::exists($configPath)) {
-                $plugins[] = json_decode(File::get($configPath), true);
-            }
-        }
-        return $plugins;
-    }
-}
-```
-
----
-
-## API Documentation
-
-### Endpoints Overview
-
-#### Public Endpoints
-```
-GET    /api/v1/venues                    List venues
-GET    /api/v1/venues/{id}               Venue details
-GET    /api/v1/venues/{id}/availability  Availability calendar
-GET    /api/v1/packages                  List packages
-POST   /api/v1/inquiries                 Submit inquiry
-POST   /api/v1/calculate-price           Calculate pricing
-```
-
-#### Authenticated Endpoints
-```
-GET    /api/v1/client/bookings           Client's bookings
-GET    /api/v1/client/bookings/{id}      Booking details
-
-# Admin
-GET    /api/v1/admin/bookings            All bookings
-POST   /api/v1/admin/bookings            Create booking
-PUT    /api/v1/admin/bookings/{id}       Update booking
-DELETE /api/v1/admin/bookings/{id}       Cancel booking
-
-GET    /api/v1/admin/reports/revenue     Revenue report
-GET    /api/v1/admin/reports/bookings    Bookings report
-```
-
-### Response Format
-
-```json
-{
-    "success": true,
-    "message": "Success",
-    "data": {
-        "id": 1,
-        "booking_number": "BK2026001",
-        "status": "confirmed",
-        "event": {
-            "type": "wedding",
-            "date": "2026-03-15",
-            "guest_count": 150
-        },
-        "financial": {
-            "total": 450000,
-            "paid": 112500,
-            "balance": 337500
-        }
-    }
-}
-```
-
----
-
-## Development Timeline
-
-### Phase 1: Foundation (Weeks 1-6)
-- Project setup, multi-tenancy, authentication
-- Database design, migrations, seeders
-- Core architecture (models, services, repositories)
-
-### Phase 2: Core Modules (Weeks 7-16)
-- Venue management & availability
-- Package system & dynamic pricing
-- Inquiry & quotation workflow
-- Booking engine & contracts
-- Payment tracking
-
-### Phase 3: Extended Modules (Weeks 17-24)
-- Vendor & resource management
-- Staff scheduling & tasks
-- Reporting & analytics
-- Client portal
-
-### Phase 4: Customization (Weeks 25-30)
-- Settings framework & custom fields
-- Theme engine & branding
-- Plugin system
-
-### Phase 5: Launch (Weeks 31-36)
-- Testing (unit, integration, UAT)
-- Documentation
-- Production deployment
-
----
-
-## Testing Strategy
-
-### Test Categories
+## Developer workflow
 
 ```bash
-# Run all tests
-php artisan test
+composer install && npm install     # dependencies
+php artisan migrate:fresh --seed    # clean demo data
+npm run dev                         # Vite HMR  (separate terminal)
+php artisan serve                   # app server
 
-# Run specific suite
-php artisan test --testsuite=Feature
-php artisan test --testsuite=Unit
-
-# Run with coverage
-php artisan test --coverage
+vendor/bin/pint                     # auto-format (Laravel Pint)
+vendor/bin/phpstan analyse          # static analysis (larastan, level 5)
+php artisan test                    # full suite
 ```
 
-### Example Test
-
-```php
-// tests/Feature/BookingTest.php
-<?php
-
-namespace Tests\Feature;
-
-use Tests\TestCase;
-use App\Models\Booking;
-use App\Models\Venue;
-use App\Models\User;
-use App\Models\Tenant;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-class BookingTest extends TestCase
-{
-    use RefreshDatabase;
-
-    public function test_prevents_double_booking()
-    {
-        $tenant = Tenant::factory()->create();
-        $venue = Venue::factory()->for($tenant)->create();
-        
-        Booking::factory()->create([
-            'tenant_id' => $tenant->id,
-            'venue_id' => $venue->id,
-            'event_date' => '2026-03-15',
-            'status' => 'confirmed',
-        ]);
-
-        $response = $this->actingAs(User::factory()->create())
-            ->postJson('/api/v1/admin/bookings', [
-                'venue_id' => $venue->id,
-                'event_date' => '2026-03-15',
-            ]);
-
-        $response->assertStatus(422)
-            ->assertJsonValidationErrors(['event_date']);
-    }
-}
-```
+CI (`.github/workflows/`) runs Pint, PHPStan, and the PHP 8.4 test suite on every PR.
 
 ---
 
-## Deployment Guide
-
-### Production Requirements
-
-| Component | Requirement |
-|-----------|-------------|
-| PHP | 8.2+ |
-| MySQL | 8.0+ |
-| RAM | 4GB minimum |
-| Storage | 50GB SSD |
-| Web Server | Nginx 1.20+ |
-
-### Deployment Checklist
+## Testing
 
 ```bash
-# 1. Clone repository
-git clone https://github.com/[username]/eventpro.git
+php artisan test                    # all tests
+php artisan test --filter Booking   # a subset
+```
 
-# 2. Install dependencies
+Tests run against an **in-memory SQLite** database (configured in `phpunit.xml`), so they
+never touch your demo data. The suite covers public pages, the inquiry→quotation→booking→
+payment pipeline, every admin section, the client portal, multi-tenant isolation, and
+security headers.
+
+---
+
+## Offline demo & evaluation recovery
+
+This repo ships a complete **offline + git-free** workflow — see [`DEMO-README.md`](DEMO-README.md):
+
+- **Runs with no internet:** self-hosted fonts, SQLite, file cache, sync queue, log mail.
+- **`dev doctor`** — pinpoints exactly which files/lines were changed or deleted versus a
+  captured baseline (no git needed), and runs every CRUD test. `dev baseline` captures the
+  known-good state; `dev restore <path>` recovers from it. Works even if the app can't boot.
+- **`tools\demo\backup.cmd`** — zips the whole project (incl. `vendor/`, `node_modules/`) as
+  a full safety net.
+
+---
+
+## Documentation
+
+| Doc | Contents |
+| --- | --- |
+| [DEMO-README.md](DEMO-README.md) | Offline run + git-free recovery tool (one-stop) |
+| [docs/installation.md](docs/installation.md) | Full install (SQLite, MySQL, Docker, production) |
+| [docs/DEMONSTRATION_GUIDE.md](docs/DEMONSTRATION_GUIDE.md) | Scene-by-scene demo script |
+| [docs/OFFLINE_DEMO.md](docs/OFFLINE_DEMO.md) | Running completely offline |
+| [docs/EVALUATION_RECOVERY.md](docs/EVALUATION_RECOVERY.md) | Recovery playbook + architecture map |
+| [docs/ADMIN-LOGINS.md](docs/ADMIN-LOGINS.md) | Seeded credentials |
+| [docs/admin-guide.md](docs/admin-guide.md) · [docs/developer-guide.md](docs/developer-guide.md) | Admin & developer guides |
+| [docs/api.md](docs/api.md) | REST API reference |
+| [DOCKER.md](DOCKER.md) | Docker setup |
+
+---
+
+## Deployment
+
+Production runs on PHP 8.2+ with MySQL/MariaDB, Redis (cache/queue), and a real web server
+(nginx/Apache) serving `public/`. Outline:
+
+```bash
 composer install --no-dev --optimize-autoloader
 npm install && npm run build
-
-# 3. Configure environment
-cp .env.example .env
-# Edit .env with production values
-php artisan key:generate
-
-# 4. Database
 php artisan migrate --force
-php artisan db:seed --class=ProductionSeeder
-
-# 5. Optimize
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
-# 6. Permissions
-chmod -R 755 storage bootstrap/cache
-chown -R www-data:www-data storage
-
-# 7. Storage link
-php artisan storage:link
-
-# 8. Queue worker (supervisor)
-# 9. Cron job for scheduler
+php artisan config:cache && php artisan route:cache && php artisan view:cache
+php artisan queue:work        # run via a supervisor
 ```
 
----
-
-## Repository Name Suggestions
-
-Given the universal product nature:
-
-| Name | Rationale |
-|------|-----------|
-| `eventpro` ⭐ | Short, professional, brandable |
-| `eventpro-platform` | Emphasizes platform nature |
-| `venue-booking-system` | Descriptive |
-| `hospitality-events` | Industry-focused |
-
-**Recommended: `eventpro`**
+Set production drivers in `.env` (MySQL, Redis, real mailer), a strong `APP_KEY`, and
+`APP_ENV=production` / `APP_DEBUG=false`. Full steps and the queue/scheduler setup are in
+[`docs/installation.md`](docs/installation.md).
 
 ---
 
 ## License
 
-Proprietary software. See LICENSE.md for details.
-
----
-
-## Support
-
-For documentation, visit: [docs.eventpro.io](https://docs.eventpro.io)
-
----
-
-*EventPro - Professional Event Management for Modern Hospitality*
-
-*Version: 1.0.0*
+Proprietary. © EventPro. All rights reserved.
