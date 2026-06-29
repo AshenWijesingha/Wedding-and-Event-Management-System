@@ -53,12 +53,15 @@ if errorlevel 1 (
 echo.
 
 echo  -- Route table ------------------------------------------------
-for /f %%c in ('"%PHP%" artisan route:list 2^>nul ^| find /c "/"') do set "ROUTES=%%c"
-if "!ROUTES!"=="" (
-    echo   [FAIL]    artisan route:list produced no output ^(app does not boot^)
-    set "FAIL=1"
-) else (
+set "ROUTES=0"
+"%PHP%" artisan route:list >"%TEMP%\ep_routes.txt" 2>nul
+for /f %%c in ('find /v /c "" ^< "%TEMP%\ep_routes.txt"') do set "ROUTES=%%c"
+del "%TEMP%\ep_routes.txt" >nul 2>&1
+if !ROUTES! GTR 20 (
     echo   [OK]      route:list returned !ROUTES! lines
+) else (
+    echo   [FAIL]    route:list returned only !ROUTES! lines ^(app may not boot^)
+    set "FAIL=1"
 )
 echo.
 
