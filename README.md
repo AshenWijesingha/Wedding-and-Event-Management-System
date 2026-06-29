@@ -295,6 +295,7 @@ This repo ships a complete **offline + git-free** workflow — see [`DEMO-README
 - **`dev doctor`** — pinpoints exactly which files/lines were changed or deleted versus a
   captured baseline (no git needed), and runs every CRUD test. `dev baseline` captures the
   known-good state; `dev restore <path>` recovers from it. Works even if the app can't boot.
+  (In PowerShell run `.\dev doctor`; `php artisan dev:doctor` works in any shell.)
 - **`tools\demo\backup.cmd`** — zips the whole project (incl. `vendor/`, `node_modules/`) as
   a full safety net.
 

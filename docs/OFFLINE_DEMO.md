@@ -125,7 +125,8 @@ To return to a clean, freshly-seeded database:
 ## 7. If something breaks during evaluation
 
 Run **`dev doctor`** — it finds exactly which files/lines changed or were deleted
-(git-free) and verifies every CRUD flow. See
+(git-free) and verifies every CRUD flow. (In PowerShell use `.\dev doctor`; in cmd.exe the
+bare `dev doctor` works; `php artisan dev:doctor` works in any shell.) See
 **[`docs/EVALUATION_RECOVERY.md`](EVALUATION_RECOVERY.md)** for the full playbook and
 the `tools\demo\` scripts (`baseline`, `doctor`, `diff`, `restore`, `backup`).
 

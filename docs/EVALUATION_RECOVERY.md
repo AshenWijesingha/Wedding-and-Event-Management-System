@@ -43,6 +43,10 @@ tools\demo\backup.cmd
  3. dev doctor                 ->  confirm HEALTHY
 ```
 
+> **Shell note.** In **PowerShell** prefix with `.\` (`.\dev doctor`, `.\dev restore <path>`)
+> — PowerShell won't run a program from the current folder without it. In **cmd.exe** the bare
+> `dev doctor` works. `php artisan dev:doctor` / `dev:restore` work in any shell.
+
 What `dev doctor` shows:
 
 - **Source integrity vs baseline** — `DELETED` files, `MODIFIED` files with the
