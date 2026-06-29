@@ -37,7 +37,7 @@ class DevDoctorCommand extends Command
         // --- 1. Source integrity (git-free) --------------------------------
         $engine = new \DemoIntegrity(base_path());
         if (! $engine->baselineExists()) {
-            $this->warn("  No baseline found. Run `php artisan dev:baseline` on a known-good checkout first.");
+            $this->warn('  No baseline found. Run `php artisan dev:baseline` on a known-good checkout first.');
             $this->line('  (Integrity comparison skipped.)');
         } else {
             $report = $engine->check();
@@ -85,7 +85,7 @@ class DevDoctorCommand extends Command
 
         // No external font/CDN link re-introduced into the blade shells.
         $leak = false;
-        foreach (glob(base_path('resources/views').'/{,**/}*.blade.php', GLOB_BRACE) ?: [] as $blade) {
+        foreach (glob(base_path('resources/views') . '/{,**/}*.blade.php', GLOB_BRACE) ?: [] as $blade) {
             $c = (string) file_get_contents($blade);
             if (str_contains($c, 'fonts.bunny.net') || str_contains($c, 'fonts.googleapis.com')) {
                 $leak = true;
@@ -130,9 +130,9 @@ class DevDoctorCommand extends Command
         $this->line('  -- Functional suite (CRUD + every flow) -----------');
         $this->line('     running the test suite, please wait...');
 
-        $cmd = '"'.PHP_BINARY.'" artisan test --compact';
+        $cmd = '"' . PHP_BINARY . '" artisan test --compact';
         if ($filter = $this->option('filter')) {
-            $cmd .= ' --filter='.escapeshellarg($filter);
+            $cmd .= ' --filter=' . escapeshellarg($filter);
         }
 
         // This command is already a booted Laravel process, which has leaked its
@@ -155,13 +155,13 @@ class DevDoctorCommand extends Command
             ])
             ->timeout(900)
             ->run($cmd);
-        $out = trim($result->output()."\n".$result->errorOutput());
+        $out = trim($result->output() . "\n" . $result->errorOutput());
 
         // Show the last few lines (the PHPUnit summary).
         $tail = array_slice(preg_split('/\r\n|\r|\n/', $out), -6);
         foreach ($tail as $l) {
             if (trim($l) !== '') {
-                $this->line('     '.$l);
+                $this->line('     ' . $l);
             }
         }
 
@@ -181,9 +181,9 @@ class DevDoctorCommand extends Command
     private function status(bool $ok, string $okMsg, string $failMsg): void
     {
         if ($ok) {
-            $this->line('   <fg=green>[OK]</>      '.$okMsg);
+            $this->line('   <fg=green>[OK]</>      ' . $okMsg);
         } else {
-            $this->line('   <fg=red>[FAIL]</>    '.$failMsg);
+            $this->line('   <fg=red>[FAIL]</>    ' . $failMsg);
         }
     }
 }
