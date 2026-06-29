@@ -17,13 +17,17 @@ class SecurityHeadersTest extends TestCase
         $response->assertHeader('Content-Security-Policy');
     }
 
-    public function test_csp_allows_bunny_fonts(): void
+    public function test_csp_uses_self_hosted_fonts_only(): void
     {
-        // The layout loads Inter/Fraunces from fonts.bunny.net; the CSP must permit it
-        // or the browser blocks the fonts.
+        // Inter/Fraunces are self-hosted (resources/css/fonts.css, bundled via Vite) so the
+        // app runs fully offline. The CSP must NOT reference any external font CDN, and fonts
+        // must be served from 'self'.
         $csp = $this->get('/')->headers->get('Content-Security-Policy');
 
-        $this->assertStringContainsString('https://fonts.bunny.net', $csp);
+        $this->assertStringNotContainsString('fonts.bunny.net', $csp);
+        $this->assertStringNotContainsString('fonts.googleapis.com', $csp);
+        $this->assertStringNotContainsString('fonts.gstatic.com', $csp);
+        $this->assertStringContainsString("font-src 'self'", $csp);
     }
 
     public function test_build_assets_are_not_given_nosniff(): void

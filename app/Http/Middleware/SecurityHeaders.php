@@ -53,8 +53,8 @@ class SecurityHeaders
         $csp = implode('; ', [
             "default-src 'self'",
             "script-src 'self' 'nonce-{$nonce}'{$vite}",
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.bunny.net{$vite}",
-            "font-src 'self' https://fonts.gstatic.com https://fonts.bunny.net data:",
+            "style-src 'self' 'unsafe-inline'{$vite}",
+            "font-src 'self' data:",
             "img-src 'self' data: blob: https:",
             "connect-src 'self'{$vite}{$viteWs}",
             "frame-ancestors 'self'",

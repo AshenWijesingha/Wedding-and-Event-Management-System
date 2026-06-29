@@ -14,9 +14,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ $branding['favicon'] }}">
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700|fraunces:300,400,500,600,7..144,9..144" rel="stylesheet" />
+    <!-- Fonts are self-hosted (offline). See resources/css/fonts.css, bundled via Vite. -->
 
     <!-- Dynamic CSS Variables -->
     <style>
