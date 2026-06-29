@@ -18,6 +18,10 @@ dev run doctor      :: identical ("run" is optional)
 dev doctor --no-tests   :: fast - integrity + offline checks only, skips the test suite
 ```
 
+> **Shell note.** `dev doctor` works in **cmd.exe**. In **PowerShell** use **`.\dev doctor`**
+> (PowerShell won't run a program from the current folder without `.\`). `php artisan dev:doctor`
+> works in any shell.
+
 `dev doctor` reports three sections:
 
 1. **Source integrity vs baseline** — `DELETED`, `MODIFIED` (with the exact
