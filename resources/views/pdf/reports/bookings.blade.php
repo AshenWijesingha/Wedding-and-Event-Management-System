@@ -3,26 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Booking Report — {{ $period }}</title>
-    @include('pdf.reports._styles')
+    @include('pdf.reports._styles', [
+        'primary' => $branding['colors']['primary'] ?? '#4f46e5',
+        'accent' => $branding['colors']['accent'] ?? '#10b981',
+    ])
 </head>
 <body>
+<div class="doc-footer">
+    <div class="name">{{ $branding['business_name'] ?? config('app.name') }}</div>
+    <div>Booking Report &middot; {{ $period }} &middot; Generated {{ now()->format('d M Y H:i') }}</div>
+</div>
 <div class="page">
-    <div class="header">
-        <div>
-            <div class="company-name">{{ config('app.name') }}</div>
-            <div class="company-sub">Booking Report</div>
-        </div>
-        <div class="doc-title">
-            <h1>BOOKINGS</h1>
-            <div class="doc-period">{{ $period }}</div>
-            <div class="doc-date">Generated {{ now()->format('d M Y') }}</div>
-        </div>
-    </div>
+    @include('pdf.reports._header', ['branding' => $branding, 'docType' => 'BOOKINGS', 'subtitle' => 'Booking Report', 'period' => $period])
 
     <div class="cards">
         <div class="card">
             <span class="card-label">Total</span>
-            <span class="card-value">{{ $totals['total'] }}</span>
+            <span class="card-value indigo">{{ $totals['total'] }}</span>
         </div>
         <div class="card">
             <span class="card-label">Confirmed</span>
@@ -33,7 +30,7 @@
             <span class="card-value red">{{ $totals['cancelled'] }}</span>
         </div>
     </div>
-    <div class="cards" style="margin-top:-14px">
+    <div class="cards" style="margin-top:10px">
         <div class="card" style="width:100%">
             <span class="card-label">Revenue (excl. cancelled)</span>
             <span class="card-value indigo">{{ number_format($totals['revenue'], 2) }}</span>
@@ -41,7 +38,7 @@
     </div>
 
     <h2 class="section">Monthly Breakdown</h2>
-    <table>
+    <table class="data">
         <thead>
             <tr>
                 <th>Month</th>
@@ -66,7 +63,7 @@
 
     @if(count($byEventType))
         <h2 class="section">By Event Type</h2>
-        <table>
+        <table class="data">
             <thead>
                 <tr><th>Event Type</th><th class="num">Count</th><th class="num">Revenue</th></tr>
             </thead>
@@ -81,8 +78,6 @@
             </tbody>
         </table>
     @endif
-
-    <div class="footer">{{ config('app.name') }} — generated {{ now()->format('d M Y H:i') }}</div>
 </div>
 </body>
 </html>

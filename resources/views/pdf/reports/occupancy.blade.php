@@ -3,24 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Occupancy Report — {{ $period }}</title>
-    @include('pdf.reports._styles')
+    @include('pdf.reports._styles', [
+        'primary' => $branding['colors']['primary'] ?? '#4f46e5',
+        'accent' => $branding['colors']['accent'] ?? '#10b981',
+    ])
 </head>
 <body>
+<div class="doc-footer">
+    <div class="name">{{ $branding['business_name'] ?? config('app.name') }}</div>
+    <div>Occupancy Report &middot; {{ $period }} &middot; Generated {{ now()->format('d M Y H:i') }}</div>
+</div>
 <div class="page">
-    <div class="header">
-        <div>
-            <div class="company-name">{{ config('app.name') }}</div>
-            <div class="company-sub">Occupancy Report</div>
-        </div>
-        <div class="doc-title">
-            <h1>OCCUPANCY</h1>
-            <div class="doc-period">{{ $period }}</div>
-            <div class="doc-date">Generated {{ now()->format('d M Y') }}</div>
-        </div>
-    </div>
+    @include('pdf.reports._header', ['branding' => $branding, 'docType' => 'OCCUPANCY', 'subtitle' => 'Occupancy Report', 'period' => $period])
 
     <h2 class="section">Venue Utilization</h2>
-    <table>
+    <table class="data">
         <thead>
             <tr><th>Venue</th><th class="num">Booked Days</th><th class="num">Occupancy %</th></tr>
         </thead>
@@ -36,8 +33,6 @@
             @endforelse
         </tbody>
     </table>
-
-    <div class="footer">{{ config('app.name') }} — generated {{ now()->format('d M Y H:i') }}</div>
 </div>
 </body>
 </html>

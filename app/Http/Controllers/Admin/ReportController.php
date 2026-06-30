@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\Venue;
+use App\Services\BrandingService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -166,7 +167,7 @@ class ReportController extends Controller
 
     // ---- PDF exports ----------------------------------------------------
 
-    public function pdfRevenue(Request $request): SymfonyResponse
+    public function pdfRevenue(Request $request, BrandingService $branding): SymfonyResponse
     {
         [$start, $end, $meta] = $this->resolveRange($request);
         $data = $this->revenueData($start, $end);
@@ -176,10 +177,11 @@ class ReportController extends Controller
             'months' => $data['months'],
             'byMethod' => $data['byMethod'],
             'totals' => $data['totals'],
-        ])->download("revenue-{$meta['slug']}.pdf");
+            'branding' => $branding->getBranding(),
+        ])->setPaper('a4', 'portrait')->download("revenue-{$meta['slug']}.pdf");
     }
 
-    public function pdfBookings(Request $request): SymfonyResponse
+    public function pdfBookings(Request $request, BrandingService $branding): SymfonyResponse
     {
         [$start, $end, $meta] = $this->resolveRange($request);
         $data = $this->bookingsData($start, $end);
@@ -189,10 +191,11 @@ class ReportController extends Controller
             'months' => $data['months'],
             'byEventType' => $data['byEventType'],
             'totals' => $data['totals'],
-        ])->download("bookings-{$meta['slug']}.pdf");
+            'branding' => $branding->getBranding(),
+        ])->setPaper('a4', 'portrait')->download("bookings-{$meta['slug']}.pdf");
     }
 
-    public function pdfOccupancy(Request $request): SymfonyResponse
+    public function pdfOccupancy(Request $request, BrandingService $branding): SymfonyResponse
     {
         [$start, $end, $meta] = $this->resolveRange($request);
         $data = $this->occupancyData($start, $end);
@@ -200,7 +203,8 @@ class ReportController extends Controller
         return Pdf::loadView('pdf.reports.occupancy', [
             'period' => $meta['label'],
             'venueOccupancy' => $data['venueOccupancy'],
-        ])->download("occupancy-{$meta['slug']}.pdf");
+            'branding' => $branding->getBranding(),
+        ])->setPaper('a4', 'portrait')->download("occupancy-{$meta['slug']}.pdf");
     }
 
     // ---- Range resolution ----------------------------------------------

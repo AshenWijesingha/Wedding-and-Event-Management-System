@@ -28,6 +28,7 @@ class BrandingService
             'tagline' => $this->tenant->getSetting('general.tagline'),
             'logo' => $this->getLogoUrl(),
             'logo_dark' => $this->getLogoUrl('dark'),
+            'logo_pdf' => $this->getLogoDataUri(),
             'favicon' => $this->getFaviconUrl(),
             'colors' => [
                 'primary' => $this->tenant->primary_color ?? '#3B82F6',
@@ -109,6 +110,44 @@ CSS;
     }
 
     /**
+     * Resolve the tenant's uploaded logo to a base64 data URI for embedding in
+     * PDFs. dompdf cannot fetch remote http(s) URLs (and we keep remote fetching
+     * off for safety/offline), so the bytes are inlined directly.
+     *
+     * Returns null when the tenant has no custom logo — callers fall back to a
+     * styled business-name wordmark rather than stamping the generic app logo on
+     * a tenant's customer-facing handout.
+     */
+    private function getLogoDataUri(): ?string
+    {
+        $logo = $this->tenant?->getSetting('branding.logo') ?? $this->tenant?->logo;
+
+        if (! $logo || ! Storage::disk('public')->exists($logo)) {
+            return null;
+        }
+
+        $mime = match (strtolower(pathinfo($logo, PATHINFO_EXTENSION))) {
+            'png' => 'image/png',
+            'jpg', 'jpeg' => 'image/jpeg',
+            'gif' => 'image/gif',
+            'svg' => 'image/svg+xml',
+            default => null,
+        };
+
+        if ($mime === null) {
+            return null;
+        }
+
+        try {
+            $bytes = Storage::disk('public')->get($logo);
+        } catch (\Throwable $e) {
+            return null;
+        }
+
+        return 'data:'.$mime.';base64,'.base64_encode($bytes);
+    }
+
+    /**
      * Get default branding when no tenant.
      */
     private function getDefaultBranding(): array
@@ -118,6 +157,7 @@ CSS;
             'tagline' => 'Professional Event Management',
             'logo' => asset('images/logo.svg'),
             'logo_dark' => asset('images/logo.svg'),
+            'logo_pdf' => null,
             'favicon' => asset('images/favicon.svg'),
             'colors' => [
                 'primary' => '#3B82F6',
