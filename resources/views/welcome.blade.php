@@ -22,35 +22,44 @@
     <!-- ===== HERO ===== -->
     <section class="lp-mesh relative isolate overflow-hidden">
         <div aria-hidden="true" class="ft-noise pointer-events-none absolute inset-0 opacity-[0.05]"></div>
-        <!-- decorative arch -->
-        <div aria-hidden="true" class="lp-arch pointer-events-none absolute -right-24 top-16 hidden h-[34rem] w-[26rem] border border-[#2b211b]/10 lg:block"></div>
-        <div aria-hidden="true" class="lp-arch pointer-events-none absolute -right-10 top-32 hidden h-[28rem] w-[20rem] border border-[#c8a96a]/30 lg:block"></div>
 
         <div class="relative mx-auto max-w-7xl px-6 pb-24 pt-24 lg:px-8 lg:pt-32">
-            <div class="max-w-3xl">
-                <p class="ft-rise text-[0.72rem] font-medium uppercase tracking-[0.35em] text-[#c8a96a]" style="animation-delay:.05s">
-                    Weddings &middot; Corporate &middot; Celebrations
-                </p>
+            <div class="grid grid-cols-1 items-center gap-14 lg:grid-cols-12">
+                <!-- copy -->
+                <div class="lg:col-span-7">
+                    <p class="ft-rise text-[0.72rem] font-medium uppercase tracking-[0.35em] text-[#c8a96a]" style="animation-delay:.05s">
+                        Weddings &middot; Corporate &middot; Celebrations
+                    </p>
 
-                <h1 class="ft-rise font-display mt-6 text-5xl font-light leading-[1.02] text-[#1a1512] sm:text-6xl lg:text-7xl" style="animation-delay:.12s">
-                    Create <span class="italic text-[#9a7b3f]">unforgettable</span><br>moments.
-                </h1>
+                    <h1 class="ft-rise font-display mt-6 text-5xl font-light leading-[1.02] text-[#1a1512] sm:text-6xl lg:text-7xl" style="animation-delay:.12s">
+                        Create <span class="italic text-[#9a7b3f]">unforgettable</span><br>moments.
+                    </h1>
 
-                <p class="ft-rise mt-7 max-w-xl text-lg leading-relaxed text-[#5c5246]" style="animation-delay:.2s">
-                    Partnering with Sri Lanka&rsquo;s leading hotels across Colombo, Kandy, Galle &amp; Dambulla &mdash; refined event management for weddings, corporate gatherings, and the celebrations that matter most.
-                </p>
+                    <p class="ft-rise mt-7 max-w-xl text-lg leading-relaxed text-[#5c5246]" style="animation-delay:.2s">
+                        Partnering with Sri Lanka&rsquo;s leading hotels across Colombo, Kandy, Galle &amp; Dambulla &mdash; refined event management for weddings, corporate gatherings, and the celebrations that matter most.
+                    </p>
 
-                <div class="ft-rise mt-10 flex flex-wrap items-center gap-5" style="animation-delay:.28s">
-                    <a href="{{ route('venues.index') }}"
-                        class="lp-cta inline-flex items-center gap-3 rounded-full px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#2b211b]/15"
-                        style="background-color: var(--color-primary);">
-                        Explore Venues
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                    </a>
-                    <a href="{{ route('contact') }}" class="group inline-flex items-center gap-2 text-sm font-semibold text-[#2b211b]">
-                        Talk to our team
-                        <span class="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
-                    </a>
+                    <div class="ft-rise mt-10 flex flex-wrap items-center gap-5" style="animation-delay:.28s">
+                        <a href="{{ route('venues.index') }}"
+                            class="lp-cta inline-flex items-center gap-3 rounded-full px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#2b211b]/15"
+                            style="background-color: var(--color-primary);">
+                            Explore Venues
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </a>
+                        <a href="{{ route('contact') }}" class="group inline-flex items-center gap-2 text-sm font-semibold text-[#2b211b]">
+                            Talk to our team
+                            <span class="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- hero artwork -->
+                <div class="ft-rise lg:col-span-5" style="animation-delay:.34s">
+                    <div class="relative mx-auto max-w-sm lg:max-w-none">
+                        <div aria-hidden="true" class="lp-arch pointer-events-none absolute -right-6 -top-6 hidden h-full w-full border border-[#c8a96a]/35 lg:block"></div>
+                        <img src="{{ asset('images/hero-event.svg') }}" alt="An elegant ballroom set for a celebration"
+                             class="lp-arch relative w-full shadow-2xl shadow-[#2b211b]/25 ring-1 ring-[#2b211b]/10">
+                    </div>
                 </div>
             </div>
 
@@ -62,7 +71,7 @@
                     ['4.9', 'Average couple rating'],
                 ];
             @endphp
-            <dl class="ft-rise mt-20 grid max-w-3xl grid-cols-1 divide-y divide-[#2b211b]/10 border-t border-[#2b211b]/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0" style="animation-delay:.36s">
+            <dl class="ft-rise mt-20 grid max-w-3xl grid-cols-1 divide-y divide-[#2b211b]/10 border-t border-[#2b211b]/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0" style="animation-delay:.42s">
                 @foreach($stats as [$num,$label])
                     <div class="px-0 py-6 sm:px-8 sm:py-4 sm:first:pl-0">
                         <dt class="font-display text-4xl font-light text-[#1a1512]">{{ $num }}</dt>

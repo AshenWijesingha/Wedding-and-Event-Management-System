@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 720" width="560" height="720" role="img" aria-label="An elegant ballroom set for a celebration">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7e6bf"/>
+      <stop offset="0.34" stop-color="#e9b878"/>
+      <stop offset="0.62" stop-color="#b9763f"/>
+      <stop offset="1" stop-color="#3a1d22"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.30" r="0.42">
+      <stop offset="0" stop-color="#fff6e0" stop-opacity="0.95"/>
+      <stop offset="0.5" stop-color="#ffe6b0" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#ffe6b0" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a1518"/>
+      <stop offset="1" stop-color="#170c0e"/>
+    </linearGradient>
+    <clipPath id="arch">
+      <path d="M20 720 V300 A260 260 0 0 1 540 300 V720 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- arched scene -->
+  <g clip-path="url(#arch)">
+    <rect x="20" y="40" width="520" height="680" fill="url(#sky)"/>
+    <rect x="20" y="40" width="520" height="680" fill="url(#sun)"/>
+
+    <!-- distant horizon shimmer -->
+    <rect x="20" y="430" width="520" height="3" fill="#ffe9bf" opacity="0.5"/>
+
+    <!-- side drapery -->
+    <path d="M20 40 C70 220 60 430 96 720 L20 720 Z" fill="#5e2230" opacity="0.92"/>
+    <path d="M20 40 C70 220 60 430 96 720" fill="none" stroke="#caa15e" stroke-opacity="0.55" stroke-width="3"/>
+    <path d="M540 40 C490 220 500 430 464 720 L540 720 Z" fill="#5e2230" opacity="0.92"/>
+    <path d="M540 40 C490 220 500 430 464 720" fill="none" stroke="#caa15e" stroke-opacity="0.55" stroke-width="3"/>
+
+    <!-- chandelier -->
+    <g stroke="#ffe9bf" stroke-opacity="0.7" fill="none" stroke-width="2">
+      <line x1="280" y1="40" x2="280" y2="150"/>
+      <path d="M214 196 Q280 120 346 196"/>
+      <path d="M236 232 Q280 178 324 232"/>
+    </g>
+    <g fill="#fff3d6">
+      <circle cx="280" cy="156" r="6"/>
+      <circle cx="214" cy="196" r="5"/><circle cx="247" cy="196" r="4"/>
+      <circle cx="280" cy="196" r="5"/><circle cx="313" cy="196" r="4"/><circle cx="346" cy="196" r="5"/>
+      <circle cx="236" cy="233" r="4"/><circle cx="280" cy="226" r="4"/><circle cx="324" cy="233" r="4"/>
+    </g>
+
+    <!-- floor -->
+    <path d="M20 560 H540 V720 H20 Z" fill="url(#floor)"/>
+    <ellipse cx="280" cy="560" rx="320" ry="34" fill="#3a2023" opacity="0.7"/>
+
+    <!-- banquet table + chairs silhouette -->
+    <g fill="#120a0b">
+      <ellipse cx="280" cy="600" rx="150" ry="30"/>
+      <rect x="150" y="600" width="260" height="70" rx="6"/>
+      <ellipse cx="280" cy="670" rx="150" ry="26"/>
+      <rect x="150" y="556" width="40" height="58" rx="10"/>
+      <rect x="370" y="556" width="40" height="58" rx="10"/>
+    </g>
+    <!-- table linen highlight -->
+    <ellipse cx="280" cy="598" rx="150" ry="28" fill="#caa15e" opacity="0.10"/>
+
+    <!-- candle / centerpiece glow -->
+    <g>
+      <circle cx="280" cy="584" r="26" fill="#ffd98a" opacity="0.35"/>
+      <circle cx="280" cy="584" r="11" fill="#ffe9bf" opacity="0.8"/>
+      <circle cx="232" cy="592" r="14" fill="#ffd98a" opacity="0.25"/>
+      <circle cx="328" cy="592" r="14" fill="#ffd98a" opacity="0.25"/>
+    </g>
+
+    <!-- floating bokeh -->
+    <g fill="#fff3d6">
+      <circle cx="150" cy="300" r="4" opacity="0.55"/>
+      <circle cx="410" cy="270" r="5" opacity="0.5"/>
+      <circle cx="360" cy="360" r="3" opacity="0.6"/>
+      <circle cx="190" cy="400" r="3" opacity="0.5"/>
+      <circle cx="430" cy="420" r="4" opacity="0.4"/>
+      <circle cx="120" cy="470" r="3" opacity="0.45"/>
+    </g>
+  </g>
+
+  <!-- gold arch frame -->
+  <path d="M20 720 V300 A260 260 0 0 1 540 300 V720" fill="none" stroke="#c8a96a" stroke-width="4"/>
+  <path d="M36 720 V302 A244 244 0 0 1 524 302 V720" fill="none" stroke="#c8a96a" stroke-opacity="0.35" stroke-width="2"/>
+</svg>
