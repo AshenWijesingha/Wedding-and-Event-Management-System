@@ -1,24 +1,40 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img" aria-label="Earl&#039;s Regency">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#173a30"/>
       <stop offset="1" stop-color="#5aa088"/>
     </linearGradient>
-    <linearGradient id="v" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#000" stop-opacity="0"/>
-      <stop offset="1" stop-color="#000" stop-opacity="0.45"/>
+    <radialGradient id="glow" cx="0.5" cy="0.30" r="0.62">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="vig" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#000000" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0.62"/>
     </linearGradient>
   </defs>
-  <rect width="1200" height="800" fill="url(#g)"/>
-  <rect width="1200" height="800" fill="url(#v)"/>
-  <g fill="none" stroke="#ffffff" stroke-opacity="0.12" stroke-width="2">
-    <circle cx="1000" cy="160" r="220"/>
-    <circle cx="1000" cy="160" r="150"/>
-    <circle cx="180" cy="690" r="160"/>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <rect width="1200" height="800" fill="url(#glow)"/>
+  <g fill="#ffffff"><circle cx="150" cy="150" r="7" opacity="0.22"/><circle cx="1050" cy="120" r="11" opacity="0.16"/><circle cx="980" cy="250" r="5" opacity="0.18"/><circle cx="240" cy="300" r="4" opacity="0.16"/><circle cx="1120" cy="360" r="6" opacity="0.12"/><circle cx="90" cy="430" r="5" opacity="0.12"/></g>
+  
+  <g stroke="#ffffff" stroke-opacity="0.45" fill="none" stroke-width="2">
+    <line x1="600" y1="0" x2="600" y2="120"/>
+    <path d="M512 158 Q600 92 688 158"/>
+    <path d="M536 196 Q600 146 664 196"/>
   </g>
-  <g text-anchor="middle" font-family="Georgia, 'Times New Roman', serif">
-    <rect x="430" y="338" width="340" height="2" fill="#ffffff" fill-opacity="0.5"/>
-    <text x="600" y="420" font-size="92" fill="#ffffff" font-weight="500">Earl&#039;s Regency</text>
-    <text x="600" y="478" font-size="30" letter-spacing="8" fill="#ffffff" fill-opacity="0.85">KANDY</text>
+  <g fill="#ffe9c2">
+    <circle cx="600" cy="126" r="6" opacity="0.95"/>
+    <circle cx="512" cy="158" r="5"/><circle cx="556" cy="158" r="4"/>
+    <circle cx="600" cy="158" r="5"/><circle cx="644" cy="158" r="4"/><circle cx="688" cy="158" r="5"/>
+    <circle cx="536" cy="197" r="4"/><circle cx="600" cy="190" r="4"/><circle cx="664" cy="197" r="4"/>
+  </g>
+  <g fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.05" stroke-width="2"><path d="M40 800 V610 a65 65 0 0 1 130 0 V800 Z"/><line x1="105" y1="559" x2="105" y2="782"/><path d="M205 800 V610 a65 65 0 0 1 130 0 V800 Z"/><line x1="270" y1="559" x2="270" y2="782"/><path d="M370 800 V610 a65 65 0 0 1 130 0 V800 Z"/><line x1="435" y1="559" x2="435" y2="782"/><path d="M535 800 V610 a65 65 0 0 1 130 0 V800 Z"/><line x1="600" y1="559" x2="600" y2="782"/><path d="M700 800 V610 a65 65 0 0 1 130 0 V800 Z"/><line x1="765" y1="559" x2="765" y2="782"/><path d="M865 800 V610 a65 65 0 0 1 130 0 V800 Z"/><line x1="930" y1="559" x2="930" y2="782"/><path d="M1030 800 V610 a65 65 0 0 1 130 0 V800 Z"/><line x1="1095" y1="559" x2="1095" y2="782"/></g>
+  <rect width="1200" height="800" fill="url(#vig)"/>
+  <rect x="0" y="723" width="1200" height="3" fill="#ffffff" fill-opacity="0.16"/>
+  <g text-anchor="middle" font-family="Georgia,'Times New Roman',serif">
+    <rect x="540" y="556" width="120" height="2" fill="#c8a96a" fill-opacity="0.9"/>
+    <text x="600" y="640" font-size="64" fill="#ffffff" font-weight="500">Earl&#039;s Regency</text>
+    <text x="600" y="690" font-size="26" letter-spacing="8" fill="#ffffff" fill-opacity="0.85">KANDY</text>
   </g>
 </svg>
