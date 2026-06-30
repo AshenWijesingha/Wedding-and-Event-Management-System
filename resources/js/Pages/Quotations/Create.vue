@@ -211,11 +211,11 @@ function submit() {
                     </p>
 
                     <div v-for="(item, i) in form.items" :key="i" class="grid grid-cols-12 gap-2 items-start">
-                        <div class="col-span-12 sm:col-span-5 space-y-1">
-                            <div class="flex items-center gap-2">
+                        <div class="col-span-12 sm:col-span-5 min-w-0 space-y-1">
+                            <div class="flex items-center gap-2 min-w-0">
                                 <span class="shrink-0 inline-flex px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide" :class="typeClass(item.type)">{{ typeLabel(item.type) }}</span>
                                 <select v-if="item.type === 'vendor'" v-model.number="item.vendor_id" @change="onVendorSelect(item)"
-                                    class="flex-1 border-border rounded-md text-sm focus:border-primary focus:ring-primary">
+                                    class="flex-1 min-w-0 border-border rounded-md text-sm focus:border-primary focus:ring-primary">
                                     <option value="" disabled>Select a vendor…</option>
                                     <optgroup v-for="(list, cat) in vendorGroups" :key="cat" :label="cat">
                                         <option v-for="v in list" :key="v.id" :value="v.id">{{ v.name }}</option>
@@ -227,16 +227,16 @@ function submit() {
                             <input v-model="item.description" type="text" placeholder="Description (optional)"
                                 class="w-full border-border rounded-md text-xs text-ink-muted focus:border-primary focus:ring-primary" />
                         </div>
-                        <div class="col-span-4 sm:col-span-2">
+                        <div class="col-span-4 sm:col-span-2 min-w-0">
                             <input v-model.number="item.quantity" type="number" min="0" placeholder="Qty"
-                                class="w-full border-border rounded-md text-sm focus:border-primary focus:ring-primary" />
+                                class="w-full min-w-0 border-border rounded-md text-sm focus:border-primary focus:ring-primary" />
                         </div>
-                        <div class="col-span-4 sm:col-span-2">
+                        <div class="col-span-4 sm:col-span-2 min-w-0">
                             <input v-model.number="item.unit_price" type="number" min="0" step="0.01" placeholder="Price"
-                                class="w-full border-border rounded-md text-sm focus:border-primary focus:ring-primary" />
+                                class="w-full min-w-0 border-border rounded-md text-sm focus:border-primary focus:ring-primary" />
                         </div>
-                        <div class="col-span-3 sm:col-span-2 text-right text-sm text-ink-muted pt-2">{{ money(lineTotal(item)) }}</div>
-                        <div class="col-span-1 pt-1.5">
+                        <div class="col-span-3 sm:col-span-2 min-w-0 text-right text-sm text-ink-muted pt-2 break-words">{{ money(lineTotal(item)) }}</div>
+                        <div class="col-span-1 min-w-0 pt-1.5">
                             <button type="button" @click="removeItem(i)" class="text-red-400 hover:text-red-600" title="Remove">&times;</button>
                         </div>
                     </div>
