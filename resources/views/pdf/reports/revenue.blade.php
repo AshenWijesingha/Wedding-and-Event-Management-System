@@ -3,21 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Revenue Report — {{ $period }}</title>
-    @include('pdf.reports._styles')
+    @include('pdf.reports._styles', [
+        'primary' => $branding['colors']['primary'] ?? '#4f46e5',
+        'accent' => $branding['colors']['accent'] ?? '#10b981',
+    ])
 </head>
 <body>
+<div class="doc-footer">
+    <div class="name">{{ $branding['business_name'] ?? config('app.name') }}</div>
+    <div>Revenue Report &middot; {{ $period }} &middot; Generated {{ now()->format('d M Y H:i') }}</div>
+</div>
 <div class="page">
-    <div class="header">
-        <div>
-            <div class="company-name">{{ config('app.name') }}</div>
-            <div class="company-sub">Revenue Report</div>
-        </div>
-        <div class="doc-title">
-            <h1>REVENUE</h1>
-            <div class="doc-period">{{ $period }}</div>
-            <div class="doc-date">Generated {{ now()->format('d M Y') }}</div>
-        </div>
-    </div>
+    @include('pdf.reports._header', ['branding' => $branding, 'docType' => 'REVENUE', 'subtitle' => 'Revenue Report', 'period' => $period])
 
     <div class="cards">
         <div class="card">
@@ -35,7 +32,7 @@
     </div>
 
     <h2 class="section">Monthly Breakdown</h2>
-    <table>
+    <table class="data">
         <thead>
             <tr><th>Month</th><th class="num">Revenue</th><th class="num">Payments</th></tr>
         </thead>
@@ -52,7 +49,7 @@
 
     @if(count($byMethod))
         <h2 class="section">By Payment Method</h2>
-        <table>
+        <table class="data">
             <thead>
                 <tr><th>Method</th><th class="num">Total</th><th class="num">Transactions</th></tr>
             </thead>
@@ -67,8 +64,6 @@
             </tbody>
         </table>
     @endif
-
-    <div class="footer">{{ config('app.name') }} — generated {{ now()->format('d M Y H:i') }}</div>
 </div>
 </body>
 </html>
