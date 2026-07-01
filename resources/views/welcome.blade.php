@@ -53,12 +53,13 @@
                     </div>
                 </div>
 
-                <!-- hero artwork -->
+                <!-- hero photograph -->
                 <div class="ft-rise lg:col-span-5" style="animation-delay:.34s">
                     <div class="relative mx-auto max-w-sm lg:max-w-none">
                         <div aria-hidden="true" class="lp-arch pointer-events-none absolute -right-6 -top-6 hidden h-full w-full border border-[#c8a96a]/35 lg:block"></div>
-                        <img src="{{ asset('images/hero-event.svg') }}" alt="An elegant ballroom set for a celebration"
-                             class="lp-arch relative w-full shadow-2xl shadow-[#2b211b]/25 ring-1 ring-[#2b211b]/10">
+                        <img src="{{ asset('images/landing/hero-ballroom.jpg') }}" alt="An elegant hotel ballroom set for a wedding reception"
+                             class="lp-arch relative aspect-[4/5] w-full object-cover shadow-2xl shadow-[#2b211b]/30 ring-1 ring-[#2b211b]/10">
+                        <span aria-hidden="true" class="lp-arch pointer-events-none absolute inset-0 ring-1 ring-inset ring-[#c8a96a]/40"></span>
                     </div>
                 </div>
             </div>
@@ -168,6 +169,37 @@
         </div>
     </section>
     @endif
+
+    <!-- ===== GALLERY ===== -->
+    <section class="relative mx-auto max-w-7xl px-6 pb-24 lg:px-8 lg:pb-28">
+        <div class="max-w-2xl">
+            <p class="text-[0.72rem] font-medium uppercase tracking-[0.3em] text-[#c8a96a]">A glimpse of the day</p>
+            <h2 class="font-display mt-4 text-4xl font-light leading-tight text-[#1a1512] sm:text-5xl">
+                Moments, <span class="italic">beautifully</span> staged
+            </h2>
+            <p class="mt-5 text-lg leading-relaxed text-[#5c5246]">
+                Grand ballrooms, candlelit banquets and florals that take the breath away &mdash; a look at the celebrations we bring to life.
+            </p>
+        </div>
+
+        @php
+            $gallery = [
+                ['landing/gallery-hall.jpg', 'Grand ballroom dressed with hanging florals', 'lg:row-span-2 aspect-[3/4]'],
+                ['landing/gallery-banquet.jpg', 'Candlelit banquet table with pastel florals', 'aspect-[4/3]'],
+                ['landing/gallery-ballroom.jpg', 'Symmetrical reception hall at golden hour', 'aspect-[4/3]'],
+            ];
+        @endphp
+        <div class="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-2">
+            @foreach($gallery as [$src,$alt,$shape])
+                <figure class="lp-card group relative overflow-hidden rounded-2xl border border-[#2b211b]/10 bg-[#f3ece0] {{ $shape }}">
+                    <img src="{{ asset('images/'.$src) }}" alt="{{ $alt }}"
+                         class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <span aria-hidden="true" class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#1a1512]/45 via-transparent to-transparent"></span>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-sm font-medium text-[#f5efe7]">{{ $alt }}</figcaption>
+                </figure>
+            @endforeach
+        </div>
+    </section>
 
     <!-- ===== QUOTE BAND (bridges into footer) ===== -->
     <section class="relative isolate overflow-hidden bg-[#1a1512] text-[#cdbfae]">
