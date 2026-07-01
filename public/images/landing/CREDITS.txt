@@ -1,0 +1,6 @@
+Landing page photography sourced from Pexels (https://www.pexels.com).
+Used under the Pexels License — free for commercial use, no attribution required.
+  hero-ballroom.jpg    — pexels.com/photo/17023014
+  gallery-hall.jpg     — pexels.com/photo/17023018
+  gallery-banquet.jpg  — pexels.com/photo/20499528
+  gallery-ballroom.jpg — pexels.com/photo/30311728
