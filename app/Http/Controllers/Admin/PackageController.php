@@ -113,6 +113,9 @@ class PackageController extends Controller
         abort_unless(auth()->user()->can('packages.submit'), 403);
         $package->submit(request()->user());
 
+        \App\Models\User::whereNull('tenant_id')->role('super_admin')->get()
+            ->each->notify(new \App\Notifications\ApprovalSubmitted(class_basename($package), $package->name, request()->user()->name));
+
         return back()->with('success', 'Package submitted for approval.');
     }
 

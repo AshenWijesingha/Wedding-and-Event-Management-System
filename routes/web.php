@@ -308,6 +308,11 @@ Route::middleware([
         Route::get('/plans/{plan}/edit', [PlanController::class, 'edit'])->name('plans.edit');
         Route::put('/plans/{plan}', [PlanController::class, 'update'])->name('plans.update');
         Route::delete('/plans/{plan}', [PlanController::class, 'destroy'])->name('plans.destroy');
+
+        // Approvals queue — super-admin reviews hotel/venue/package submissions.
+        Route::get('/approvals', [App\Http\Controllers\Admin\ApprovalController::class, 'index'])->name('approvals.index');
+        Route::post('/approvals/{type}/{id}/approve', [App\Http\Controllers\Admin\ApprovalController::class, 'approve'])->name('approvals.approve');
+        Route::post('/approvals/{type}/{id}/reject', [App\Http\Controllers\Admin\ApprovalController::class, 'reject'])->name('approvals.reject');
     });
 
     // Settings, themes and plugins. Viewing requires settings.view; every mutation

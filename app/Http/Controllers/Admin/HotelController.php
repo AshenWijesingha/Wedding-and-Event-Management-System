@@ -80,7 +80,9 @@ class HotelController extends Controller
         abort_unless($hotel->name && $hotel->city, 422, 'Complete the hotel details before submitting.');
 
         $hotel->submit($request->user());
-        // Task 8 adds: notify super admins.
+
+        \App\Models\User::whereNull('tenant_id')->role('super_admin')->get()
+            ->each->notify(new \App\Notifications\ApprovalSubmitted(class_basename($hotel), $hotel->name, request()->user()->name));
 
         return back()->with('success', 'Submitted for approval.');
     }
