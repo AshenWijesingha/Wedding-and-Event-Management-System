@@ -30,9 +30,18 @@ class ApprovableTest extends TestCase
         $this->assertSame('approved', $hotel->fresh()->approval_status);
         $this->assertTrue($hotel->fresh()->changes_pending_review);
 
+        // Rejecting edits on a LIVE item: status stays approved, changes cleared.
         $hotel->reject($u, 'Needs better photos');
-        $this->assertSame('rejected', $hotel->approval_status);
+        $hotel->refresh();
+        $this->assertSame('approved', $hotel->approval_status, 'Live item must stay approved when its edit-changes are rejected');
+        $this->assertFalse((bool) $hotel->changes_pending_review);
         $this->assertSame('Needs better photos', $hotel->review_notes);
+
+        // Rejecting a normally pending item: status becomes rejected.
+        $pending = Hotel::factory()->pending()->create();
+        $pending->reject($u, 'Not ready');
+        $pending->refresh();
+        $this->assertSame('rejected', $pending->approval_status);
     }
 
     public function test_approved_scope_filters(): void

@@ -47,13 +47,26 @@ trait Approvable
 
     public function reject(User $user, string $notes): void
     {
-        $this->forceFill([
-            'approval_status' => 'rejected',
-            'reviewed_at' => now(),
-            'reviewed_by' => $user->id,
-            'review_notes' => $notes,
-            'changes_pending_review' => false,
-        ])->saveQuietly();
+        // If we are rejecting EDITS to a currently-live item (changes_pending_review
+        // is true while approval_status is already approved), keep the item live —
+        // only discard the pending changes.  For everything else (new pending items,
+        // already-rejected items, drafts) mark as rejected as usual.
+        if ($this->isApproved() && $this->changes_pending_review) {
+            $this->forceFill([
+                'changes_pending_review' => false,
+                'review_notes' => $notes,
+                'reviewed_at' => now(),
+                'reviewed_by' => $user->id,
+            ])->saveQuietly();
+        } else {
+            $this->forceFill([
+                'approval_status' => 'rejected',
+                'reviewed_at' => now(),
+                'reviewed_by' => $user->id,
+                'review_notes' => $notes,
+                'changes_pending_review' => false,
+            ])->saveQuietly();
+        }
     }
 
     public function isApproved(): bool
