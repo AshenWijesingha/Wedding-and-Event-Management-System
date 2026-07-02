@@ -139,6 +139,14 @@ Route::middleware([
         Route::get('venues/{venue}/availability', [App\Http\Controllers\Admin\VenueController::class, 'availability'])->name('admin.venues.availability');
     });
 
+    // Hotels — full resource with approval workflow
+    Route::middleware('permission:hotels.view')->group(function () {
+        Route::resource('hotels', App\Http\Controllers\Admin\HotelController::class)
+            ->except([]);
+        Route::post('hotels/{hotel}/submit', [App\Http\Controllers\Admin\HotelController::class, 'submit'])
+            ->name('hotels.submit');
+    });
+
     // Packages
     Route::middleware('permission:packages.view')->group(function () {
         Route::resource('packages', App\Http\Controllers\Admin\PackageController::class)
