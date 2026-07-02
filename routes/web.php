@@ -137,12 +137,13 @@ Route::middleware([
         Route::resource('venues', App\Http\Controllers\Admin\VenueController::class)
             ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
         Route::get('venues/{venue}/availability', [App\Http\Controllers\Admin\VenueController::class, 'availability'])->name('admin.venues.availability');
+        Route::post('venues/{venue}/submit', [App\Http\Controllers\Admin\VenueController::class, 'submit'])->name('venues.submit');
     });
 
     // Hotels — full resource with approval workflow
     Route::middleware('permission:hotels.view')->group(function () {
         Route::resource('hotels', App\Http\Controllers\Admin\HotelController::class)
-            ->except([]);
+            ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
         Route::post('hotels/{hotel}/submit', [App\Http\Controllers\Admin\HotelController::class, 'submit'])
             ->name('hotels.submit');
     });
@@ -151,6 +152,7 @@ Route::middleware([
     Route::middleware('permission:packages.view')->group(function () {
         Route::resource('packages', App\Http\Controllers\Admin\PackageController::class)
             ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+        Route::post('packages/{package}/submit', [App\Http\Controllers\Admin\PackageController::class, 'submit'])->name('packages.submit');
     });
 
     // Bookings

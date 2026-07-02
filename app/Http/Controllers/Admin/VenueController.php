@@ -56,10 +56,12 @@ class VenueController extends Controller
             'amenities' => 'nullable|array',
             'amenities.*' => 'string',
             'status' => 'nullable|in:active,inactive,maintenance',
+            'hotel_id' => 'nullable|exists:hotels,id',
         ]);
 
         $validated['slug'] = $validated['slug'] ?? Str::slug($validated['name']);
         $validated['status'] = $validated['status'] ?? 'active';
+        $validated['approval_status'] = 'draft';
 
         $baseSlug = $validated['slug'];
         $i = 1;
@@ -97,11 +99,21 @@ class VenueController extends Controller
             'amenities' => 'nullable|array',
             'amenities.*' => 'string',
             'status' => 'nullable|in:active,inactive,maintenance',
+            'hotel_id' => 'nullable|exists:hotels,id',
         ]);
 
         $venue->update($validated);
 
         return redirect()->route('admin.venues.index')->with('success', 'Venue updated successfully.');
+    }
+
+    public function submit(Venue $venue): \Illuminate\Http\RedirectResponse
+    {
+        $this->authorize('update', $venue);
+        abort_unless(auth()->user()->can('venues.submit'), 403);
+        $venue->submit(request()->user());
+
+        return back()->with('success', 'Venue submitted for approval.');
     }
 
     public function availability(Venue $venue): Response
