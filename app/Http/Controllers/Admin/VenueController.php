@@ -114,6 +114,9 @@ class VenueController extends Controller
         abort_unless(auth()->user()->can('venues.submit'), 403);
         $venue->submit(request()->user());
 
+        \App\Models\User::whereNull('tenant_id')->role('super_admin')->get()
+            ->each->notify(new \App\Notifications\ApprovalSubmitted(class_basename($venue), $venue->name, request()->user()->name));
+
         return back()->with('success', 'Venue submitted for approval.');
     }
 
