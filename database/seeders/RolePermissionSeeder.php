@@ -14,6 +14,9 @@ class RolePermissionSeeder extends Seeder
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $permissions = [
+            // Hotels
+            'hotels.view', 'hotels.create', 'hotels.edit', 'hotels.delete', 'hotels.submit',
+            'venues.submit', 'packages.submit',
             // Venues
             'venues.view', 'venues.create', 'venues.edit', 'venues.delete',
             // Packages
@@ -49,6 +52,7 @@ class RolePermissionSeeder extends Seeder
         $platformPermissions = [
             'tenants.view', 'tenants.create', 'tenants.edit', 'tenants.delete', 'tenants.impersonate',
             'plans.view', 'plans.create', 'plans.edit', 'plans.delete',
+            'approvals.view', 'approvals.review',
         ];
 
         foreach (array_merge($permissions, $platformPermissions) as $permission) {
@@ -74,7 +78,8 @@ class RolePermissionSeeder extends Seeder
         // No settings, no user management, no vendors/custom-fields/staff management, no deletes.
         $manager = Role::firstOrCreate(['name' => 'manager', 'guard_name' => 'web']);
         $manager->syncPermissions([
-            'venues.view', 'packages.view',
+            'hotels.view', 'hotels.create', 'hotels.edit', 'hotels.submit',
+            'venues.view', 'venues.submit', 'packages.view', 'packages.submit',
             'clients.view', 'clients.create', 'clients.edit',
             'inquiries.view', 'inquiries.create', 'inquiries.edit', 'inquiries.assign',
             'quotations.view', 'quotations.create', 'quotations.edit', 'quotations.send',
@@ -87,6 +92,7 @@ class RolePermissionSeeder extends Seeder
         // Staff: mostly read-only execution. View pipeline, log inquiries, see tasks.
         $staff = Role::firstOrCreate(['name' => 'staff', 'guard_name' => 'web']);
         $staff->syncPermissions([
+            'hotels.view',
             'venues.view', 'packages.view',
             'clients.view',
             'inquiries.view', 'inquiries.create',
