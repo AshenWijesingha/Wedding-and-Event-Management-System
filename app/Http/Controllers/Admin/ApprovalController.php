@@ -19,7 +19,7 @@ class ApprovalController extends Controller
 
     public function index(): Response
     {
-        $this->authorizePlatform('approvals.view');
+        $this->authorizePlatform('approvals.review');
 
         $items = collect(self::TYPES)->flatMap(function ($class, $type) {
             return $class::withoutGlobalScopes()->pendingReview()
@@ -50,8 +50,8 @@ class ApprovalController extends Controller
 
     public function reject(Request $request, string $type, int $id): RedirectResponse
     {
-        $notes = $request->validate(['notes' => 'required|string|max:2000'])['notes'];
         $model = $this->find($type, $id);
+        $notes = $request->validate(['notes' => 'required|string|max:2000'])['notes'];
         $model->reject(request()->user(), $notes);
         $this->notifySubmitter($model, 'rejected', $notes);
 
