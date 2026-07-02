@@ -18,6 +18,46 @@ Charts show monthly revenue and booking status breakdown.
 
 ---
 
+## Hotels
+
+Path: `/admin/hotels`
+
+Hotels are the parent properties that group one or more venue halls. Managers can create and edit hotels; only approved hotels appear in the public venue list and are selectable in quotations.
+
+---
+
+## Approval workflow
+
+Hotels, venues, and packages all go through an approval cycle before they are visible to clients or selectable when building quotations.
+
+### Status values
+
+| Status | Meaning |
+| --- | --- |
+| `draft` | Created but not yet submitted. Only the owning tenant can see it. |
+| `pending` | Submitted for review. Visible to super admins in the approvals queue. |
+| `approved` | Live. Appears in the public list and can be selected in quotations. |
+| `rejected` | Returned to the manager with reviewer notes. Can be edited and re-submitted. |
+
+### Manager flow
+
+1. Create a hotel / venue / package — it starts as **draft**.
+2. Fill in all required fields, then click **Submit for approval** — status moves to **pending**.
+3. Wait for a super admin decision (an in-app notification is sent on approval or rejection).
+4. If **rejected**, read the reviewer notes, edit the item, and re-submit.
+5. If **approved**, the item is immediately live. Editing an approved item keeps it live but automatically moves it back to **pending** so the changes can be reviewed.
+
+### Super admin flow
+
+Path: `/admin/approvals`
+
+The approvals queue lists every hotel, venue, and package in **pending** status across all tenants. For each item the super admin can:
+
+- **Approve** — moves status to `approved`; manager receives a notification.
+- **Reject** — moves status to `rejected` and requires optional reviewer notes sent back to the manager.
+
+---
+
 ## Venues
 
 Path: `/admin/venues`
