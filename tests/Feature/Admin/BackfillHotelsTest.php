@@ -57,5 +57,10 @@ class BackfillHotelsTest extends TestCase
             Hotel::withoutGlobalScopes()->where('name', 'Grand Palace')->first()->approval_status,
             'Backfilled hotel should be approved'
         );
+        $this->assertSame(
+            0,
+            Venue::withoutGlobalScopes()->where('approval_status', '!=', 'approved')->count(),
+            'All venues should be approved after backfill'
+        );
     }
 }

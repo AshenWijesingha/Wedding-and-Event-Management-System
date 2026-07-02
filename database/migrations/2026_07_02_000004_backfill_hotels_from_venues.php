@@ -38,6 +38,10 @@ return new class extends Migration
 
     public function down(): void
     {
+        // Rollback reverses venue hotel_id links and deletes hotel rows created during up().
+        // However, package approval_status values bumped to 'approved' during up() are
+        // intentionally NOT restored — their prior draft/null state is not tracked, so
+        // we cannot safely restore them without risking data loss or inconsistency.
         Venue::withoutGlobalScopes()->update(['hotel_id' => null]);
         Hotel::withoutGlobalScopes()->delete();
     }
