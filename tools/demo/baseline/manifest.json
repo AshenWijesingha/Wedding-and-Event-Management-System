@@ -1,5 +1,5 @@
 {
-    "generated_at": "2026-07-02T23:41:06+00:00",
+    "generated_at": "2026-07-02T23:56:17+00:00",
     "root": "C:/Users/Ashen/Documents/BIT/Wedding-and-Event-Management-System",
     "count": 425,
     "files": {
@@ -479,9 +479,9 @@
             "lines": 114
         },
         "app/Models/Concerns/Approvable.php": {
-            "sha256": "8c84a578c8ea90dc3c166506db07e20e656d3e9a3491e9936a5d948a42d2ded6",
-            "bytes": 2566,
-            "lines": 87
+            "sha256": "a1946d2f196f52dd31e3d37c25a088f4e17ccb58fee2051a3ae8c55b33e6d850",
+            "bytes": 2802,
+            "lines": 97
         },
         "app/Models/Concerns/BelongsToTenant.php": {
             "sha256": "0882d7cc57a8d50a21175d8396faecdda230a78f1e1a3afa504366c9f78bff98",
@@ -499,9 +499,9 @@
             "lines": 74
         },
         "app/Models/Hotel.php": {
-            "sha256": "26acbc8584fd8ffc6da5cd07b41bf3d6e74e40f9eabe90ed6d07b893de0fa890",
-            "bytes": 1246,
-            "lines": 57
+            "sha256": "f6ec3881bf278411f307c255ecddd576568cc61bf7e06a67be03a4885de01b1a",
+            "bytes": 1034,
+            "lines": 47
         },
         "app/Models/Inquiry.php": {
             "sha256": "4f64e097ea847e8a26ab07121ad3bd9a9b21fded671fc2e3997e8df4faa474c4",
@@ -1814,9 +1814,9 @@
             "lines": 112
         },
         "tests/Feature/Admin/ApprovalReviewTest.php": {
-            "sha256": "f00198ad512d866afbc95f0d813d1b25d6b02361f984fdc72e78f61157c14d9a",
-            "bytes": 2955,
-            "lines": 87
+            "sha256": "c21fc5fbc3fe5a07d5e0a2fb50b1c4e2e092b4d65dbe5d4d012dfc374dee378b",
+            "bytes": 3907,
+            "lines": 116
         },
         "tests/Feature/Admin/BackfillHotelsTest.php": {
             "sha256": "02f68ae892bb2e10dba2b04a851826fb9d5492ff90a796a574ba8a48895ba93e",

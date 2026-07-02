@@ -34,16 +34,6 @@ class Hotel extends Model
         return $this->hasMany(Package::class);
     }
 
-    public function submitter()
-    {
-        return $this->belongsTo(User::class, 'submitted_by');
-    }
-
-    public function reviewer()
-    {
-        return $this->belongsTo(User::class, 'reviewed_by');
-    }
-
     public function scopeActive($query)
     {
         return $query->where('status', 'active');
