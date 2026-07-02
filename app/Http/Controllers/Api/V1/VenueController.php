@@ -16,6 +16,8 @@ class VenueController extends Controller
     public function index(Request $request): JsonResponse
     {
         $venues = Venue::active()
+            ->approved()
+            ->where(fn ($q) => $q->whereNull('hotel_id')->orWhereHas('hotel', fn ($h) => $h->approved()))
             ->when($request->search, fn ($q, $search) => $q->where('name', 'like', "%{$search}%")
             )
             ->when($request->capacity_min, fn ($q, $min) => $q->where('capacity_max', '>=', $min)
@@ -32,6 +34,14 @@ class VenueController extends Controller
     {
         if ($venue->status !== 'active') {
             return $this->notFound('Venue not found.');
+        }
+
+        if (! $venue->isApproved()) {
+            abort(404);
+        }
+
+        if ($venue->hotel_id !== null && ! optional($venue->hotel)->isApproved()) {
+            abort(404);
         }
 
         return $this->success(new VenueResource($venue));
