@@ -17,6 +17,7 @@ class VenueController extends Controller
     public function index(Request $request): JsonResponse
     {
         $venues = Venue::query()
+            ->approved()
             ->when($request->search, fn ($q, $search) => $q->where('name', 'like', "%{$search}%")
                 ->orWhere('description', 'like', "%{$search}%")
             )

@@ -46,9 +46,9 @@ use Illuminate\Support\Str;
 
 // Public website routes
 Route::get('/', function () {
-    $featuredVenues = Venue::active()->orderByDesc('capacity_max')->take(4)->get();
-    $hallCount = Venue::active()->count();
-    $hotelCount = Venue::active()->get()
+    $featuredVenues = Venue::active()->approved()->orderByDesc('capacity_max')->take(4)->get();
+    $hallCount = Venue::active()->approved()->count();
+    $hotelCount = Venue::active()->approved()->get()
         ->map(fn ($v) => Str::before($v->name, ' — '))
         ->unique()->count();
 

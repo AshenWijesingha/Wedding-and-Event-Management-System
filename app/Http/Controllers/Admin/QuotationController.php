@@ -72,9 +72,9 @@ class QuotationController extends Controller
 
         return Inertia::render('Quotations/Create', [
             // base_price/weekend_surcharge let the form auto-allocate the venue cost.
-            'venues' => Venue::where('status', 'active')->orderBy('name')
+            'venues' => Venue::where('status', 'active')->approved()->orderBy('name')
                 ->get(['id', 'name', 'base_price', 'weekend_surcharge']),
-            'packages' => Package::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
+            'packages' => Package::where('status', 'active')->approved()->orderBy('name')->get(['id', 'name', 'base_price']),
             // Active vendors offered as selectable line items, grouped by category.
             'vendors' => Vendor::where('status', 'active')->orderBy('category')->orderBy('name')
                 ->get(['id', 'name', 'category', 'base_rate', 'rate_type']),

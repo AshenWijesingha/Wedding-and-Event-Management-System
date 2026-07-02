@@ -17,6 +17,7 @@ class PackageController extends Controller
     public function index(Request $request): JsonResponse
     {
         $packages = Package::query()
+            ->approved()
             ->when($request->search, fn ($q, $search) => $q->where('name', 'like', "%{$search}%")
                 ->orWhere('description', 'like', "%{$search}%")
             )

@@ -10,6 +10,8 @@ class VenueController extends Controller
     public function index(Request $request)
     {
         $venues = Venue::active()
+            ->approved()
+            ->where(fn ($q) => $q->whereNull('hotel_id')->orWhereHas('hotel', fn ($h) => $h->approved()))
             ->when($request->search, fn ($q, $search) => $q->where('name', 'like', "%{$search}%")
                 ->orWhere('description', 'like', "%{$search}%")
             )
@@ -25,7 +27,12 @@ class VenueController extends Controller
 
     public function show(Venue $venue)
     {
-        if ($venue->status !== 'active') {
+        if ($venue->status !== 'active' || ! $venue->isApproved()) {
+            abort(404);
+        }
+
+        // If venue belongs to a hotel, that hotel must also be approved.
+        if ($venue->hotel_id !== null && (! $venue->hotel || ! $venue->hotel->isApproved())) {
             abort(404);
         }
 
