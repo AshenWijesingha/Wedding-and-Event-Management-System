@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Booking;
 use App\Models\Client;
+use App\Models\Hotel;
 use App\Models\Inquiry;
 use App\Models\Package;
 use App\Models\Payment;
@@ -97,10 +98,47 @@ class ShowcaseSeeder extends Seeder
 
     private function seedVenues(int $tid)
     {
-        // Real leading Sri Lankan hotels and their reception halls (shared source).
-        return collect(SriLankaHotels::halls())->map(fn ($v) => Venue::factory()->create($v + [
-            'tenant_id' => $tid,
-        ]));
+        // Create one approved Hotel per source property (showcase-tenant scoped),
+        // then build each hall-venue linked to its parent hotel.
+        $venues = collect();
+
+        foreach (SriLankaHotels::hotels() as $hotelData) {
+            $hotel = Hotel::updateOrCreate(
+                ['tenant_id' => $tid, 'slug' => $hotelData['slug']],
+                [
+                    'name'            => $hotelData['name'],
+                    'city'            => $hotelData['city'],
+                    'status'          => 'active',
+                    'approval_status' => 'approved',
+                ]
+            );
+
+            $banner = '/images/venues/' . $hotelData['slug'] . '.svg';
+
+            foreach ($hotelData['halls'] as $hall) {
+                $name      = $hotelData['name'] . ' — ' . $hall['hall'];
+                $slug      = $hotelData['slug'] . '-' . Str::slug($hall['hall']);
+                $amenities = array_values(array_unique(array_merge($hotelData['services'], $hall['services'] ?? [])));
+
+                $venues->push(Venue::factory()->create([
+                    'tenant_id'         => $tid,
+                    'hotel_id'          => $hotel->id,
+                    'name'              => $name,
+                    'slug'              => $slug,
+                    'description'       => $hall['description'] . ' Located at ' . $hotelData['name'] . ', ' . $hotelData['city'] . '.',
+                    'capacity_min'      => $hall['capacity_min'],
+                    'capacity_max'      => $hall['capacity_max'],
+                    'base_price'        => $hall['base_price'],
+                    'weekend_surcharge' => $hall['weekend_surcharge'],
+                    'amenities'         => $amenities,
+                    'images'            => [$banner],
+                    'status'            => 'active',
+                    'approval_status'   => 'approved',
+                ]));
+            }
+        }
+
+        return $venues;
     }
 
     private function seedPackages(int $tid)

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Booking;
 use App\Models\Client;
 use App\Models\CustomField;
+use App\Models\Hotel;
 use App\Models\Inquiry;
 use App\Models\Package;
 use App\Models\Payment;
@@ -41,22 +42,63 @@ class DemoDataSeeder extends Seeder
         );
         $admin->assignRole('admin');
 
-        // Venues — real leading Sri Lankan hotels and their reception halls.
+        // Hotels — one row per source property, tenant-scoped and pre-approved.
         // Prune the legacy placeholder venues so the replacement is clean on
         // re-seed (bookings cascade, inquiries/quotations null out by FK rules).
         Venue::whereIn('slug', [
             'mahaweli-grand-ballroom', 'pol-watta-garden-terrace', 'galle-face-rooftop-pavilion',
         ])->delete();
 
+        $hotelBySlug = [];
+        foreach (SriLankaHotels::hotels() as $hotelData) {
+            $hotelBySlug[$hotelData['slug']] = Hotel::updateOrCreate(
+                ['slug' => $hotelData['slug']],
+                [
+                    'name'            => $hotelData['name'],
+                    'city'            => $hotelData['city'],
+                    'status'          => 'active',
+                    'approval_status' => 'approved',
+                ]
+            );
+        }
+
+        // Venues — real leading Sri Lankan hotels and their reception halls.
         $createdVenues = [];
-        foreach (SriLankaHotels::halls() as $venueData) {
-            $createdVenues[] = Venue::updateOrCreate(['slug' => $venueData['slug']], $venueData);
+        foreach (SriLankaHotels::hotels() as $hotelData) {
+            $banner   = '/images/venues/' . $hotelData['slug'] . '.svg';
+            $hotelObj = $hotelBySlug[$hotelData['slug']];
+
+            foreach ($hotelData['halls'] as $hall) {
+                $name      = $hotelData['name'] . ' — ' . $hall['hall'];
+                $slug      = $hotelData['slug'] . '-' . Str::slug($hall['hall']);
+                $amenities = array_values(array_unique(array_merge($hotelData['services'], $hall['services'] ?? [])));
+
+                $createdVenues[] = Venue::updateOrCreate(
+                    ['slug' => $slug],
+                    [
+                        'hotel_id'          => $hotelObj->id,
+                        'name'              => $name,
+                        'description'       => $hall['description'] . ' Located at ' . $hotelData['name'] . ', ' . $hotelData['city'] . '.',
+                        'capacity_min'      => $hall['capacity_min'],
+                        'capacity_max'      => $hall['capacity_max'],
+                        'base_price'        => $hall['base_price'],
+                        'weekend_surcharge' => $hall['weekend_surcharge'],
+                        'amenities'         => $amenities,
+                        'images'            => [$banner],
+                        'status'            => 'active',
+                        'approval_status'   => 'approved',
+                    ]
+                );
+            }
         }
 
         // Packages — real Sri Lankan reception service packages.
         $createdPackages = [];
         foreach (SriLankaHotels::packages() as $packageData) {
-            $createdPackages[] = Package::updateOrCreate(['slug' => $packageData['slug']], $packageData);
+            $createdPackages[] = Package::updateOrCreate(
+                ['slug' => $packageData['slug']],
+                array_merge($packageData, ['approval_status' => 'approved'])
+            );
         }
 
         // Make every package available at every hall (venue_packages pivot).
@@ -307,6 +349,16 @@ class DemoDataSeeder extends Seeder
                 ])
             );
         }
+
+        // Approval-queue samples — one pending hotel, one rejected hotel, and one
+        // pending venue so that the super-admin /admin/approvals page has items to
+        // review during a live demonstration.
+        Hotel::factory()->pending()->create(['tenant_id' => $tenant->id]);
+        Hotel::factory()->rejected()->create(['tenant_id' => $tenant->id]);
+        Venue::factory()->pending()->create([
+            'tenant_id' => $tenant->id,
+            'hotel_id'  => $hotelBySlug[array_key_first($hotelBySlug)]->id,
+        ]);
 
         $this->command->info('Demo data seeded for tenant: ' . $tenant->name);
     }
