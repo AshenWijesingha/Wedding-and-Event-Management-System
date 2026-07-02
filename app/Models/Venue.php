@@ -24,6 +24,7 @@ class Venue extends Model
         'amenities',
         'images',
         'status',
+        'approval_status',
     ];
 
     protected $casts = [

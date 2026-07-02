@@ -21,8 +21,8 @@ trait Approvable
     public function scopePendingReview(Builder $q): Builder
     {
         return $q->where(fn ($w) => $w
-            ->where('approval_status', 'pending')
-            ->orWhere('changes_pending_review', true));
+            ->where($this->getTable().'.approval_status', 'pending')
+            ->orWhere($this->getTable().'.changes_pending_review', true));
     }
 
     public function submit(User $user): void

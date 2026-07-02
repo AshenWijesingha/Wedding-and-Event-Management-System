@@ -13,7 +13,7 @@ class Hotel extends Model
 
     protected $fillable = [
         'tenant_id', 'name', 'slug', 'city', 'address',
-        'description', 'star_rating', 'images', 'status',
+        'description', 'star_rating', 'images', 'status', 'approval_status',
     ];
 
     protected $casts = [

@@ -23,6 +23,7 @@ class Package extends Model
         'guest_pricing',
         'included_services',
         'status',
+        'approval_status',
     ];
 
     protected $casts = [
