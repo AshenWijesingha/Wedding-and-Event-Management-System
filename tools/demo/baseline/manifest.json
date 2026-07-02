@@ -1,0 +1,2127 @@
+{
+    "generated_at": "2026-07-02T17:06:00+00:00",
+    "root": "C:/Users/Ashen/Documents/BIT/Wedding-and-Event-Management-System",
+    "count": 424,
+    "files": {
+        "app/Auth/TenantlessUserProvider.php": {
+            "sha256": "a1ba6e18b204888160c273725279877ff0f24dcc29098ee8a3f3345afaf75294",
+            "bytes": 1007,
+            "lines": 29
+        },
+        "app/Console/Commands/DevBaselineCommand.php": {
+            "sha256": "f4880442f1dee6f1edffd19174d9bf9644795a36db3c1f889ce1a0f141b3274c",
+            "bytes": 1639,
+            "lines": 47
+        },
+        "app/Console/Commands/DevDoctorCommand.php": {
+            "sha256": "b4be891bb7de2a7a7bea9d73d4e2d12f5afb8b061aaafbdd70e664cb2b7a45a2",
+            "bytes": 7687,
+            "lines": 190
+        },
+        "app/Console/Commands/DevRestoreCommand.php": {
+            "sha256": "310f3f020563f95bf49490233889a4f68204f19b81f5f712f2252d89efb26943",
+            "bytes": 2420,
+            "lines": 76
+        },
+        "app/Console/Commands/ReapDemoTenants.php": {
+            "sha256": "ab3659a67f1513b92d5ff081d5263059d102fc72c237cbe8442128539229b6cd",
+            "bytes": 1726,
+            "lines": 60
+        },
+        "app/Console/Commands/SendPaymentReminders.php": {
+            "sha256": "a204dbb36c987748238e95796e15bfba07dfee067e3cec86abc08395a06c64d1",
+            "bytes": 1664,
+            "lines": 48
+        },
+        "app/Http/Controllers/Admin/ApprovalController.php": {
+            "sha256": "6759fc3036e116e75e03011e42e74ef2929e72d8b3f0deea656bfa6c8f4231bd",
+            "bytes": 2756,
+            "lines": 81
+        },
+        "app/Http/Controllers/Admin/AuditLogController.php": {
+            "sha256": "bc001e5927b7c9e670091e5c6fa2cd28efb36cfa2b38319cceb2e6a16527868e",
+            "bytes": 1792,
+            "lines": 51
+        },
+        "app/Http/Controllers/Admin/BookingController.php": {
+            "sha256": "41e29769f05d002e254ad4f41a7ef53033442b03d8d644fd1fbe6e624ad09f00",
+            "bytes": 11552,
+            "lines": 263
+        },
+        "app/Http/Controllers/Admin/CalendarController.php": {
+            "sha256": "bc0611f5d01101fcf8901e55c7da87edd34a0593caa37de3e0dd40bff261736d",
+            "bytes": 936,
+            "lines": 32
+        },
+        "app/Http/Controllers/Admin/ClientController.php": {
+            "sha256": "f2990f0c2fe326a20b509eae6d0f4aad89206ba4218992fc266196e56bf21e15",
+            "bytes": 6245,
+            "lines": 174
+        },
+        "app/Http/Controllers/Admin/CustomFieldController.php": {
+            "sha256": "6c9fdf88ec6a0029c21436c7e7fc12fd8435052f8efd4e174641f4d6385d2cfe",
+            "bytes": 3208,
+            "lines": 85
+        },
+        "app/Http/Controllers/Admin/DashboardController.php": {
+            "sha256": "9080a06e8e004d9120ec30f8d352740623b8be4d9e27e6058fbd922a1d71925f",
+            "bytes": 5239,
+            "lines": 135
+        },
+        "app/Http/Controllers/Admin/HotelController.php": {
+            "sha256": "04e385f927adf23af9e4f34d96155e147b00d901a8346c2fedffd44bc8839d02",
+            "bytes": 3494,
+            "lines": 115
+        },
+        "app/Http/Controllers/Admin/ImpersonationController.php": {
+            "sha256": "230f65c90ec27bb33f83488a8721adc00f6daa38140576b776459ee8424ab90f",
+            "bytes": 1879,
+            "lines": 60
+        },
+        "app/Http/Controllers/Admin/InquiryController.php": {
+            "sha256": "2910f2dab26d00d5e154e468740b438d48136b4289c2b64715d094259dc0ff23",
+            "bytes": 3512,
+            "lines": 100
+        },
+        "app/Http/Controllers/Admin/NotificationController.php": {
+            "sha256": "18d366a404905117a2a0d03782eb0f2820040773569753e6b0ee82f6199a428d",
+            "bytes": 716,
+            "lines": 28
+        },
+        "app/Http/Controllers/Admin/OnboardingController.php": {
+            "sha256": "c0f1372b720c9e1c5b18e08fe09cae4aaa3df04c8b640be3d58e1861485ee9af",
+            "bytes": 6474,
+            "lines": 176
+        },
+        "app/Http/Controllers/Admin/PackageController.php": {
+            "sha256": "033758d5213b78c59f2444dc2061af45a2121a50613ef5f8e73b34a37758e97b",
+            "bytes": 5258,
+            "lines": 134
+        },
+        "app/Http/Controllers/Admin/PaymentController.php": {
+            "sha256": "49ebf3e6e66a50c1bb2b5740855f9238b1dfa900d4e651e70556e0a91bbd18fc",
+            "bytes": 4560,
+            "lines": 127
+        },
+        "app/Http/Controllers/Admin/PlanController.php": {
+            "sha256": "87ae40488f3f585efd6b64c136bf0531aedd352d9c72fc777dcb5bb847a3a6fb",
+            "bytes": 5297,
+            "lines": 146
+        },
+        "app/Http/Controllers/Admin/PlatformSettingsController.php": {
+            "sha256": "f82422779e16dff0258c17c9aedfdefce6af049a8a2e4584d578adb1c5c06842",
+            "bytes": 1717,
+            "lines": 49
+        },
+        "app/Http/Controllers/Admin/PluginController.php": {
+            "sha256": "a61e60f5d28567d36e761e3e33cfe2920c64998fde98388e74cdbaf7ceef4dfb",
+            "bytes": 1454,
+            "lines": 42
+        },
+        "app/Http/Controllers/Admin/ProfileController.php": {
+            "sha256": "16f4ee63a2b43befbf9a745e3a96c8f238ca73a54fb1f6dd74332a86ceaf7962",
+            "bytes": 4289,
+            "lines": 126
+        },
+        "app/Http/Controllers/Admin/QuotationController.php": {
+            "sha256": "aaef4ba93239406550a81cfb6da4808b8daf30210008b75924f8f8996c3d7faa",
+            "bytes": 10794,
+            "lines": 260
+        },
+        "app/Http/Controllers/Admin/ReportController.php": {
+            "sha256": "2260e0a3d1d66ff935db93863252ab300d34426ccd13272b88ab52171781b03b",
+            "bytes": 16422,
+            "lines": 396
+        },
+        "app/Http/Controllers/Admin/SessionManagementController.php": {
+            "sha256": "8deb2028e824432415bb25c65f49328eae769896095012fba561d9347d0673fa",
+            "bytes": 3424,
+            "lines": 104
+        },
+        "app/Http/Controllers/Admin/SettingsController.php": {
+            "sha256": "4c4b74714f65d498ebdd26adf5cb7bd4b8a8434f1c46afbb23d93d9f145e3446",
+            "bytes": 6266,
+            "lines": 180
+        },
+        "app/Http/Controllers/Admin/StaffController.php": {
+            "sha256": "eee3c0bbffe80bd34d696dac93b7b6f686f806af1368c67becf95a1da588973a",
+            "bytes": 3226,
+            "lines": 105
+        },
+        "app/Http/Controllers/Admin/TaskController.php": {
+            "sha256": "6ef971f58b071f38699da25b2d122aec0e5ac3e4a1e677c71b3ea7987f063e63",
+            "bytes": 2863,
+            "lines": 80
+        },
+        "app/Http/Controllers/Admin/TenantController.php": {
+            "sha256": "3dbf928cba3a629ffb3ebf0f03c2349ed5cc2ddfa558d630762aa5cfffa5ab45",
+            "bytes": 7946,
+            "lines": 195
+        },
+        "app/Http/Controllers/Admin/ThemeController.php": {
+            "sha256": "4a9ca10fac84f76bfcfb65d9c9dc441186f59b4b5f85a5bfae44dde53fa28880",
+            "bytes": 1113,
+            "lines": 37
+        },
+        "app/Http/Controllers/Admin/UserController.php": {
+            "sha256": "5559d8bf61bcdd09c605dc13895c640f79b1e33f3ce5b5d490fc6882d1f1a810",
+            "bytes": 9426,
+            "lines": 256
+        },
+        "app/Http/Controllers/Admin/VendorController.php": {
+            "sha256": "c154d5fb77b8e2f30ccf738d361f3dcadd2b2519683ab0178f4c0cd33b572b83",
+            "bytes": 4302,
+            "lines": 118
+        },
+        "app/Http/Controllers/Admin/VenueController.php": {
+            "sha256": "8266f822ced8d8c474bf786c043599f0b3898ca75819d9ac7e67adf018cc8e4b",
+            "bytes": 5828,
+            "lines": 156
+        },
+        "app/Http/Controllers/Api/V1/Admin/BookingController.php": {
+            "sha256": "0d5e829316dc5f66e8873d6e60f0243d420505c2b773077097e973b1e44bcc22",
+            "bytes": 4475,
+            "lines": 108
+        },
+        "app/Http/Controllers/Api/V1/Admin/ClientController.php": {
+            "sha256": "63c88c5f3c9fb5561ec7deac72decb940aaf704f3dfb00df90bfa9fc39298627",
+            "bytes": 3580,
+            "lines": 99
+        },
+        "app/Http/Controllers/Api/V1/Admin/CustomFieldController.php": {
+            "sha256": "06b24baf43834725fa299cfaf7ff8639b7625f6e50dca6c625e4ef5fff842d16",
+            "bytes": 1908,
+            "lines": 64
+        },
+        "app/Http/Controllers/Api/V1/Admin/InquiryController.php": {
+            "sha256": "c6a7f41f454cebc97abac0c4ad18849323f44335d3b5cc9a39b1a19bdc149026",
+            "bytes": 3909,
+            "lines": 97
+        },
+        "app/Http/Controllers/Api/V1/Admin/PackageController.php": {
+            "sha256": "de6aa1e757d63b3ab9a90e2801b05c8880dea2384c00aa4b1de49d48d96ae254",
+            "bytes": 3465,
+            "lines": 98
+        },
+        "app/Http/Controllers/Api/V1/Admin/PaymentController.php": {
+            "sha256": "7912f0c1551064dfb1b6c92d4a40d60eb4ef993a5cef3c74cd8649897ba5dd05",
+            "bytes": 4416,
+            "lines": 114
+        },
+        "app/Http/Controllers/Api/V1/Admin/QuotationController.php": {
+            "sha256": "cd514e6a6e6fd438ccae312d59539bef163d02a04af79d14796ba4e5b50613b5",
+            "bytes": 5644,
+            "lines": 143
+        },
+        "app/Http/Controllers/Api/V1/Admin/ReportController.php": {
+            "sha256": "19a6f9c4bf40ae030af6f3871f9e1378686b746d358ea498b0b991866276ea0f",
+            "bytes": 2530,
+            "lines": 69
+        },
+        "app/Http/Controllers/Api/V1/Admin/SettingsController.php": {
+            "sha256": "d023b8d7653b514e277dbc6d6e2c79d9534e2fdc26c958b99e72daeb45ba5b73",
+            "bytes": 913,
+            "lines": 37
+        },
+        "app/Http/Controllers/Api/V1/Admin/StaffController.php": {
+            "sha256": "01a2dfefc059d4fdcf7d39f72bdcd64fd7f9d699937e5d455b4ed73f061ac880",
+            "bytes": 3141,
+            "lines": 92
+        },
+        "app/Http/Controllers/Api/V1/Admin/TaskController.php": {
+            "sha256": "28cb6eac6eac8b747011790ce5651fb72eed4e17e02b8fe52f8a8d8469aed48b",
+            "bytes": 2922,
+            "lines": 81
+        },
+        "app/Http/Controllers/Api/V1/Admin/VendorController.php": {
+            "sha256": "e1c7823001ef05910b780bbfd7a98904cc4744394c7443e9cba6483403b70470",
+            "bytes": 3358,
+            "lines": 93
+        },
+        "app/Http/Controllers/Api/V1/Admin/VenueController.php": {
+            "sha256": "19966c8794c94e4da010e269feaa8dafcea2e3e118ecbe82d9b4905cac5968b3",
+            "bytes": 3854,
+            "lines": 107
+        },
+        "app/Http/Controllers/Api/V1/Client/BookingController.php": {
+            "sha256": "ef148c08b9816ff33ca5138eb173634c7a75fc62127352f52989853bc937cbf5",
+            "bytes": 974,
+            "lines": 38
+        },
+        "app/Http/Controllers/Api/V1/Client/QuotationController.php": {
+            "sha256": "de150a2c9b3e2e1adcd4dcf3f22d8429f87e8f8b4b7e85a6134b93cfd3ec254b",
+            "bytes": 2103,
+            "lines": 71
+        },
+        "app/Http/Controllers/Api/V1/InquiryController.php": {
+            "sha256": "c29b3c6415c35f486784fadc4597997075bcc8fd0663dd068873a419190e40f2",
+            "bytes": 2448,
+            "lines": 71
+        },
+        "app/Http/Controllers/Api/V1/PackageController.php": {
+            "sha256": "ac8c502a79dee6d2b3cd45c3a0ed2df65964c59620723eef2ce8d4683a187f06",
+            "bytes": 788,
+            "lines": 33
+        },
+        "app/Http/Controllers/Api/V1/PricingController.php": {
+            "sha256": "1f773490af7900b34db3dfc7ecb6aae5d39410789b2536e8574b075929c43e77",
+            "bytes": 1721,
+            "lines": 48
+        },
+        "app/Http/Controllers/Api/V1/VenueController.php": {
+            "sha256": "4994a2eb237d5bbeb669bf4e54dc9f1957cc3f25404f60644c68545fe1070042",
+            "bytes": 1598,
+            "lines": 55
+        },
+        "app/Http/Controllers/Auth/AuthenticatedSessionController.php": {
+            "sha256": "b5b8b09854fd743de683c6bb9a2f65af9986392ffa14d52b7b4ac53c3fd45a71",
+            "bytes": 2765,
+            "lines": 80
+        },
+        "app/Http/Controllers/Auth/ConfirmablePasswordController.php": {
+            "sha256": "b1cf37ae7dac1d2f6275380b6e7a5b86560d95123dff4541ffda0da004d3bc7a",
+            "bytes": 1076,
+            "lines": 39
+        },
+        "app/Http/Controllers/Auth/NewPasswordController.php": {
+            "sha256": "ad80c55cf5202a7fc9c53f61d488661e2711e32d19f508463243ffc580a9920e",
+            "bytes": 1643,
+            "lines": 56
+        },
+        "app/Http/Controllers/Auth/PasswordResetLinkController.php": {
+            "sha256": "e7d54a606ecf33cdf063d3e18f1f40cd1e1d181dfdb2f42d5d588b2ed8b60eec",
+            "bytes": 970,
+            "lines": 39
+        },
+        "app/Http/Controllers/Auth/RegisteredUserController.php": {
+            "sha256": "e24e33bab520f69af6740d184b39cd4bbc5a5c6321d174db9e035099ac11685a",
+            "bytes": 2657,
+            "lines": 78
+        },
+        "app/Http/Controllers/Controller.php": {
+            "sha256": "663e9f40be59adb09c7acd871da814b78216e79120f10375da0a31a6cef968eb",
+            "bytes": 299,
+            "lines": 13
+        },
+        "app/Http/Controllers/DemoController.php": {
+            "sha256": "efb0dea2d365fd68cca7cff3286cf217272153be39a60d20e1cdf694d6fccd24",
+            "bytes": 1055,
+            "lines": 33
+        },
+        "app/Http/Controllers/InquiryController.php": {
+            "sha256": "6f54c671276cf8a9fc95e8618b119736258d710e264cccc5d684128dba809735",
+            "bytes": 2778,
+            "lines": 75
+        },
+        "app/Http/Controllers/PackageController.php": {
+            "sha256": "46a43fa97f28846f098c96a9c0895b225a7703e913aa0958498244c305271961",
+            "bytes": 309,
+            "lines": 16
+        },
+        "app/Http/Controllers/PayHereWebhookController.php": {
+            "sha256": "354926a8376bd2b586b43778deaa64624a42594fdc499d45c577fee86fefc164",
+            "bytes": 2522,
+            "lines": 70
+        },
+        "app/Http/Controllers/Portal/PaymentController.php": {
+            "sha256": "0bef184746ca514929cc22abfc1a31a724c48cf418dda809ab5d84f17cd47486",
+            "bytes": 5001,
+            "lines": 146
+        },
+        "app/Http/Controllers/Portal/PortalController.php": {
+            "sha256": "c769e1a98360bfffa80e0236e18f5e082c7d3bce4e12d1f152b7e4ff92d08303",
+            "bytes": 6206,
+            "lines": 169
+        },
+        "app/Http/Controllers/TourController.php": {
+            "sha256": "05e8c7cbf566b7df5197da9aaf862c36ba5f4f2e0d4238c4a072b5f871b1153d",
+            "bytes": 1234,
+            "lines": 42
+        },
+        "app/Http/Controllers/VenueController.php": {
+            "sha256": "2fa85c6be1133a187389bcf0088858d17d667bceab35687aac2e53e78b0de198",
+            "bytes": 1578,
+            "lines": 49
+        },
+        "app/Http/Middleware/EnforceSessionTimeout.php": {
+            "sha256": "7b3cd2094312ae0d00bde6bdc980d368352e5ec9d7fb05f8a901f85553746c9b",
+            "bytes": 1933,
+            "lines": 61
+        },
+        "app/Http/Middleware/EnsureOnboarded.php": {
+            "sha256": "6ed1cc06a15ae6e970d7eaab887e188bce7a60dad7dd183a865a0025fea5ad04",
+            "bytes": 881,
+            "lines": 32
+        },
+        "app/Http/Middleware/EnsureTenantActive.php": {
+            "sha256": "1c367302ea6d594541e2dc742e47b2b7219d06f4a9be791eed456aaaf487d15c",
+            "bytes": 1093,
+            "lines": 40
+        },
+        "app/Http/Middleware/EnsureValidTenant.php": {
+            "sha256": "641bbc4f2ef71e0911ed54c669b64c2934253e5f581725c508f11e8fbdbf6623",
+            "bytes": 567,
+            "lines": 27
+        },
+        "app/Http/Middleware/HandleInertiaRequests.php": {
+            "sha256": "f86650b1111734b9fc2d6dfd78446a95952a66f9e6aea806efc9b13498c533ea",
+            "bytes": 4623,
+            "lines": 129
+        },
+        "app/Http/Middleware/SecurityHeaders.php": {
+            "sha256": "c9d933b4ee687f88db08c134a3784bbcbd8cf587860db6dc65f6efcd1eb31a68",
+            "bytes": 2861,
+            "lines": 73
+        },
+        "app/Http/Middleware/SetCurrentTenant.php": {
+            "sha256": "e465d02b6577d974a74b1d17e9744573ff21cdf9a5987ce3f2c658e634829900",
+            "bytes": 997,
+            "lines": 36
+        },
+        "app/Http/Requests/StoreBookingRequest.php": {
+            "sha256": "adb848049a5a82559d99aed8cbbef91fa6682c465361663db4c39b544be9a8f2",
+            "bytes": 3101,
+            "lines": 96
+        },
+        "app/Http/Resources/BookingResource.php": {
+            "sha256": "595b326c2847f6b244b2fccb67953aa10f6d42f8ca66c949ce8fd1615bc1ac61",
+            "bytes": 1518,
+            "lines": 40
+        },
+        "app/Http/Resources/ClientResource.php": {
+            "sha256": "746a9f3e229b67f6176e21f86242254a086b692aed8758362ae212d4236792fc",
+            "bytes": 1079,
+            "lines": 35
+        },
+        "app/Http/Resources/HotelResource.php": {
+            "sha256": "8cc220c021aa69b79a366adc86f882379c36299e2d2668e64d819df5c1e85274",
+            "bytes": 835,
+            "lines": 28
+        },
+        "app/Http/Resources/InquiryResource.php": {
+            "sha256": "8b1949fcea51b09aeba0903c61a655e5d2c3f9df2feede740f918c94b3452edf",
+            "bytes": 1298,
+            "lines": 35
+        },
+        "app/Http/Resources/PackageResource.php": {
+            "sha256": "5810add15ff919ce783aff2cf49a1a3f8872876a1537caf62f7ffaff6bcf714a",
+            "bytes": 824,
+            "lines": 29
+        },
+        "app/Http/Resources/PaymentResource.php": {
+            "sha256": "7cde71f9d0ae34fedfc6ee84c7e23ba09ad9787d419e5807f8b15d83e3ddf9cc",
+            "bytes": 987,
+            "lines": 30
+        },
+        "app/Http/Resources/QuotationResource.php": {
+            "sha256": "fe4f9e1c86a5f74504f369df89bbdaaffdcc645558b6387ebe716981b0395a6a",
+            "bytes": 1392,
+            "lines": 37
+        },
+        "app/Http/Resources/StaffResource.php": {
+            "sha256": "a9950806b48dc7565f7a357051cb6d9a0abfb742f54f3eec2d5874cebfb6b7a8",
+            "bytes": 701,
+            "lines": 26
+        },
+        "app/Http/Resources/TaskResource.php": {
+            "sha256": "3f3267a4b67ab476b83b177f741d40557ca80398bed19ef60070c64c0730a669",
+            "bytes": 998,
+            "lines": 30
+        },
+        "app/Http/Resources/VendorResource.php": {
+            "sha256": "e7ce33749ac87a3e15fe9988d0b6e598c516be2ac49874e9f0f4daf8877a234f",
+            "bytes": 936,
+            "lines": 31
+        },
+        "app/Http/Resources/VenueResource.php": {
+            "sha256": "9861390c1e6e4a8c00edd1ed707282f5db4e6b59c37ca8a2a5c0440a991fae4f",
+            "bytes": 985,
+            "lines": 33
+        },
+        "app/Http/Traits/ApiResponse.php": {
+            "sha256": "7ad24862579ba61071c12dab09b40975cf368bd67aeaa832bb8604ab99e63619",
+            "bytes": 1657,
+            "lines": 57
+        },
+        "app/Mail/BookingConfirmedMail.php": {
+            "sha256": "7fe31fc5f0e6670f6360f7312ce55c67a9bd314a17675334526a487bbfc098e8",
+            "bytes": 798,
+            "lines": 31
+        },
+        "app/Mail/NewInquiryMail.php": {
+            "sha256": "02f7781bc7eb3f3f93dc3544c126e79ebcac0dac81b51a460aa862fcc16eaa43",
+            "bytes": 724,
+            "lines": 31
+        },
+        "app/Mail/PaymentReceivedMail.php": {
+            "sha256": "213a99f573ea25b6cc7a3edfcbf2a07cebd1a029e5b73f9c95e7afa29005f8dc",
+            "bytes": 795,
+            "lines": 31
+        },
+        "app/Mail/QuotationSentMail.php": {
+            "sha256": "8e315462e878e459f9cdd75f62d78140e9153b4d4c51d33311451aba78a3e8ac",
+            "bytes": 802,
+            "lines": 31
+        },
+        "app/Mail/UserInvitedMail.php": {
+            "sha256": "f5cdb9a04604c26ae51d13e2342211293be573930e3c2c044fc306f9ec0ccf22",
+            "bytes": 921,
+            "lines": 33
+        },
+        "app/Models/Booking.php": {
+            "sha256": "8446047b87a0a9ad2b48cb33be708dc054c07ffcc2a71116543dd1a20d68f400",
+            "bytes": 3609,
+            "lines": 157
+        },
+        "app/Models/Client.php": {
+            "sha256": "8ff4fed5c74cfa470085fed49cedc8480c0109e853cc4f0970e95282e7bfa076",
+            "bytes": 2573,
+            "lines": 114
+        },
+        "app/Models/Concerns/Approvable.php": {
+            "sha256": "a5db2ea3dddbf6088dcd61f36114544c168c2792773cdfeb4030db5bc2d68dbe",
+            "bytes": 1876,
+            "lines": 74
+        },
+        "app/Models/Concerns/BelongsToTenant.php": {
+            "sha256": "0882d7cc57a8d50a21175d8396faecdda230a78f1e1a3afa504366c9f78bff98",
+            "bytes": 1648,
+            "lines": 59
+        },
+        "app/Models/CustomField.php": {
+            "sha256": "3d3b6059db8cb3cc12926c53957f2771e792c9adc43587d68eb9f0e5f7aacd83",
+            "bytes": 2858,
+            "lines": 118
+        },
+        "app/Models/CustomFieldValue.php": {
+            "sha256": "fb0296057ed71a5eb7b06842f5aa1e4b25b2ff757d6ef3b515143c94edc00ec8",
+            "bytes": 1734,
+            "lines": 74
+        },
+        "app/Models/Hotel.php": {
+            "sha256": "26acbc8584fd8ffc6da5cd07b41bf3d6e74e40f9eabe90ed6d07b893de0fa890",
+            "bytes": 1246,
+            "lines": 57
+        },
+        "app/Models/Inquiry.php": {
+            "sha256": "4f64e097ea847e8a26ab07121ad3bd9a9b21fded671fc2e3997e8df4faa474c4",
+            "bytes": 2366,
+            "lines": 107
+        },
+        "app/Models/Package.php": {
+            "sha256": "43f225177e7a729a67ae042a353d64622dc3a827d9cffa90c2b3f55dab0517fe",
+            "bytes": 2333,
+            "lines": 99
+        },
+        "app/Models/Payment.php": {
+            "sha256": "0782c4af9acd298891f2d468f546e6eff0bd463670e38145e8004060079f283a",
+            "bytes": 2159,
+            "lines": 95
+        },
+        "app/Models/Plan.php": {
+            "sha256": "fd219b5ce309884a7625338df5ad8d5d4d0cf9c71d762ffe984cf77cf155c6cf",
+            "bytes": 1699,
+            "lines": 76
+        },
+        "app/Models/Quotation.php": {
+            "sha256": "041c2b2a658c6d371144ff92bf1735fb69fc37245ee38d7a177628113eb5f03d",
+            "bytes": 3774,
+            "lines": 152
+        },
+        "app/Models/Staff.php": {
+            "sha256": "16f183d4064ef38879ab1dbd76b70ca828449931babf98739de4ade78adb8f34",
+            "bytes": 933,
+            "lines": 47
+        },
+        "app/Models/Task.php": {
+            "sha256": "4444a905aaacedad977fbb0dad867a8cb5c98ee503332a71396b41b5d8407afd",
+            "bytes": 1219,
+            "lines": 56
+        },
+        "app/Models/Tenant.php": {
+            "sha256": "68ddaecdbb64c52ddc63f5f4cce9595d9874b2e1cef318a9ce6b9650e0d3f3fc",
+            "bytes": 3144,
+            "lines": 138
+        },
+        "app/Models/User.php": {
+            "sha256": "2e69ad489a41e90222c66c828a0d8d9253eb0b29d2be048de544c2f887b2f671",
+            "bytes": 3808,
+            "lines": 149
+        },
+        "app/Models/Vendor.php": {
+            "sha256": "96eeebcd78d7765678b2458bcdd0050789aaa4c32182668843870fae456ecc9a",
+            "bytes": 1517,
+            "lines": 63
+        },
+        "app/Models/Venue.php": {
+            "sha256": "8dbaa5d340ff95db19b212a36f5aa6e9041e298d8b4aeaba373f5899c1a967b5",
+            "bytes": 2122,
+            "lines": 93
+        },
+        "app/Multitenancy/DomainTenantFinder.php": {
+            "sha256": "a4bde2fc0d03d6d31a8f5e8445c71763ece5728979dba10ef5315743e129e18f",
+            "bytes": 1579,
+            "lines": 46
+        },
+        "app/Notifications/ApprovalReviewed.php": {
+            "sha256": "ede4a2935d6f7137abbad1d81a4656dbd7db98187f2831a498f62db04e429e91",
+            "bytes": 624,
+            "lines": 30
+        },
+        "app/Notifications/ApprovalSubmitted.php": {
+            "sha256": "6869b2e7624bafac5981cbdc3e35a7d18884e78eda5acd996a995c04775dc41b",
+            "bytes": 534,
+            "lines": 24
+        },
+        "app/Notifications/PaymentReminderNotification.php": {
+            "sha256": "a9813a52fee5603a90e58d2262b263662ceab4d3e27d512052477d83964a3bac",
+            "bytes": 1791,
+            "lines": 49
+        },
+        "app/Notifications/StaffNotification.php": {
+            "sha256": "3cd49430ae259c6570fad1d8ac758d0cf5ab819955b99a008453f0f1e39bf6d6",
+            "bytes": 874,
+            "lines": 38
+        },
+        "app/Observers/ApprovableObserver.php": {
+            "sha256": "7a1085eae4dd2d85069103f757cb174a7cf385dc8b409bf6adff9706bab80ffe",
+            "bytes": 673,
+            "lines": 26
+        },
+        "app/Policies/ClientPolicy.php": {
+            "sha256": "4ffaa32912f0a007436a67e460d0bf3c459e53edd76cc7b787d858d488d52d33",
+            "bytes": 655,
+            "lines": 35
+        },
+        "app/Policies/HotelPolicy.php": {
+            "sha256": "6348a172c96c16812cb24f0fccc1c1f8e59d6b7bd4b9739e1afe8100e2b6183f",
+            "bytes": 657,
+            "lines": 17
+        },
+        "app/Policies/PackagePolicy.php": {
+            "sha256": "5a6b5173b09ad8c61d2532e1f42ef4e4e1d7ea1a30d383186aaf1461b9f87b1e",
+            "bytes": 668,
+            "lines": 35
+        },
+        "app/Policies/StaffPolicy.php": {
+            "sha256": "8e02ed4ce88fadb90d05172a3b84df821b6047345409d666ae54b3ce56be5efc",
+            "bytes": 637,
+            "lines": 35
+        },
+        "app/Policies/VendorPolicy.php": {
+            "sha256": "f086ae5ffc45adfd83bf9725ece7cc9d8ff62f4cfcd2f7c6a5fed70e6008d48f",
+            "bytes": 655,
+            "lines": 35
+        },
+        "app/Policies/VenuePolicy.php": {
+            "sha256": "61f56daf52efdc12fe1b346c2368b0e8910e530eeeb06f83febd33e9242f80d6",
+            "bytes": 642,
+            "lines": 35
+        },
+        "app/Providers/AppServiceProvider.php": {
+            "sha256": "92f4d1c26cd367eaf48803500a79b75471f36716acc4627b6fb7b9412350f0fb",
+            "bytes": 2453,
+            "lines": 65
+        },
+        "app/Services/AvailabilityService.php": {
+            "sha256": "397ebbb62710cd8ae7e0bde7ae14e7134663b6bb3f449eab31786245e6ec1af1",
+            "bytes": 4635,
+            "lines": 142
+        },
+        "app/Services/BrandingService.php": {
+            "sha256": "c9db70e07349fe06996c5ac4da3ce2143d9d2a13d65e701a3c3f2a5fbf67df51",
+            "bytes": 8051,
+            "lines": 236
+        },
+        "app/Services/CustomFieldService.php": {
+            "sha256": "20a741c2557b23a3e2d0a4f5912956a976feb41ada2bc2b101bb0b256531aac5",
+            "bytes": 3509,
+            "lines": 134
+        },
+        "app/Services/DemoTenantProvisioner.php": {
+            "sha256": "118933f875a569f2494b70f6d25ce90150d78fe875f13cbd01a8be86db4f9481",
+            "bytes": 11451,
+            "lines": 262
+        },
+        "app/Services/OnboardingService.php": {
+            "sha256": "94ef0b110febbb383343b80a6f1f08a3c8a584545f88f945fbd80d0da1bb7f00",
+            "bytes": 3125,
+            "lines": 99
+        },
+        "app/Services/PayHereService.php": {
+            "sha256": "a926d17827d6ee8921448856f204499b15694b3f1b9152662d39d6bb479c23e5",
+            "bytes": 6093,
+            "lines": 181
+        },
+        "app/Services/PaymentService.php": {
+            "sha256": "ec5f38eec9fd34fd4a0cda79927d326ba0ea630d78e04423a0b4266535ab1697",
+            "bytes": 5281,
+            "lines": 152
+        },
+        "app/Services/PluginService.php": {
+            "sha256": "d48a7f55f39f59031cf5821d524fd3307ab17a1c5da0eb3cc61c6b6908dc6a4c",
+            "bytes": 4702,
+            "lines": 176
+        },
+        "app/Services/PricingService.php": {
+            "sha256": "fc8cd3967a7f6d5bde11bb6c0ea6bdbe309feb7d70fa9fe958702b36ead66145",
+            "bytes": 6782,
+            "lines": 221
+        },
+        "app/Services/QuotationService.php": {
+            "sha256": "f8fa759eba48205e7475c92a8ef90d8aa07fbbb6c5de819ae90bbf9db790f112",
+            "bytes": 5206,
+            "lines": 176
+        },
+        "app/Services/SettingsService.php": {
+            "sha256": "c9551ac6cad0272f2c21d85e633469a23f85ccd75185d04c6892fc9ee6a01794",
+            "bytes": 3703,
+            "lines": 156
+        },
+        "app/Services/ThemeService.php": {
+            "sha256": "b9e4c3772688f276cc5baa346ef8efd4bd67f7d545d3ae6342caca727b5f26b3",
+            "bytes": 3050,
+            "lines": 127
+        },
+        "app/Settings/PlatformSettings.php": {
+            "sha256": "91074f2253d6fc89122f080a8eb196d94077745db498c1a20356a024d3021ac9",
+            "bytes": 337,
+            "lines": 22
+        },
+        "app/Support/Notifier.php": {
+            "sha256": "95f263c82c81f7d74ae0601507dc5168b9061ce6e24753f5b11f3f93c4ff90a0",
+            "bytes": 1810,
+            "lines": 60
+        },
+        "app/Support/TenantRule.php": {
+            "sha256": "188e1d7d104af06c3f2481c1ed097e8ca2fa54a0c0a71b8175430da730b8d305",
+            "bytes": 627,
+            "lines": 23
+        },
+        "app/Support/UserAgentParser.php": {
+            "sha256": "f8032ff185ea700ad25c04c63a5e3df29ade0c9759adcfa3d4802a0085f87ffa",
+            "bytes": 1447,
+            "lines": 45
+        },
+        "artisan": {
+            "sha256": "1aa7dc9cb64a52d32daa48d2b1d5a0b7929ff3dcbaf245febe5ca93238fcb8ec",
+            "bytes": 365,
+            "lines": 16
+        },
+        "bootstrap/app.php": {
+            "sha256": "e6a3050da2815325964a151c2efa040b9bff9e4ef94a20ab0ad06e83ad52cfba",
+            "bytes": 2217,
+            "lines": 54
+        },
+        "bootstrap/providers.php": {
+            "sha256": "3ad8154f5a0cac3761cad5f83094c0d8130594af91e331e602c5a2ca7ab31b45",
+            "bytes": 96,
+            "lines": 8
+        },
+        "composer.json": {
+            "sha256": "dbd6880bd6abf265effe5295c8da7099470ec92baaa73b994c9cac9f63abd5be",
+            "bytes": 2678,
+            "lines": 79
+        },
+        "config/activitylog.php": {
+            "sha256": "46280240969e4af889e969699e761cf85b0920d9b6cd9212f7e1c07ecd8eeb35",
+            "bytes": 1670,
+            "lines": 55
+        },
+        "config/app.php": {
+            "sha256": "2d8f411275395ce1d84f88c776c3f5b52774c5b2acbf5ca9cb7abce347bb4215",
+            "bytes": 736,
+            "lines": 24
+        },
+        "config/auth.php": {
+            "sha256": "ff398dfe5e649631e2e92cf28a73bad0428d4e327a545b40efd7103f58d5d9f1",
+            "bytes": 964,
+            "lines": 43
+        },
+        "config/broadcasting.php": {
+            "sha256": "c796096d168b427c69e797ffeaa9c0da2dbb87b7d13af7e3cb6a58faac1ffa0d",
+            "bytes": 1560,
+            "lines": 51
+        },
+        "config/cache.php": {
+            "sha256": "6494efc8f7261d864354c07df173453525dbd03e2bf7345f5b09db1b0fa7d7fb",
+            "bytes": 2034,
+            "lines": 67
+        },
+        "config/cors.php": {
+            "sha256": "98a2d8f1fa0e40754bd4eca57c05c094211f27327d02cbf85a36deac0f897dee",
+            "bytes": 503,
+            "lines": 20
+        },
+        "config/database.php": {
+            "sha256": "0668c5b4448736e0c6c235a82d23c321df1b77ae5df007ad36b336f0865f4972",
+            "bytes": 4221,
+            "lines": 119
+        },
+        "config/eventpro.php": {
+            "sha256": "1fab4caadf1e098f90c0ebb2fabed31a516a516d34b9cb1359e572ce8b93dd14",
+            "bytes": 4420,
+            "lines": 134
+        },
+        "config/eventpro/settings-schema.php": {
+            "sha256": "83d01c4942f6c538c9f44957deacfafe4f623228af3172c19bf3e00acfcca3d4",
+            "bytes": 5915,
+            "lines": 199
+        },
+        "config/filesystems.php": {
+            "sha256": "f472fe4eda7f0257b76e292d44e15c9310937cc380a409cfc24b2e1c89d8b368",
+            "bytes": 1082,
+            "lines": 39
+        },
+        "config/hashing.php": {
+            "sha256": "6e1569d14a6a4f910f05692f2fb2d2bbd066a35d5901a412f76f95a85d1b161e",
+            "bytes": 373,
+            "lines": 18
+        },
+        "config/logging.php": {
+            "sha256": "1d61a575d6ba4ee80cca01b869584e3839c5f134122a0800b4f5a44b6ff66a5f",
+            "bytes": 2963,
+            "lines": 93
+        },
+        "config/mail.php": {
+            "sha256": "84acf8b176eec73f34aaafeb98e17e8e38869c455e31c15a563c831ff24d99c4",
+            "bytes": 1609,
+            "lines": 67
+        },
+        "config/multitenancy.php": {
+            "sha256": "b5bce6835478de4ffb615cf165cacbd2f59a5b6eefc05bdcd542ec5d16474bb1",
+            "bytes": 1269,
+            "lines": 48
+        },
+        "config/permission.php": {
+            "sha256": "4538b98a34bb4e2edd842fdef04f4b4c815286f70d728305d6ab8e50abdbe983",
+            "bytes": 7101,
+            "lines": 207
+        },
+        "config/queue.php": {
+            "sha256": "ca4a6b152696fec515efa91c4f7fba6292f0440f3adeb53f066a758fcca4d80c",
+            "bytes": 1932,
+            "lines": 61
+        },
+        "config/sanctum.php": {
+            "sha256": "2c730e398aebf5b41ce538b7d42ac1ebde373374b76047b72f47fe3ce7f8c939",
+            "bytes": 761,
+            "lines": 26
+        },
+        "config/services.php": {
+            "sha256": "6210c2205d0b9be566916f4da3b043cb92a96e2779136df14e613824c45182f9",
+            "bytes": 548,
+            "lines": 20
+        },
+        "config/session.php": {
+            "sha256": "c04cefe1b678f2a45027640f6ad334796c82163cd2df3adabd6d4de4910ca215",
+            "bytes": 1765,
+            "lines": 40
+        },
+        "config/settings.php": {
+            "sha256": "468338075acb4dd84e1d12323d6eeb34252ef72ae10fe916c9be077e54ae03d2",
+            "bytes": 3516,
+            "lines": 109
+        },
+        "database/factories/BookingFactory.php": {
+            "sha256": "c294be2250a2e347b212a9cf168a557c546797141fdbeb97551dbdd7b1400747",
+            "bytes": 1541,
+            "lines": 47
+        },
+        "database/factories/ClientFactory.php": {
+            "sha256": "f420772ea08e1fb75df81c03217596c21a02b1dd4afdb22d26e285357565583b",
+            "bytes": 777,
+            "lines": 27
+        },
+        "database/factories/HotelFactory.php": {
+            "sha256": "9789ebaea7a7e3ce70bdeb0c58b1c556786eb3c76a238b3ff018b6f8d59f1714",
+            "bytes": 1401,
+            "lines": 49
+        },
+        "database/factories/InquiryFactory.php": {
+            "sha256": "f0c349e8aa24b7921080f8b9fa54f628ad7e1ea3bcfb14f1a5401fc133b86c59",
+            "bytes": 2003,
+            "lines": 56
+        },
+        "database/factories/PackageFactory.php": {
+            "sha256": "fc86e3ff0ab8408486ece8bd57638f361d34ae3a987d57d740f7c90b49e487a7",
+            "bytes": 1902,
+            "lines": 55
+        },
+        "database/factories/PaymentFactory.php": {
+            "sha256": "bdaf35f2bc970ae9d737d4b9c8b007c961262a1f4a0b8003aa36be9f2b13e440",
+            "bytes": 2342,
+            "lines": 67
+        },
+        "database/factories/PlanFactory.php": {
+            "sha256": "0ff1f51492112176ca63f1a807af065b209b3d21e60082e861c02ac88e86e423",
+            "bytes": 825,
+            "lines": 27
+        },
+        "database/factories/QuotationFactory.php": {
+            "sha256": "0a4e9b3e30d8db33194703ea7aa7c7ed2723f2d322ad9c0b1586162e5604dbae",
+            "bytes": 2978,
+            "lines": 84
+        },
+        "database/factories/StaffFactory.php": {
+            "sha256": "3a63575b1ccec5bc5ab6fcf60ef61c7f005c2d077b203d68c48eb07747b4cd21",
+            "bytes": 788,
+            "lines": 28
+        },
+        "database/factories/TaskFactory.php": {
+            "sha256": "41ae879d3391c186ce85734fe1c6e9306a30d64fb482394d9b3ea162587cc875",
+            "bytes": 1126,
+            "lines": 37
+        },
+        "database/factories/TenantFactory.php": {
+            "sha256": "cf1e91ea3925c7a09c650834fc3df044f435a52d82672c39b3c85916f701f0f8",
+            "bytes": 1034,
+            "lines": 41
+        },
+        "database/factories/UserFactory.php": {
+            "sha256": "3303f9623bd284863ed8eca6f5ed9c8013a8c5c44abca78ef10d363348a6caa5",
+            "bytes": 1764,
+            "lines": 68
+        },
+        "database/factories/VendorFactory.php": {
+            "sha256": "d46011b11dd4f8e28cd85f432e9d3d9d354a13b5f8746f25262fd244bc580004",
+            "bytes": 1324,
+            "lines": 37
+        },
+        "database/factories/VenueFactory.php": {
+            "sha256": "2ee9c084146fa5e11c10a720e908c4e1bbbddb0ccbf66ed7c0603304c31a49c0",
+            "bytes": 1867,
+            "lines": 59
+        },
+        "database/migrations/2022_12_14_083707_create_settings_table.php": {
+            "sha256": "a2e2fe93b4736745134b71c9a22ad4b5725e215d2650e271653fb01c6fdbed39",
+            "bytes": 626,
+            "lines": 25
+        },
+        "database/migrations/2024_01_01_000001_create_plans_table.php": {
+            "sha256": "1c2deef469d2aca1f9276b26ba4d7e9ad5b33ffb033fb3a4843245c4bbcd73b7",
+            "bytes": 1001,
+            "lines": 37
+        },
+        "database/migrations/2024_01_01_000002_create_tenants_table.php": {
+            "sha256": "2a2e36bbf0d77c2560a64b75dfbbf09fd178ffe89ccdb1b939a37b1b832bc6df",
+            "bytes": 1321,
+            "lines": 42
+        },
+        "database/migrations/2024_01_01_000003_create_users_table.php": {
+            "sha256": "397fbc6d241fefdd64722070304d8b00d6f5a4492854bfcdc4ca052347bcafa8",
+            "bytes": 1893,
+            "lines": 56
+        },
+        "database/migrations/2024_01_01_000004_create_venues_table.php": {
+            "sha256": "fefc621f576517356a45afa19625ccf02f8e67a2eefcc1cc21b10848660b3298",
+            "bytes": 1211,
+            "lines": 41
+        },
+        "database/migrations/2024_01_01_000005_create_packages_table.php": {
+            "sha256": "2be568adf67bcc07d0752266ecb0f60b2ca84532977c90886600365333a70d9c",
+            "bytes": 1620,
+            "lines": 51
+        },
+        "database/migrations/2024_01_01_000006_create_clients_table.php": {
+            "sha256": "a497cda4fd2ecb95841c35639284ce3a27f7bed5d159244f7e9e5c52daef0394",
+            "bytes": 1418,
+            "lines": 45
+        },
+        "database/migrations/2024_01_01_000007_create_inquiries_table.php": {
+            "sha256": "cb74e5085525b766063116e3bb2501d7e9de4e1cd953ffd07833119631b6c499",
+            "bytes": 1767,
+            "lines": 46
+        },
+        "database/migrations/2024_01_01_000008_create_bookings_table.php": {
+            "sha256": "0541a2678927bc68fbb215805697acc0c5abb0899cd0c84e52e78ecea7dbb99b",
+            "bytes": 1751,
+            "lines": 48
+        },
+        "database/migrations/2024_01_01_000009_create_quotations_table.php": {
+            "sha256": "d149f36370c9f045dcea455b226386a255247eb547700c6522e7b9ec45b77067",
+            "bytes": 2153,
+            "lines": 52
+        },
+        "database/migrations/2024_01_01_000010_create_payments_table.php": {
+            "sha256": "f3cc356ad524cf3b3043d85a6309b595a0182838e667b20422903149f7db10a9",
+            "bytes": 1423,
+            "lines": 42
+        },
+        "database/migrations/2024_01_01_000011_create_custom_fields_tables.php": {
+            "sha256": "09d68c755bcfbbc8a5954858011348e7732f8970bfdf8395f5e1d502cd1322a2",
+            "bytes": 2000,
+            "lines": 58
+        },
+        "database/migrations/2024_01_01_000012_create_permission_tables.php": {
+            "sha256": "8f012a32334b820f24d2823b62b24aaf0ba050a5408a09e0c48970cfa2b20c1a",
+            "bytes": 5587,
+            "lines": 115
+        },
+        "database/migrations/2024_01_02_000001_add_due_date_to_payments_table.php": {
+            "sha256": "d02b0174aaab30d171b69d7141a96c5da3975fdb95a3b5fbeb833363175b643e",
+            "bytes": 637,
+            "lines": 24
+        },
+        "database/migrations/2024_01_02_000002_create_vendors_table.php": {
+            "sha256": "59569689d0dfd2cb7cdc62abab1d4c37c06a428d0f6ecc4af8acd55e92827c16",
+            "bytes": 2121,
+            "lines": 53
+        },
+        "database/migrations/2024_01_02_000003_create_staff_table.php": {
+            "sha256": "aea1bec392e6132ead5b45312cc8e3d71c748856685809f8cd07e80ae5862288",
+            "bytes": 2076,
+            "lines": 52
+        },
+        "database/migrations/2024_01_03_000001_add_performance_indexes.php": {
+            "sha256": "29054dbe9f5be91855786bb3137335d73dbe261bfa700018153490598f1b2d0b",
+            "bytes": 3295,
+            "lines": 85
+        },
+        "database/migrations/2024_01_03_000002_add_created_by_to_bookings_table.php": {
+            "sha256": "35710cfb3bb765b7dcfc74378a203ac84b41c6a8ad10b651e114f75c3cdc00e9",
+            "bytes": 809,
+            "lines": 31
+        },
+        "database/migrations/2024_01_03_000003_create_booking_vendor_table.php": {
+            "sha256": "a2d1c1962d0b624e6c30aa89ee618c82ed8901b5143f447018a88c133f02c078",
+            "bytes": 1363,
+            "lines": 37
+        },
+        "database/migrations/2024_01_03_000004_add_missing_performance_indexes.php": {
+            "sha256": "9a7fab552c7c0734c651021fc5f25581a822073c76e2e8fecc6e071d9197593a",
+            "bytes": 949,
+            "lines": 33
+        },
+        "database/migrations/2026_06_08_000001_change_users_role_to_string.php": {
+            "sha256": "05fc63f451c44ef2741e14aed2cd2e1c08fcbd88b688e3d46ec36de6da60e0b2",
+            "bytes": 952,
+            "lines": 30
+        },
+        "database/migrations/2026_06_08_000002_make_tenant_email_nullable.php": {
+            "sha256": "65658712f3c50753908d2d2f233497d55a915b23ddc4e5f0f99b312ce071905a",
+            "bytes": 706,
+            "lines": 27
+        },
+        "database/migrations/2026_06_08_154700_create_activity_log_table.php": {
+            "sha256": "3a16b451da732d0f1199178402c1612f4c87909a3274fe4dc016a37add4de196",
+            "bytes": 936,
+            "lines": 28
+        },
+        "database/migrations/2026_06_08_154701_add_event_column_to_activity_log_table.php": {
+            "sha256": "86ec12eb6a07e18ba90142d6a60f6282b3a62a4935907d0cce1f6de172dbf324",
+            "bytes": 714,
+            "lines": 23
+        },
+        "database/migrations/2026_06_08_154702_add_batch_uuid_column_to_activity_log_table.php": {
+            "sha256": "b04eb953e551aa855a73d55d08d1b6eb91ce0dd54f22f8d3e9806f18f00a9d98",
+            "bytes": 724,
+            "lines": 23
+        },
+        "database/migrations/2026_06_09_000001_create_notifications_table.php": {
+            "sha256": "150672d7e054dd1cecfb6d23bb3e4a1b50351ae32c7677c3c9ebecc2fb5219e0",
+            "bytes": 960,
+            "lines": 35
+        },
+        "database/migrations/2026_06_10_000001_create_sessions_table.php": {
+            "sha256": "da34264b4fa49b8415062e84f439da655f288ff50b404ce68adace1e0becc691",
+            "bytes": 984,
+            "lines": 35
+        },
+        "database/migrations/2026_06_12_000001_add_gateway_columns_to_payments_table.php": {
+            "sha256": "9fb84a3958bcd7831a4e3be1450048c139fa53151f3aea17b8a7caa51f4282ef",
+            "bytes": 1014,
+            "lines": 28
+        },
+        "database/migrations/2026_06_13_000001_make_payment_date_nullable_on_payments_table.php": {
+            "sha256": "dc219f8871c801e52a62dc5954690df916be13bc4bd1c98c6c9a26bb75116c3e",
+            "bytes": 696,
+            "lines": 27
+        },
+        "database/migrations/2026_06_14_000001_add_demo_columns_to_tenants_table.php": {
+            "sha256": "fdaf4456baaa808ef530f2c95841c82f7263f1475a932b0b7b34605fa6292f9b",
+            "bytes": 640,
+            "lines": 24
+        },
+        "database/migrations/2026_07_02_000001_create_hotels_table.php": {
+            "sha256": "258e997463d3dc0cd98561e18bced3fd2c8098976229c5f54bf3c43e625eec4b",
+            "bytes": 973,
+            "lines": 31
+        },
+        "database/migrations/2026_07_02_000002_add_approvable_columns.php": {
+            "sha256": "c4896c2d3d603d19d6bff31b16bbaa4cabcc9f9bb7b06d38a8f94e371fdcd310",
+            "bytes": 1435,
+            "lines": 39
+        },
+        "database/migrations/2026_07_02_000003_add_hotel_id_to_venues_and_packages.php": {
+            "sha256": "3bd7c8c8df62b1eb7b9c7aee1fed7a10ec6ae475fc41173a81ddcbca6793cc9f",
+            "bytes": 734,
+            "lines": 27
+        },
+        "database/migrations/2026_07_02_000004_backfill_hotels_from_venues.php": {
+            "sha256": "af5eb979b7e21e1de0bb104993b33fe0e4f4129934c7a882cfed38350e8777b0",
+            "bytes": 2049,
+            "lines": 49
+        },
+        "database/seeders/Data/EventVendors.php": {
+            "sha256": "ac198520fe1db8a6741b9df6933d0ca8b0b09960089b01b7806fa7f302298330",
+            "bytes": 8528,
+            "lines": 179
+        },
+        "database/seeders/Data/SriLankaHotels.php": {
+            "sha256": "96cf995bcd39337757b06a4e7d00bde5ed5a8c1dcea8ff15c8be1cc26078b6b4",
+            "bytes": 16338,
+            "lines": 232
+        },
+        "database/seeders/DatabaseSeeder.php": {
+            "sha256": "b4778c62019e9d9bd690ef845bda96ece463587192bbed6483bd4efd94f680db",
+            "bytes": 449,
+            "lines": 24
+        },
+        "database/seeders/DemoDataSeeder.php": {
+            "sha256": "bd1447c31bbbd9b8b2ec38bec5e1cafad9c5f01958d40b911e5009fd2d22ecfb",
+            "bytes": 18505,
+            "lines": 366
+        },
+        "database/seeders/PlanSeeder.php": {
+            "sha256": "ef703de4a387192d8b02dd3c13d591f9de23c9df558c7c1a5207bca717444512",
+            "bytes": 3781,
+            "lines": 118
+        },
+        "database/seeders/RolePermissionSeeder.php": {
+            "sha256": "24eb51034af037f28db808704605efc08d3acfe7912d126830c98ebe0ee8ce88",
+            "bytes": 5278,
+            "lines": 113
+        },
+        "database/seeders/ShowcaseSeeder.php": {
+            "sha256": "6aa51ef22a0f1cb63110df43b20a76cf04644afc437bf6c2f9130d0c5d9b84c7",
+            "bytes": 18935,
+            "lines": 423
+        },
+        "database/seeders/TenantSeeder.php": {
+            "sha256": "e0bafe3d96ddefbf88b6eec0a3df50f0d63444d4acd9dd3e1f15b8fc59c8212d",
+            "bytes": 1763,
+            "lines": 48
+        },
+        "database/seeders/UserSeeder.php": {
+            "sha256": "a00c9e9c759cf459b081a2205d1a627beea28bd890a7a4cfae65ab5c8de43308",
+            "bytes": 1705,
+            "lines": 58
+        },
+        "package.json": {
+            "sha256": "8b02f471bc0a9188c5c1ea6dc51e2d4ac8fa46d77a1ce318fd48ad933bf39d30",
+            "bytes": 1060,
+            "lines": 36
+        },
+        "postcss.config.js": {
+            "sha256": "218def8d8635601327c5c7c2084d958f316e71e55bc2daece2a627b34ed87b72",
+            "bytes": 99,
+            "lines": 7
+        },
+        "resources/css/app.css": {
+            "sha256": "4013d75c3e358e5d6e4c55cecaf26b72711ee6aad5c90c90f4d202e8bab15b57",
+            "bytes": 4844,
+            "lines": 128
+        },
+        "resources/css/fonts.css": {
+            "sha256": "e36f92cac96fa71d9c27cc0aee063790fc389cee03e6d79a9f68370863d76ab0",
+            "bytes": 6645,
+            "lines": 166
+        },
+        "resources/js/Components/InputError.vue": {
+            "sha256": "e3e6a5309aab9779d8925b1fbb7907fa0377f4ea0c1bad0eb9c5f9f72380ce65",
+            "bytes": 156,
+            "lines": 7
+        },
+        "resources/js/Components/InputLabel.vue": {
+            "sha256": "a546de06e6cf1d5c6d24174f48e92c6ea676233cd37d9433d5dce3faa42d3f90",
+            "bytes": 280,
+            "lines": 10
+        },
+        "resources/js/Components/NotificationBell.vue": {
+            "sha256": "dc554ea9d8255674dde15d341662f179beace2f39facda429eccf88f813911ef",
+            "bytes": 3002,
+            "lines": 65
+        },
+        "resources/js/Components/OnboardingChecklist.vue": {
+            "sha256": "030be25f9c321dc8630c44517982f04894849c5184d104b726a7eedc48d48ee3",
+            "bytes": 2420,
+            "lines": 47
+        },
+        "resources/js/Components/PageTour.vue": {
+            "sha256": "223e4efcc7c51cb6f8e07d5efe320aec540f25729406a32743eeeb3243f3571d",
+            "bytes": 2698,
+            "lines": 75
+        },
+        "resources/js/Components/PlanForm.vue": {
+            "sha256": "0793cb1533ee856b2379df335a76edceb843dc009856bbb73b1ca3bcf52cd317",
+            "bytes": 5226,
+            "lines": 99
+        },
+        "resources/js/Components/PrimaryButton.vue": {
+            "sha256": "afc87cb056ddb134ec69c1f881b3515203c9ecadaa7fa5e518240a6efc41d09a",
+            "bytes": 556,
+            "lines": 15
+        },
+        "resources/js/Components/ReportFilter.vue": {
+            "sha256": "b1c16a4c9cb107af0850feaff1e82d9470e6384bc23c05220c951db2af4f4998",
+            "bytes": 2260,
+            "lines": 56
+        },
+        "resources/js/Components/SecondaryButton.vue": {
+            "sha256": "9b14b187f75a85f0efc189d8134e5f4c2cc0ffb4f73d87c9908f75abe4ad8f5e",
+            "bytes": 295,
+            "lines": 9
+        },
+        "resources/js/Components/TextInput.vue": {
+            "sha256": "cc48a86dba5c46b68f3da92527fe3361bcae196706cb1f988f1001f5d071835a",
+            "bytes": 578,
+            "lines": 18
+        },
+        "resources/js/Components/ui/Alert.vue": {
+            "sha256": "6efc4adb7e00793ac6c416cfa17a1c402a4a6e6d59fe59c9605090c68c983681",
+            "bytes": 504,
+            "lines": 16
+        },
+        "resources/js/Components/ui/Avatar.vue": {
+            "sha256": "6fdcf5588246eb0fba6912d9f354f60ebc40747b2caddebdd4a5937132d26d85",
+            "bytes": 690,
+            "lines": 18
+        },
+        "resources/js/Components/ui/Button.vue": {
+            "sha256": "8c1c9a4bdb35ccd00607150210d312749df71ecfecc22fa560e21521eb258faf",
+            "bytes": 2102,
+            "lines": 44
+        },
+        "resources/js/Components/ui/Card.vue": {
+            "sha256": "949042abbd5a52dce60002d460a328ad8a3358ed8722fa0554867ce461fc96c6",
+            "bytes": 561,
+            "lines": 18
+        },
+        "resources/js/Components/ui/DataTable.vue": {
+            "sha256": "daa3fa8df8c670d8766d21e5e48f7f16e439ab5fb696229b209dc7546a45b625",
+            "bytes": 4287,
+            "lines": 78
+        },
+        "resources/js/Components/ui/EmptyState.vue": {
+            "sha256": "ba27565a2795ac7940e959ea334d837dc9a4e36e5e91ec3ab2ae41fce16ca746",
+            "bytes": 1060,
+            "lines": 19
+        },
+        "resources/js/Components/ui/FormField.vue": {
+            "sha256": "e555651954ed1ce6d7257f79723c16c7c9ae4fbb67d2f98a5b39ab20a28526bf",
+            "bytes": 1118,
+            "lines": 25
+        },
+        "resources/js/Components/ui/Modal.vue": {
+            "sha256": "f56cb873a77106270cffe5926486bd55633d984439af97d60af1d312d470094f",
+            "bytes": 3859,
+            "lines": 89
+        },
+        "resources/js/Components/ui/PageHeader.vue": {
+            "sha256": "36fcbff595e696b6bf244553f334f072edebe45e1b0c739a7f14ab00faf3aec3",
+            "bytes": 671,
+            "lines": 17
+        },
+        "resources/js/Components/ui/SelectField.vue": {
+            "sha256": "1a9dec98d0847c3dcc41bdcc23a25351742c373330573c84e8fbbb6f04d2b1e5",
+            "bytes": 924,
+            "lines": 24
+        },
+        "resources/js/Components/ui/StatCard.vue": {
+            "sha256": "2de9b0ceb92dedee315774b23bc810591b85939d4b7e49077bfd9b3a4324b358",
+            "bytes": 686,
+            "lines": 20
+        },
+        "resources/js/Components/ui/StatusBadge.vue": {
+            "sha256": "4eaa4e3535217b338bc0181b812472bd813d96cbba1875580aee008b46eacd92",
+            "bytes": 355,
+            "lines": 11
+        },
+        "resources/js/Components/ui/Tabs.vue": {
+            "sha256": "b917d30e34be3a188f84507938efa394967e6801fdcee060da571d22d8b8f852",
+            "bytes": 704,
+            "lines": 22
+        },
+        "resources/js/Components/ui/TextField.vue": {
+            "sha256": "0d013aa6dc0de5d98355507052d940ea3d36a949c76dc0c264e165d6f7778594",
+            "bytes": 1133,
+            "lines": 25
+        },
+        "resources/js/Components/ui/TextareaField.vue": {
+            "sha256": "f0ed81ee320908c3f22ab3995d7834ecd0d185c2c85f8123e2864938772d6540",
+            "bytes": 997,
+            "lines": 23
+        },
+        "resources/js/Components/ui/Toggle.vue": {
+            "sha256": "0bd05b93193b2ce8b95af79ce92dbdb039645da6bf2d94900faccd7b6fbb680c",
+            "bytes": 960,
+            "lines": 16
+        },
+        "resources/js/Components/ui/index.js": {
+            "sha256": "eeb3d2a947258156978157dd9246038ab21121da0c711083773f6f817af25976",
+            "bytes": 938,
+            "lines": 18
+        },
+        "resources/js/Layouts/AppLayout.vue": {
+            "sha256": "ee85cd5bfbfdf1ae84b65453527b7fefe13c0d8be10df3d6a21efcd50df9f5ba",
+            "bytes": 13865,
+            "lines": 161
+        },
+        "resources/js/Layouts/GuestLayout.vue": {
+            "sha256": "651dd1f58c83ceeb358b0c8b15330932527c231580fcb21f31c2ddc32edba287",
+            "bytes": 1861,
+            "lines": 27
+        },
+        "resources/js/Layouts/PortalLayout.vue": {
+            "sha256": "1608e0f58a0ac787b40797f2045737e546a2e2e51f4a91740f1f7fe496bfd9f0",
+            "bytes": 6702,
+            "lines": 101
+        },
+        "resources/js/Pages/Admin/Approvals/Index.vue": {
+            "sha256": "d4cdd6b51cc05d4948671ad32559ba5f2fefa863e9f7d386a6efb579b02ad035",
+            "bytes": 1833,
+            "lines": 38
+        },
+        "resources/js/Pages/Auth/ConfirmPassword.vue": {
+            "sha256": "7fb51924fd9cb01d74d2971fa1d7e6b4f550ca8b2ce51fff048c573d955b3fd3",
+            "bytes": 1681,
+            "lines": 38
+        },
+        "resources/js/Pages/Auth/ForgotPassword.vue": {
+            "sha256": "65cf0760754f633fff0a9ca3a57fc7344eea395e92fc2d6dfd621d86729fad77",
+            "bytes": 1413,
+            "lines": 37
+        },
+        "resources/js/Pages/Auth/Login.vue": {
+            "sha256": "24bab47ae9b9e6e3c2bf7b26e8ed0f690bc2c927ee64b7ac99b3db27c22619a3",
+            "bytes": 6496,
+            "lines": 111
+        },
+        "resources/js/Pages/Auth/Register.vue": {
+            "sha256": "a913dc9e30b2a2daaa06e47858730704e9649bb5ccb94e2b9cf848179e193a5d",
+            "bytes": 2451,
+            "lines": 56
+        },
+        "resources/js/Pages/Auth/ResetPassword.vue": {
+            "sha256": "722086db0b9bf021fad3ac006f5aee2b21927657ccaa4ad1b490b6319c4cc9d0",
+            "bytes": 2068,
+            "lines": 52
+        },
+        "resources/js/Pages/Bookings/Create.vue": {
+            "sha256": "78449638398dfd53b9845499d7d0ab18d1adb23f524a69ea926b76e64ba2a4cb",
+            "bytes": 8828,
+            "lines": 169
+        },
+        "resources/js/Pages/Bookings/Edit.vue": {
+            "sha256": "431e76d3be12dac58b03573a9bb383f01171fbb695730961d53467ac20fd6bb5",
+            "bytes": 8532,
+            "lines": 161
+        },
+        "resources/js/Pages/Bookings/Index.vue": {
+            "sha256": "9bec8855d2810187a75e3b6912aaf8de631aa0f18f36edb9eefb63d0f1deaca7",
+            "bytes": 7307,
+            "lines": 117
+        },
+        "resources/js/Pages/Bookings/Show.vue": {
+            "sha256": "f3d16c7ac3d32e37d77783446cf28e3bd9320c7d6a28eb9b1716471c556b4ac4",
+            "bytes": 16052,
+            "lines": 265
+        },
+        "resources/js/Pages/Calendar/Index.vue": {
+            "sha256": "64add8451fd7b5d92c8a1d0b88a480afc2d8331eb5323288b92a180fe606ff02",
+            "bytes": 2696,
+            "lines": 84
+        },
+        "resources/js/Pages/Clients/Create.vue": {
+            "sha256": "08d75c21174d046d1a88203c79f8d0a1c93a1b787e5d8ea503b8d2e984151573",
+            "bytes": 6035,
+            "lines": 106
+        },
+        "resources/js/Pages/Clients/Edit.vue": {
+            "sha256": "8f1cf629b8758846470793c496c7bc93b922eb1ae2a564de7dc7574a301be0f7",
+            "bytes": 6365,
+            "lines": 109
+        },
+        "resources/js/Pages/Clients/Index.vue": {
+            "sha256": "870e5e3f5b65ebb2efb34435d8da9e60f19db178c10f4f9e6c59c19474f7e19d",
+            "bytes": 5941,
+            "lines": 103
+        },
+        "resources/js/Pages/Clients/Show.vue": {
+            "sha256": "b1f4ea3df060ade47b851c8718664940a7ed377ed6d7bd4a6a3264a43c91d274",
+            "bytes": 9902,
+            "lines": 164
+        },
+        "resources/js/Pages/CustomFields/Index.vue": {
+            "sha256": "2fbf554555b3ef2fcc2f4f510d49dae35dff30bbfbf6dc94307a66d63a318c51",
+            "bytes": 10206,
+            "lines": 184
+        },
+        "resources/js/Pages/Dashboard.vue": {
+            "sha256": "064c62a853d2e2c7e8b4bb9cea280771331205a42a60e030c21c2025549b4a1f",
+            "bytes": 8174,
+            "lines": 139
+        },
+        "resources/js/Pages/Hotels/Create.vue": {
+            "sha256": "be66d8fe0eb6a6a970d6c56c51b144304d4b3bd0b8078a3d0e6aa0fe11661153",
+            "bytes": 5524,
+            "lines": 136
+        },
+        "resources/js/Pages/Hotels/Edit.vue": {
+            "sha256": "16378bc5ce8d5a6df8f2357f2db248b70335dc992a0dd2c6e8b1c32d43df6eaa",
+            "bytes": 9382,
+            "lines": 195
+        },
+        "resources/js/Pages/Hotels/Index.vue": {
+            "sha256": "ccc5588abba9df7efde32bf9baa30d65311b6a7cc049eab36b6f776918ea32a1",
+            "bytes": 5887,
+            "lines": 129
+        },
+        "resources/js/Pages/Inquiries/Index.vue": {
+            "sha256": "7703c165d9362cba631f5fbb71131929362020c728f678c557239006f7dc8228",
+            "bytes": 7430,
+            "lines": 124
+        },
+        "resources/js/Pages/Inquiries/Show.vue": {
+            "sha256": "f00ace4f3c3cce255e58dcae518196ed6bbefbafb4f76b909cde468342966ea8",
+            "bytes": 9995,
+            "lines": 174
+        },
+        "resources/js/Pages/Onboarding/Wizard.vue": {
+            "sha256": "5128e549f50509419bfa54165a991cb738e0e11000da72dddb46e3babe1d6e4b",
+            "bytes": 11654,
+            "lines": 173
+        },
+        "resources/js/Pages/Packages/Create.vue": {
+            "sha256": "95f0b0384208b75e1ef88391d4fcc2312a914ca08be17c0ef81643fd4ee2d633",
+            "bytes": 6323,
+            "lines": 133
+        },
+        "resources/js/Pages/Packages/Edit.vue": {
+            "sha256": "400b50746268f08c2a02b9e20b47e170e744fedd1c41bcd316c8fad77261aab4",
+            "bytes": 5915,
+            "lines": 109
+        },
+        "resources/js/Pages/Packages/Index.vue": {
+            "sha256": "2830a4e2dbfdaf3c9d0ee1186cab603e07eb0876a73a83b9a24fc68e58cf5556",
+            "bytes": 6840,
+            "lines": 121
+        },
+        "resources/js/Pages/Payments/Create.vue": {
+            "sha256": "1dfc3550c22a36b39457d3686070287b0536fe30ced59aeedce83c1563ae7336",
+            "bytes": 5859,
+            "lines": 106
+        },
+        "resources/js/Pages/Payments/Index.vue": {
+            "sha256": "dde138ff64bcbcd5fc7bc03537bde1ef4eebf7137b43e63d4edcb20e0cffd4b9",
+            "bytes": 7363,
+            "lines": 118
+        },
+        "resources/js/Pages/Payments/Show.vue": {
+            "sha256": "553de9345a368b4ba6ef1510dc1258e23f20c8660f8840a7425efe8f864c8380",
+            "bytes": 3170,
+            "lines": 53
+        },
+        "resources/js/Pages/Plans/Create.vue": {
+            "sha256": "7abd5b939f168bddd6f0381437a7904c066cd345bdd3c901c563f3e4a763746c",
+            "bytes": 1272,
+            "lines": 41
+        },
+        "resources/js/Pages/Plans/Edit.vue": {
+            "sha256": "c4de22aa470a6a49567a7f802e6db5a8af215102c020e1c41680a401dec4a062",
+            "bytes": 1581,
+            "lines": 42
+        },
+        "resources/js/Pages/Plans/Index.vue": {
+            "sha256": "a02f8b90959cfd340e314fb5d29f7ad291e21048e26518e489f18dfe47f2f2fe",
+            "bytes": 4171,
+            "lines": 79
+        },
+        "resources/js/Pages/Platform/AuditLog.vue": {
+            "sha256": "8b54a66e518f655ce1d85de26e3a170e912a94d32f279b7d268f369fc44c66a5",
+            "bytes": 5329,
+            "lines": 96
+        },
+        "resources/js/Pages/Platform/Dashboard.vue": {
+            "sha256": "9c1a14619330c4537b17bd696189ad25f74eacc6a73cc2e4090d4e6baf6c1b67",
+            "bytes": 6218,
+            "lines": 106
+        },
+        "resources/js/Pages/Platform/Settings.vue": {
+            "sha256": "274a3671f3c56194af278c68c7b90aa8b690d3cf28e5d916662d0e71d43c7d1e",
+            "bytes": 3139,
+            "lines": 67
+        },
+        "resources/js/Pages/Plugins/Index.vue": {
+            "sha256": "10dbef2f47112cd9386a41c5cb5cd9ffafb877f80a578893cb9a251a0b5ea151",
+            "bytes": 3991,
+            "lines": 76
+        },
+        "resources/js/Pages/Portal/BookingShow.vue": {
+            "sha256": "a72b1897fd01459dc9d6cf7401ff552f51ce43258e3c707ad84c47660ed5b07f",
+            "bytes": 5293,
+            "lines": 87
+        },
+        "resources/js/Pages/Portal/Bookings.vue": {
+            "sha256": "71e4c1eb19c18bc04a79cbdd3ee0eb50ac402f87ae9427739290533c80348429",
+            "bytes": 4088,
+            "lines": 75
+        },
+        "resources/js/Pages/Portal/Dashboard.vue": {
+            "sha256": "c4634cdb55f35a536acb521549a1f7b8b3cf807dd7ede6c3d3ebfe09a4d614a1",
+            "bytes": 5643,
+            "lines": 99
+        },
+        "resources/js/Pages/Portal/Payments.vue": {
+            "sha256": "15efdb3176919427ea8e08f293937969cd3d787c1b1798c402a11f0655989510",
+            "bytes": 5364,
+            "lines": 89
+        },
+        "resources/js/Pages/Portal/Quotations.vue": {
+            "sha256": "d650d10c4ac38e6e62df2a8fc6502b62bccf96f8998f2f3b37a5073e1caf0dda",
+            "bytes": 2105,
+            "lines": 44
+        },
+        "resources/js/Pages/Profile/Edit.vue": {
+            "sha256": "3063e0b86cf3f2626addf021224aed85e0fbe7f6b313d487bcadfeac8268bde3",
+            "bytes": 9909,
+            "lines": 193
+        },
+        "resources/js/Pages/Quotations/Create.vue": {
+            "sha256": "3b67062916b090e7f129b70ffa3c47ab3986f65d7d5df5c7cdfc7244fa6ada73",
+            "bytes": 16152,
+            "lines": 295
+        },
+        "resources/js/Pages/Quotations/Index.vue": {
+            "sha256": "39ea8a6baad1888d8f426a563ad5612cf642bd2ea6afb52019fec2641b49c731",
+            "bytes": 6801,
+            "lines": 113
+        },
+        "resources/js/Pages/Quotations/Show.vue": {
+            "sha256": "c84ed9a2b6c35e82dba6942cb95177ae8879e502f8de10ee516481fe31ed53a4",
+            "bytes": 9701,
+            "lines": 144
+        },
+        "resources/js/Pages/Reports/Bookings.vue": {
+            "sha256": "9970d3c95a6dd0e355c529fa0bbd265da0a7d633082d53de7dda76edefae8fb2",
+            "bytes": 7490,
+            "lines": 120
+        },
+        "resources/js/Pages/Reports/Index.vue": {
+            "sha256": "501044685a05212ee7c0923510ab6f70ced6279c82738fc5589a8f8b0925b60c",
+            "bytes": 11781,
+            "lines": 198
+        },
+        "resources/js/Pages/Reports/Occupancy.vue": {
+            "sha256": "6ff225f36fafd4898ae1966bfd568a99d8d98267554aa4d399826925d090753b",
+            "bytes": 6681,
+            "lines": 105
+        },
+        "resources/js/Pages/Reports/Revenue.vue": {
+            "sha256": "a4d601c21cf7dcc39ba05e3a02b1a46b1874c6e595ad64318460beb3bfe4c869",
+            "bytes": 7012,
+            "lines": 112
+        },
+        "resources/js/Pages/Settings/Index.vue": {
+            "sha256": "c68773f2f0827351e69e41773260f0366840d56d7e880761c1fa71fc998049e2",
+            "bytes": 17086,
+            "lines": 274
+        },
+        "resources/js/Pages/Settings/Sessions.vue": {
+            "sha256": "8f1b0d726b77748c84d0ca77da1feab93bda66ec20b1945c0489807efb0b84e9",
+            "bytes": 3568,
+            "lines": 82
+        },
+        "resources/js/Pages/Staff/Create.vue": {
+            "sha256": "31fe79c97bf85f28646fbbfe9f44fbcf50592ac6faad425f40a4c97c539d7545",
+            "bytes": 4486,
+            "lines": 77
+        },
+        "resources/js/Pages/Staff/Edit.vue": {
+            "sha256": "c683c0002bb183e251b0fbf248f4a3a90aae72e300dd14148c3aa7ab21587a25",
+            "bytes": 4587,
+            "lines": 78
+        },
+        "resources/js/Pages/Staff/Index.vue": {
+            "sha256": "4533eace22ef54eb03a68d0517ffb8222dccd073cab514e671d684daae83e74e",
+            "bytes": 5686,
+            "lines": 99
+        },
+        "resources/js/Pages/Staff/Show.vue": {
+            "sha256": "df1c713a4e0cd1d77beff9941fc956aa40152aee30fdfc69b1327786536e547b",
+            "bytes": 4749,
+            "lines": 89
+        },
+        "resources/js/Pages/Tasks/Index.vue": {
+            "sha256": "b02c4ee08289def7527ed3a800b2fddb242a9e787c601fd172255dab86029e25",
+            "bytes": 8923,
+            "lines": 154
+        },
+        "resources/js/Pages/Tenants/Create.vue": {
+            "sha256": "47916cea10b167793f2608354098518f3e85f8d89bf61a73511f3b46a1af32e4",
+            "bytes": 7541,
+            "lines": 141
+        },
+        "resources/js/Pages/Tenants/Edit.vue": {
+            "sha256": "6aed62c9afd103d00bf48240c923d1f0452af175b55566ef180e22d06734a080",
+            "bytes": 5757,
+            "lines": 108
+        },
+        "resources/js/Pages/Tenants/Index.vue": {
+            "sha256": "749152b6a27077f962286d23a0df65908605c629af93eca7f9b00b926e14c034",
+            "bytes": 8231,
+            "lines": 140
+        },
+        "resources/js/Pages/Themes/Index.vue": {
+            "sha256": "9ff980eca3894745408101b511d201315d2a6dbccf23a11d6056f08140bc0317",
+            "bytes": 3116,
+            "lines": 63
+        },
+        "resources/js/Pages/Users/Create.vue": {
+            "sha256": "01f97a902f7e7bf47b7bbc2f728defdee8b230ea6aeea0ac8984872e8b413a2c",
+            "bytes": 5351,
+            "lines": 99
+        },
+        "resources/js/Pages/Users/Edit.vue": {
+            "sha256": "7818bb5fb3774d2b24aeac6f54d7e19807d33044dc85ec3f4f3742dd0b072d41",
+            "bytes": 6959,
+            "lines": 128
+        },
+        "resources/js/Pages/Users/Index.vue": {
+            "sha256": "dc9993fa4624b499c8f98cd28706b8f28e92b7dd9862d98f7c38c59ebdd870a9",
+            "bytes": 8835,
+            "lines": 149
+        },
+        "resources/js/Pages/Vendors/Create.vue": {
+            "sha256": "c7a302136f1447594f6043bc6a4ac5ea90dae75526bc049270bd4aab86ffdc14",
+            "bytes": 7940,
+            "lines": 150
+        },
+        "resources/js/Pages/Vendors/Edit.vue": {
+            "sha256": "3785bad269759c93ae105513e3db50107868ce0a4a5389cb21c60c790ba3990f",
+            "bytes": 8083,
+            "lines": 140
+        },
+        "resources/js/Pages/Vendors/Index.vue": {
+            "sha256": "37513796f97774368c9658c7e83b5857426d74c31ca348e0bddb5d132bd3d11c",
+            "bytes": 6828,
+            "lines": 115
+        },
+        "resources/js/Pages/Vendors/Show.vue": {
+            "sha256": "b57699169b4cdc4f79a939b6ab121434fe74c3e822a078c1b164f1cf54a9732c",
+            "bytes": 4585,
+            "lines": 85
+        },
+        "resources/js/Pages/Venues/Availability.vue": {
+            "sha256": "f1ccd1f48702847240e02ce3379b992bb3822582563496e9eb0931e5212d9ffa",
+            "bytes": 9409,
+            "lines": 206
+        },
+        "resources/js/Pages/Venues/Create.vue": {
+            "sha256": "1b25525db4dd231c1d4e94460a5aae419d28a328c922495b1b33553813eb0de9",
+            "bytes": 8271,
+            "lines": 186
+        },
+        "resources/js/Pages/Venues/Edit.vue": {
+            "sha256": "4bd0eb7e709c3177623dd7cc33ad6648929e1ce7cd2e72ade89530f0d1dc011e",
+            "bytes": 7733,
+            "lines": 166
+        },
+        "resources/js/Pages/Venues/Index.vue": {
+            "sha256": "35e4aac4254276210f25093ca4b2f563055c1e592f5218fba0f7685b50ad8bf6",
+            "bytes": 7572,
+            "lines": 144
+        },
+        "resources/js/app.js": {
+            "sha256": "9003b72b9719fad1b3909869981a525b636357e8f47f77ee603d776963d33b10",
+            "bytes": 649,
+            "lines": 21
+        },
+        "resources/js/bootstrap.js": {
+            "sha256": "e78f04a697a091b432ca1d58dfbfb215ba85e05e4c1b37446429249188ef61e2",
+            "bytes": 131,
+            "lines": 5
+        },
+        "resources/js/composables/usePermissions.js": {
+            "sha256": "6d7311eda74674a31785fff32a7e642e3f013d2493057e598208f8f3e918c8c1",
+            "bytes": 1026,
+            "lines": 26
+        },
+        "resources/js/tours/registry.js": {
+            "sha256": "4074a8ddbb456dcefd458b023340b6c0ff5d0e2235d70cbebed5d6b6739067eb",
+            "bytes": 5735,
+            "lines": 110
+        },
+        "resources/js/utils/status.js": {
+            "sha256": "d54758c10da10121817ed08e7bb29b7c97c57a728e4b485677f188c2857612a2",
+            "bytes": 1774,
+            "lines": 49
+        },
+        "resources/views/app.blade.php": {
+            "sha256": "8f45539347cd7f9f9b4f9013ed866cdb65cd5ccee988c5280fe459b5d6a4be36",
+            "bytes": 646,
+            "lines": 20
+        },
+        "resources/views/contact.blade.php": {
+            "sha256": "be16fca8e9fab25ee69dea9a46d717ea19853152d48f0e0c2c911bf23db9d4ee",
+            "bytes": 12581,
+            "lines": 193
+        },
+        "resources/views/layouts/app.blade.php": {
+            "sha256": "08315fec2e76d53fe02e7f0edb5b666fb7cf0ab5a70a19861c6d56dd9e3743d7",
+            "bytes": 16235,
+            "lines": 221
+        },
+        "resources/views/links.blade.php": {
+            "sha256": "0e4787cd0f10e5dd33aa86f6b3e93460487f8d0762af9b56ba1ab3dfc7148e66",
+            "bytes": 5109,
+            "lines": 79
+        },
+        "resources/views/mail/booking-confirmed.blade.php": {
+            "sha256": "95464444b718d9f0a91968d1d6058290044c1c0ef1868cede339a23b9dbf1b45",
+            "bytes": 596,
+            "lines": 21
+        },
+        "resources/views/mail/new-inquiry.blade.php": {
+            "sha256": "20b351f9f58e818e4e4b394405dbba28623b126d40e654a968c9d0a0c9fd1e3e",
+            "bytes": 710,
+            "lines": 25
+        },
+        "resources/views/mail/payment-received.blade.php": {
+            "sha256": "61a2eea1272359036d2db2788da9eeb79b8fa6291d39c40f88390c0480ef6a1a",
+            "bytes": 711,
+            "lines": 23
+        },
+        "resources/views/mail/quotation-sent.blade.php": {
+            "sha256": "ad3bae9919c5582536eb43615ed3fe27e3154a52a0ec531d4f86f28f20eca817",
+            "bytes": 565,
+            "lines": 20
+        },
+        "resources/views/mail/user-invited.blade.php": {
+            "sha256": "3ed4dfe178fb9a38382fffa1e620d005a9762cf1a79c56b12e3d87c0e2f43508",
+            "bytes": 559,
+            "lines": 24
+        },
+        "resources/views/packages/index.blade.php": {
+            "sha256": "408bf27977bea95697b70eb286c3a3928840d7033e13318e839c65c8bd35fdd6",
+            "bytes": 5417,
+            "lines": 98
+        },
+        "resources/views/payments/checkout.blade.php": {
+            "sha256": "524f5d2d49641f035d9d6a587b1b563fab161be5c77be1486df49cdd64af4b7c",
+            "bytes": 1707,
+            "lines": 34
+        },
+        "resources/views/pdf/inquiry.blade.php": {
+            "sha256": "f88383ba9443d2fa9f82399246fab721ff62c8a8a65c6e3f111cd276b515d418",
+            "bytes": 4156,
+            "lines": 109
+        },
+        "resources/views/pdf/partials/footer.blade.php": {
+            "sha256": "dce994d228a6f7d0fac953e21bcdb0d469a74729a4bbb06e6054a4785d12353a",
+            "bytes": 315,
+            "lines": 6
+        },
+        "resources/views/pdf/partials/header.blade.php": {
+            "sha256": "56b940dfb725135833fa6ddbf8e699d2ad8a7d99725c74de16abc3584358456e",
+            "bytes": 1861,
+            "lines": 40
+        },
+        "resources/views/pdf/partials/styles.blade.php": {
+            "sha256": "dddca42664367b69f4f85e1086ad3d3076e4c72d615d1c6dd1aaf7971d48d16c",
+            "bytes": 7398,
+            "lines": 119
+        },
+        "resources/views/pdf/quotation.blade.php": {
+            "sha256": "da2258eb7885810466d1938e1dce812389cd747a33a6e6e052b357cdd5d6937a",
+            "bytes": 6454,
+            "lines": 162
+        },
+        "resources/views/pdf/receipt.blade.php": {
+            "sha256": "d45bc6edb2604988a24dff73c15dd5e2ddc0d0cb96e9c20df3bbd884bfe07490",
+            "bytes": 3642,
+            "lines": 81
+        },
+        "resources/views/pdf/reports/_header.blade.php": {
+            "sha256": "8fc832819ddc026eb389721876b39704335010e9915a7d8021b73c53e792be3d",
+            "bytes": 828,
+            "lines": 20
+        },
+        "resources/views/pdf/reports/_styles.blade.php": {
+            "sha256": "491b6c4b62618c2b65b2c9dd3b9f8d0058534d4f86c3902fc0dad8a8dd103988",
+            "bytes": 6575,
+            "lines": 105
+        },
+        "resources/views/pdf/reports/bookings.blade.php": {
+            "sha256": "b8b31b8da1fd78637739ef9527d37b2d2d8d4d74c3bd7de8f5e97c0c82579a19",
+            "bytes": 5378,
+            "lines": 119
+        },
+        "resources/views/pdf/reports/occupancy.blade.php": {
+            "sha256": "181a1ba9ffbfe6ec908d995c70aab063503b1951b610c697584192705f3c0868",
+            "bytes": 3594,
+            "lines": 83
+        },
+        "resources/views/pdf/reports/revenue.blade.php": {
+            "sha256": "5584491625ea09c41a4abc5ff299630cd06c4f09aea355737ba35dba19dc69b7",
+            "bytes": 4828,
+            "lines": 109
+        },
+        "resources/views/quotations/pdf.blade.php": {
+            "sha256": "d88dacbb26c4223d54b5dedaae3a9b69c6a41583526abbb88939c9de51e286e0",
+            "bytes": 3535,
+            "lines": 113
+        },
+        "resources/views/venues/index.blade.php": {
+            "sha256": "6e8f738f7a79d5c9d3e90b3c01bbafc5e3c4121f7a24089d5901a0b123e96799",
+            "bytes": 7944,
+            "lines": 129
+        },
+        "resources/views/venues/show.blade.php": {
+            "sha256": "c5afc8ca88542336b37ad735f64be6d771dca98c139990c0dc206ea059946854",
+            "bytes": 11238,
+            "lines": 176
+        },
+        "resources/views/welcome.blade.php": {
+            "sha256": "457762838c59c772f9415a1aad24a125b4350e04919c57542c74d16fa19e4ed8",
+            "bytes": 14679,
+            "lines": 220
+        },
+        "routes/api.php": {
+            "sha256": "bc3bcab88e93e742c380d16e42d75cdba273f9d2addc16b93cf86cfecb1b1afc",
+            "bytes": 5685,
+            "lines": 115
+        },
+        "routes/console.php": {
+            "sha256": "2d457f75bab666147548adef4ad6b0b51443259de32c563c7b58eac2c200fa47",
+            "bytes": 381,
+            "lines": 13
+        },
+        "routes/web.php": {
+            "sha256": "02b183ada91f5c391932d41c2f63b9e6de43ecdf80c5fd924de2ceed00c23d42",
+            "bytes": 26032,
+            "lines": 370
+        },
+        "tailwind.config.js": {
+            "sha256": "4d708dfcba10449c3cdefe0254a161595f49361459ef3812bb0bb20ab1fe27e3",
+            "bytes": 2189,
+            "lines": 57
+        },
+        "tests/Feature/Admin/AdminPagesSmokeTest.php": {
+            "sha256": "448fb1892d1b6a570f4fb5186e4c0b94b136e1462f1e4853221d845f603542ab",
+            "bytes": 3702,
+            "lines": 112
+        },
+        "tests/Feature/Admin/ApprovalReviewTest.php": {
+            "sha256": "ab89dde4106ca19c02ec6e1881baede588032ce195560c5bbeee424744f01bc1",
+            "bytes": 1842,
+            "lines": 61
+        },
+        "tests/Feature/Admin/BackfillHotelsTest.php": {
+            "sha256": "02f68ae892bb2e10dba2b04a851826fb9d5492ff90a796a574ba8a48895ba93e",
+            "bytes": 2470,
+            "lines": 67
+        },
+        "tests/Feature/Admin/BookingAdminTest.php": {
+            "sha256": "d959517fba8a299e793e1a230ceb9d24245f9a45b0f0b08f4462db8be0ca0f92",
+            "bytes": 2237,
+            "lines": 76
+        },
+        "tests/Feature/Admin/BookingEditTest.php": {
+            "sha256": "2a9ada7ac13e7eec4d71ebbec1be66a4c799bae161052fdcc80a45da653ad3c0",
+            "bytes": 4475,
+            "lines": 135
+        },
+        "tests/Feature/Admin/BookingPrefillTest.php": {
+            "sha256": "e2b38c594776a77c671ac16262218dfffe78b64ec1daa9e5c24d77435639957e",
+            "bytes": 2731,
+            "lines": 75
+        },
+        "tests/Feature/Admin/CalendarTest.php": {
+            "sha256": "4069494a70eb0e36cea0f0c03e1ad99a8bb998464c80b6c1aacdeb3e326217f2",
+            "bytes": 2436,
+            "lines": 80
+        },
+        "tests/Feature/Admin/ClientCrudTest.php": {
+            "sha256": "7b7ca96aa6743207e970b5ad3319ad98c56313e682d8d67247d6f9edbbc52dc3",
+            "bytes": 5607,
+            "lines": 172
+        },
+        "tests/Feature/Admin/HotelCrudTest.php": {
+            "sha256": "84ef1992f543113a6a9fbe471c6de7d90c75420ecce3d59ddc786121df65cbc3",
+            "bytes": 1260,
+            "lines": 44
+        },
+        "tests/Feature/Admin/HotelPermissionTest.php": {
+            "sha256": "c4f1cbbd01d9759ff5cd939a352d3b545b544a317887d2e81a12a646ef4531a3",
+            "bytes": 884,
+            "lines": 31
+        },
+        "tests/Feature/Admin/HotelSchemaTest.php": {
+            "sha256": "312ed64459ccbd0046fa63a9b2e3bb38328b1704f589c56640a042d724dfd1f5",
+            "bytes": 795,
+            "lines": 26
+        },
+        "tests/Feature/Admin/PackageSubmitTest.php": {
+            "sha256": "369e0b29c2359a582681c5216b6bb02616d571890ae9add0486a490f4541fe44",
+            "bytes": 2162,
+            "lines": 68
+        },
+        "tests/Feature/Admin/PlanManagementTest.php": {
+            "sha256": "f00922ffc1e9f6b563b0aa8f9f7586a8f38e53fdede34ca082c8e1711bea4179",
+            "bytes": 3517,
+            "lines": 105
+        },
+        "tests/Feature/Admin/PlatformDashboardTest.php": {
+            "sha256": "fc194956df97e6bead8de7c0fe13a30ceb4b916bd6857878772706d46df79427",
+            "bytes": 1497,
+            "lines": 47
+        },
+        "tests/Feature/Admin/PlatformManagementTest.php": {
+            "sha256": "3edbd7d53e7c86dcf171d89289d5784ffd45eb88938fccaa11ceb9ba105fa134",
+            "bytes": 4415,
+            "lines": 128
+        },
+        "tests/Feature/Admin/ProfileTest.php": {
+            "sha256": "6034cfb7946124f103ae58cae87384b1f9a311569977b51e02fce128e71ff27b",
+            "bytes": 4505,
+            "lines": 134
+        },
+        "tests/Feature/Admin/QuotationBuilderTest.php": {
+            "sha256": "643463ea4c7e5f76ed421d08cc736ab07822de2b6df43d86583c12a000084f16",
+            "bytes": 3986,
+            "lines": 102
+        },
+        "tests/Feature/Admin/QuotationPrintWorkflowTest.php": {
+            "sha256": "5e2adecf1e4b0a77bafab11bf48e5917f61a843005163922e8d99f17a622dfbe",
+            "bytes": 6241,
+            "lines": 182
+        },
+        "tests/Feature/Admin/RbacEnforcementTest.php": {
+            "sha256": "3df6be3b38cb91653ff14333273073e782763b3d747a1fb579df228deda58c15",
+            "bytes": 5192,
+            "lines": 142
+        },
+        "tests/Feature/Admin/ReportSmokeTest.php": {
+            "sha256": "beda9c743664b6eddfdaedcbfdd2c3a6fc10d9009bd4a560830dc1b5b4738cce",
+            "bytes": 2858,
+            "lines": 79
+        },
+        "tests/Feature/Admin/SeederApprovalSmokeTest.php": {
+            "sha256": "992493dcf26a1a2794bc5ea956c9d8e5789e50a3c9ff5e96ccf016746ebbecc6",
+            "bytes": 2144,
+            "lines": 70
+        },
+        "tests/Feature/Admin/StaffAdminTest.php": {
+            "sha256": "4b7f37baeb6f562765c5dc9a9be5bf8861dd1f7d2227e606b4ced54acbd79789",
+            "bytes": 2346,
+            "lines": 83
+        },
+        "tests/Feature/Admin/TenantManagementTest.php": {
+            "sha256": "77d8cd168e4c98e62d55bd2be3c11a2b16e1f291a14074b93937c6da91ad53a7",
+            "bytes": 4177,
+            "lines": 116
+        },
+        "tests/Feature/Admin/UserManagementTest.php": {
+            "sha256": "35f831d53f50b9cc74ae09baf11bc53b85469b98f91b182ad2ff5017b32557d6",
+            "bytes": 10206,
+            "lines": 263
+        },
+        "tests/Feature/Admin/VenueAdminTest.php": {
+            "sha256": "f0067b80b65e8953c1892476bbdd446f5814752a138640ac980176e8397e6ba3",
+            "bytes": 3392,
+            "lines": 116
+        },
+        "tests/Feature/Admin/VenueSubmitTest.php": {
+            "sha256": "c5c90579607628b0f5d434135b72492c21cb565dff444772ee0246b9a43057c1",
+            "bytes": 2120,
+            "lines": 68
+        },
+        "tests/Feature/Api/Admin/PaymentCascadeTest.php": {
+            "sha256": "c0c0f18b3ec27b182fca16998859d5f0597bc4241673122a16011b11539857bc",
+            "bytes": 3366,
+            "lines": 101
+        },
+        "tests/Feature/Api/Admin/PaymentIntegrityTest.php": {
+            "sha256": "46bac638a35a540289494bcfdb4cd003892d16fc4b4eb41dd6ac41ca5b4aef80",
+            "bytes": 3472,
+            "lines": 109
+        },
+        "tests/Feature/Api/Client/BookingAuthorizationTest.php": {
+            "sha256": "f0bc969d03501fbdca46c31f9ffa91876eeb8947f72d073b8350647820df40e4",
+            "bytes": 2082,
+            "lines": 70
+        },
+        "tests/Feature/Api/Client/QuotationAuthorizationTest.php": {
+            "sha256": "cba386ea1a54f2bc20316456e6712917427247e7835ecb7d3509a2127a4d6aca",
+            "bytes": 3006,
+            "lines": 90
+        },
+        "tests/Feature/Api/InquiryApiTest.php": {
+            "sha256": "67c74e1d43573c0c04420e405dd1dcfbfb7a2ae82095a58bfe8cc366eda3ca10",
+            "bytes": 2526,
+            "lines": 78
+        },
+        "tests/Feature/Api/StaffApiTest.php": {
+            "sha256": "544d55bf678e9abc8a59a41d42ccb93a09d4486c2802cafb4c50c0774f56f31e",
+            "bytes": 2435,
+            "lines": 81
+        },
+        "tests/Feature/Api/VendorApiTest.php": {
+            "sha256": "610b398be32fa24e848220b350ea0e9818c7dee1c5bc0718f2fbd3b94eb7899c",
+            "bytes": 2176,
+            "lines": 74
+        },
+        "tests/Feature/Api/VenueApiTest.php": {
+            "sha256": "bdc8879de992d53cd14f11b8add2ec7a2ae49e6e2a3dfa7581cdc47fb62d0aca",
+            "bytes": 4350,
+            "lines": 142
+        },
+        "tests/Feature/ApprovalGatingTest.php": {
+            "sha256": "0ef013570dd40c46bd588e99170b558e0117a2295d44f8591515dd5cd6f73e86",
+            "bytes": 1009,
+            "lines": 39
+        },
+        "tests/Feature/Auth/LogoutTest.php": {
+            "sha256": "039ced047f1b9193bebc0a609d20de52c7784d42bcbc8e3d0b6bd660a2db852f",
+            "bytes": 1511,
+            "lines": 55
+        },
+        "tests/Feature/Auth/PlatformAuthTest.php": {
+            "sha256": "d86f08609bd9139113424e83a007c49adc8aae77c9f6da8838b36b446f0b33ec",
+            "bytes": 2535,
+            "lines": 69
+        },
+        "tests/Feature/Auth/RegistrationRoleTest.php": {
+            "sha256": "98f7c55424bc9acb1bc035429f4170acba4f7a679a8fc65e8dd55064b67efca9",
+            "bytes": 1627,
+            "lines": 51
+        },
+        "tests/Feature/BrandingCssSanitizationTest.php": {
+            "sha256": "9ae0357c0d225238ae0f95051db665d95cf52281dd459fa0dcadeaffc4c81dc2",
+            "bytes": 1894,
+            "lines": 45
+        },
+        "tests/Feature/Demo/DemoSandboxTest.php": {
+            "sha256": "fd62b38d3dd81e91288579825655d465d7e4461341453adb4dba3b13deebad04",
+            "bytes": 4892,
+            "lines": 121
+        },
+        "tests/Feature/DemoReadinessTest.php": {
+            "sha256": "c76a13e7048c0072b52c7f20effe4f05a3a2bbe473131dfb7ce7a928244360ee",
+            "bytes": 3616,
+            "lines": 104
+        },
+        "tests/Feature/ExampleTest.php": {
+            "sha256": "ceb364a75321b680e21573513f49396a1a756eded8ee8e492f4089aa6ac33657",
+            "bytes": 515,
+            "lines": 21
+        },
+        "tests/Feature/Multitenancy/TenantScopingTest.php": {
+            "sha256": "9fe245175e04f865b209e7a862600f8fe37ef1fcbc15623886247d290f439333",
+            "bytes": 3501,
+            "lines": 123
+        },
+        "tests/Feature/NotificationsTest.php": {
+            "sha256": "d566421b7b7c1495091ec38e75b81a08f9ded7304e6df247a9cdb6e8e2d8c9ab",
+            "bytes": 5711,
+            "lines": 167
+        },
+        "tests/Feature/Onboarding/OnboardingWizardTest.php": {
+            "sha256": "a5ae95daccae6aef9cf68cb04c8bca2bcdf4b20597675aeef4410480d73dbf7e",
+            "bytes": 5233,
+            "lines": 144
+        },
+        "tests/Feature/Payments/PaymentFlowTest.php": {
+            "sha256": "46138042e05cc3deec33c052ade3e2e6092f99eac7f653c3ef6a44a457585eb5",
+            "bytes": 11338,
+            "lines": 308
+        },
+        "tests/Feature/Portal/PortalAccessTest.php": {
+            "sha256": "1a0c87bdffb2502a03923c79efbbebaf8c5ce10c041f0ec4824123fbebcb9e22",
+            "bytes": 2224,
+            "lines": 67
+        },
+        "tests/Feature/SecurityHeadersTest.php": {
+            "sha256": "8f2a3b7a4dd53891739ad313db38f08255ce3803c89a8bdb6e296870b2eeae0c",
+            "bytes": 1668,
+            "lines": 44
+        },
+        "tests/Feature/Session/SessionManagementTest.php": {
+            "sha256": "23f030ff4ecc1934f0369dc5d92ecb81debf7972a0851919bb75496690f24c1d",
+            "bytes": 3944,
+            "lines": 117
+        },
+        "tests/Feature/Session/SessionTimeoutTest.php": {
+            "sha256": "141f93249729696cce4f007da0ae92f75de0754ab54461e10bdc387e595d95a6",
+            "bytes": 2337,
+            "lines": 75
+        },
+        "tests/Feature/ShowcaseSeederTest.php": {
+            "sha256": "1642bc9ae65479c417dcbb5e244a51cecb672eaac6ed0912bd53329413c52d02",
+            "bytes": 3000,
+            "lines": 83
+        },
+        "tests/Feature/TourCompletionTest.php": {
+            "sha256": "2e5c297903db8d08d72651ab3e0b67e91aa4107b6a230e5c0ece5a346ba4fc82",
+            "bytes": 2163,
+            "lines": 70
+        },
+        "tests/TestCase.php": {
+            "sha256": "d844d740615cbf35b1d281da433c54ea58d3be952b4d2d381251979fc3945df8",
+            "bytes": 867,
+            "lines": 27
+        },
+        "tests/Unit/ApprovableTest.php": {
+            "sha256": "ddbaf3756e9f861ecae4e510223d70772b6415c24accab183478924d76182bd4",
+            "bytes": 1447,
+            "lines": 45
+        },
+        "tests/Unit/OnboardingServiceTest.php": {
+            "sha256": "67c2a06eb9c15448a3a5029ce0e9862312b627cd5588174c666db6b3549e48b7",
+            "bytes": 3268,
+            "lines": 97
+        },
+        "tests/Unit/PackagePricingTest.php": {
+            "sha256": "955dd3dd113cfd1184253b32b7d099b25f7d55954f9003aee63ae71be554b178",
+            "bytes": 2174,
+            "lines": 66
+        },
+        "tests/Unit/PayHereServiceTest.php": {
+            "sha256": "2a0dda0d5845dff1d48637dd1b3b7647cce8e36f084fb08284e5605de25c01b5",
+            "bytes": 3741,
+            "lines": 117
+        },
+        "tests/Unit/PluginServiceTest.php": {
+            "sha256": "d8f9b2c7cfa783c92b3e7e276f6e361ca7b5b31e515500b9e67321f18ad6ff03",
+            "bytes": 2550,
+            "lines": 87
+        },
+        "tests/Unit/PricingServiceTest.php": {
+            "sha256": "0956f7b02e2669faff3bb6414c6ab96815e223f2b67b7ad8b5ed03d9e03a8568",
+            "bytes": 4792,
+            "lines": 158
+        },
+        "tests/Unit/QuotationExpirationTest.php": {
+            "sha256": "ba755c77d06e47d1accf36336d0960830c639e241741f27f852ba8d876adafd0",
+            "bytes": 2997,
+            "lines": 97
+        },
+        "tests/Unit/SendPaymentRemindersTest.php": {
+            "sha256": "3f4d8f17fbe07d619284fa6e6428bf2bd661d2f0a9b6c37fc7fe938dcb922303",
+            "bytes": 3753,
+            "lines": 118
+        },
+        "tests/Unit/ThemeServiceTest.php": {
+            "sha256": "163db1a701b0caab7a764d2a737a977e82d0712a725e3cdf8b1462b9e468ecea",
+            "bytes": 2576,
+            "lines": 91
+        },
+        "vite.config.js": {
+            "sha256": "8028bfc5e134a5cbfa116d4ef47bc1738b7385fee850666c0be17badef629507",
+            "bytes": 1046,
+            "lines": 35
+        }
+    }
+}

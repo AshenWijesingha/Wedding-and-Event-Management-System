@@ -1,0 +1,273 @@
+<script setup>
+import { ref } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+
+const props = defineProps({ tenant: Object, settings: Object, payhere: Object });
+
+const activeTab = ref('general');
+
+// General form
+const generalForm = useForm({
+    name:          props.tenant?.name ?? '',
+    email:         props.tenant?.email ?? '',
+    phone:         props.tenant?.phone ?? '',
+    primary_color: props.tenant?.primary_color ?? '#6366f1',
+});
+
+// Branding form
+const branding = props.settings?.branding ?? {};
+const brandingForm = useForm({
+    company_name:  branding.company_name ?? '',
+    tagline:       branding.tagline ?? '',
+    primary_color: branding.primary_color ?? '#6366f1',
+    font_family:   branding.font_family ?? 'Inter',
+    logo_url:      branding.logo_url ?? '',
+});
+
+// Email templates form
+const defaultTemplates = [
+    { key: 'booking_confirmed', subject: 'Your Booking is Confirmed', body: 'Dear {client_name},\n\nYour booking {booking_number} has been confirmed.\n\nEvent Date: {event_date}\nVenue: {venue_name}\n\nThank you for choosing us!' },
+    { key: 'payment_received', subject: 'Payment Received', body: 'Dear {client_name},\n\nWe have received your payment of {amount} for booking {booking_number}.\n\nThank you!' },
+    { key: 'payment_reminder', subject: 'Payment Reminder for {booking_number}', body: 'Dear {client_name},\n\nThis is a reminder that a payment of {amount} is due on {due_date}.\n\nPlease contact us if you have any questions.' },
+];
+
+const savedTemplates = props.settings?.email_templates ?? {};
+const emailTemplates = ref(defaultTemplates.map(t => ({
+    ...t,
+    subject: savedTemplates[t.key]?.subject ?? t.subject,
+    body:    savedTemplates[t.key]?.body ?? t.body,
+})));
+
+function saveEmailTemplates() {
+    useForm({ templates: emailTemplates.value }).post('/admin/settings/email-templates', {
+        preserveScroll: true,
+    });
+}
+
+// Document templates form
+const docTemplates = props.settings?.document_templates ?? {};
+const docForm = useForm({
+    quotation_footer: docTemplates.quotation_footer ?? '',
+    quotation_terms:  docTemplates.quotation_terms ?? '',
+    invoice_footer:   docTemplates.invoice_footer ?? '',
+    contract_header:  docTemplates.contract_header ?? '',
+});
+
+// PayHere payment gateway form. The merchant secret is write-only — the server
+// reports only whether one is configured, never the value itself.
+const payhereForm = useForm({
+    merchant_id:     props.payhere?.merchant_id ?? '',
+    merchant_secret: '',
+    sandbox:         props.payhere?.sandbox ?? true,
+    currency:        props.payhere?.currency ?? 'LKR',
+});
+
+const tabs = [
+    { id: 'general', label: 'General' },
+    { id: 'branding', label: 'Branding' },
+    { id: 'payhere', label: 'Payments' },
+    { id: 'email', label: 'Email Templates' },
+    { id: 'documents', label: 'Documents' },
+];
+</script>
+
+<template>
+    <AppLayout tour="settings" title="Settings">
+        <div class="max-w-3xl mx-auto space-y-4">
+            <h2 class="text-xl font-semibold text-ink">Settings</h2>
+
+            <!-- Tab nav -->
+            <div data-tour="settings.tabs" class="border-b border-border flex gap-4">
+                <button v-for="tab in tabs" :key="tab.id"
+                    @click="activeTab = tab.id"
+                    :class="[
+                        'pb-3 text-sm font-medium border-b-2 -mb-px transition-colors',
+                        activeTab === tab.id ? 'border-primary text-primary' : 'border-transparent text-ink-subtle hover:text-ink-muted'
+                    ]">
+                    {{ tab.label }}
+                </button>
+            </div>
+
+            <!-- General -->
+            <form v-if="activeTab === 'general'" @submit.prevent="generalForm.post('/admin/settings/general', { preserveScroll: true })"
+                class="bg-surface rounded-lg shadow-sm p-6 space-y-4">
+                <h3 class="text-sm font-semibold text-ink">General Settings</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-ink-muted mb-1">Business Name *</label>
+                        <input v-model="generalForm.name" type="text" class="w-full border-border rounded-md text-sm focus:border-primary focus:ring-primary" required />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-ink-muted mb-1">Email</label>
+                        <input v-model="generalForm.email" type="email" class="w-full border-border rounded-md text-sm focus:border-primary focus:ring-primary" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-ink-muted mb-1">Phone</label>
+                        <input v-model="generalForm.phone" type="text" class="w-full border-border rounded-md text-sm focus:border-primary focus:ring-primary" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-ink-muted mb-1">Brand Color</label>
+                        <div class="flex items-center gap-2">
+                            <input v-model="generalForm.primary_color" type="color" class="h-9 w-12 border-border rounded cursor-pointer" />
+                            <input v-model="generalForm.primary_color" type="text" class="flex-1 border-border rounded-md text-sm focus:border-primary focus:ring-primary" />
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" :disabled="generalForm.processing"
+                    class="px-5 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-medium rounded-lg disabled:opacity-50">
+                    Save General Settings
+                </button>
+            </form>
+
+            <!-- Branding -->
+            <form v-if="activeTab === 'branding'" @submit.prevent="brandingForm.post('/admin/settings/branding', { preserveScroll: true })"
+                class="bg-surface rounded-lg shadow-sm p-6 space-y-4">
+                <h3 class="text-sm font-semibold text-ink">Branding Settings</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-ink-muted mb-1">Company Name</label>
+                        <input v-model="brandingForm.company_name" type="text" class="w-full border-border rounded-md text-sm focus:border-primary focus:ring-primary" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-ink-muted mb-1">Tagline</label>
+                        <input v-model="brandingForm.tagline" type="text" class="w-full border-border rounded-md text-sm focus:border-primary focus:ring-primary" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-ink-muted mb-1">Primary Color</label>
+                        <div class="flex items-center gap-2">
+                            <input v-model="brandingForm.primary_color" type="color" class="h-9 w-12 border-border rounded cursor-pointer" />
+                            <input v-model="brandingForm.primary_color" type="text" class="flex-1 border-border rounded-md text-sm focus:border-primary focus:ring-primary" />
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-ink-muted mb-1">Font Family</label>
+                        <select v-model="brandingForm.font_family" class="w-full border-border rounded-md text-sm focus:border-primary focus:ring-primary">
+                            <option value="Inter">Inter</option>
+                            <option value="Roboto">Roboto</option>
+                            <option value="Open Sans">Open Sans</option>
+                            <option value="Lato">Lato</option>
+                            <option value="Poppins">Poppins</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-ink-muted mb-1">Logo URL</label>
+                        <input v-model="brandingForm.logo_url" type="url" placeholder="https://..."
+                            class="w-full border-border rounded-md text-sm focus:border-primary focus:ring-primary" />
+                    </div>
+                    <div v-if="brandingForm.logo_url" class="col-span-2">
+                        <p class="text-xs text-ink-subtle mb-1">Preview:</p>
+                        <img :src="brandingForm.logo_url" alt="Logo preview" class="h-12 object-contain rounded border border-border" />
+                    </div>
+                </div>
+                <button type="submit" :disabled="brandingForm.processing"
+                    class="px-5 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-medium rounded-lg disabled:opacity-50">
+                    Save Branding
+                </button>
+            </form>
+
+            <!-- PayHere -->
+            <form v-if="activeTab === 'payhere'" @submit.prevent="payhereForm.post('/admin/settings/payhere', { preserveScroll: true, onSuccess: () => payhereForm.reset('merchant_secret') })"
+                class="bg-surface rounded-lg shadow-sm p-6 space-y-4">
+                <h3 class="text-sm font-semibold text-ink">PayHere Payment Gateway</h3>
+                <p class="text-xs text-ink-subtle">Collect online payments into your own PayHere merchant account. Find these values in your PayHere dashboard under Settings &rarr; Domains &amp; Credentials.</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-ink-muted mb-1">Merchant ID</label>
+                        <input v-model="payhereForm.merchant_id" type="text" class="w-full border-border rounded-md text-sm focus:border-primary focus:ring-primary" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-ink-muted mb-1">Currency</label>
+                        <select v-model="payhereForm.currency" class="w-full border-border rounded-md text-sm focus:border-primary focus:ring-primary">
+                            <option value="LKR">LKR</option>
+                            <option value="USD">USD</option>
+                            <option value="GBP">GBP</option>
+                            <option value="EUR">EUR</option>
+                            <option value="AUD">AUD</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-ink-muted mb-1">
+                            Merchant Secret
+                            <span v-if="payhere?.secret_configured" class="ml-1 text-xs text-green-600 font-normal">(configured — leave blank to keep)</span>
+                        </label>
+                        <input v-model="payhereForm.merchant_secret" type="password" autocomplete="new-password"
+                            :placeholder="payhere?.secret_configured ? '••••••••••••' : 'Enter merchant secret'"
+                            class="w-full border-border rounded-md text-sm focus:border-primary focus:ring-primary" />
+                        <p class="text-xs text-ink-subtle mt-1">Stored encrypted. Never displayed after saving.</p>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="flex items-center gap-2 text-sm text-ink-muted">
+                            <input v-model="payhereForm.sandbox" type="checkbox" class="rounded border-border text-primary focus:ring-primary" />
+                            Sandbox mode (use for testing — no real charges)
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" :disabled="payhereForm.processing"
+                    class="px-5 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-medium rounded-lg disabled:opacity-50">
+                    Save PayHere Settings
+                </button>
+            </form>
+
+            <!-- Email Templates -->
+            <div v-if="activeTab === 'email'" class="bg-surface rounded-lg shadow-sm p-6 space-y-5">
+                <h3 class="text-sm font-semibold text-ink">Email Templates</h3>
+                <p class="text-xs text-ink-subtle">Available variables: {client_name}, {booking_number}, {event_date}, {venue_name}, {amount}, {due_date}</p>
+                <div v-for="(tpl, i) in emailTemplates" :key="tpl.key" class="border border-border rounded-lg p-4 space-y-3">
+                    <p class="text-xs font-semibold text-ink-subtle uppercase">{{ tpl.key.replace('_', ' ') }}</p>
+                    <div>
+                        <label class="block text-xs font-medium text-ink-muted mb-1">Subject</label>
+                        <input v-model="emailTemplates[i].subject" type="text"
+                            class="w-full border-border rounded-md text-sm focus:border-primary focus:ring-primary" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-ink-muted mb-1">Body</label>
+                        <textarea v-model="emailTemplates[i].body" rows="4"
+                            class="w-full border-border rounded-md text-sm focus:border-primary focus:ring-primary resize-none font-mono text-xs"></textarea>
+                    </div>
+                </div>
+                <button @click="saveEmailTemplates"
+                    class="px-5 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-medium rounded-lg">
+                    Save Email Templates
+                </button>
+            </div>
+
+            <!-- Document Templates -->
+            <form v-if="activeTab === 'documents'" @submit.prevent="docForm.post('/admin/settings/document-templates', { preserveScroll: true })"
+                class="bg-surface rounded-lg shadow-sm p-6 space-y-4">
+                <h3 class="text-sm font-semibold text-ink">Document Template Settings</h3>
+                <p class="text-xs text-ink-subtle">Customise footers, terms, and headers for generated PDF documents.</p>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-ink-muted mb-1">Quotation Footer</label>
+                        <textarea v-model="docForm.quotation_footer" rows="3"
+                            class="w-full border-border rounded-md text-sm resize-none focus:border-primary focus:ring-primary"
+                            placeholder="Footer text printed on all quotations..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-ink-muted mb-1">Quotation Terms & Conditions</label>
+                        <textarea v-model="docForm.quotation_terms" rows="5"
+                            class="w-full border-border rounded-md text-sm resize-none focus:border-primary focus:ring-primary"
+                            placeholder="Standard terms included in quotations..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-ink-muted mb-1">Invoice Footer</label>
+                        <textarea v-model="docForm.invoice_footer" rows="3"
+                            class="w-full border-border rounded-md text-sm resize-none focus:border-primary focus:ring-primary"
+                            placeholder="Footer text printed on all invoices..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-ink-muted mb-1">Contract Header</label>
+                        <textarea v-model="docForm.contract_header" rows="3"
+                            class="w-full border-border rounded-md text-sm resize-none focus:border-primary focus:ring-primary"
+                            placeholder="Header text for contract documents..."></textarea>
+                    </div>
+                </div>
+                <button type="submit" :disabled="docForm.processing"
+                    class="px-5 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-medium rounded-lg disabled:opacity-50">
+                    Save Document Templates
+                </button>
+            </form>
+        </div>
+    </AppLayout>
+</template>
