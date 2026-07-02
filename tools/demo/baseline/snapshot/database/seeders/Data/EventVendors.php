@@ -1,0 +1,178 @@
+<?php
+
+namespace Database\Seeders\Data;
+
+/**
+ * Realistic Sri Lankan event vendors used to seed the Vendors section, shared by
+ * DemoDataSeeder and ShowcaseSeeder.
+ *
+ * Vendor names are fictional-but-plausible so no real business is attributed
+ * fabricated contact details. Rates are indicative LKR figures for demonstration.
+ */
+class EventVendors
+{
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public static function all(): array
+    {
+        return [
+            [
+                'name' => 'Araliya Catering Co.',
+                'category' => 'caterer',
+                'contact_name' => 'Lakshman Perera',
+                'email' => 'events@araliyacatering.lk',
+                'phone' => '+94 11 250 1122',
+                'website' => 'https://araliyacatering.lk',
+                'description' => 'Full-service wedding and banquet caterer specialising in Sri Lankan, Indian and Western menus.',
+                'base_rate' => 4500,
+                'rate_type' => 'per_event',
+                'services' => ['Buffet & plated menus', 'Live cooking stations', 'Bar service', 'Service staff'],
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Studio Aperture',
+                'category' => 'photographer',
+                'contact_name' => 'Chaminda Pradeep',
+                'email' => 'hello@studioaperture.lk',
+                'phone' => '+94 77 345 6789',
+                'website' => 'https://studioaperture.lk',
+                'description' => 'Award-winning wedding photography capturing candid and editorial moments.',
+                'base_rate' => 185000,
+                'rate_type' => 'per_event',
+                'services' => ['Full-day coverage', 'Engagement shoot', 'Album & prints', 'Drone photography'],
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Cinnamon Reels',
+                'category' => 'videographer',
+                'contact_name' => 'Nuwan Fernando',
+                'email' => 'book@cinnamonreels.lk',
+                'phone' => '+94 76 221 8844',
+                'website' => 'https://cinnamonreels.lk',
+                'description' => 'Cinematic wedding films and same-day edits with 4K multi-camera coverage.',
+                'base_rate' => 225000,
+                'rate_type' => 'per_event',
+                'services' => ['Cinematic highlight film', 'Same-day edit', 'Drone videography', 'Live streaming'],
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Bloom & Petal Florals',
+                'category' => 'florist',
+                'contact_name' => 'Kumari Silva',
+                'email' => 'orders@bloomandpetal.lk',
+                'phone' => '+94 71 909 1234',
+                'website' => 'https://bloomandpetal.lk',
+                'description' => 'Bespoke floral design for ceremonies, receptions and stage décor.',
+                'base_rate' => 120000,
+                'rate_type' => 'per_event',
+                'services' => ['Bridal bouquets', 'Stage & aisle florals', 'Centrepieces', 'Imported blooms'],
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Grand Décor Lanka',
+                'category' => 'decor',
+                'contact_name' => 'Roshan Jayasuriya',
+                'email' => 'projects@granddecor.lk',
+                'phone' => '+94 11 277 6655',
+                'website' => 'https://granddecor.lk',
+                'description' => 'Themed event styling, draping and stage design for weddings and corporate galas.',
+                'base_rate' => 275000,
+                'rate_type' => 'per_event',
+                'services' => ['Stage & backdrop design', 'Draping & ceiling work', 'Themed styling', 'Furniture rental'],
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Rhythm Nation Entertainment',
+                'category' => 'entertainment',
+                'contact_name' => 'Saman Kumara',
+                'email' => 'bookings@rhythmnation.lk',
+                'phone' => '+94 77 654 3210',
+                'website' => 'https://rhythmnation.lk',
+                'description' => 'Live bands, DJs and MCs for weddings and corporate events island-wide.',
+                'base_rate' => 95000,
+                'rate_type' => 'per_event',
+                'services' => ['Live band', 'DJ & MC', 'Sound system', 'Cultural dancers'],
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Royal Ride Limousines',
+                'category' => 'transport',
+                'contact_name' => 'Ajith Bandara',
+                'email' => 'reservations@royalride.lk',
+                'phone' => '+94 70 112 3344',
+                'website' => 'https://royalride.lk',
+                'description' => 'Luxury bridal cars and guest transport with chauffeur service.',
+                'base_rate' => 35000,
+                'rate_type' => 'per_event',
+                'services' => ['Bridal luxury car', 'Vintage cars', 'Guest coaches', 'Airport transfers'],
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Glamour by Nayana',
+                'category' => 'makeup',
+                'contact_name' => 'Nayana Wijeratne',
+                'email' => 'studio@glamourbynayana.lk',
+                'phone' => '+94 76 445 9090',
+                'website' => 'https://glamourbynayana.lk',
+                'description' => 'Bridal hair and makeup artistry, including Kandyan and Indian bridal looks.',
+                'base_rate' => 85000,
+                'rate_type' => 'per_event',
+                'services' => ['Bridal makeup', 'Kandyan dressing', 'Hair styling', 'Bridal party glam'],
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Sweet Symphony Cakes',
+                'category' => 'cake',
+                'contact_name' => 'Dilani Mendis',
+                'email' => 'cakes@sweetsymphony.lk',
+                'phone' => '+94 11 288 7700',
+                'website' => 'https://sweetsymphony.lk',
+                'description' => 'Custom wedding cakes and dessert tables, handcrafted to your theme.',
+                'base_rate' => 45000,
+                'rate_type' => 'fixed',
+                'services' => ['Tiered wedding cakes', 'Dessert tables', 'Cupcakes & favours', 'Sugar flowers'],
+                'status' => 'active',
+            ],
+            [
+                'name' => 'LumenWorks Sound & Lighting',
+                'category' => 'sound',
+                'contact_name' => 'Tharindu Alwis',
+                'email' => 'crew@lumenworks.lk',
+                'phone' => '+94 77 818 2020',
+                'website' => 'https://lumenworks.lk',
+                'description' => 'Professional sound, stage lighting and LED video walls for large events.',
+                'base_rate' => 160000,
+                'rate_type' => 'per_event',
+                'services' => ['Line-array sound', 'Stage lighting', 'LED video walls', 'Technical crew'],
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Pixel Booth Lanka',
+                'category' => 'photographer',
+                'contact_name' => 'Ishara Gunawardena',
+                'email' => 'fun@pixelbooth.lk',
+                'phone' => '+94 71 363 6363',
+                'website' => 'https://pixelbooth.lk',
+                'description' => 'Interactive photo booths and instant prints to entertain your guests.',
+                'base_rate' => 55000,
+                'rate_type' => 'per_event',
+                'services' => ['360 photo booth', 'Instant prints', 'Custom props', 'Digital gallery'],
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Celebrations Event Planners',
+                'category' => 'planner',
+                'contact_name' => 'Hiruni Abeysekara',
+                'email' => 'plan@celebrations.lk',
+                'phone' => '+94 11 299 4545',
+                'website' => 'https://celebrations.lk',
+                'description' => 'End-to-end wedding and corporate event planning and on-the-day coordination.',
+                'base_rate' => 300000,
+                'rate_type' => 'per_event',
+                'services' => ['Full planning', 'Day-of coordination', 'Vendor management', 'Budgeting'],
+                'status' => 'active',
+            ],
+        ];
+    }
+}
