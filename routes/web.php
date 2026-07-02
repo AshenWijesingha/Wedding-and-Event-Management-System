@@ -46,8 +46,6 @@ use Illuminate\Support\Str;
 
 // Public website routes
 Route::get('/', function () {
-    $hotelGuard = fn ($q) => $q->where(fn ($w) => $w->whereNull('hotel_id')->orWhereHas('hotel', fn ($h) => $h->approved()));
-
     $featuredVenues = Venue::active()->approved()->where(fn ($q) => $q->whereNull('hotel_id')->orWhereHas('hotel', fn ($h) => $h->approved()))->orderByDesc('capacity_max')->take(4)->get();
     $hallCount = Venue::active()->approved()->where(fn ($q) => $q->whereNull('hotel_id')->orWhereHas('hotel', fn ($h) => $h->approved()))->count();
     $hotelCount = Venue::active()->approved()->where(fn ($q) => $q->whereNull('hotel_id')->orWhereHas('hotel', fn ($h) => $h->approved()))->get()
