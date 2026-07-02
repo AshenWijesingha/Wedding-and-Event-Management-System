@@ -54,7 +54,7 @@ Path: `/admin/approvals`
 The approvals queue lists every hotel, venue, and package in **pending** status across all tenants. For each item the super admin can:
 
 - **Approve** — moves status to `approved`; manager receives a notification.
-- **Reject** — moves status to `rejected` and requires optional reviewer notes sent back to the manager.
+- **Reject** — moves status to `rejected` and requires reviewer notes (mandatory) sent back to the manager.
 
 ---
 
