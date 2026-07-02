@@ -42,6 +42,13 @@ class ApprovalController extends Controller
     public function approve(string $type, int $id): RedirectResponse
     {
         $model = $this->find($type, $id);
+
+        abort_unless(
+            $model->approval_status === 'pending' || $model->changes_pending_review,
+            422,
+            'This item is not awaiting review.'
+        );
+
         $model->approve(request()->user());
         $this->notifySubmitter($model, 'approved', null);
 
@@ -51,6 +58,13 @@ class ApprovalController extends Controller
     public function reject(Request $request, string $type, int $id): RedirectResponse
     {
         $model = $this->find($type, $id);
+
+        abort_unless(
+            $model->approval_status === 'pending' || $model->changes_pending_review,
+            422,
+            'This item is not awaiting review.'
+        );
+
         $notes = $request->validate(['notes' => 'required|string|max:2000'])['notes'];
         $model->reject(request()->user(), $notes);
         $this->notifySubmitter($model, 'rejected', $notes);

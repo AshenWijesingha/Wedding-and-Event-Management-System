@@ -57,4 +57,30 @@ class ApprovalReviewTest extends TestCase
             ->post("/admin/approvals/hotel/{$hotel->id}/approve")
             ->assertForbidden();
     }
+
+    public function test_rejecting_changes_on_approved_item_keeps_it_live(): void
+    {
+        $hotel = Hotel::factory()->for($this->tenant)->approved()->create();
+        $hotel->forceFill(['changes_pending_review' => true])->saveQuietly();
+
+        $this->actingAs($this->super)
+            ->post("/admin/approvals/hotel/{$hotel->id}/reject", ['notes' => 'Revert the changes'])
+            ->assertRedirect();
+
+        $fresh = $hotel->fresh();
+        $this->assertSame('approved', $fresh->approval_status, 'Item must stay approved after rejecting live-edit changes');
+        $this->assertFalse((bool) $fresh->changes_pending_review, 'changes_pending_review must be cleared');
+        $this->assertSame('Revert the changes', $fresh->review_notes);
+    }
+
+    public function test_cannot_approve_a_draft(): void
+    {
+        $hotel = Hotel::factory()->for($this->tenant)->draft()->create();
+
+        $this->actingAs($this->super)
+            ->post("/admin/approvals/hotel/{$hotel->id}/approve")
+            ->assertStatus(422);
+
+        $this->assertSame('draft', $hotel->fresh()->approval_status);
+    }
 }
