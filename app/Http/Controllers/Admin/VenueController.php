@@ -10,6 +10,7 @@ use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -56,7 +57,7 @@ class VenueController extends Controller
             'amenities' => 'nullable|array',
             'amenities.*' => 'string',
             'status' => 'nullable|in:active,inactive,maintenance',
-            'hotel_id' => 'nullable|exists:hotels,id',
+            'hotel_id' => ['nullable', Rule::exists('hotels', 'id')->where('tenant_id', auth()->user()->tenant_id)],
         ]);
 
         $validated['slug'] = $validated['slug'] ?? Str::slug($validated['name']);
@@ -99,7 +100,7 @@ class VenueController extends Controller
             'amenities' => 'nullable|array',
             'amenities.*' => 'string',
             'status' => 'nullable|in:active,inactive,maintenance',
-            'hotel_id' => 'nullable|exists:hotels,id',
+            'hotel_id' => ['nullable', Rule::exists('hotels', 'id')->where('tenant_id', auth()->user()->tenant_id)],
         ]);
 
         $venue->update($validated);
