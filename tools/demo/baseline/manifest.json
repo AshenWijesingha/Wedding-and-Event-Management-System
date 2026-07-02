@@ -1,7 +1,7 @@
 {
-    "generated_at": "2026-07-02T17:06:00+00:00",
+    "generated_at": "2026-07-02T23:41:06+00:00",
     "root": "C:/Users/Ashen/Documents/BIT/Wedding-and-Event-Management-System",
-    "count": 424,
+    "count": 425,
     "files": {
         "app/Auth/TenantlessUserProvider.php": {
             "sha256": "a1ba6e18b204888160c273725279877ff0f24dcc29098ee8a3f3345afaf75294",
@@ -34,9 +34,9 @@
             "lines": 48
         },
         "app/Http/Controllers/Admin/ApprovalController.php": {
-            "sha256": "6759fc3036e116e75e03011e42e74ef2929e72d8b3f0deea656bfa6c8f4231bd",
-            "bytes": 2756,
-            "lines": 81
+            "sha256": "537bc438ed9ba3cfb606bc66b97f5bbf14dfd123b0900f8048c68f02e6353b21",
+            "bytes": 3126,
+            "lines": 95
         },
         "app/Http/Controllers/Admin/AuditLogController.php": {
             "sha256": "bc001e5927b7c9e670091e5c6fa2cd28efb36cfa2b38319cceb2e6a16527868e",
@@ -44,8 +44,8 @@
             "lines": 51
         },
         "app/Http/Controllers/Admin/BookingController.php": {
-            "sha256": "41e29769f05d002e254ad4f41a7ef53033442b03d8d644fd1fbe6e624ad09f00",
-            "bytes": 11552,
+            "sha256": "43facfc782a4942624a1f2c5556e45ae003549171097f0b4d193b0403cf6c415",
+            "bytes": 11600,
             "lines": 263
         },
         "app/Http/Controllers/Admin/CalendarController.php": {
@@ -259,9 +259,9 @@
             "lines": 71
         },
         "app/Http/Controllers/Api/V1/PackageController.php": {
-            "sha256": "ac8c502a79dee6d2b3cd45c3a0ed2df65964c59620723eef2ce8d4683a187f06",
-            "bytes": 788,
-            "lines": 33
+            "sha256": "8bae84a997e54513aa050c79bafb82cb125ed88c7ac097c62dbfca42b0f7c1ae",
+            "bytes": 893,
+            "lines": 38
         },
         "app/Http/Controllers/Api/V1/PricingController.php": {
             "sha256": "1f773490af7900b34db3dfc7ecb6aae5d39410789b2536e8574b075929c43e77",
@@ -269,9 +269,9 @@
             "lines": 48
         },
         "app/Http/Controllers/Api/V1/VenueController.php": {
-            "sha256": "4994a2eb237d5bbeb669bf4e54dc9f1957cc3f25404f60644c68545fe1070042",
-            "bytes": 1598,
-            "lines": 55
+            "sha256": "a6983c6ebb0dd9dd50e7708ac2318820d1a8877a1316652542b5b4d16900efda",
+            "bytes": 1931,
+            "lines": 65
         },
         "app/Http/Controllers/Auth/AuthenticatedSessionController.php": {
             "sha256": "b5b8b09854fd743de683c6bb9a2f65af9986392ffa14d52b7b4ac53c3fd45a71",
@@ -479,9 +479,9 @@
             "lines": 114
         },
         "app/Models/Concerns/Approvable.php": {
-            "sha256": "a5db2ea3dddbf6088dcd61f36114544c168c2792773cdfeb4030db5bc2d68dbe",
-            "bytes": 1876,
-            "lines": 74
+            "sha256": "8c84a578c8ea90dc3c166506db07e20e656d3e9a3491e9936a5d948a42d2ded6",
+            "bytes": 2566,
+            "lines": 87
         },
         "app/Models/Concerns/BelongsToTenant.php": {
             "sha256": "0882d7cc57a8d50a21175d8396faecdda230a78f1e1a3afa504366c9f78bff98",
@@ -1799,8 +1799,8 @@
             "lines": 13
         },
         "routes/web.php": {
-            "sha256": "02b183ada91f5c391932d41c2f63b9e6de43ecdf80c5fd924de2ceed00c23d42",
-            "bytes": 26032,
+            "sha256": "5a324e2e9c619d9b9c7d70139538e8ae45f3b63aa904fa236a23f97ca6471041",
+            "bytes": 26311,
             "lines": 370
         },
         "tailwind.config.js": {
@@ -1814,9 +1814,9 @@
             "lines": 112
         },
         "tests/Feature/Admin/ApprovalReviewTest.php": {
-            "sha256": "ab89dde4106ca19c02ec6e1881baede588032ce195560c5bbeee424744f01bc1",
-            "bytes": 1842,
-            "lines": 61
+            "sha256": "f00198ad512d866afbc95f0d813d1b25d6b02361f984fdc72e78f61157c14d9a",
+            "bytes": 2955,
+            "lines": 87
         },
         "tests/Feature/Admin/BackfillHotelsTest.php": {
             "sha256": "02f68ae892bb2e10dba2b04a851826fb9d5492ff90a796a574ba8a48895ba93e",
@@ -1963,6 +1963,11 @@
             "bytes": 2526,
             "lines": 78
         },
+        "tests/Feature/Api/PublicApiApprovalGatingTest.php": {
+            "sha256": "5d6ddb1c9d7cc4f785f582a144bdcfcce8540377fb9361ec71471bee6add5ecb",
+            "bytes": 4892,
+            "lines": 146
+        },
         "tests/Feature/Api/StaffApiTest.php": {
             "sha256": "544d55bf678e9abc8a59a41d42ccb93a09d4486c2802cafb4c50c0774f56f31e",
             "bytes": 2435,
@@ -1979,9 +1984,9 @@
             "lines": 142
         },
         "tests/Feature/ApprovalGatingTest.php": {
-            "sha256": "0ef013570dd40c46bd588e99170b558e0117a2295d44f8591515dd5cd6f73e86",
-            "bytes": 1009,
-            "lines": 39
+            "sha256": "50a51298149136c8b6b9deef1e902bb280bf6e4ce1c6c88c3f502f2f3168eb85",
+            "bytes": 2394,
+            "lines": 75
         },
         "tests/Feature/Auth/LogoutTest.php": {
             "sha256": "039ced047f1b9193bebc0a609d20de52c7784d42bcbc8e3d0b6bd660a2db852f",
@@ -2074,9 +2079,9 @@
             "lines": 27
         },
         "tests/Unit/ApprovableTest.php": {
-            "sha256": "ddbaf3756e9f861ecae4e510223d70772b6415c24accab183478924d76182bd4",
-            "bytes": 1447,
-            "lines": 45
+            "sha256": "a2455342f543032670893b88678568bce1642af5c2a3cc4c7aad7b2c6af1b1a4",
+            "bytes": 1959,
+            "lines": 54
         },
         "tests/Unit/OnboardingServiceTest.php": {
             "sha256": "67c2a06eb9c15448a3a5029ce0e9862312b627cd5588174c666db6b3549e48b7",

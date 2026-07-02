@@ -71,8 +71,8 @@ class BookingController extends Controller
         }
 
         return Inertia::render('Bookings/Create', [
-            'venues' => Venue::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
-            'packages' => Package::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
+            'venues' => Venue::where('status', 'active')->approved()->orderBy('name')->get(['id', 'name', 'base_price']),
+            'packages' => Package::where('status', 'active')->approved()->orderBy('name')->get(['id', 'name', 'base_price']),
             'clients' => Client::orderBy('first_name')->get()->map(fn ($c) => [
                 'id' => $c->id,
                 'name' => trim("{$c->first_name} {$c->last_name}"),
@@ -123,8 +123,8 @@ class BookingController extends Controller
     {
         return Inertia::render('Bookings/Edit', [
             'booking' => new BookingResource($booking->load(['client', 'venue', 'package'])),
-            'venues' => Venue::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
-            'packages' => Package::where('status', 'active')->orderBy('name')->get(['id', 'name', 'base_price']),
+            'venues' => Venue::where('status', 'active')->approved()->orderBy('name')->get(['id', 'name', 'base_price']),
+            'packages' => Package::where('status', 'active')->approved()->orderBy('name')->get(['id', 'name', 'base_price']),
             'clients' => Client::orderBy('first_name')->get()->map(fn ($c) => [
                 'id' => $c->id,
                 'name' => trim("{$c->first_name} {$c->last_name}"),

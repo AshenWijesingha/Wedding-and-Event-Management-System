@@ -15,6 +15,7 @@ class PackageController extends Controller
     public function index(Request $request): JsonResponse
     {
         $packages = Package::query()
+            ->approved()
             ->when($request->venue_id, fn ($query, $venueId) => $query->where('venue_id', $venueId)
             )
             ->paginate($request->per_page ?? 15);
@@ -27,6 +28,10 @@ class PackageController extends Controller
      */
     public function show(Package $package): JsonResponse
     {
+        if (! $package->isApproved()) {
+            abort(404);
+        }
+
         return response()->json($package);
     }
 }
