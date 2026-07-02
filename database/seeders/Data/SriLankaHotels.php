@@ -133,7 +133,7 @@ class SriLankaHotels
      *
      * @return array<int, array<string, mixed>>
      */
-    private static function hotels(): array
+    public static function hotels(): array
     {
         $colomboServices = ['In-house catering', 'Customizable menus', 'AV & stage', 'Bridal suite', 'Valet parking', 'Dedicated wedding coordinator', 'Air conditioning', 'Wi-Fi'];
 
