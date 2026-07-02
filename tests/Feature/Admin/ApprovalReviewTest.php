@@ -3,8 +3,10 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\Hotel;
+use App\Models\Package;
 use App\Models\Tenant;
 use App\Models\User;
+use App\Models\Venue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -82,5 +84,32 @@ class ApprovalReviewTest extends TestCase
             ->assertStatus(422);
 
         $this->assertSame('draft', $hotel->fresh()->approval_status);
+    }
+
+    public function test_approvals_index_lists_pending_items_across_all_types(): void
+    {
+        $user = User::factory()->for($this->tenant)->create();
+
+        $hotel = Hotel::factory()->for($this->tenant)->pending()->create([
+            'name' => 'Test Pending Hotel',
+            'submitted_by' => $user->id,
+        ]);
+
+        $venue = Venue::factory()->for($this->tenant)->pending()->create([
+            'name' => 'Test Pending Venue',
+            'submitted_by' => $user->id,
+        ]);
+
+        $package = Package::factory()->for($this->tenant)->pending()->create([
+            'name' => 'Test Pending Package',
+            'submitted_by' => $user->id,
+        ]);
+
+        $this->actingAs($this->super)
+            ->get('/admin/approvals')
+            ->assertOk()
+            ->assertSee($hotel->name)
+            ->assertSee($venue->name)
+            ->assertSee($package->name);
     }
 }
