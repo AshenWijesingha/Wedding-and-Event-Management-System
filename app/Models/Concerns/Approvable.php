@@ -69,6 +69,16 @@ trait Approvable
         }
     }
 
+    public function submitter()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'submitted_by');
+    }
+
+    public function reviewer()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'reviewed_by');
+    }
+
     public function isApproved(): bool
     {
         return $this->approval_status === 'approved';
