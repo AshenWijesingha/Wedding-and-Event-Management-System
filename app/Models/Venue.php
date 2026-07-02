@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Approvable;
 use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Venue extends Model
 {
-    use BelongsToTenant, HasFactory;
+    use Approvable, BelongsToTenant, HasFactory;
 
     protected $fillable = [
         'tenant_id',
+        'hotel_id',
         'name',
         'slug',
         'description',
@@ -31,7 +33,18 @@ class Venue extends Model
         'images' => 'array',
         'capacity_min' => 'integer',
         'capacity_max' => 'integer',
+        'submitted_at' => 'datetime',
+        'reviewed_at' => 'datetime',
+        'changes_pending_review' => 'boolean',
     ];
+
+    /**
+     * Get the hotel this venue belongs to.
+     */
+    public function hotel()
+    {
+        return $this->belongsTo(Hotel::class);
+    }
 
     /**
      * Get the bookings for this venue.

@@ -28,6 +28,27 @@ class PackageFactory extends Factory
                 $this->faker->numberBetween(2, 5)
             ),
             'status' => 'active',
+            'approval_status' => 'approved',
         ];
+    }
+
+    public function draft(): static
+    {
+        return $this->state(fn () => ['approval_status' => 'draft']);
+    }
+
+    public function pending(): static
+    {
+        return $this->state(fn () => ['approval_status' => 'pending', 'submitted_at' => now()]);
+    }
+
+    public function approved(): static
+    {
+        return $this->state(fn () => ['approval_status' => 'approved', 'reviewed_at' => now()]);
+    }
+
+    public function rejected(): static
+    {
+        return $this->state(fn () => ['approval_status' => 'rejected', 'review_notes' => 'Please revise.']);
     }
 }

@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Approvable;
 use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Package extends Model
 {
-    use BelongsToTenant, HasFactory;
+    use Approvable, BelongsToTenant, HasFactory;
 
     protected $fillable = [
         'tenant_id',
+        'hotel_id',
         'name',
         'slug',
         'description',
@@ -29,7 +31,18 @@ class Package extends Model
         'max_guests' => 'integer',
         'guest_pricing' => 'array',
         'included_services' => 'array',
+        'submitted_at' => 'datetime',
+        'reviewed_at' => 'datetime',
+        'changes_pending_review' => 'boolean',
     ];
+
+    /**
+     * Get the hotel this package belongs to.
+     */
+    public function hotel()
+    {
+        return $this->belongsTo(Hotel::class);
+    }
 
     /**
      * Get the venues this package is available at.
