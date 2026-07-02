@@ -55,10 +55,12 @@ class PackageController extends Controller
             'included_services' => 'nullable|array',
             'included_services.*' => 'string',
             'status' => 'nullable|in:active,inactive,archived',
+            'hotel_id' => 'nullable|exists:hotels,id',
         ]);
 
         $validated['slug'] = $validated['slug'] ?? Str::slug($validated['name']);
         $validated['status'] = $validated['status'] ?? 'active';
+        $validated['approval_status'] = 'draft';
 
         $baseSlug = $validated['slug'];
         $i = 1;
@@ -96,11 +98,21 @@ class PackageController extends Controller
             'included_services' => 'nullable|array',
             'included_services.*' => 'string',
             'status' => 'nullable|in:active,inactive,archived',
+            'hotel_id' => 'nullable|exists:hotels,id',
         ]);
 
         $package->update($validated);
 
         return redirect()->route('admin.packages.index')->with('success', 'Package updated successfully.');
+    }
+
+    public function submit(Package $package): RedirectResponse
+    {
+        $this->authorize('update', $package);
+        abort_unless(auth()->user()->can('packages.submit'), 403);
+        $package->submit(request()->user());
+
+        return back()->with('success', 'Package submitted for approval.');
     }
 
     public function destroy(Package $package): RedirectResponse
