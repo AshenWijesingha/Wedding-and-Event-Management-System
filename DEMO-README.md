@@ -33,6 +33,8 @@ the logins. Manual alternative:
 **Logins** (password `password`): super admin `admin@eventpro.io` · tenant admin
 `nuwan@mangala.lk` · staff `sanduni@mangala.lk`. Client portal = register at `/register`.
 
+**Approvals queue** (super admin only): `/admin/approvals` — review pending hotels, venues, and packages submitted by tenant managers.
+
 **Reset demo data:** `php artisan migrate:fresh --seed`.
 
 Full details + a "verify there's no internet" checklist: [docs/OFFLINE_DEMO.md](docs/OFFLINE_DEMO.md).

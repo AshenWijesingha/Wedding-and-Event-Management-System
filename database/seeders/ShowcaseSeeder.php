@@ -159,8 +159,9 @@ class ShowcaseSeeder extends Seeder
         ];
 
         return collect($named)->map(fn ($p) => Package::factory()->create($p + [
-            'tenant_id' => $tid,
-            'slug' => Str::slug($p['name']) . '-' . Str::lower(Str::random(4)),
+            'tenant_id'       => $tid,
+            'slug'            => Str::slug($p['name']) . '-' . Str::lower(Str::random(4)),
+            'approval_status' => 'approved',
         ]));
     }
 

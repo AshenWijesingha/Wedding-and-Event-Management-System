@@ -52,7 +52,7 @@ class DemoDataSeeder extends Seeder
         $hotelBySlug = [];
         foreach (SriLankaHotels::hotels() as $hotelData) {
             $hotelBySlug[$hotelData['slug']] = Hotel::updateOrCreate(
-                ['slug' => $hotelData['slug']],
+                ['slug' => $hotelData['slug'], 'tenant_id' => $tenant->id],
                 [
                     'name'            => $hotelData['name'],
                     'city'            => $hotelData['city'],
