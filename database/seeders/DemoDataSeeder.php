@@ -353,11 +353,12 @@ class DemoDataSeeder extends Seeder
         // Approval-queue samples — one pending hotel, one rejected hotel, and one
         // pending venue so that the super-admin /admin/approvals page has items to
         // review during a live demonstration.
-        Hotel::factory()->pending()->create(['tenant_id' => $tenant->id]);
-        Hotel::factory()->rejected()->create(['tenant_id' => $tenant->id]);
+        Hotel::factory()->pending()->create(['tenant_id' => $tenant->id, 'submitted_by' => $admin->id]);
+        Hotel::factory()->rejected()->create(['tenant_id' => $tenant->id, 'submitted_by' => $admin->id]);
         Venue::factory()->pending()->create([
-            'tenant_id' => $tenant->id,
-            'hotel_id'  => $hotelBySlug[array_key_first($hotelBySlug)]->id,
+            'tenant_id'    => $tenant->id,
+            'hotel_id'     => $hotelBySlug[array_key_first($hotelBySlug)]->id,
+            'submitted_by' => $admin->id,
         ]);
 
         $this->command->info('Demo data seeded for tenant: ' . $tenant->name);
