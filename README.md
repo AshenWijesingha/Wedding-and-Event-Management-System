@@ -305,6 +305,7 @@ This repo ships a complete **offline + git-free** workflow — see [`DEMO-README
 
 | Doc | Contents |
 | --- | --- |
+| [docs/DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md) | **Exhaustive method-level guide** — every function, call chains, full file map, viva Q&A |
 | [DEMO-README.md](DEMO-README.md) | Offline run + git-free recovery tool (one-stop) |
 | [docs/installation.md](docs/installation.md) | Full install (SQLite, MySQL, Docker, production) |
 | [docs/DEMONSTRATION_GUIDE.md](docs/DEMONSTRATION_GUIDE.md) | Scene-by-scene demo script |
